@@ -1,21 +1,24 @@
 #!/usr/bin/env python
 
-# Usage: ./update_dot_files.py or python update_dot_files.py
-# Function: Back up $HOME/file to ./backup,
-#           append all the contents of ./file to $HOME/file
+# Usage: ./dot_files.py update|recover or python dot_files.py update|recover
+# Update Function: Back up $HOME/file to ./backup,
+#                  append all the contents of ./file to $HOME/file
+# Recover Function: copy ./backup/file to $HOME/
 
-# Update the list to ignore those files you don't want to update
+# Update the list to ignore those files you don't want to update or recover
 # NOTE: items must start with ./ and end with no / at the end,
 #       for example, ./backup means a file named backup in current directory or
 #       a directory named backup in current directory
-ignore_file = set(["./.git", "./LICENSE", "./README.md", "./update_dot_files.py",
-                   "./.gitignore"])
+ignore_file = set(["./.git", "./LICENSE", "./README.md",
+                   "./dot_files.py", "./.gitignore"])
 
 # Update the string to specify where you want to store the backed-up files
+# or where you want to recover from
 backup_dir = "./backup"
 
 import os
 import shutil
+import sys
 
 # We don't backup backup directory
 ignore_file.add(backup_dir)
@@ -46,7 +49,7 @@ def update_dot_files(home_current_dir : str, current_dir : str):
             backup_file += '/'
             backup_dir += backup_file
             update_dot_files(home_current_dir + backup_file,
-                           current_dir + backup_file)
+                             current_dir + backup_file)
             backup_dir -= backup_file
     for cur_file in cur_file_set:
         if cur_file == '.' or cur_file == "..":
@@ -62,8 +65,41 @@ def update_dot_files(home_current_dir : str, current_dir : str):
         else:
             print(cur_file)
             cur_file += '/'
-            update_dot_files(home_current_dir + cur_file, current_dir + cur_file)            
-      
+            update_dot_files(home_current_dir + cur_file,
+                             current_dir + cur_file)            
+
+def recover_dot_files(home_current_dir, current_dir):
+    global backup_dir, ignore_file, home_dir
+    if not os.path.exists(home_current_dir):
+       os.mkdir(home_current_dir)
+    recover_file_set = set(os.listdir(backup_dir + current_dir)) 
+    for recover_file in recover_file_set:
+        if recover_file == '.' or recover_file == "..":
+            continue
+        if current_dir + recover_file in ignore_file:
+            continue
+        if os.path.isfile(backup_dir + current_dir + recover_file):
+            print(f"recover {backup_dir + current_dir + recover_file} to "
+                  f"{home_current_dir}")
+            shutil.copy(backup_dir + current_dir + recover_file,
+                        home_current_dir)
+        else:
+            recover_file += '/'
+            update_dot_files(home_current_dir + recover_file,
+                             current_dir + recover_file)
+        
+def update_or_recover_dot_files(home_current_dir : str, current_dir : str,
+                                opcode : str):
+    if opcode == "update":
+        update_dot_files(home_current_dir, current_dir)
+    if opcode == "recover":
+        recover_dot_files(home_current_dir, current_dir)
+    else:
+        exit(1)      
+
 if __name__ == "__main__":
+    if (len(sys.argv) != 2 or
+        (sys.argv[1] != "update" and sys.argv[1] != "recover")):
+        print("Usage: ./dot_files.py update|recover")
     home_dir.replace("//", "/")
-    update_dot_files(home_dir, './')
+    update_or_recover_dot_files(home_dir, "./", sys.argv[1])
