@@ -2,6 +2,42 @@
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
 
+" We don't use <CR> to go to next line
+nnoremap <CR> <Nop>
+vnoremap <CR> <Nop>
+" use system clip board
+set clipboard=unnamed
+
+" vim-plug
+call plug#begin('~/.vim/plugged')
+" add status bar below
+Plug 'vim-airline/vim-airline'
+" snazzy color theme
+Plug 'connorholyday/vim-snazzy'
+" CtrlP for find files
+Plug 'kien/ctrlp.vim'
+call plug#end()
+
+" ^P to open CtrlP pluggin
+let g:ctrlp_map = '<C-p>'
+
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = {
+\ 'dir':  '\v[\/]\.(git|hg|svn)$',
+\ 'file': '\v\.(exe|so|dll)$',
+\ }
+" let dot files be included in ctrlp
+let g:ctrlp_show_hidden = 1
+
+" set color scheme to be snazzy, and enable transparent
+colorscheme snazzy
+let g:SnazzyTransparent = 1
+
+" set leader be space
+nnoremap <space> <Nop>
+vnoremap <space> <Nop>
+let mapleader=" "
 " Set no compatible mode for vim
 set nocompatible
 
@@ -10,7 +46,6 @@ syntax on
 
 " Disable the default Vim startup message.
 set shortmess+=I
-
 
 " set line number
 set number
@@ -24,10 +59,12 @@ set laststatus=2
 " by default, you can't backspace before the insertion point set with 'i'.
 " This configuration makes backspace behave more reasonably, in that you can
 " backspace over anything.
-set backspace=indent,eol,start
+" set backspace=indent,eol,start
+nnoremap <BS> <Nop>
+vnoremap <BS> <Nop>
 
 " By default, Vim doesn't let you hide a buffer (i.e. have a buffer that isn't
-" shown in any window) that has unsaved changes. This is to prevent you from "
+" shown in any window) that has unsaved changes. This is to prevent you from
 " forgetting about unsaved changes and then quitting e.g. via `:qa!`. We find
 " hidden buffers helpful enough to disable this protection. See `:help hidden`
 " for more information on this.
@@ -40,21 +77,28 @@ set ignorecase
 set smartcase
 
 " Enable searching as you type, rather than waiting till you press enter.
+exec "nohlsearch"
 set incsearch
 " hightlight search
 set hlsearch
+nnoremap <LEADER><CR> :nohlsearch<CR>
+" Those two lines are for copy selected contents to Windows clipboard,
+" or copy from Windoes clipboard with <spac>c and <space>v
+" those are mainly for wsl
+vnoremap <LEADER>c :w !clip.exe<CR><CR>
+nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 
 " Unbind some useless/annoying default key bindings.
 " 'Q' in normal mode enters Ex mode. You almost never want this.
 " we map Q to be :q
-nmap Q <Nop> 
+nmap Q <Nop>
 nnoremap Q :q<CR>
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
 
 " Enable mouse support. You should avoid relying on this too much, but it can
 " sometimes be convenient.
-set mouse+=a
+" set mouse+=a
 
 " Try to prevent bad habits like using the arrow keys for movement. This is
 " not the only possible bad habit. For example, holding down the h/j/k/l keys
@@ -66,22 +110,11 @@ nnoremap <Left>  :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up>    :echoe "Use k"<CR>
 nnoremap <Down>  :echoe "Use j"<CR>
+" ...and in insert mode
 inoremap <Left>  <ESC>:echoe "Use h"<CR>
 inoremap <Right> <ESC>:echoe "Use l"<CR>
 inoremap <Up>    <ESC>:echoe "Use k"<CR>
 inoremap <Down>  <ESC>:echoe "Use j"<CR>
-" ^P to open CtrlP pluggin
-let g:ctrlp_map = '<C-p>'
-
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-\ 'file': '\v\.(exe|so|dll)$',
-\ }
-" let dot files be included in ctrlp
-let g:ctrlp_show_hidden = 1
-" ...and in insert mode
 " show cursor line to let you know where are you now more efficiently
 set cursorline
 " show command
