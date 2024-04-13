@@ -30,5 +30,8 @@ alias jptnbcv='jupyter nbconvert'
 alias ll='ls -alFh'
 # goes to up directory
 alias up='cd ..'
+# Those two lines are for WSL to use windows clipboard
+alias wcp='clip.exe'
+alias wpst='powershell.exe Get-Clipboard'
 # we add a empty line below to make sure the script append it coreectly.
 ### end_symbol_kaiserqzyue
