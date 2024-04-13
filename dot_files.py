@@ -2,7 +2,8 @@
 
 # Usage: ./dot_files.py update|recover or python dot_files.py update|recover
 # Update Function: Back up $HOME/file to ./backup,
-#                  append all the contents of ./file to $HOME/file
+#                  append all the contents of ./file to $HOME/file or
+#                  copy ./file to $HOME/
 # Recover Function: copy ./backup/file to $HOME/
 
 # Update the list to ignore those files you don't want to update or recover
@@ -12,6 +13,8 @@
 ignore_file = set(["./.git", "./LICENSE", "./README.md",
                    "./dot_files.py", "./.gitignore"])
 
+# Update the list to let those files to be copied to $HOME
+copy_file = set(["./.vscode-server"])
 # Update the string to specify where you want to store the backed-up files
 # or where you want to recover from
 backup_dir = "./backup"
@@ -26,47 +29,63 @@ ignore_file.add(backup_dir)
 backup_dir += '/'
 home_dir = os.environ["HOME"] + '/'
 
-def update_dot_files(home_current_dir : str, current_dir : str):
+def backup_files(home_current_dir : str, current_dir):
     global backup_dir, ignore_file, home_dir
     if not os.path.exists(backup_dir):
         os.mkdir(backup_dir)
-    if not os.path.exists(home_current_dir):
-        os.mkdir(home_current_dir)
     home_file_set = set(os.listdir(home_current_dir))
     cur_file_set = set(os.listdir(current_dir))
     backup_file_set = home_file_set & cur_file_set
-    for backup_file in backup_file_set:
-        if backup_file == '.' or backup_file == "..":
+    for fileOrDir in backup_file_set:
+        if fileOrDir == '.' or fileOrDir == "..":
             continue
-        if current_dir + backup_file in ignore_file:
+        if current_dir + fileOrDir in ignore_file:
             continue
-        if os.path.isfile(home_current_dir + backup_file):
-            print(f"backup {home_current_dir + backup_file} to "
-                  f"{backup_dir + backup_file}")
-            shutil.copy(home_current_dir + backup_file,
-                        backup_dir + backup_file)
+        if os.path.isfile(home_current_dir + fileOrDir):
+            print(f"backup {home_current_dir + fileOrDir} to "
+                  f"{backup_dir + fileOrDir}")
+            shutil.copy(home_current_dir + fileOrDir,
+                        backup_dir + fileOrDir)
         else:
-            backup_file += '/'
-            backup_dir += backup_file
-            update_dot_files(home_current_dir + backup_file,
-                             current_dir + backup_file)
-            backup_dir -= backup_file
-    for cur_file in cur_file_set:
-        if cur_file == '.' or cur_file == "..":
+            fileOrDir += '/'
+            backup_dir += fileOrDir
+            backup_files(home_current_dir + fileOrDir,
+                         current_dir + fileOrDir)
+            backup_dir = backup_dir[:-len(fileOrDir)] 
+
+def update_dot_files(home_current_dir : str, current_dir : str):
+    if not os.path.exists(home_current_dir):
+        os.mkdir(home_current_dir)
+    cur_file_set = set(os.listdir(current_dir))
+    for fileOrDir in cur_file_set:
+        if fileOrDir == '.' or fileOrDir == "..":
             continue
-        if current_dir + cur_file in ignore_file:
+        if current_dir + fileOrDir in ignore_file:
             continue
-        if os.path.isfile(current_dir + cur_file):
-            print(f"append contents of "
-                  f"{os.getcwd() + '/' + current_dir + cur_file} "
-                  f"to {home_dir + cur_file}")
-            os.system(f"cat {os.getcwd() + '/' + current_dir + cur_file} "
-                      f">> {home_current_dir + cur_file}")
+        if os.path.isfile(current_dir + fileOrDir):
+            if current_dir + fileOrDir in copy_file:
+                print(f"copy "
+                        f"{current_dir + fileOrDir} "
+                        f"to {home_current_dir + fileOrDir}")
+                shutil.copy(current_dir + fileOrDir,
+                            home_current_dir + fileOrDir)
+            else:
+                print(f"append contents of "
+                        f"{os.getcwd() + '/' + current_dir + fileOrDir} "
+                        f"to {home_current_dir + fileOrDir}")
+                os.system(f"cat {os.getcwd() + '/' + current_dir + fileOrDir} "
+                            f">> {home_current_dir + fileOrDir}")
+        elif current_dir + fileOrDir in copy_file:
+            print("cp -r " 
+                  f"{os.getcwd() + '/' + current_dir + fileOrDir + '/*'} " 
+                  f"{home_current_dir + fileOrDir}")
+            os.system("cp -r " 
+                      f"{os.getcwd() + '/' + current_dir + fileOrDir + '/*'} " 
+                      f"{home_current_dir + fileOrDir}")
         else:
-            print(cur_file)
-            cur_file += '/'
-            update_dot_files(home_current_dir + cur_file,
-                             current_dir + cur_file)            
+            fileOrDir += '/'
+            update_dot_files(home_current_dir + fileOrDir,
+                             current_dir + fileOrDir)
 
 def recover_dot_files(home_current_dir, current_dir):
     global backup_dir, ignore_file, home_dir
@@ -85,14 +104,15 @@ def recover_dot_files(home_current_dir, current_dir):
                         home_current_dir)
         else:
             recover_file += '/'
-            update_dot_files(home_current_dir + recover_file,
+            recover_dot_files(home_current_dir + recover_file,
                              current_dir + recover_file)
         
 def update_or_recover_dot_files(home_current_dir : str, current_dir : str,
                                 opcode : str):
     if opcode == "update":
+        backup_files(home_current_dir, current_dir)
         update_dot_files(home_current_dir, current_dir)
-    if opcode == "recover":
+    elif opcode == "recover":
         recover_dot_files(home_current_dir, current_dir)
     else:
         exit(1)      
