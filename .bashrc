@@ -19,6 +19,7 @@ alias gcm='git commit'
 alias gft='git fetch'
 alias gmg='git merge'
 alias gl='git log'
+alias gdf='git diff'
 
 # set aliases for some frequently used jupyter commands
 alias jpt='jupyter'

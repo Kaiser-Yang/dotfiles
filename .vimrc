@@ -41,6 +41,8 @@ set smartcase
 
 " Enable searching as you type, rather than waiting till you press enter.
 set incsearch
+" hightlight search
+set hlsearch
 
 " Unbind some useless/annoying default key bindings.
 " 'Q' in normal mode enters Ex mode. You almost never want this.
@@ -64,6 +66,10 @@ nnoremap <Left>  :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up>    :echoe "Use k"<CR>
 nnoremap <Down>  :echoe "Use j"<CR>
+inoremap <Left>  <ESC>:echoe "Use h"<CR>
+inoremap <Right> <ESC>:echoe "Use l"<CR>
+inoremap <Up>    <ESC>:echoe "Use k"<CR>
+inoremap <Down>  <ESC>:echoe "Use j"<CR>
 " ^P to open CtrlP pluggin
 let g:ctrlp_map = '<C-p>'
 
@@ -76,10 +82,6 @@ let g:ctrlp_custom_ignore = {
 " let dot files be included in ctrlp
 let g:ctrlp_show_hidden = 1
 " ...and in insert mode
-inoremap <Left>  <ESC>:echoe "Use h"<CR>
-inoremap <Right> <ESC>:echoe "Use l"<CR>
-inoremap <Up>    <ESC>:echoe "Use k"<CR>
-inoremap <Down>  <ESC>:echoe "Use j"<CR>
 " show cursor line to let you know where are you now more efficiently
 set cursorline
 " show command
