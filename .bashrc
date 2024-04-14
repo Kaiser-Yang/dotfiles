@@ -33,5 +33,7 @@ alias up='cd ..'
 # Those two lines are for WSL to use windows clipboard
 alias wcp='clip.exe'
 alias wpst='powershell.exe Get-Clipboard'
+# Let ^L clear the screen
+bind "\C-l":clear-screen
 # we add a empty line below to make sure the script append it coreectly.
 ### end_symbol_kaiserqzyue

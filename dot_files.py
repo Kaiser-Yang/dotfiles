@@ -14,7 +14,8 @@ ignore_file = set(["./.git", "./LICENSE", "./README.md",
                    "./dot_files.py", "./.gitignore"])
 
 # Update the list to let those files to be copied to $HOME
-copy_file = set(["./.vscode-server"])
+copy_file = set(["./.vscode-server", "./.vimrc", "./.vim",
+                 "./vim_plugin_config"])
 # Update the string to specify where you want to store the backed-up files
 # or where you want to recover from
 backup_dir = "./backup"
@@ -76,6 +77,8 @@ def update_dot_files(home_current_dir : str, current_dir : str):
                 os.system(f"cat {os.getcwd() + '/' + current_dir + fileOrDir} "
                             f">> {home_current_dir + fileOrDir}")
         elif current_dir + fileOrDir in copy_file:
+            if not os.path.exists(home_current_dir + fileOrDir):
+                os.mkdir(home_current_dir + fileOrDir)
             print("cp -r " 
                   f"{os.getcwd() + '/' + current_dir + fileOrDir + '/*'} " 
                   f"{home_current_dir + fileOrDir}")

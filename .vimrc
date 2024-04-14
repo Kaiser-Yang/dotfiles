@@ -2,44 +2,52 @@
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
 
+" Those are for wsl cursor to be changable between normal mode and insert mode.
+let &t_SI.="\e[5 q"
+let &t_SR.="\e[3 q"
+let &t_EI.="\e[1 q"
+autocmd VimEnter * silent !echo -ne "\e[1 q"
+autocmd VimLeave * silent !echo -ne "\e[5 q"
+
+" This is to make <ESC> quicker
+set ttimeoutlen=0
+
 " We don't use <CR> to go to next line
 nnoremap <CR> <Nop>
 vnoremap <CR> <Nop>
+
 " use system clip board
 set clipboard=unnamed
-
-" vim-plug
-call plug#begin('~/.vim/plugged')
-" add status bar below
-Plug 'vim-airline/vim-airline'
-" snazzy color theme
-Plug 'connorholyday/vim-snazzy'
-" CtrlP for find files
-Plug 'kien/ctrlp.vim'
-call plug#end()
-
-" ^P to open CtrlP pluggin
-let g:ctrlp_map = '<C-p>'
-
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-\ 'file': '\v\.(exe|so|dll)$',
-\ }
-" let dot files be included in ctrlp
-let g:ctrlp_show_hidden = 1
-
-" set color scheme to be snazzy, and enable transparent
-colorscheme snazzy
-let g:SnazzyTransparent = 1
 
 " set leader be space
 nnoremap <space> <Nop>
 vnoremap <space> <Nop>
 let mapleader=" "
+
 " Set no compatible mode for vim
 set nocompatible
+filetype on
+filetype indent on
+filetype plugin on
+filetype plugin indent on
+
+" set utf8 as default encoding
+scriptencoding utf-8
+set encoding=utf-8
+
+" set list chars
+set list
+set listchars=tab:»·,trail:·
+
+" set fold method for folding code.
+set foldmethod=indent
+set foldlevel=99
+
+" set your working directory is where current file is.
+set autochdir
+
+" This is to set cursor where it was when the file is closed last time.
+au BufReadPost * if line("''\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 " Turn on syntax highlighting.
 syntax on
@@ -48,18 +56,14 @@ syntax on
 set shortmess+=I
 
 " set line number
-set number
 " Set relative line number
+set number
 set relativenumber
 
 " Always show the status line at the bottom, even if you only have one window open.
 set laststatus=2
 
-" The backspace key has slightly unintuitive behavior by default. For example,
-" by default, you can't backspace before the insertion point set with 'i'.
-" This configuration makes backspace behave more reasonably, in that you can
-" backspace over anything.
-" set backspace=indent,eol,start
+" We don't use backspace in normal and visual mode, use h instead.
 nnoremap <BS> <Nop>
 vnoremap <BS> <Nop>
 
@@ -77,11 +81,14 @@ set ignorecase
 set smartcase
 
 " Enable searching as you type, rather than waiting till you press enter.
-exec "nohlsearch"
 set incsearch
+
 " hightlight search
+" user <LEADER><CR> to close search hightlight
+exec "nohlsearch"
 set hlsearch
 nnoremap <LEADER><CR> :nohlsearch<CR>
+
 " Those two lines are for copy selected contents to Windows clipboard,
 " or copy from Windoes clipboard with <spac>c and <space>v
 " those are mainly for wsl
@@ -93,6 +100,7 @@ nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 " we map Q to be :q
 nmap Q <Nop>
 nnoremap Q :q<CR>
+
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
 
@@ -100,39 +108,67 @@ set noerrorbells visualbell t_vb=
 " sometimes be convenient.
 " set mouse+=a
 
-" Try to prevent bad habits like using the arrow keys for movement. This is
-" not the only possible bad habit. For example, holding down the h/j/k/l keys
-" for movement, rather than using more efficient movement commands, is also a
-" bad habit. The former is enforceable through a .vimrc, while we don't know
-" how to prevent the latter.
-" Do this in normal mode...
-nnoremap <Left>  :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up>    :echoe "Use k"<CR>
-nnoremap <Down>  :echoe "Use j"<CR>
-" ...and in insert mode
-inoremap <Left>  <ESC>:echoe "Use h"<CR>
-inoremap <Right> <ESC>:echoe "Use l"<CR>
-inoremap <Up>    <ESC>:echoe "Use k"<CR>
-inoremap <Down>  <ESC>:echoe "Use j"<CR>
 " show cursor line to let you know where are you now more efficiently
 set cursorline
+
 " show command
 set showcmd
+
 " wild menu for tab search
 set wildmenu
+
 " set indentation 4 spaces
 set expandtab
 set tabstop=4
 set shiftwidth=4
+
 " set wrap for split lines automatically
-set wrap
+" set wrap
 " set S to be :w, because S is synonym for cc
 map S :w<CR>
+
+" set <leader>h, j, k and l to be split left, down, up, right.
+" set <leader>H, J, K, L to move current window to left, down, up, right
+nnoremap <C-h> :set nosplitright<CR>:vsplit<CR>
+nnoremap <C-j> :set splitbelow<CR>:split<CR>
+nnoremap <C-k> :set nosplitbelow<CR>:split<CR>
+nnoremap <C-l> :set splitright<CR>:vsplit<CR>
+inoremap <C-h> <ESC>:set nosplitright<CR>:vsplit<CR>
+inoremap <C-j> <ESC>:set splitbelow<CR>:split<CR>
+inoremap <C-k> <ESC>:set nosplitbelow<CR>:split<CR>
+inoremap <C-l> <ESC>:set splitright<CR>:vsplit<CR>
+nnoremap <LEADER>h <C-w>h
+nnoremap <LEADER>j <C-w>j
+nnoremap <LEADER>k <C-w>k
+nnoremap <LEADER>l <C-w>l
+nnoremap <LEADER>H <C-w>H
+nnoremap <LEADER>J <C-w>J
+nnoremap <LEADER>K <C-w>K
+nnoremap <LEADER>L <C-w>L
+
+" set up to add size of current window, down to minus size
+" set right to add size of current window, left to minus size
+nnoremap <Up> :res +5<CR>
+nnoremap <Down> :res -5<CR>
+nnoremap <Left> :vertical resize -5<CR>
+nnoremap <Right> :vertical resize +5<CR>
+inoremap <Up> <ESC>:res +5<CR>i
+inoremap <Down> <ESC>:res -5<CR>i
+inoremap <Left> <ESC>:vertical resize -5<CR>i
+inoremap <Right> <ESC>:vertical resize +5<CR>i
+
+" set ^T to create new tab
 " set ^N and ^B to navigate between tabs
-nnoremap <C-n> :tabnext<CR>
-nnoremap <C-b> :tabprev<CR>
+inoremap <C-t> <ESC>:tabnew<CR>
 inoremap <C-n> <ESC>:tabnext<CR>
 inoremap <C-b> <ESC>:tabprev<CR>
+nnoremap <C-t> :tabnew<CR>
+nnoremap <C-n> :tabnext<CR>
+nnoremap <C-b> :tabprev<CR>
+
+" source some plugins config files
+source ~/.vim/vim_plugin_config/vimplug_config.vim
+source ~/.vim/vim_plugin_config/ctrlp_config.vim
+source ~/.vim/vim_plugin_config/snazzy_config.vim
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
