@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Usage: ./dot_files.py update|recover or python dot_files.py update|recover
 # Update Function: Back up $HOME/file to ./backup,
@@ -14,6 +14,8 @@ ignore_file = set(["./.git", "./LICENSE", "./README.md",
                    "./dot_files.py", "./.gitignore"])
 
 # Update the list to let those files to be copied to $HOME
+# In short, if your $HOME has no the file or directory,
+# Add it to the variable.
 copy_file = set(["./.vscode-server", "./.vimrc", "./.vim",
                  "./vim_plugin_config"])
 # Update the string to specify where you want to store the backed-up files

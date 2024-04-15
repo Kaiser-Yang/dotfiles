@@ -2,6 +2,12 @@
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
 
+" set scrolloff to make you can see the non-exist lines of files
+" set scrolloff=999 will let your curor line always be in the middle.
+" but when it reach the bottom, the cusor line will not be the middle,
+" you can use zz to make it be in the middle again.
+set scrolloff=999
+
 " Those are for wsl cursor to be changable between normal mode and insert mode.
 let &t_SI.="\e[5 q"
 let &t_SR.="\e[3 q"
@@ -11,10 +17,6 @@ autocmd VimLeave * silent !echo -ne "\e[5 q"
 
 " This is to make <ESC> quicker
 set ttimeoutlen=0
-
-" We don't use <CR> to go to next line
-nnoremap <CR> <Nop>
-vnoremap <CR> <Nop>
 
 " use system clip board
 set clipboard=unnamed
@@ -26,7 +28,7 @@ let mapleader=" "
 
 " Set no compatible mode for vim
 set nocompatible
-filetype on
+filetype off
 filetype indent on
 filetype plugin on
 filetype plugin indent on
@@ -47,7 +49,10 @@ set foldlevel=99
 set autochdir
 
 " This is to set cursor where it was when the file is closed last time.
-au BufReadPost * if line("''\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+autocmd BufReadPost *
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+  \ |   exe "normal! g`\""
+  \ | endif
 
 " Turn on syntax highlighting.
 syntax on
@@ -84,7 +89,7 @@ set smartcase
 set incsearch
 
 " hightlight search
-" user <LEADER><CR> to close search hightlight
+" use <LEADER><CR> to close search hightlight
 exec "nohlsearch"
 set hlsearch
 nnoremap <LEADER><CR> :nohlsearch<CR>
@@ -92,6 +97,7 @@ nnoremap <LEADER><CR> :nohlsearch<CR>
 " Those two lines are for copy selected contents to Windows clipboard,
 " or copy from Windoes clipboard with <spac>c and <space>v
 " those are mainly for wsl
+" those can only copy or paste entire lines
 vnoremap <LEADER>c :w !clip.exe<CR><CR>
 nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 
@@ -123,19 +129,24 @@ set tabstop=4
 set shiftwidth=4
 
 " set wrap for split lines automatically
-" set wrap
+set wrap
+
 " set S to be :w, because S is synonym for cc
-map S :w<CR>
+nnoremap S <Nop>
+nnoremap S :w<CR>
 
 " set <leader>h, j, k and l to be split left, down, up, right.
 " set <leader>H, J, K, L to move current window to left, down, up, right
-nnoremap <C-h> :set nosplitright<CR>:vsplit<CR>
-nnoremap <C-j> :set splitbelow<CR>:split<CR>
+" set <leader>T to let current window be a new tab
+nnoremap <C-h> :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
+nnoremap <C-j> :set splitbelow<CR>:split<CR>:set nosplitbelow<CR>
 nnoremap <C-k> :set nosplitbelow<CR>:split<CR>
 nnoremap <C-l> :set splitright<CR>:vsplit<CR>
-inoremap <C-h> <ESC>:set nosplitright<CR>:vsplit<CR>
-inoremap <C-j> <ESC>:set splitbelow<CR>:split<CR>
-inoremap <C-k> <ESC>:set nosplitbelow<CR>:split<CR>
+inoremap <C-h> <ESC>:set nosplitright<CR>:vsplit<CR>:set splitright<CR>
+" we can not use <C-j> in insert mode,
+" because we use <C-j> to select code completion.
+" inoremap <C-j> <ESC>:set splitbelow<CR>:split<CR>:set nosplitbelow<CR>
+" inoremap <C-k> <ESC>:set nosplitbelow<CR>:split<CR>
 inoremap <C-l> <ESC>:set splitright<CR>:vsplit<CR>
 nnoremap <LEADER>h <C-w>h
 nnoremap <LEADER>j <C-w>j
@@ -145,6 +156,7 @@ nnoremap <LEADER>H <C-w>H
 nnoremap <LEADER>J <C-w>J
 nnoremap <LEADER>K <C-w>K
 nnoremap <LEADER>L <C-w>L
+nnoremap <LEADER>T <C-w>T
 
 " set up to add size of current window, down to minus size
 " set right to add size of current window, left to minus size
@@ -166,9 +178,11 @@ nnoremap <C-t> :tabnew<CR>
 nnoremap <C-n> :tabnext<CR>
 nnoremap <C-b> :tabprev<CR>
 
-" source some plugins config files
 source ~/.vim/vim_plugin_config/vimplug_config.vim
 source ~/.vim/vim_plugin_config/ctrlp_config.vim
 source ~/.vim/vim_plugin_config/snazzy_config.vim
+source ~/.vim/vim_plugin_config/youcompleteme_config.vim
+" source ~/.vim/vim_plugin_config/vundle_config.vim
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
+
