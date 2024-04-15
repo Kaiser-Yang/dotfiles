@@ -184,6 +184,7 @@ source ~/.vim/vim_plugin_config/vimplug_config.vim
 source ~/.vim/vim_plugin_config/ctrlp_config.vim
 source ~/.vim/vim_plugin_config/snazzy_config.vim
 source ~/.vim/vim_plugin_config/youcompleteme_config.vim
+source ~/.vim/vim_plugin_config/nerdtree_config.vim
 " source ~/.vim/vim_plugin_config/vundle_config.vim
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
