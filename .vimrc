@@ -28,7 +28,7 @@ let mapleader=" "
 
 " Set no compatible mode for vim
 set nocompatible
-filetype off
+filetype on
 filetype indent on
 filetype plugin on
 filetype plugin indent on
