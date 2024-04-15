@@ -9,19 +9,6 @@ nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 " use gd to go to definition
 nnoremap gd <Nop>
 nnoremap gd :rightbelow vertical YcmCompleter GoTo<CR>
-" nnoremap gh  <Nop>
-" nnoremap ghd <Nop>
-" nnoremap ghd :leftabove vertical YcmCompleter GoTo<CR>
-" nnoremap gj  <Nop>
-" nnoremap gjd <Nop>
-" nnoremap gjd :rightbelow YcmCompleter GoTo<CR>
-" nnoremap gk  <Nop>
-" nnoremap gkd <Nop>
-" nnoremap gkd :leftabove YcmCompleter GoTo<CR>
-" nnoremap gl  <Nop>
-" nnoremap gld <Nop>
-" nnoremap gld :rightbelow vertical YcmCompleter GoTo<CR>
-" use gh to go to current file's header file
 
 " nnoremap gh <Nop>
 nnoremap gh :rightbelow vertical YcmCompleter GoToAlternateFile<CR>
@@ -41,7 +28,7 @@ nnoremap <Leader>r :YcmCompleter RefactorRename
 nnoremap <C-f> <Nop>
 nnoremap <C-f> :YcmCompleter FixIt<CR>
 
-" use <Leader>d show dow for current symbol
+" use <Leader>d show doc for current symbol
 nnoremap <Leader>d <plug>(YCMHover)
 
 let g:ycm_extra_conf_globlist = ['~/.vim/vim_plugin_config/ycm_extra_config_global.py']
@@ -54,13 +41,13 @@ let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_list_select_completion = ['<C-j>', '<TAB>']
 let g:ycm_key_list_previous_completion = ['<C-k>', '<S-TAB>']
 let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_auto_hover = ''
 let g:ycm_semantic_triggers =  {
   \   'c': ['->', '.', '#'],
-  \   'cpp': ['->', '.', '#'],
   \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
   \            're!\[.*\]\s'],
   \   'ocaml': ['.', '#'],
-  \   'cpp,cuda,objcpp': ['->', '.', '::'],
+  \   'cpp,cuda,objcpp': ['->', '.', '::', '#'],
   \   'perl': ['->'],
   \   'php': ['->', '::'],
   \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],

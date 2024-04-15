@@ -164,10 +164,10 @@ nnoremap <Up> :res +5<CR>
 nnoremap <Down> :res -5<CR>
 nnoremap <Left> :vertical resize -5<CR>
 nnoremap <Right> :vertical resize +5<CR>
-inoremap <Up> <ESC>:res +5<CR>i
-inoremap <Down> <ESC>:res -5<CR>i
-inoremap <Left> <ESC>:vertical resize -5<CR>i
-inoremap <Right> <ESC>:vertical resize +5<CR>i
+inoremap <Up> <ESC>:res +5<CR>a
+inoremap <Down> <ESC>:res -5<CR>a
+inoremap <Left> <ESC>:vertical resize -5<CR>a
+inoremap <Right> <ESC>:vertical resize +5<CR>a
 
 " set ^T to create new tab
 " set ^N and ^B to navigate between tabs
@@ -177,6 +177,8 @@ inoremap <C-b> <ESC>:tabprev<CR>
 nnoremap <C-t> :tabnew<CR>
 nnoremap <C-n> :tabnext<CR>
 nnoremap <C-b> :tabprev<CR>
+
+set completeopt=popup
 
 source ~/.vim/vim_plugin_config/vimplug_config.vim
 source ~/.vim/vim_plugin_config/ctrlp_config.vim
