@@ -3,12 +3,22 @@
 " We add a empty line above to make sure the script append it correctly.
 
 " set scrolloff to make you can see the non-exist lines of files
-" set scrolloff=999 will let your curor line always be in the middle.
-" but when it reach the bottom, the cusor line will not be the middle,
-" you can use zz to make it be in the middle again.
-set scrolloff=999
+" set scrolloff=999 will let your cursor line always be in the middle.
+" but when it reach the bottom, the cursor line will not be the middle,
+" use this below can figure it out, make your cursor always the middle,
+augroup VCenterCursor
+au!
+au BufEnter,WinEnter,WinNew,VimResized *,*.*
+    \ let &scrolloff=winheight(win_getid())/2
+augroup END
+nnoremap i zzi
+nnoremap I zzI
+nnoremap o zzo
+nnoremap O zzO
+nnoremap a zza
+nnoremap A zzA
 
-" Those are for wsl cursor to be changable between normal mode and insert mode.
+" Those are for wsl cursor to be changeable between normal mode and insert mode.
 let &t_SI.="\e[5 q"
 let &t_SR.="\e[3 q"
 let &t_EI.="\e[1 q"
@@ -21,10 +31,16 @@ set ttimeoutlen=0
 " use system clip board
 set clipboard=unnamed
 
+" set spell check on by default
+set spell
+
 " set leader be space
 nnoremap <space> <Nop>
 vnoremap <space> <Nop>
 let mapleader=" "
+
+" set <leader>sc to turn on or off spell check
+nnoremap <leader>sc :set spell!<CR>
 
 " Set no compatible mode for vim
 set nocompatible
@@ -33,7 +49,7 @@ filetype indent on
 filetype plugin on
 filetype plugin indent on
 
-" set utf8 as default encoding
+" set utf-8 as default encoding
 scriptencoding utf-8
 set encoding=utf-8
 
@@ -88,14 +104,14 @@ set smartcase
 " Enable searching as you type, rather than waiting till you press enter.
 set incsearch
 
-" hightlight search
-" use <LEADER><CR> to close search hightlight
+" highlight search
+" use <LEADER><CR> to close search highlight
 exec "nohlsearch"
 set hlsearch
 nnoremap <LEADER><CR> :nohlsearch<CR>
 
 " Those two lines are for copy selected contents to Windows clipboard,
-" or copy from Windoes clipboard with <spac>c and <space>v
+" or copy from Windows clipboard with <leader>c and <space>v
 " those are mainly for wsl
 " those can only copy or paste entire lines
 vnoremap <LEADER>c :w !clip.exe<CR><CR>
@@ -142,12 +158,12 @@ nnoremap <C-h> :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
 nnoremap <C-j> :set splitbelow<CR>:split<CR>:set nosplitbelow<CR>
 nnoremap <C-k> :set nosplitbelow<CR>:split<CR>
 nnoremap <C-l> :set splitright<CR>:vsplit<CR>
-inoremap <C-h> <ESC>:set nosplitright<CR>:vsplit<CR>:set splitright<CR>
+inoremap <C-h> <ESC>:set nosplitright<CR><ESC>:vsplit<CR><ESC>:set splitright<CR>
 " we can not use <C-j> in insert mode,
 " because we use <C-j> to select code completion.
-" inoremap <C-j> <ESC>:set splitbelow<CR>:split<CR>:set nosplitbelow<CR>
-" inoremap <C-k> <ESC>:set nosplitbelow<CR>:split<CR>
-inoremap <C-l> <ESC>:set splitright<CR>:vsplit<CR>
+" inoremap <C-j> <ESC>:set splitbelow<CR><ESC>:split<CR><ESC>:set nosplitbelow<CR>
+" inoremap <C-k> <ESC>:set nosplitbelow<CR><ESC>:split<CR>
+inoremap <C-l> <ESC>:set splitright<CR><ESC>:vsplit<CR>
 nnoremap <LEADER>h <C-w>h
 nnoremap <LEADER>j <C-w>j
 nnoremap <LEADER>k <C-w>k
@@ -164,10 +180,10 @@ nnoremap <Up> :res +5<CR>
 nnoremap <Down> :res -5<CR>
 nnoremap <Left> :vertical resize -5<CR>
 nnoremap <Right> :vertical resize +5<CR>
-inoremap <Up> <ESC>:res +5<CR>a
-inoremap <Down> <ESC>:res -5<CR>a
-inoremap <Left> <ESC>:vertical resize -5<CR>a
-inoremap <Right> <ESC>:vertical resize +5<CR>a
+inoremap <Up> <C-o>:res +5<CR>
+inoremap <Down> <C-o>:res -5<CR>
+inoremap <Left> <C-o>:vertical resize -5<CR>
+inoremap <Right> <C-o>:vertical resize +5<CR>
 
 " set ^T to create new tab
 " set ^N and ^B to navigate between tabs
@@ -185,7 +201,6 @@ source ~/.vim/vim_plugin_config/ctrlp_config.vim
 source ~/.vim/vim_plugin_config/snazzy_config.vim
 source ~/.vim/vim_plugin_config/youcompleteme_config.vim
 source ~/.vim/vim_plugin_config/nerdtree_config.vim
-" source ~/.vim/vim_plugin_config/vundle_config.vim
-" we add a empty line below to make sure the script append it coreectly.
+" we add a empty line below to make sure the script append it correctly.
 " end_symbol_kaiserqzyue
 
