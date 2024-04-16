@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 
-# Usage: ./dot_files.py update|recover or python dot_files.py update|recover
+# Usage: ./dot_files.py update|recover or python dot_files.py [update|recover|init]
 # Update Function: Back up $HOME/file to ./backup,
 #                  append all the contents of ./file to $HOME/file or
 #                  copy ./file to $HOME/
 # Recover Function: copy ./backup/file to $HOME/
+# Init Function: this is for first use this, it will backup, update and install plugins
+#                automatically, this will use vim commands :PlugInstall to install,
+#                and will install ycm clangd-completer automatically.
+#                this code will use sudo, so you need enter your password.
+# No Args: this will recover, backup and update.
+# NOTE: any operation reference to update will overwrite the backup files,
+#       so use ./dot_files.py with no args are strongly recommended.
+# NOTE: do not run this code as root, even using sudo, otherwise, this will install in
+#       user root's HOME DIRECTORY, which is usually set with /root
 
 # Update the list to ignore those files you don't want to update or recover
 # NOTE: items must start with ./ and end with no / at the end,
@@ -31,6 +40,7 @@ ignore_file.add(backup_dir)
 
 backup_dir += '/'
 home_dir = os.environ["HOME"] + '/'
+ycm_dir = home_dir + ".vim/plugged/YouCompleteMe/"
 
 def backup_files(home_current_dir : str, current_dir):
     global backup_dir, ignore_file, home_dir
@@ -94,8 +104,11 @@ def update_dot_files(home_current_dir : str, current_dir : str):
 
 def recover_dot_files(home_current_dir, current_dir):
     global backup_dir, ignore_file, home_dir
+    # this is to invent the backup_dir doesn't exists.
+    if not os.path.exists(current_dir):
+        return
     if not os.path.exists(home_current_dir):
-       os.mkdir(home_current_dir)
+        os.mkdir(home_current_dir)
     recover_file_set = set(os.listdir(backup_dir + current_dir)) 
     for recover_file in recover_file_set:
         if recover_file == '.' or recover_file == "..":
@@ -111,20 +124,57 @@ def recover_dot_files(home_current_dir, current_dir):
             recover_file += '/'
             recover_dot_files(home_current_dir + recover_file,
                              current_dir + recover_file)
-        
-def update_or_recover_dot_files(home_current_dir : str, current_dir : str,
-                                opcode : str):
+def install_plugin_for_vim():
+    global ycm_dir
+    # ycm requirs vim 9, so we will update your vim.
+    print("updating vim for you...")
+    # in order to add correctly, we must remove the repository
+    # manually, and add it again.
+    os.system("sudo add-apt-repository -r ppa:jonathonf/vim")
+    os.system("sudo add-apt-repository ppa:jonathonf/vim")
+    os.system("sudo apt update")
+    os.system("sudo apt install vim")
+    # use vim +PlugInstall to install plugins
+    print("installing vim plugins...")
+    os.system("vim +PlugInstall")
+    # the installation tools for ycm
+    print("installing build tools for ycm...")
+    os.system("sudo apt install build-essential cmake vim-nox python3-dev")
+    print("installing ycm...")
+    ycm_dir = ycm_dir.replace("//", "/")
+    os.system(f"cd {ycm_dir} && python3 install.py --clangd-completer")
+
+def operate_dot_files(home_current_dir : str, current_dir : str,
+                      opcode : str):
     if opcode == "update":
         backup_files(home_current_dir, current_dir)
         update_dot_files(home_current_dir, current_dir)
     elif opcode == "recover":
         recover_dot_files(home_current_dir, current_dir)
+    elif opcode == "init":
+        recover_dot_files(home_current_dir, current_dir)
+        backup_files(home_current_dir, current_dir)
+        update_dot_files(home_current_dir, current_dir)
+        install_plugin_for_vim()
+    elif opcode == "":
+        recover_dot_files(home_current_dir, current_dir)
+        backup_files(home_current_dir, current_dir)
+        update_dot_files(home_current_dir, current_dir)
     else:
-        exit(1)      
+        print("Usage: ./dot_files.py [update|recover|init]")
+        exit(1)
 
 if __name__ == "__main__":
-    if (len(sys.argv) != 2 or
-        (sys.argv[1] != "update" and sys.argv[1] != "recover")):
-        print("Usage: ./dot_files.py update|recover")
-    home_dir.replace("//", "/")
-    update_or_recover_dot_files(home_dir, "./", sys.argv[1])
+    if os.getuid() == 0:
+        print("Warning: you are installing for user root,"
+              "which is uncommon, are you sure to continue?[y/n]", end = '')
+        if input() != 'y':
+            exit(0)
+    if len(sys.argv) == 2:
+        opcode =  sys.argv[1]
+    elif len(sys.argv) > 2:
+        print("Usage: ./dot_files.py [update|recover|init]")
+    else:
+        opcode = ""
+    home_dir = home_dir.replace("//", "/")
+    operate_dot_files(home_dir, "./", opcode)

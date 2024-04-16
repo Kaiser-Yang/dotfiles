@@ -32,7 +32,8 @@ nnoremap <C-f> :YcmCompleter FixIt<CR>
 nnoremap <Leader>d <plug>(YCMHover)
 
 let g:ycm_extra_conf_globlist = ['~/.vim/vim_plugin_config/ycm_extra_config_global.py']
-let g:ycm_goto_buffer_command = 'split-or-existing-window'
+" this will make ^O and ^I be difficult to return and go forward.
+" let g:ycm_goto_buffer_command = 'split-or-existing-window'
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_comments = 1
@@ -42,6 +43,7 @@ let g:ycm_key_list_select_completion = ['<C-j>', '<TAB>']
 let g:ycm_key_list_previous_completion = ['<C-k>', '<S-TAB>']
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_auto_hover = ''
+" Just add # to trigger for C-family language
 let g:ycm_semantic_triggers =  {
   \   'c': ['->', '.', '#'],
   \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
