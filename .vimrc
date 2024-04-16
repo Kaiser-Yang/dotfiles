@@ -151,7 +151,8 @@ set wrap
 nnoremap S <Nop>
 nnoremap S :w<CR>
 
-" set <leader>h, j, k and l to be split left, down, up, right.
+" set <C> + h, j, k and l to be split left, down, up, right.
+" set <leader> h, j, k and l to move cursor between Windows.
 " set <leader>H, J, K, L to move current window to left, down, up, right
 " set <leader>T to let current window be a new tab
 nnoremap <C-h> :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
