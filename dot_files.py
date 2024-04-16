@@ -25,8 +25,7 @@ ignore_file = set(["./.git", "./LICENSE", "./README.md",
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,
 # Add it to the variable.
-copy_file = set(["./.vscode-server", "./.vimrc", "./.vim",
-                 "./vim_plugin_config"])
+copy_file = set(["./.vscode-server", "./.vimrc", "./.vim"])
 # Update the string to specify where you want to store the backed-up files
 # or where you want to recover from
 backup_dir = "./backup"
@@ -105,7 +104,7 @@ def update_dot_files(home_current_dir : str, current_dir : str):
 def recover_dot_files(home_current_dir, current_dir):
     global backup_dir, ignore_file, home_dir
     # this is to invent the backup_dir doesn't exists.
-    if not os.path.exists(current_dir):
+    if not os.path.exists(backup_dir + current_dir):
         return
     if not os.path.exists(home_current_dir):
         os.mkdir(home_current_dir)
