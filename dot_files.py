@@ -142,8 +142,7 @@ def install_plugin_for_vim():
     print("installing ycm...")
     ycm_dir = ycm_dir.replace("//", "/")
     # sometimes the ycm's installation will failed if using conda environment
-    ycm_install_cmd = (f"conda deactivate ||"
-                       f"(cd {ycm_dir} && python3 install.py --clangd-completer)")
+    ycm_install_cmd = f"cd {ycm_dir} && python3 install.py --clangd-completer"
     if is_root:
         ycm_install_cmd += " --force-sudo"
     os.system(ycm_install_cmd)
