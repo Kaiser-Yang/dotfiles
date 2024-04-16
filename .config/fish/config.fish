@@ -42,7 +42,6 @@ function fish_user_key_bindings
     # The argument specifies the initial mode (insert, "default" or visual).
     fish_vi_key_bindings --no-erase insert
 end
-fish_user_key_bindings
 
 # this will not be useful for wsl
 # Emulates vim's cursor shape behavior
