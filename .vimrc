@@ -1,4 +1,9 @@
-
+#        _                      _         _               
+# __   _(_)_ __ ___  _ __ ___  | | ____ _(_)___  ___ _ __ 
+# \ \ / / | '_ ` _ \| '__/ __| | |/ / _` | / __|/ _ \ '__|
+#  \ V /| | | | | | | | | (__  |   < (_| | \__ \  __/ |   
+# (_)_/ |_|_| |_| |_|_|  \___| |_|\_\__,_|_|___/\___|_|   
+#                                                         
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
 
