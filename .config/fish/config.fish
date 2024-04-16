@@ -14,8 +14,8 @@ abbr -a gpl git pull
 
 # abbreviations for jupyter
 abbr -a jpt jupyter
-abbr -a nb notebook
-abbr -a nbcv nbconvert
+abbr -a jptnb jupyter notebook
+abbr -a jptnbcv jupyter nbconvert
 
 # abbreviation for  ll not to show hidden files
 abbr -a ll ls -lFh
