@@ -125,7 +125,7 @@ def recover_dot_files(home_current_dir, current_dir):
             recover_dot_files(home_current_dir + recover_file,
                              current_dir + recover_file)
 def install_plugin_for_vim():
-    global ycm_dir
+    global ycm_dir, is_root
     # ycm requirs vim 9, so we will update your vim.
     print("updating vim for you...")
     # in order to add correctly, we must remove the repository
@@ -142,7 +142,10 @@ def install_plugin_for_vim():
     os.system("sudo apt install build-essential cmake vim-nox python3-dev")
     print("installing ycm...")
     ycm_dir = ycm_dir.replace("//", "/")
-    os.system(f"cd {ycm_dir} && python3 install.py --clangd-completer")
+    ycm_install_cmd = "cd {ycm_dir} && python3 install.py --clangd-completer"
+    if is_root:
+        ycm_install_cmd += " --force-sudo"
+    os.system(ycm_install_cmd)
 
 def install_fish():
     print("installing fish...")
@@ -177,9 +180,12 @@ def operate_dot_files(home_current_dir : str, current_dir : str,
 if __name__ == "__main__":
     if os.getuid() == 0:
         print("Warning: you are installing for user root,"
-              "which is uncommon, are you sure to continue?[y/n]", end = '')
+              "which is uncommon, are you sure to continue?[y/N]", end = '')
         if input() != 'y':
             exit(0)
+        is_root = True
+    else:
+        is_root = False
     if len(sys.argv) == 2:
         opcode =  sys.argv[1]
     elif len(sys.argv) > 2:
