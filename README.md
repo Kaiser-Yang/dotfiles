@@ -7,7 +7,7 @@ You can use `./dot_files.py recover` to copy the backed up files to `$HOME` dire
 
 You can use `./dot_files.py`, which is same with `./dot_files.py recover && ./dot_files.py update`.
 
-You can use `./dot_files.py init` for the first time install, which will install all plugins for vim and install fish and then set is to your default shell, see the file for more details.
+You can use `./dot_files.py init` for the first time install, which will install all plugins for vim and install fish and then set fith be your default shell, see the file for more details.
 
 NOTE: if you want to use `./dot_files.py init`, be sure your conda is deactivated (there is no base or other conda name on your screen), and make sure you have `Python` order than `3.8` locally, because `ycm` can not be installed by this script within conda.
 

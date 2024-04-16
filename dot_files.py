@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Usage: ./dot_files.py update|recover or python dot_files.py [update|recover|init]
+# Usage: python dot_files.py [update|recover|init]
 # Update Function: Back up $HOME/file to ./backup,
 #                  append all the contents of ./file to $HOME/file or
 #                  copy ./file to $HOME/

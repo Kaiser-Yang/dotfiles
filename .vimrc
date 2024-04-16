@@ -120,6 +120,9 @@ nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 nmap Q <Nop>
 nnoremap Q :q!<CR>
 
+nnoremap <TAB> <Nop>
+nnoremap <TAB> :tabnext<CR>
+
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
 
