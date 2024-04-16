@@ -116,9 +116,9 @@ nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 
 " Unbind some useless/annoying default key bindings.
 " 'Q' in normal mode enters Ex mode. You almost never want this.
-" we map Q to be :q
+" we map Q to be :q!
 nmap Q <Nop>
-nnoremap Q :q<CR>
+nnoremap Q :q!<CR>
 
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
@@ -144,9 +144,13 @@ set shiftwidth=4
 " set wrap for split lines automatically
 set wrap
 
-" set S to be :w, because S is synonym for cc
+" set ^S to be :w
+nnoremap <C-s> <Nop>
+nnoremap <C-s> :w<CR>
+
+" set S to be :wq
 nnoremap S <Nop>
-nnoremap S :w<CR>
+nnoremap S :wq<CR>
 
 " set <C> + h, j, k and l to be split left, down, up, right.
 " set <leader> h, j, k and l to move cursor between Windows.
@@ -200,6 +204,7 @@ source ~/.vim/vim_plugin_config/youcompleteme_config.vim
 source ~/.vim/vim_plugin_config/nerdtree_config.vim
 source ~/.vim/vim_plugin_config/onedark_config.vim
 source ~/.vim/vim_plugin_config/vimpolyglot_config.vim
+source ~/.vim/vim_plugin_config/undotree_config.vim
 " we add a empty line below to make sure the script append it correctly.
 " end_symbol_kaiserqzyue
 

@@ -15,6 +15,8 @@ Plug 'preservim/nerdtree'
 Plug 'joshdick/onedark.vim'
 " highlight for programming languages
 Plug 'sheerun/vim-polyglot'
+" undotree to show history of files
+Plug 'mbbill/undotree'
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue

@@ -7,6 +7,8 @@
 " just use <C-S-e>
 nnoremap <C-e> <Nop>
 nnoremap <C-e> :NERDTreeToggle<CR>
+inoremap <C-e> <Nop>
+inoremap <C-e> <C-o>:NERDTreeToggle<CR>
 
 " Exit Vim if NERDTree is the only window remaining in the only tab.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
