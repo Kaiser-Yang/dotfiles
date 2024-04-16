@@ -144,6 +144,15 @@ def install_plugin_for_vim():
     ycm_dir = ycm_dir.replace("//", "/")
     os.system(f"cd {ycm_dir} && python3 install.py --clangd-completer")
 
+def install_fish():
+    print("installing fish...")
+    os.system("sudo add-apt-repository -r ppa:fish-shell/release-3")
+    os.system("sudo add-apt-repository ppa:fish-shell/release-3")
+    os.system("sudo apt update")
+    os.system("sudo apt install fish")
+    os.system("echo /usr/bin/fish | sudo tee -a /etc/shells")
+    os.system("chsh -s /usr/bin/fish")
+
 def operate_dot_files(home_current_dir : str, current_dir : str,
                       opcode : str):
     if opcode == "update":
@@ -156,6 +165,7 @@ def operate_dot_files(home_current_dir : str, current_dir : str,
         backup_files(home_current_dir, current_dir)
         update_dot_files(home_current_dir, current_dir)
         install_plugin_for_vim()
+        install_fish()
     elif opcode == "":
         recover_dot_files(home_current_dir, current_dir)
         backup_files(home_current_dir, current_dir)

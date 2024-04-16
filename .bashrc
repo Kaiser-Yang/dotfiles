@@ -27,7 +27,7 @@ alias jptnb='jupyter notebook'
 alias jptnbcv='jupyter nbconvert'
 # set aliases for some frequently used bash commands
 # we use -h always to make the size of files more humane
-alias ll='ls -alFh'
+alias ll='ls -lFh'
 # goes to up directory
 alias up='cd ..'
 # Those two lines are for WSL to use windows clipboard
