@@ -142,7 +142,9 @@ def install_plugin_for_vim():
     os.system("sudo apt install build-essential cmake vim-nox python3-dev")
     print("installing ycm...")
     ycm_dir = ycm_dir.replace("//", "/")
-    ycm_install_cmd = "cd {ycm_dir} && python3 install.py --clangd-completer"
+    # sometimes the ycm's installation will failed if using conda environment
+    ycm_install_cmd = (f"conda deactivate ||"
+                       f"(cd {ycm_dir} && python3 install.py --clangd-completer)")
     if is_root:
         ycm_install_cmd += " --force-sudo"
     os.system(ycm_install_cmd)
