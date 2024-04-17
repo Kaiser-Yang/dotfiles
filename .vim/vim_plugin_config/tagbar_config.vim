@@ -1,10 +1,10 @@
 
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
-nnoremap <C-o> <Nop>
-nnoremap <C-o> :TagbarToggle<CR>
-inoremap <C-o> <Nop>
-inoremap <C-o> <ESC>:TagbarToggle<CR>
+nnoremap <C-w> <Nop>
+nnoremap <C-w> :TagbarToggle<CR>
+inoremap <C-w> <Nop>
+inoremap <C-w> <ESC>:TagbarToggle<CR>
 " once open, cursor is in tagbar window
 let g:tagbar_autofocus = 1
 " open at left
