@@ -216,6 +216,9 @@ source ~/.vim/vim_plugin_config/nerdtree_config.vim
 source ~/.vim/vim_plugin_config/onedark_config.vim
 source ~/.vim/vim_plugin_config/vimpolyglot_config.vim
 source ~/.vim/vim_plugin_config/undotree_config.vim
+source ~/.vim/vim_plugin_config/tagbar_config.vim
+source ~/.vim/vim_plugin_config/vimgitgutter_config.vim
+
 " we add a empty line below to make sure the script append it correctly.
 " end_symbol_kaiserqzyue
 

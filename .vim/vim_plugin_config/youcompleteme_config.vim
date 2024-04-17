@@ -8,18 +8,18 @@ nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
 " use gd to go to definition
 nnoremap gd <Nop>
-nnoremap gd :rightbelow vertical YcmCompleter GoTo<CR>
+nnoremap gd :YcmCompleter GoTo<CR>
 
 " nnoremap gh <Nop>
-nnoremap gh :rightbelow vertical YcmCompleter GoToAlternateFile<CR>
+nnoremap gh :YcmCompleter GoToAlternateFile<CR>
 
 " use gr to go to references
 nnoremap gr <Nop>
-nnoremap gr :rightbelow vertical YcmCompleter GoToReferences<CR>
+nnoremap gr :YcmCompleter GoToReferences<CR>
 
 " use gc to go to callers, find those who call this function
 nnoremap gc <Nop>
-nnoremap gc :rightbelow vertical YcmCompleter GoToCallers<CR>
+nnoremap gc :YcmCompleter GoToCallers<CR>
 
 " use <Leader>r to refactor rename
 nnoremap <Leader>r :YcmCompleter RefactorRename 
@@ -32,8 +32,6 @@ nnoremap <C-f> :YcmCompleter FixIt<CR>
 nnoremap <Leader>d <plug>(YCMHover)
 
 let g:ycm_extra_conf_globlist = ['~/.vim/vim_plugin_config/ycm_extra_config_global.py']
-" this will make ^O and ^I be difficult to return and go forward.
-" let g:ycm_goto_buffer_command = 'split-or-existing-window'
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_comments = 1

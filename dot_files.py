@@ -146,6 +146,8 @@ def install_plugin_for_vim():
     if is_root:
         ycm_install_cmd += " --force-sudo"
     os.system(ycm_install_cmd)
+    print("installing universal-tags for tagbar plugin...")
+    os.system("sudo apt-get install universal-ctags")
 
 def install_fish():
     print("installing fish...")
