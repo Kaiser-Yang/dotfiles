@@ -23,10 +23,10 @@ abbr -a jpt jupyter
 abbr -a jptnb jupyter notebook
 abbr -a jptnbcv jupyter nbconvert
 
-# abbreviation for ll not to show hidden files
+# abbreviations for ll not to show hidden files
 abbr -a ll ls -lFh
 
-# abbreviation for windows copy and paste,
+# abbreviations for windows copy and paste,
 # those is for wsl
 abbr -a wcp clip.exe
 abbr -a wpst powershell.exe Get-Clipboard
@@ -34,13 +34,20 @@ abbr -a wpst powershell.exe Get-Clipboard
 # abbreviations for tmux
 abbr -a tm tmux
 abbr -a tmls tmux ls
-abbr -a tmnss tmux new -s
+abbr -a tmlsbf tmux list-buffers
+abbr -a tmlscli tmux list-clients
+abbr -a tmlscmd tmux list-commands
+abbr -a tmlsk tmus list-keys
+abbr -a tmlspn tmus list-panes
+abbr -a tmlsss tmux list-session
+abbr -a tmlswd tmux list-window
+abbr -a tmnss tmux new-session -s
 abbr -a tmatc tmux attach -t
+abbr -a tmksv tmux kill-server
 abbr -a tmkss tmux kill-session -t
 abbr -a tmswt tmux switch -t
 abbr -a tmrnss tmux rename-session -t
 abbr -a tmrnwd tmux rename-window -t
-abbr -a tmksv tmux kill-server
 
 # this enable .. be cd ../, ... be cd ../../
 # .... be cd ../../../
