@@ -21,6 +21,10 @@ Plug 'mbbill/undotree'
 Plug 'preservim/tagbar'
 " gitgutter to see the difference of git repositories' files
 Plug 'airblade/vim-gitgutter'
+" nerd commenter for add comments for lines
+Plug 'preservim/nerdcommenter'
+" vim-which-key to cheat
+Plug 'liuchengxu/vim-which-key'
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue

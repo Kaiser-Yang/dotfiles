@@ -23,12 +23,10 @@ nnoremap O zzO
 nnoremap a zza
 nnoremap A zzA
 
-" Those are for wsl cursor to be changeable between normal mode and insert mode.
+" Those are for cursor to be changeable between normal mode and insert mode.
 let &t_SI.="\e[5 q"
 let &t_SR.="\e[3 q"
 let &t_EI.="\e[1 q"
-autocmd VimEnter * silent !echo -ne "\e[1 q"
-autocmd VimLeave * silent !echo -ne "\e[5 q"
 
 " This is to make <ESC> quicker
 set ttimeoutlen=0
@@ -112,12 +110,16 @@ exec "nohlsearch"
 set hlsearch
 nnoremap <LEADER><CR> :nohlsearch<CR>
 
+" NOTE: do not use again, because <LEADER>c now is NerdCommenter's binding
+" key, you can use the right button of your mouse to copy and paste.
+" If you enable mouse in your vim, you may need press and hold shift for
+" Windows copy and paste in wsl.
 " Those two lines are for copy selected contents to Windows clipboard,
 " or copy from Windows clipboard with <leader>c and <space>v
 " those are mainly for wsl
 " those can only copy or paste entire lines
-vnoremap <LEADER>c :w !clip.exe<CR><CR>
-nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
+" vnoremap <LEADER>c :w !clip.exe<CR><CR>
+" nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 
 " Unbind some useless/annoying default key bindings.
 " 'Q' in normal mode enters Ex mode. You almost never want this.
@@ -218,6 +220,8 @@ source ~/.vim/vim_plugin_config/vimpolyglot_config.vim
 source ~/.vim/vim_plugin_config/undotree_config.vim
 source ~/.vim/vim_plugin_config/tagbar_config.vim
 source ~/.vim/vim_plugin_config/vimgitgutter_config.vim
+source ~/.vim/vim_plugin_config/nerdcommenter_config.vim
+source ~/.vim/vim_plugin_config/vimwhichkey_config.vim
 
 " we add a empty line below to make sure the script append it correctly.
 " end_symbol_kaiserqzyue
