@@ -127,6 +127,8 @@ nnoremap Q :q!<CR>
 
 nnoremap <TAB> <Nop>
 nnoremap <TAB> :tabnext<CR>
+nnoremap <S-TAB> <Nop>
+nnoremap <S-TAB> :tabprev<CR>
 
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
@@ -197,12 +199,13 @@ inoremap <Right> <C-o>:vertical resize +5<CR>
 
 " set ^T to create new tab
 " set ^N and ^B to navigate between tabs
+" we don't use ^T and ^B, use <TAB> and <S-TAB> instead
 inoremap <C-t> <ESC>:tabnew<CR>
-inoremap <C-n> <ESC>:tabnext<CR>
-inoremap <C-b> <ESC>:tabprev<CR>
+" inoremap <C-n> <ESC>:tabnext<CR>
+" inoremap <C-b> <ESC>:tabprev<CR>
 nnoremap <C-t> :tabnew<CR>
-nnoremap <C-n> :tabnext<CR>
-nnoremap <C-b> :tabprev<CR>
+" nnoremap <C-n> :tabnext<CR>
+" nnoremap <C-b> :tabprev<CR>
 
 set completeopt=popup
 
