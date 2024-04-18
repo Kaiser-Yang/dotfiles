@@ -222,6 +222,8 @@ source ~/.vim/vim_plugin_config/tagbar_config.vim
 source ~/.vim/vim_plugin_config/vimgitgutter_config.vim
 source ~/.vim/vim_plugin_config/nerdcommenter_config.vim
 source ~/.vim/vim_plugin_config/vimwhichkey_config.vim
+source ~/.vim/vim_plugin_config/nerdtreegitplugin_config.vim
+source ~/.vim/vim_plugin_config/markdownpreview_config.vim
 
 " we add a empty line below to make sure the script append it correctly.
 " end_symbol_kaiserqzyue

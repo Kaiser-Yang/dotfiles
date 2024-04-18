@@ -27,6 +27,8 @@ Plug 'preservim/nerdcommenter'
 Plug 'liuchengxu/vim-which-key'
 " nerdtree git status plugin
 Plug 'Xuyuanp/nerdtree-git-plugin'
+" markdown preview
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
