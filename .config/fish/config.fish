@@ -17,6 +17,7 @@ abbr -a gdf git diff
 abbr -a ga git add
 abbr -a gps git push
 abbr -a gpl git pull
+abbr -a grbs git rebase -i
 
 # abbreviations for jupyter
 abbr -a jpt jupyter
