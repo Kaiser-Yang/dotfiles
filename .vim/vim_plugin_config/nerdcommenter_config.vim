@@ -10,8 +10,8 @@ let g:NERDSpaceDelims = 1
 " Use compact syntax for prettified multi-line comments
 let g:NERDCompactSexyComs = 1
 
-" Align line-wise comment delimiters flush left instead of following code indentation
-let g:NERDDefaultAlign = 'left'
+" Align line-wise comment delimiters flush start instead of following code indentation
+let g:NERDDefaultAlign = 'start'
 
 " Set a language to use its alternate delimiters by default
 " let g:NERDAltDelims_java = 1

@@ -224,6 +224,34 @@ source ~/.vim/vim_plugin_config/nerdcommenter_config.vim
 source ~/.vim/vim_plugin_config/vimwhichkey_config.vim
 source ~/.vim/vim_plugin_config/nerdtreegitplugin_config.vim
 source ~/.vim/vim_plugin_config/markdownpreview_config.vim
+source ~/.vim/vim_plugin_config/vimwiki_config.vim
+
+" Compile function
+func! CompileRunGcc()
+  exec "w"
+  if &filetype == 'c'
+    exec "!g++ % -o %<"
+    exec "!time ./%<"
+  elseif &filetype == 'cpp'
+    exec "!g++ % -o %<"
+    exec "!time ./%<"
+  elseif &filetype == 'java'
+    exec "!javac %"
+    exec "!time java %<"
+  elseif &filetype == 'sh'
+    :!time bash %
+  elseif &filetype == 'python'
+    silent! exec "!clear"
+    exec "!time python3 %"
+  elseif &filetype == 'html'
+    exec "!wslview % &"
+  elseif &filetype == 'markdown'
+    exec "MarkdownPreviewToggle"
+  elseif &filetype == 'vimwiki'
+    exec "MarkdownPreviewToggle"
+  endif
+endfunc
+nnoremap <LEADER>r :call CompileRunGcc()<CR>
 
 " we add a empty line below to make sure the script append it correctly.
 " end_symbol_kaiserqzyue
