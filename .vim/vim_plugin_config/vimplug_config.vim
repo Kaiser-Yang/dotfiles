@@ -33,6 +33,8 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 Plug 'vimwiki/vimwiki'
 " vim indent line
 Plug 'Yggdroot/indentLine'
+" auto-pairs for brakets.
+Plug 'jiangmiao/auto-pairs'
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue

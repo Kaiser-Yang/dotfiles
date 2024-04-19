@@ -24,7 +24,8 @@ nnoremap a zza
 nnoremap A zzA
 
 " use pure text as pasted contents
-set paste
+" don't use this, this will disable ycm, auto-pairs.
+" set paste
 
 " Those are for cursor to be changeable between normal mode and insert mode.
 let &t_SI.="\e[5 q"
@@ -161,8 +162,9 @@ set expandtab
 set tabstop=4
 set shiftwidth=4
 
-" set wrap for split lines automatically
+" never auto split
 set wrap
+set tw=0
 
 " set ^S to be :w
 nnoremap <C-s> <Nop>
@@ -234,6 +236,7 @@ source ~/.vim/vim_plugin_config/nerdtreegitplugin_config.vim
 source ~/.vim/vim_plugin_config/markdownpreview_config.vim
 source ~/.vim/vim_plugin_config/vimwiki_config.vim
 source ~/.vim/vim_plugin_config/indentline_config.vim
+source ~/.vim/vim_plugin_config/autopairs_config.vim
 
 " Compile function
 func! CompileRunGcc()
