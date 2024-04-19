@@ -19,6 +19,12 @@
 # NOTE: items must start with ./ and end with no / at the end,
 #       for example, ./backup means a file named backup in current directory or
 #       a directory named backup in current directory
+# NOTE: functionality of converting vimwiki to html needed pandoc,
+#       and tasks_list are supported after pandoc 2.6,
+#       you can use conda install pandoc for your activated conda environment,
+#       if you do it, make sure when you want convert files,
+#       your conda environment is where you install pandoc,
+#       if you never convert vimwiki to html files, you can ignore this.
 ignore_file = set(["./.git", "./LICENSE", "./README.md",
                    "./dot_files.py", "./.gitignore"])
 

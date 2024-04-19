@@ -23,5 +23,8 @@ if [ -n "$HAS_MATH" ]; then
 else
     MATH=""
 fi
-sed -r 's/(\[.+\])\(([^)]+)\)/\1(\2.html)/g' <"$INPUT" | pandoc $MATH -s -f $SYNTAX -t html -c $CSSFILENAME --metadata pagetitle="$FILE" | sed -r 's/<li>(.*)\[ \]/<li class="todo done0">\1/g; s/<li>(.*)\[X\]/<li class="todo done4">\1/g' > "$OUTPUT"
+sed -r 's/(\[.+\])\(([^.)]+)(\.md)?\)/\1(\2.html)/g' < "$INPUT" \
+| pandoc $MATH -s -f $SYNTAX -t html -c $CSSFILENAME --metadata pagetitle="$FILE" \
+> "$OUTPUT"
+# | sed -r 's/<li>(.*)\[ \]/<li class="todo done0">\1/g; s/<li>(.*)\[X\]/<li class="todo done4">\1/g' > "$OUTPUT"
 
