@@ -31,6 +31,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 " vimwiki plugin
 Plug 'vimwiki/vimwiki'
+" vim indent line
+Plug 'Yggdroot/indentLine'
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue

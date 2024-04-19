@@ -23,16 +23,24 @@ nnoremap O zzO
 nnoremap a zza
 nnoremap A zzA
 
+" use pure text as pasted contents
+set paste
+
 " Those are for cursor to be changeable between normal mode and insert mode.
 let &t_SI.="\e[5 q"
 let &t_SR.="\e[3 q"
 let &t_EI.="\e[1 q"
+" this will print something weird at bottom, but I don't know how to fix it,
+" those two lines are to set cursur when enter vim, and when leave vim, set it
+" back.
+autocmd VimEnter * silent !echo -ne "\e[1 q"
+autocmd VimLeave * silent !echo -ne "\e[5 q"
 
 " This is to make <ESC> quicker
 set ttimeoutlen=0
 
 " use system clip board
-set clipboard=unnamed
+" set clipboard=unnamed
 
 " set leader be space
 nnoremap <space> <Nop>
@@ -225,31 +233,32 @@ source ~/.vim/vim_plugin_config/vimwhichkey_config.vim
 source ~/.vim/vim_plugin_config/nerdtreegitplugin_config.vim
 source ~/.vim/vim_plugin_config/markdownpreview_config.vim
 source ~/.vim/vim_plugin_config/vimwiki_config.vim
+source ~/.vim/vim_plugin_config/indentline_config.vim
 
 " Compile function
 func! CompileRunGcc()
-  exec "w"
-  if &filetype == 'c'
-    exec "!g++ % -o %<"
-    exec "!time ./%<"
-  elseif &filetype == 'cpp'
-    exec "!g++ % -o %<"
-    exec "!time ./%<"
-  elseif &filetype == 'java'
-    exec "!javac %"
-    exec "!time java %<"
-  elseif &filetype == 'sh'
-    :!time bash %
-  elseif &filetype == 'python'
-    silent! exec "!clear"
-    exec "!time python3 %"
-  elseif &filetype == 'html'
-    exec "!wslview % &"
-  elseif &filetype == 'markdown'
-    exec "MarkdownPreviewToggle"
-  elseif &filetype == 'vimwiki'
-    exec "MarkdownPreviewToggle"
-  endif
+    exec "w"
+    if &filetype == 'c'
+        exec "!g++ % -o %<"
+        exec "!time ./%<"
+    elseif &filetype == 'cpp'
+        exec "!g++ % -o %<"
+        exec "!time ./%<"
+    elseif &filetype == 'java'
+        exec "!javac %"
+        exec "!time java %<"
+    elseif &filetype == 'sh'
+        :!time bash %
+    elseif &filetype == 'python'
+        silent! exec "!clear"
+        exec "!time python3 %"
+    elseif &filetype == 'html'
+        exec "!wslview % &"
+    elseif &filetype == 'markdown'
+        exec "MarkdownPreviewToggle"
+    elseif &filetype == 'vimwiki'
+        exec "MarkdownPreviewToggle"
+    endif
 endfunc
 nnoremap <LEADER>r :call CompileRunGcc()<CR>
 
