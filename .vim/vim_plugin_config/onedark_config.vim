@@ -10,10 +10,18 @@ if (has("autocmd") && !has("gui_running"))
   augroup colorset
     autocmd!
     let s:white = { "gui": "#ABB2BF", "cterm": "145", "cterm16" : "7" }
-    autocmd ColorScheme * call onedark#set_highlight("Normal", { "fg": s:white }) " `bg` will not be styled since there is no `bg` setting
+    " `bg` will not be styled since there is no `bg` setting
+    autocmd ColorScheme * call onedark#set_highlight("Normal", { "fg": s:white })
   augroup END
 endif
 colorscheme onedark
-" we add a empty line below to make sure the script append it coreectly.
+" this is for highlight selection
+" because after setting transparent onedark's
+" selection is nearly invisible, so just need this configure,
+" you can set what color you like, ctermfg is the text color
+hi visual ctermfg=white
+hi visualblock guibg=gray
+hi visualline guibg=gray
+" we add a empty line below to make sure the script append it correctly
 " end_symbol_kaiserqzyue
 
