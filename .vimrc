@@ -45,8 +45,6 @@ set ttimeoutlen=0
 " set clipboard=unnamed
 
 " set leader be space
-nnoremap <space> <Nop>
-vnoremap <space> <Nop>
 let mapleader=" "
 
 " set <leader>sc to turn on or off spell check
@@ -93,10 +91,6 @@ set relativenumber
 
 " Always show the status line at the bottom, even if you only have one window open.
 set laststatus=2
-
-" We don't use backspace in normal and visual mode, use h instead.
-nnoremap <BS> <Nop>
-vnoremap <BS> <Nop>
 
 " By default, Vim doesn't let you hide a buffer (i.e. have a buffer that isn't
 " shown in any window) that has unsaved changes. This is to prevent you from
@@ -146,7 +140,6 @@ nnoremap <LEADER>ya :w !clip.exe<CR><CR>
 " Unbind some useless/annoying default key bindings.
 " 'Q' in normal mode enters Ex mode. You almost never want this.
 " we map Q to be :q!
-nmap Q <Nop>
 nnoremap Q :q!<CR>
 
 " we cannot set <TAB>, because this will affect ^I
@@ -197,7 +190,6 @@ nnoremap <C-s> :w<CR>
 inoremap <C-s> <C-o>:w<CR>
 
 " set S to be :wq
-nnoremap S <Nop>
 nnoremap S :wq<CR>
 
 " set <C> + h, j, k and l to be split left, down, up, right.
@@ -290,6 +282,14 @@ func! CompileRunGcc()
     endif
 endfunc
 nnoremap <LEADER>r :call CompileRunGcc()<CR>
+
+" set empty filetype be none.
+function! SetFiletypeNewBuffer()
+  if @% == ""
+    :set filetype=none
+  endif
+endfunction
+autocmd BufEnter * :call SetFiletypeNewBuffer()
 
 " Note that this must be at the bottom,
 " and I don't know why, it seems that some plugins will disable something.
