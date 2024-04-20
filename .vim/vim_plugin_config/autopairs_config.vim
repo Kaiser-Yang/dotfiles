@@ -1,8 +1,7 @@
 
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
-" inoremap <C-b> <Nop>
-" let g:AutoPairsShortcutBackInsert = '<C-b>'
+let g:AutoPairsShortcutFastWrap = '<C-a>'
 let g:AutoPairsFlyMode = 1
 " double quotation is vim's comment sign, so remove it from auto pairs of vim files
 autocmd Filetype vim let b:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'", "`":"`", '```':'```', '"""':'"""', "'''":"'''"}

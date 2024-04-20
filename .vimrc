@@ -193,8 +193,8 @@ set wrap
 set tw=0
 
 " set ^S to be :w
-nnoremap <C-s> <Nop>
 nnoremap <C-s> :w<CR>
+inoremap <C-s> <C-o>:w<CR>
 
 " set S to be :wq
 nnoremap S <Nop>
