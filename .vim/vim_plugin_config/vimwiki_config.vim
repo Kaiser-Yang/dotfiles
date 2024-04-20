@@ -26,6 +26,11 @@ let g:vimwiki_key_mappings =
 " don't treat all .md files as vimwiki
 let g:vimwiki_global_ext = 0
 
+" you should not let a single markdown file be seen as vimwiki,
+" and you should not add links for that,
+" if you want another index, you should add another config.
+let g:vimwiki_ext2syntax = {}
+
 " use <LEADER>wh convert all files to html files
 autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
 " we add a empty line below to make sure the script append it coreectly.

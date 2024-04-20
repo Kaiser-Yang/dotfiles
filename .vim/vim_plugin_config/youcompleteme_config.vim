@@ -7,25 +7,21 @@
 nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
 " use gd to go to definition
-nnoremap gd <Nop>
 nnoremap gd :YcmCompleter GoTo<CR>
 
 " nnoremap gh <Nop>
 nnoremap gh :YcmCompleter GoToAlternateFile<CR>
 
 " use gr to go to references
-nnoremap gr <Nop>
 nnoremap gr :YcmCompleter GoToReferences<CR>
 
 " use gc to go to callers, find those who call this function
-nnoremap gc <Nop>
 nnoremap gc :YcmCompleter GoToCallers<CR>
 
 " use <Leader>r to refactor rename
 nnoremap <Leader>r :YcmCompleter RefactorRename 
 
 " use <Ctrl-f> as fix it command
-nnoremap <C-f> <Nop>
 nnoremap <C-f> :YcmCompleter FixIt<CR>
 
 " use <Leader>d show doc for current symbol
@@ -41,20 +37,36 @@ let g:ycm_key_list_select_completion = ['<C-j>', '<TAB>']
 let g:ycm_key_list_previous_completion = ['<C-k>', '<S-TAB>']
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_auto_hover = ''
-" Just add # to trigger for C-family language
+let g:ycm_enable_semantic_highlighting = 1
+
+" add # to trigger for C-family language
+" input two characters will trigger ycm for c and cpp files
 let g:ycm_semantic_triggers =  {
-  \   'c': ['->', '.', '#'],
-  \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
-  \            're!\[.*\]\s'],
-  \   'ocaml': ['.', '#'],
-  \   'cpp,cuda,objcpp': ['->', '.', '::', '#'],
-  \   'perl': ['->'],
-  \   'php': ['->', '::'],
-  \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],
-  \   'ruby,rust': ['.', '::'],
-  \   'lua': ['.', ':'],
-  \   'erlang': [':'],
-  \ }
+    \   'c': ['->', '.', '#', 're!w{2}'],
+    \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
+    \            're!\[.*\]\s'],
+    \   'ocaml': ['.', '#'],
+    \   'cpp,cuda,objcpp': ['->', '.', '::', '#', 're!w{2}'],
+    \   'perl': ['->'],
+    \   'php': ['->', '::'],
+    \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],
+    \   'ruby,rust': ['.', '::'],
+    \   'lua': ['.', ':'],
+    \   'erlang': [':'],
+    \ }
+
+" let ycm complete markdown files
+let g:ycm_filetype_blacklist = {
+    \ 'tagbar': 1,
+    \ 'notes': 1,
+    \ 'netrw': 1,
+    \ 'unite': 1,
+    \ 'text': 1,
+    \ 'pandoc': 1,
+    \ 'infolog': 1,
+    \ 'leaderf': 1,
+    \ 'mail': 1
+    \}
 " You can use this line to let <CR> close completion,
 " which is similar with vscode.
 " let g:ycm_key_list_stop_completion = ['<C-y>', '<CR>']

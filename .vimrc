@@ -255,6 +255,8 @@ source ~/.vim/vim_plugin_config/markdownpreview_config.vim
 source ~/.vim/vim_plugin_config/vimwiki_config.vim
 source ~/.vim/vim_plugin_config/indentline_config.vim
 source ~/.vim/vim_plugin_config/autopairs_config.vim
+source ~/.vim/vim_plugin_config/vimsurround_config.vim
+source ~/.vim/vim_plugin_config/tabular_config.vim
 
 " Compile function
 func! CompileRunGcc()
