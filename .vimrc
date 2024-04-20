@@ -31,6 +31,7 @@ nnoremap A zzA
 let &t_SI.="\e[5 q"
 let &t_SR.="\e[3 q"
 let &t_EI.="\e[1 q"
+
 " this will print something weird at bottom, but I don't know how to fix it,
 " those two lines are to set cursur when enter vim, and when leave vim, set it
 " back.
@@ -130,16 +131,41 @@ nnoremap <LEADER><CR> :nohlsearch<CR>
 " vnoremap <LEADER>c :w !clip.exe<CR><CR>
 " nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 
+" NOTE: I've found new solution for this (copy and paste with windows using
+" wls vim). After 2021, wsl has internal gui app,  which is called  wslg,
+" using windows to show gui apps, so now the system clipboard can be used.
+" make sure you have sudo apt install vim-gtk
+vnoremap <LEADER>y "+y<CR>
+nnoremap <LEADER>p "+p<CR>
+nnoremap <LEADER>P "+P<CR>
+vnoremap <LEADER>p "+p<CR>
+vnoremap <LEADER>P "+P<CR>
+" copy the whole file is used very often, so we add a new bind for this.
+nnoremap <LEADER>ya :w !clip.exe<CR><CR>
+
 " Unbind some useless/annoying default key bindings.
 " 'Q' in normal mode enters Ex mode. You almost never want this.
 " we map Q to be :q!
 nmap Q <Nop>
 nnoremap Q :q!<CR>
 
-nnoremap <TAB> <Nop>
-nnoremap <TAB> :tabnext<CR>
-nnoremap <S-TAB> <Nop>
-nnoremap <S-TAB> :tabprev<CR>
+" we cannot set <TAB>, because this will affect ^I
+" nnoremap <TAB> :tabnext<CR>
+" nnoremap <S-TAB> :tabprev<CR>
+
+" Now we use <LEADER>n and <LEADER>b to got next and back
+" and <LEADER>nubmer to go specified tab.
+nnoremap <LEADER>b :tabprev<CR>
+nnoremap <LEADER>n :tabnext<CR>
+nnoremap <LEADER>1 1gt
+nnoremap <LEADER>2 2gt
+nnoremap <LEADER>3 3gt
+nnoremap <LEADER>4 4gt
+nnoremap <LEADER>5 5gt
+nnoremap <LEADER>6 6gt
+nnoremap <LEADER>7 7gt
+nnoremap <LEADER>8 8gt
+nnoremap <LEADER>9 9gt
 
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
@@ -264,6 +290,11 @@ func! CompileRunGcc()
     endif
 endfunc
 nnoremap <LEADER>r :call CompileRunGcc()<CR>
+
+" Note that this must be at the bottom,
+" and I don't know why, it seems that some plugins will disable something.
+" close the annoying auto comments
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " we add a empty line below to make sure the script append it correctly.
 " end_symbol_kaiserqzyue

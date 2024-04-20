@@ -138,7 +138,7 @@ def install_plugin_for_vim():
     os.system("sudo add-apt-repository -r ppa:jonathonf/vim")
     os.system("sudo add-apt-repository ppa:jonathonf/vim")
     os.system("sudo apt update")
-    os.system("sudo apt install vim")
+    os.system("sudo apt install vim vim-gtk")
     # use vim +PlugInstall to install plugins
     print("installing vim plugins...")
     os.system("vim +PlugInstall")
