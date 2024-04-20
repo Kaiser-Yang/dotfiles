@@ -35,6 +35,8 @@ Plug 'vimwiki/vimwiki'
 Plug 'Yggdroot/indentLine'
 " auto-pairs for brakets.
 Plug 'jiangmiao/auto-pairs'
+" for surrouding, change braces conveniently
+Plug 'tpope/vim-surround'
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
