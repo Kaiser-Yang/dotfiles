@@ -23,13 +23,17 @@ let g:vimwiki_key_mappings =
     \   'mouse': 0,
     \ }
 
-" don't treat all .md files as vimwiki
-let g:vimwiki_global_ext = 0
+" treat all .md files as vimwiki
+" this will make input in markdown files more easily
+let g:vimwiki_global_ext = 1
 
 " you should not let a single markdown file be seen as vimwiki,
 " and you should not add links for that,
 " if you want another index, you should add another config.
 let g:vimwiki_ext2syntax = {}
+
+" don't conceal links
+let g:vimwiki_conceallevel = 0
 
 " use <LEADER>wh convert all files to html files
 autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
