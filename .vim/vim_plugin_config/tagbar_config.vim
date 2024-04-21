@@ -1,10 +1,15 @@
 
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
-nnoremap <C-w> <Nop>
-nnoremap <C-w> :w<CR>:TagbarToggle<CR>
-inoremap <C-w> <Nop>
-inoremap <C-w> <ESC>:w<CR>:TagbarToggle<CR>
+
+" save files before open tagbar
+fun! BeforeTagbarSaveCheck()
+    if &buftype == ''
+        exec "w"
+    endif
+endf
+nnoremap <C-w> :call BeforeTagbarSaveCheck()<CR>:TagbarToggle<CR>
+inoremap <C-w> <Esc>:call BeforeTagbarSaveCheck()<CR>:TagbarToggle<CR>
 " once open, cursor is in tagbar window
 let g:tagbar_autofocus = 1
 " open at left
