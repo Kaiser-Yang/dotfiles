@@ -11,17 +11,22 @@
 " set scrolloff=999 will let your cursor line always be in the middle.
 " but when it reach the bottom, the cursor line will not be the middle,
 " use this below can figure it out, make your cursor always the middle,
-augroup VCenterCursor
-au!
-au BufEnter,WinEnter,WinNew,VimResized *,*.*
-    \ let &scrolloff=winheight(win_getid())/2
-augroup END
-nnoremap i zzi
-nnoremap I zzI
-nnoremap o zzo
-nnoremap O zzO
-nnoremap a zza
-nnoremap A zzA
+" this will inconvenient for looking code
+" augroup VCenterCursor
+" au!
+" au BufEnter,WinEnter,WinNew,VimResized *,*.*
+"     \ let &scrolloff=winheight(win_getid())/2
+" augroup END
+
+set scrolloff=5
+
+" this will let you mouse be the middle, when you enter insert mode.
+" nnoremap i zzi
+" nnoremap I zzI
+" nnoremap o zzo
+" nnoremap O zzO
+" nnoremap a zza
+" nnoremap A zzA
 
 " use pure text as pasted contents
 " don't use this, this will disable ycm, auto-pairs.

@@ -18,8 +18,8 @@ nnoremap gr :YcmCompleter GoToReferences<CR>
 " use gc to go to callers, find those who call this function
 nnoremap gc :YcmCompleter GoToCallers<CR>
 
-" use <Leader>r to refactor rename
-nnoremap <Leader>r :YcmCompleter RefactorRename 
+" use <Leader>R to refactor rename
+nnoremap <Leader>R :YcmCompleter RefactorRename 
 
 " use <Ctrl-f> as fix it command
 nnoremap <C-f> :YcmCompleter FixIt<CR>

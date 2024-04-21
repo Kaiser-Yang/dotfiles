@@ -26,7 +26,7 @@
 #       your conda environment is where you install pandoc,
 #       if you never convert vimwiki to html files, you can ignore this.
 ignore_file = set(["./.git", "./LICENSE", "./README.md",
-                   "./dot_files.py", "./.gitignore"])
+                   "./dot_files.py", "./.gitignore", "./replace_md_image.py"])
 
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,
