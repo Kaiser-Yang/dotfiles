@@ -6,7 +6,9 @@ call plug#begin('~/.vim/plugged')
 " add status bar below
 Plug 'vim-airline/vim-airline'
 " CtrlP for find files
-Plug 'kien/ctrlp.vim'
+" Plug 'kien/ctrlp.vim'
+" now we are using LeaderF to find files.
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 " YouCompleteMe for code completion.
 Plug 'ycm-core/YouCompleteMe'
 " Nerd Tree to navigation in folders.

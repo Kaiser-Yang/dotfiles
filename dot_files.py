@@ -139,6 +139,9 @@ def install_plugin_for_vim():
     os.system("sudo add-apt-repository ppa:jonathonf/vim")
     os.system("sudo apt update")
     os.system("sudo apt install vim vim-gtk")
+    # rg is needed for search files
+    print("installing ripgrep...")
+    os.system("sudo apt install ripgrep")
     # use vim +PlugInstall to install plugins
     print("installing vim plugins...")
     os.system("vim +PlugInstall")

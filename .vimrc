@@ -245,7 +245,9 @@ nnoremap <C-t> :tabnew<CR>
 set completeopt=popup
 
 source ~/.vim/vim_plugin_config/vimplug_config.vim
-source ~/.vim/vim_plugin_config/ctrlp_config.vim
+" source ~/.vim/vim_plugin_config/ctrlp_config.vim
+" now we are using leaderf to find files.
+source ~/.vim/vim_plugin_config/leaderf_config.vim
 source ~/.vim/vim_plugin_config/youcompleteme_config.vim
 source ~/.vim/vim_plugin_config/nerdtree_config.vim
 source ~/.vim/vim_plugin_config/onedark_config.vim

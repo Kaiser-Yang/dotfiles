@@ -1,12 +1,21 @@
 
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
-let g:vimwiki_list = [{
+let g:vimwiki_list = [
+\ {
     \ 'path_html': '/mnt/e/vimwiki/programming/html',
     \ 'path': '/mnt/e/vimwiki/programming',
     \ 'syntax': 'markdown',
     \ 'ext':'.md',
-    \ 'custom_wiki2html': '~/.vim/autoload/wiki2html.sh'}]
+    \ 'custom_wiki2html': '~/.vim/autoload/wiki2html.sh'
+\ },
+\ {
+    \ 'path_html': '/mnt/e/vimwiki/blog/html',
+    \ 'path': '/mnt/e/vimwiki/blog',
+    \ 'syntax': 'markdown',
+    \ 'ext':'.md',
+    \ 'custom_wiki2html': '~/.vim/autoload/wiki2html.sh'
+\ }]
 
 " disable html convertion default key bindings.
 let g:vimwiki_key_mappings =
