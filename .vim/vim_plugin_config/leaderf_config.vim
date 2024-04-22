@@ -5,9 +5,8 @@
 " use popup rather than bottom.
 let g:Lf_WindowPosition = 'popup'
 let g:Lf_PopupHeight = 0.3
-" let g:Lf_PopupWidth = 0.75
-" this will not work.
-" leg g:Lf_PopupPreviewPosition = 'top'
+let g:Lf_PopupWidth = 0.75
+let g:Lf_PopupPreviewPosition = 'top'
 
 " the icons are all ?, may need some extensions,
 " you should install nerd-font for your terminal.

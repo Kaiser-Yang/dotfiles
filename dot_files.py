@@ -129,6 +129,7 @@ def recover_dot_files(home_current_dir, current_dir):
             recover_file += '/'
             recover_dot_files(home_current_dir + recover_file,
                              current_dir + recover_file)
+
 def install_plugin_for_vim():
     global ycm_dir, is_root
     # ycm requirs vim 9, so we will update your vim.
