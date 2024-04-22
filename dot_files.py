@@ -168,6 +168,10 @@ def install_fish():
     os.system("echo /usr/bin/fish | sudo tee -a /etc/shells")
     os.system("chsh -s /usr/bin/fish")
 
+def install_lazygit():
+    print("installing lazygit...")
+    os.system("bash ./lazygit_installer.sh")
+
 def operate_dot_files(home_current_dir : str, current_dir : str,
                       opcode : str):
     if opcode == "update":
@@ -181,6 +185,7 @@ def operate_dot_files(home_current_dir : str, current_dir : str,
         update_dot_files(home_current_dir, current_dir)
         install_plugin_for_vim()
         install_fish()
+        install_lazygit()
     elif opcode == "":
         recover_dot_files(home_current_dir, current_dir)
         backup_files(home_current_dir, current_dir)

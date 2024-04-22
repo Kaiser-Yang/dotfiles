@@ -5,6 +5,7 @@
 #  \___\___/|_| |_|_| |_|\__, (_)_| |_|___/_| |_| |_|\_\__,_|_|___/\___|_|   
 #                        |___/                                               
 # abbreviations for git
+abbr -a lzg lazygit
 abbr -a gco git checkout
 abbr -a gst git status
 abbr -a gaa git add :/

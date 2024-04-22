@@ -270,10 +270,10 @@ source ~/.vim/vim_plugin_config/markdownhelper_config.vim
 func! CompileRunGcc()
     exec "w"
     if &filetype == 'c'
-        exec "!g++ % -o %<"
+        exec "!gcc -g -Wall % -o %<"
         exec "!time ./%<"
     elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"
+        exec "!g++ -g -Wall -std=c++17 % -o %<"
         exec "!time ./%<"
     elseif &filetype == 'java'
         exec "!javac %"
