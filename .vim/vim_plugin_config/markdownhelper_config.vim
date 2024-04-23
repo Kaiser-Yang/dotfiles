@@ -16,10 +16,10 @@ autocmd Filetype markdown inoremap ,b ****<++><Esc>F*hi
 autocmd Filetype markdown inoremap ,i **<++><Esc>F*i
 
 " for code blocks
-autocmd Filetype markdown inoremap ,c <CR>```<CR>```<CR><CR><++><Esc>3kA
+autocmd Filetype markdown inoremap ,c <CR><CR>```<CR>```<CR><CR><++><Esc>3kA
 
 " for pictures, mostly, we don't add pictures' descriptions
-autocmd Filetype markdown inoremap ,p <CR>![]()<++><Esc>F(a
+autocmd Filetype markdown inoremap ,p <CR><CR>![]()<++><Esc>F(a
 
 " for for links <a> are html links tag, so we use ,a
 autocmd Filetype markdown inoremap ,a [](<++>)<++><Esc>F[a
@@ -37,7 +37,7 @@ autocmd Filetype markdown inoremap ,d ~~~~<++><Esc>F~hi
 autocmd Filetype markdown inoremap ,t ``<++><Esc>F`i
 
 " math formulas
-autocmd Filetype markdown inoremap ,M <CR>$$<CR><CR>$$<CR><CR><++><Esc>3kA
+autocmd Filetype markdown inoremap ,M <CR><CR>$$<CR><CR>$$<CR><CR><++><Esc>3kA
 
 " math formulas in line
 autocmd Filetype markdown inoremap ,m $$<++><Esc>F$i
