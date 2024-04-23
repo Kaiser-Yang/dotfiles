@@ -16,7 +16,7 @@ autocmd Filetype markdown inoremap ,b ****<++><Esc>F*hi
 autocmd Filetype markdown inoremap ,i **<++><Esc>F*i
 
 " for code blocks
-autocmd Filetype markdown inoremap ,c <CR>```<CR><++><CR>```<CR><CR><++><Esc>4kA
+autocmd Filetype markdown inoremap ,c <CR>```<CR><CR>```<CR><CR><++><Esc>4kA
 
 " for pictures, mostly, we don't add pictures' descriptions
 autocmd Filetype markdown inoremap ,p <CR>![]()<++><Esc>F(a
@@ -43,9 +43,12 @@ autocmd Filetype markdown inoremap ,M <CR>$$<CR><CR>$$<CR><CR><++><Esc>3kA
 autocmd Filetype markdown inoremap ,m $$<++><Esc>F$i
 
 " newline but not new paragraph
-
 autocmd FileType markdown inoremap ,n <br><CR>
 
+" use mouse in markdown file,
+" this is useful when you are write Chinese
+" which is inconvenient to navigate with f/F or t/T.
+autocmd FileType markdown set mouse+=a
 " not used
 " autocmd Filetype markdown inoremap ,n ---<CR><CR>
 " autocmd Filetype markdown inoremap ,l --------<CR>

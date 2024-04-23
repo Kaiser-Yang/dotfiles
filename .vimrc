@@ -186,9 +186,15 @@ set expandtab
 set tabstop=4
 set shiftwidth=4
 
-" never auto split
+" show one long line in many lines, rather than infinitely elongating.
 set wrap
+
+" never auto split
 set tw=0
+
+" when in wrap lines, j and k can move in wrap lines, rather than going to next line.
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 " set ^S to be :w
 nnoremap <C-s> :w<CR>
