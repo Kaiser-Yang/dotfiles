@@ -25,7 +25,7 @@
 #       if you do it, make sure when you want convert files,
 #       your conda environment is where you install pandoc,
 #       if you never convert vimwiki to html files, you can ignore this.
-ignore_file = set(["./.git", "./LICENSE", "./README.md",
+ignore_file = set(["./.git", "./LICENSE", "./README.md", "./lazygit_installer.sh",
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py"])
 
 # Update the list to let those files to be copied to $HOME
