@@ -23,7 +23,7 @@ abbr -a grbs git rebase -i
 # abbreviations for jupyter
 abbr -a jpt jupyter
 abbr -a jptnb jupyter notebook
-abbr -a jptnbcv jupyter nbconvert
+abbr -a jptnbcv jupyter nbconvert --to
 
 # abbreviations for ll not to show hidden files
 abbr -a ll ls -lFh
