@@ -3,12 +3,8 @@
 " We add a empty line above to make sure the script append it correctly.
 " vim nerdtree config
 " open nerdtree use ^E
-" if you want to open a nerdtree which is same with the previous opened one,
-" just use <C-S-e>
-nnoremap <C-e> <Nop>
 nnoremap <C-e> :NERDTreeToggle<CR>
-inoremap <C-e> <Nop>
-inoremap <C-e> <C-o>:NERDTreeToggle<CR>
+inoremap <C-e> <Esc>:NERDTreeToggle<CR>
 
 " Exit Vim if NERDTree is the only window remaining in the only tab.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
@@ -28,7 +24,6 @@ let g:NERDTreeShowHidden = 1
 
 " set nerdtree sort by numerical
 let g:NERDTreeNaturalSort = 1
-
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
 

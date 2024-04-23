@@ -2,9 +2,7 @@
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
 " use ^Q to open undotree
-nnoremap <C-q> <Nop>
 nnoremap <C-q> :UndotreeToggle<CR>:UndotreeFocus<CR>
-inoremap <C-q> <Nop>
 inoremap <C-q> <ESC>:UndotreeToggle<CR>:UndotreeFocus<CR>
 " use :UndotreePersistUndo to save the history into a file
 if has("persistent_undo")

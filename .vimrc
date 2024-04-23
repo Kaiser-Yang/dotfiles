@@ -131,7 +131,7 @@ nnoremap <LEADER><CR> :nohlsearch<CR>
 " nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 
 " NOTE: I've found new solution for this (copy and paste with windows using
-" wls vim). After 2021, wsl has internal gui app,  which is called  wslg,
+" wsl vim). After 2021, wsl has internal gui app,  which is called wslg,
 " using windows to show gui apps, so now the system clipboard can be used.
 " make sure you have sudo apt install vim-gtk
 vnoremap <LEADER>y "+y<CR>

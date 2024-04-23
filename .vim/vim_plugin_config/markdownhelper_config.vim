@@ -16,7 +16,7 @@ autocmd Filetype markdown inoremap ,b ****<++><Esc>F*hi
 autocmd Filetype markdown inoremap ,i **<++><Esc>F*i
 
 " for code blocks
-autocmd Filetype markdown inoremap ,c <CR>```<CR><CR>```<CR><CR><++><Esc>4kA
+autocmd Filetype markdown inoremap ,c <CR>```<CR>```<CR><CR><++><Esc>3kA
 
 " for pictures, mostly, we don't add pictures' descriptions
 autocmd Filetype markdown inoremap ,p <CR>![]()<++><Esc>F(a
