@@ -19,7 +19,7 @@ autocmd Filetype markdown inoremap ,i **<++><Esc>F*i
 autocmd Filetype markdown inoremap ,c <CR><CR>```<CR>```<CR><CR><++><Esc>3kA
 
 " for pictures, mostly, we don't add pictures' descriptions
-autocmd Filetype markdown inoremap ,p <CR><CR>![]()<++><Esc>F(a
+autocmd Filetype markdown inoremap ,p <CR><CR>![]()<CR><CR><++><Esc>2kF(a
 
 " for for links <a> are html links tag, so we use ,a
 autocmd Filetype markdown inoremap ,a [](<++>)<++><Esc>F[a
