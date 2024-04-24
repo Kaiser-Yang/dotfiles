@@ -19,6 +19,11 @@ abbr -a ga git add
 abbr -a gps git push
 abbr -a gpl git pull
 abbr -a grbs git rebase -i
+abbr -a gdag git log --all --graph --decorate
+abbr -a gcco git checkout
+abbr -a gbrc git branch
+abbr -a gcln git clone
+abbr -a grst git reset
 
 # abbreviations for jupyter
 abbr -a jpt jupyter
