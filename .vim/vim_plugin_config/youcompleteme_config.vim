@@ -30,8 +30,9 @@ nnoremap <Leader>d <plug>(YCMHover)
 let g:ycm_extra_conf_globlist = ['~/.vim/vim_plugin_config/ycm_extra_config_global.py']
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_complete_in_comments = 1
-let g:ycm_complete_in_strings = 1
+" don't complete in comments, this will trigger every time you input .
+" let g:ycm_complete_in_comments = 1
+" let g:ycm_complete_in_strings = 1
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_list_select_completion = ['<C-j>', '<TAB>']
 let g:ycm_key_list_previous_completion = ['<C-k>', '<S-TAB>']
