@@ -20,6 +20,9 @@
 
 set scrolloff=5
 
+" show tips of column 80
+set cc=80
+
 " this will let you mouse be the middle, when you enter insert mode.
 " nnoremap i zzi
 " nnoremap I zzI
