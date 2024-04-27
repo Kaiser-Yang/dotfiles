@@ -15,8 +15,8 @@ endfunction
 " autocmd BufRead,BufNewFile *.md inoremap <silent> <Bar> <Bar><Esc>:call <SID>align()<CR>A
 nnoremap <Leader>a= :Tabularize /=<CR>
 vnoremap <Leader>a= :Tabularize /=<CR>
-nnoremap <Leader>a: :Tabularize /:<CR>
-vnoremap <Leader>a: :Tabularize /:<CR>
+nnoremap <Leader>a: :Tabularize /:\zs<CR>
+vnoremap <Leader>a: :Tabularize /:\zs<CR>
 nnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
 vnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
 " we add a empty line below to make sure the script append it coreectly.
