@@ -279,16 +279,22 @@ source ~/.vim/vim_plugin_config/markdownhelper_config.vim
 func! CompileRunGcc()
     exec "w"
     if &filetype == 'c'
-        exec "!gcc -g -Wall % -o %<"
-        exec "!time ./%<"
+        exec "!gcc -g -Wall % -o %<.out"
+        if v:shell_error == 0
+            exec "!time ./%<.out"
+        endif
     elseif &filetype == 'cpp'
-        exec "!g++ -g -Wall -std=c++17 % -o %<"
-        exec "!time ./%<"
+        exec "!g++ -g -Wall -std=c++17 % -o %<.out"
+        if v:shell_error == 0
+            exec "!time ./%<.out"
+        endif
     elseif &filetype == 'java'
         exec "!javac %"
-        exec "!time java %<"
+        if v:shell_error == 0
+            exec "!time java %<"
+        endif
     elseif &filetype == 'sh'
-        :!time bash %
+        exec "!time ./%"
     elseif &filetype == 'python'
         silent! exec "!clear"
         exec "!time python3 %"
