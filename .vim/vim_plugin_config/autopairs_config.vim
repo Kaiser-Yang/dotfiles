@@ -1,9 +1,9 @@
 
 " start_symbol_kaiserqzyue
 " We add a empty line above to make sure the script append it correctly.
-" use ^F to add brackets when mismatch
+" use ^B to add brackets when mismatch
 let g:AutoPairsFlyMode = 1
-let g:AutoPairsShortcutBackInsert = '<C-f>'
+let g:AutoPairsShortcutBackInsert = '<C-b>'
 
 " use ^A to wrap
 let g:AutoPairsShortcutFastWrap = '<C-a>'

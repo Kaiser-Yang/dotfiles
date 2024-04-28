@@ -18,7 +18,7 @@ let g:Lf_RootMarkers = ['.git', '.svn', '.hg', '.project', '.root']
 
 " those will be ignored
 let g:Lf_WildIgnore = {
-    \ 'file': ['*.vcproj', '*.vcxproj', '*.exe', '*.so', '*.dll', '*.o', '*.obj'],
+    \ 'file': ['*.vcproj', '*.vcxproj', '*.exe', '*.so', '*.dll', '*.o', '*.obj', 'LICENSE'],
     \ 'dir': ['build', 'tmp', '.git']}
 
 " show hidden files, this is helpful when you are editing configure files.
@@ -28,9 +28,17 @@ let g:Lf_ShowHidden = 1
 let g:Lf_ShortcutF = '<C-P>'
 inoremap <C-p> <Esc>:LeaderfFile<CR>
 
-" use ^J and ^K to navigate
-" let g:Lf_CommandMap = {'<C-K>': ['<Up>'], '<C-J>': ['<Down>']}
+" when find symbols we don't ignore dotfiles,
+" we'll ignore .git and LICENSE
+let g:Lf_RgConfig = [
+    \ "--hidden",
+    \ "--glob=!.git/*",
+    \ "--glob=!LICENSE",
+\ ]
 
+" we use <C-f> to find symbols in files.
+nnoremap <C-f> :Leaderf rg<CR>
+inoremap <C-f> <ESC>:Leaderf rg<CR>
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
 

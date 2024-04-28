@@ -21,8 +21,9 @@ nnoremap gc :YcmCompleter GoToCallers<CR>
 " use <Leader>R to refactor rename
 nnoremap <Leader>R :YcmCompleter RefactorRename 
 
-" use <Ctrl-f> as fix it command
-nnoremap <C-f> :YcmCompleter FixIt<CR>
+" note that now use <C-f> to find symbols in files
+" so we now use H to fix
+nnoremap H :YcmCompleter FixIt<CR>
 
 " use <Leader>d show doc for current symbol
 nnoremap <Leader>d <plug>(YCMHover)
