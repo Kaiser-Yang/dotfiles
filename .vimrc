@@ -274,6 +274,7 @@ source ~/.vim/vim_plugin_config/autopairs_config.vim
 source ~/.vim/vim_plugin_config/vimsurround_config.vim
 source ~/.vim/vim_plugin_config/tabular_config.vim
 source ~/.vim/vim_plugin_config/markdownhelper_config.vim
+source ~/.vim/vim_plugin_config/pythonmode_config.vim
 
 " Compile function
 func! CompileRunGcc()

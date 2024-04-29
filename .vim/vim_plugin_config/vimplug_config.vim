@@ -41,6 +41,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 " alignment tool
 Plug 'godlygeek/tabular'
+" for python fix and notations
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
