@@ -51,7 +51,7 @@ let g:ycm_semantic_triggers =  {
     \   'cpp,cuda,objcpp': ['->', '.', '::', '#', 're!w{2}'],
     \   'perl': ['->'],
     \   'php': ['->', '::'],
-    \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],
+    \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.', 're!w{2}'],
     \   'ruby,rust': ['.', '::'],
     \   'lua': ['.', ':'],
     \   'erlang': [':'],
@@ -73,5 +73,11 @@ let g:ycm_filetype_blacklist = {
 " which is similar with vscode.
 " let g:ycm_key_list_stop_completion = ['<C-y>', '<CR>']
 
+" set inlay hints for normal and visual modes but not for insert mode
+let g:ycm_enable_inlay_hints = 1
+let g:ycm_clear_inlay_hints_in_insert_mode = 1
+
+" use <leader>i to close inlay hints
+nnoremap <silent> <Leader>i <Plug>(YCMToggleInlayHints)
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
