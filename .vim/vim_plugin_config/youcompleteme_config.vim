@@ -73,10 +73,6 @@ let g:ycm_filetype_blacklist = {
 " which is similar with vscode.
 " let g:ycm_key_list_stop_completion = ['<C-y>', '<CR>']
 
-" set inlay hints for normal and visual modes but not for insert mode
-let g:ycm_enable_inlay_hints = 1
-let g:ycm_clear_inlay_hints_in_insert_mode = 1
-
 " use <leader>i to close inlay hints
 nnoremap <silent> <Leader>i <Plug>(YCMToggleInlayHints)
 " we add a empty line below to make sure the script append it coreectly.
