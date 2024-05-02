@@ -137,11 +137,11 @@ nnoremap <LEADER><CR> :nohlsearch<CR>
 " wsl vim). After 2021, wsl has internal gui app,  which is called wslg,
 " using windows to show gui apps, so now the system clipboard can be used.
 " make sure you have sudo apt install vim-gtk
-vnoremap <LEADER>y "+y<CR>
-nnoremap <LEADER>p "+p<CR>
-nnoremap <LEADER>P "+P<CR>
-vnoremap <LEADER>p "+p<CR>
-vnoremap <LEADER>P "+P<CR>
+vnoremap <LEADER>y "+y
+nnoremap <LEADER>p "+p
+nnoremap <LEADER>P "+P
+vnoremap <LEADER>p "+p
+vnoremap <LEADER>P "+P
 " copy the whole file is used very often, so we add a new bind for this.
 nnoremap <LEADER>ya :w !clip.exe<CR><CR>
 
