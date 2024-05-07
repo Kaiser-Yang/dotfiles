@@ -143,7 +143,8 @@ nnoremap <LEADER>P "+P
 vnoremap <LEADER>p "+p
 vnoremap <LEADER>P "+P
 " copy the whole file is used very often, so we add a new bind for this.
-nnoremap <LEADER>ya :w !clip.exe<CR><CR>
+" this use mark to go back
+nnoremap <LEADER>ya mzggVG"+y`z:delmark z<CR>
 
 " Unbind some useless/annoying default key bindings.
 " 'Q' in normal mode enters Ex mode. You almost never want this.
