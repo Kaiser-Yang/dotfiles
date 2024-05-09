@@ -1,11 +1,26 @@
 #!/usr/bin/env bash
 
 # chage sources
-sudo cat ./sources.list.tuna | sudo tee /etc/apt/sources.list || exit 1
-sudo apt-get update || exit 1
+# this only works for Ubuntu 22.04 and Ubuntu 20.04
+if which lsb_release && lsb_release -a | grep -i ubuntu; then
+    UBUNTU_VERSION_NUMBER=$(lsb_release -a | sed -n 3p | awk '{print $2}')
+    if [ "$UBUNTU_VERSION_NUMBER" = "22.04" ]; then
+        sudo cat ./sources.list.tuna-22.04 | sudo tee /etc/apt/sources.list || exit 1
+        sudo apt update || exit 1
+    elif [ "$UBUNTU_VERSION_NUMBER" = "20.04" ]; then
+        sudo cat ./sources.list.tuna-20.04 | sudo tee /etc/apt/sources.list || exit 1
+        sudo apt update || exit 1
+    else
+        echo "source by yourself..."
+    fi
+fi
+
+# basic tools
+sudo apt install curl || exit 1
+sudo apt-get install software-properties-common || exit
 
 # install lazygit
-if ! which laxygit; then
+if ! which lazygit; then
     cd ~ || exit 1
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*') || exit 1
     curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" || exit 1
