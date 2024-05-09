@@ -19,7 +19,8 @@ abbr -a ga git add
 abbr -a gps git push
 abbr -a gpl git pull
 abbr -a grbs git rebase -i
-abbr -a gdag git log --all --graph --decorate
+abbr -a gdag git log --graph --abbrev-commit --decorate --format=format:"'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'" --all
+abbr -a gdagol git log --all --decorate --oneline --graph
 abbr -a gcco git checkout
 abbr -a gbrc git branch
 abbr -a gcln git clone
@@ -55,6 +56,11 @@ abbr -a tmkss tmux kill-session -t
 abbr -a tmswt tmux switch -t
 abbr -a tmrnss tmux rename-session -t
 abbr -a tmrnwd tmux rename-window -t
+
+# node for coc
+set PATH $PATH ~/node-v20.13.0-linux-x64/bin
+# the directory where user lib pip will install
+set PATH $PATH ~/.local/bin
 
 # this enable .. be cd ../, ... be cd ../../
 # .... be cd ../../../

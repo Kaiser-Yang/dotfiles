@@ -40,5 +40,7 @@ alias wcp='clip.exe'
 alias wpst='powershell.exe Get-Clipboard'
 # Let ^L clear the screen
 bind "\C-l":clear-screen
+export PATH=$PATH:~/node-v20.13.0-linux-x64/bin:~/.local/bin
+
 # we add a empty line below to make sure the script append it coreectly.
 ### end_symbol_kaiserqzyue

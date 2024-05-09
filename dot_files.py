@@ -22,11 +22,13 @@
 # NOTE: functionality of converting vimwiki to html needed pandoc,
 #       and tasks_list are supported after pandoc 2.6,
 #       you can use conda install pandoc for your activated conda environment,
-#       if you do it, make sure when you want convert files,
+#       if you do it, make sure when you want to convert files,
 #       your conda environment is where you install pandoc,
 #       if you never convert vimwiki to html files, you can ignore this.
-ignore_file = set(["./.git", "./LICENSE", "./README.md", "./lazygit_installer.sh",
-                   "./dot_files.py", "./.gitignore", "./replace_md_image.py"])
+# NOTE: make sure you conda environments are all deactived before runnint with init
+ignore_file = set(["./.git", "./LICENSE", "./README.md",
+                   "./dot_files.py", "./.gitignore", "./replace_md_image.py",
+                   "./sources.list.tuna", "./installer.sh"])
 
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,
@@ -45,7 +47,6 @@ ignore_file.add(backup_dir)
 
 backup_dir += '/'
 home_dir = os.environ["HOME"] + '/'
-ycm_dir = home_dir + ".vim/plugged/YouCompleteMe/"
 
 def backup_files(home_current_dir : str, current_dir):
     global backup_dir, ignore_file, home_dir
@@ -130,47 +131,9 @@ def recover_dot_files(home_current_dir, current_dir):
             recover_dot_files(home_current_dir + recover_file,
                              current_dir + recover_file)
 
-def install_plugin_for_vim():
-    global ycm_dir, is_root
-    # ycm requirs vim 9, so we will update your vim.
-    print("updating vim for you...")
-    # in order to add correctly, we must remove the repository
-    # manually, and add it again.
-    os.system("sudo add-apt-repository -r ppa:jonathonf/vim")
-    os.system("sudo add-apt-repository ppa:jonathonf/vim")
-    os.system("sudo apt update")
-    os.system("sudo apt install vim vim-gtk")
-    # rg is needed for search files
-    print("installing ripgrep...")
-    os.system("sudo apt install ripgrep")
-    # use vim +PlugInstall to install plugins
-    print("installing vim plugins...")
-    os.system("vim +PlugInstall")
-    # the installation tools for ycm
-    print("installing build tools for ycm...")
-    os.system("sudo apt install build-essential cmake vim-nox python3-dev")
-    print("installing ycm...")
-    ycm_dir = ycm_dir.replace("//", "/")
-    # sometimes the ycm's installation will failed if using conda environment
-    ycm_install_cmd = f"cd {ycm_dir} && python3 install.py --clangd-completer"
-    if is_root:
-        ycm_install_cmd += " --force-sudo"
-    os.system(ycm_install_cmd)
-    print("installing universal-tags for tagbar plugin...")
-    os.system("sudo apt-get install universal-ctags")
-
-def install_fish():
-    print("installing fish...")
-    os.system("sudo add-apt-repository -r ppa:fish-shell/release-3")
-    os.system("sudo add-apt-repository ppa:fish-shell/release-3")
-    os.system("sudo apt update")
-    os.system("sudo apt install fish")
-    os.system("echo /usr/bin/fish | sudo tee -a /etc/shells")
-    os.system("chsh -s /usr/bin/fish")
-
-def install_lazygit():
-    print("installing lazygit...")
-    os.system("bash ./lazygit_installer.sh")
+def install_useful_softwares():
+    print("install useful softwares...")
+    os.system("bash ./installer.sh")
 
 def operate_dot_files(home_current_dir : str, current_dir : str,
                       opcode : str):
@@ -183,9 +146,7 @@ def operate_dot_files(home_current_dir : str, current_dir : str,
         recover_dot_files(home_current_dir, current_dir)
         backup_files(home_current_dir, current_dir)
         update_dot_files(home_current_dir, current_dir)
-        install_plugin_for_vim()
-        install_fish()
-        install_lazygit()
+        install_useful_softwares()
     elif opcode == "":
         recover_dot_files(home_current_dir, current_dir)
         backup_files(home_current_dir, current_dir)
@@ -207,6 +168,7 @@ if __name__ == "__main__":
         opcode =  sys.argv[1]
     elif len(sys.argv) > 2:
         print("Usage: ./dot_files.py [update|recover|init]")
+        exit(1)
     else:
         opcode = ""
     home_dir = home_dir.replace("//", "/")

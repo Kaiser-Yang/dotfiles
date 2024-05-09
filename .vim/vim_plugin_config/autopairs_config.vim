@@ -5,8 +5,10 @@
 let g:AutoPairsFlyMode = 1
 let g:AutoPairsShortcutBackInsert = '<C-b>'
 
+" don't use this ^A is the prefix for tmux
+" use surrounding's key like: ysw)
 " use ^A to wrap
-let g:AutoPairsShortcutFastWrap = '<C-a>'
+" let g:AutoPairsShortcutFastWrap = '<C-a>'
 
 " double quotation is vim's comment sign, so remove it from auto pairs of vim files
 autocmd Filetype vim let b:AutoPairs = {'(':')', '[':']', '{':'}', "'":"'", "`":"`", '```':'```', '"""':'"""', "'''":"'''"}

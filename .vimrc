@@ -122,6 +122,9 @@ exec "nohlsearch"
 set hlsearch
 nnoremap <LEADER><CR> :nohlsearch<CR>
 
+" use Y to copt to the end
+nnoremap Y y$
+
 " NOTE: do not use again, because <LEADER>c now is NerdCommenter's binding
 " key, you can use the right button of your mouse to copy and paste.
 " If you enable mouse in your vim, you may need press and hold shift for
@@ -137,11 +140,11 @@ nnoremap <LEADER><CR> :nohlsearch<CR>
 " wsl vim). After 2021, wsl has internal gui app,  which is called wslg,
 " using windows to show gui apps, so now the system clipboard can be used.
 " make sure you have sudo apt install vim-gtk
-vnoremap <LEADER>y "+y
+xnoremap <LEADER>y "+y
 nnoremap <LEADER>p "+p
 nnoremap <LEADER>P "+P
-vnoremap <LEADER>p "+p
-vnoremap <LEADER>P "+P
+xnoremap <LEADER>p "+p
+xnoremap <LEADER>P "+P
 " copy the whole file is used very often, so we add a new bind for this.
 " this use mark to go back
 nnoremap <LEADER>ya mzggVG"+y`z:delmark z<CR>
@@ -212,8 +215,11 @@ nnoremap S :wq<CR>
 " set <leader>H, J, K, L to move current window to left, down, up, right
 " set <leader>T to let current window be a new tab
 nnoremap <C-h> :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
-nnoremap <C-j> :set splitbelow<CR>:split<CR>:set nosplitbelow<CR>
-nnoremap <C-k> :set nosplitbelow<CR>:split<CR>
+" I found that I don't split a screen vertically very often
+" and I usually use <C-j> when I'm in searching windows, this will split
+" this is very annoying, so I just turn it off.
+" nnoremap <C-j> :set splitbelow<CR>:split<CR>:set nosplitbelow<CR>
+" nnoremap <C-k> :set nosplitbelow<CR>:split<CR>
 nnoremap <C-l> :set splitright<CR>:vsplit<CR>
 inoremap <C-h> <ESC>:set nosplitright<CR><ESC>:vsplit<CR><ESC>:set splitright<CR>
 " we can not use <C-j> in insert mode,
@@ -258,13 +264,16 @@ source ~/.vim/vim_plugin_config/vimplug_config.vim
 " source ~/.vim/vim_plugin_config/ctrlp_config.vim
 " now we are using leaderf to find files.
 source ~/.vim/vim_plugin_config/leaderf_config.vim
-source ~/.vim/vim_plugin_config/youcompleteme_config.vim
+" source ~/.vim/vim_plugin_config/youcompleteme_config.vim
+" now use coc
+source ~/.vim/vim_plugin_config/coc_config.vim
 source ~/.vim/vim_plugin_config/nerdtree_config.vim
 source ~/.vim/vim_plugin_config/onedark_config.vim
 source ~/.vim/vim_plugin_config/vimpolyglot_config.vim
 source ~/.vim/vim_plugin_config/undotree_config.vim
 source ~/.vim/vim_plugin_config/tagbar_config.vim
-source ~/.vim/vim_plugin_config/vimgitgutter_config.vim
+" this can be replaced with coc-git
+" source ~/.vim/vim_plugin_config/vimgitgutter_config.vim
 source ~/.vim/vim_plugin_config/nerdcommenter_config.vim
 source ~/.vim/vim_plugin_config/vimwhichkey_config.vim
 source ~/.vim/vim_plugin_config/nerdtreegitplugin_config.vim

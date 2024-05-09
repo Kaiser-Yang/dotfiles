@@ -9,8 +9,16 @@ Plug 'vim-airline/vim-airline'
 " Plug 'kien/ctrlp.vim'
 " now we are using LeaderF to find files.
 Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+" coc to complete
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" now we use coc, so these two are not used anymore
 " YouCompleteMe for code completion.
-Plug 'ycm-core/YouCompleteMe'
+" Plug 'ycm-core/YouCompleteMe'
+" for python fix and notations
+" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+" this can be replaced with coc-git
+" gitgutter to see the difference of git repositories' files
+" Plug 'airblade/vim-gitgutter'
 " Nerd Tree to navigation in folders.
 Plug 'preservim/nerdtree'
 " onedark theme
@@ -21,8 +29,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'mbbill/undotree'
 " tagbar for outlines of files
 Plug 'preservim/tagbar'
-" gitgutter to see the difference of git repositories' files
-Plug 'airblade/vim-gitgutter'
 " nerd commenter for add comments for lines
 Plug 'preservim/nerdcommenter'
 " vim-which-key to cheat
@@ -41,8 +47,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 " alignment tool
 Plug 'godlygeek/tabular'
-" for python fix and notations
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue

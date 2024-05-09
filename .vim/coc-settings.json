@@ -1,0 +1,48 @@
+{
+    // enable cmake lsp
+    "cmake.lsp.enable": true,
+    // enable semantic highlight
+    "semanticTokens.enable": true,
+    // enable code lens
+    // this is not supported by my vim version
+    // "codeLens.enable": true,
+    // don't ignore dot files
+    "coc.source.file.ignoreHidden": false,
+    // all files use word completion
+    "coc.source.word.filetypes": null,
+    // refresh diagnostic information in insert mode
+    "diagnostic.refreshOnInsertMode": true,
+    // don't select the first one when triggering completion
+    "suggest.noselect": true,
+    // those are maek coc-git use the icons of vim-gitgutter
+    "git.addedSign.hlGroup": "GitGutterAdd",
+    "git.changedSign.hlGroup": "GitGutterChange",
+    "git.removedSign.hlGroup": "GitGutterDelete",
+    "git.topRemovedSign.hlGroup": "GitGutterDelete",
+    "git.changeRemovedSign.hlGroup": "GitGutterChangeDelete",
+    // diagnostic-languageserver
+    "diagnostic-languageserver.filetypes": {
+        "vim": "vint",
+        // "email": "languagetool",
+        "markdown": [ "write-good", "markdownlint" ],
+        "sh": "shellcheck",
+        // "elixir": ["mix_credo", "mix_credo_compile"],
+        // "eelixir": ["mix_credo", "mix_credo_compile"],
+        // "php": ["phpstan", "psalm"],
+        "yaml": [ "yamllint" ],
+        "cmake": [ "cmake-lint", "cmakelint" ],
+        // "systemd": "systemd-analyze",
+    },
+    // not used now
+    // "diagnostic-languageserver.formatFiletypes": {
+    //     "dart": "dartfmt",
+    //     "elixir": "mix_format",
+    //     "eelixir": "mix_format",
+    //     "python": ["black", "isort"],
+    //     "lua": "lua-format",
+    //     "sh": "shfmt",
+    //     "blade": "blade-formatter",
+    //     "cmake": "cmake-format",
+    // }
+}
+
