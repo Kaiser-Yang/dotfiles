@@ -24,7 +24,7 @@ if ! which lazygit; then
     cd ~ || exit 1
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*') || exit 1
     curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" || exit 1
-    tar xf lazygit.tar.gz lazygit || exit 1
+    tar -xf lazygit.tar.gz lazygit || exit 1
     sudo install lazygit /usr/local/bin || exit 1
     rm -rf lazygit lazygit.tar.gz || exit 1
     cd - || exit 1
