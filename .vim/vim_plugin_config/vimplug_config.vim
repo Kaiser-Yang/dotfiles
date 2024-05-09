@@ -7,8 +7,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 " CtrlP for find files
 " Plug 'kien/ctrlp.vim'
-" now we are using LeaderF to find files.
-Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 " coc to complete
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " now we use coc, so these two are not used anymore
@@ -35,8 +33,6 @@ Plug 'preservim/nerdcommenter'
 Plug 'liuchengxu/vim-which-key'
 " nerdtree git status plugin
 Plug 'Xuyuanp/nerdtree-git-plugin'
-" markdown preview
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 " vimwiki plugin
 Plug 'vimwiki/vimwiki'
 " vim indent line
@@ -47,6 +43,10 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 " alignment tool
 Plug 'godlygeek/tabular'
+" now we are using LeaderF to find files.
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+" markdown preview
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
