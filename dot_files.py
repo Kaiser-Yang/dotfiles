@@ -26,6 +26,9 @@
 #       your conda environment is where you install pandoc,
 #       if you never convert vimwiki to html files, you can ignore this.
 # NOTE: make sure you conda environments are all deactived before runnint with init
+# BUG: the leader f and markdown preview must be re-installed after all the plugins
+#      finish install, I don't know why now. You can just rm LeaderF and markdownpreview's
+#      repositories at ~/.vim/plugged/ and then rum vim +PlugInstall to install manually.
 ignore_file = set(["./.git", "./LICENSE", "./README.md",
                              "./dot_files.py", "./.gitignore", "./replace_md_image.py",
                              "./sources.list.tuna", "./installer.sh", "./sources.list.tuna-20.04",
