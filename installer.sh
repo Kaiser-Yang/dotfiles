@@ -16,8 +16,8 @@ if which lsb_release && lsb_release -a | grep -i ubuntu; then
 fi
 
 # basic tools
-sudo apt install curl || exit 1
-sudo apt-get install software-properties-common || exit
+sudo apt install -y curl || exit 1
+sudo apt install -y software-properties-common || exit
 
 # install lazygit
 if ! which lazygit; then
@@ -34,7 +34,7 @@ fi
 if ! which fish; then
     sudo add-apt-repository ppa:fish-shell/release-3 || exit 1
     sudo apt update || exit 1
-    sudo apt install fish || exit 1
+    sudo apt install -y fish || exit 1
     echo /usr/bin/fish | sudo tee -a /etc/shells || exit 1
     chsh -s /usr/bin/fish || exit 1
 fi
@@ -44,7 +44,7 @@ VIM_VERSION=$(vim --version | sed -n 1p | awk '{print $5}')
 if [ "$VIM_VERSION" != "9.0" ]; then
     sudo add-apt-repository ppa:jonathonf/vim || exit 1
     sudo apt update || exit 1
-    sudo apt install vim vim-gtk universal-ctags ripgrep vim-nox || exit 1
+    sudo apt install -y vim vim-gtk universal-ctags ripgrep vim-nox || exit 1
 fi
 
 # vim-plug coc depends on nodejs
@@ -60,7 +60,7 @@ fi
 vim +PlugInstall
 
 # some tools for development
-sudo apt install shellcheck build-essential cmake python3-dev pip pandoc || exit 1
+sudo apt install -y shellcheck build-essential cmake python3-dev pip pandoc || exit 1
 
 # NOTE: this will use conda-pip, if your conda is activated
 pip install cmake-language-server || exit 1
@@ -70,10 +70,10 @@ pip install cmake-language-server || exit 1
 # python3 install.py --clangd-completer --force-sudo || exit 1
 
 # clang family
-sudo apt install clangd clang-format clang-tidy || exit 1
+sudo apt install -y clangd clang-format clang-tidy || exit 1
 
 # sshfs
-sudo apt install sshfs || exit 1
+sudo apt install -y sshfs || exit 1
 
 # sh language server
 if ! sudo snap install bash-language-server --classic; then
