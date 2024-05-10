@@ -10,13 +10,13 @@ fi
 # this only works for Ubuntu 22.04 and Ubuntu 20.04
 # the original source.list will be renamed with source.list.bak
 if which lsb_release && lsb_release -a | grep -i ubuntu; then
-    if lsb_release -a | grep 22.04; then
+    if lsb_release -a | grep '22\.04'; then
         SUDO_COMMAND=$(which sudo)
         ${SUDO_COMMAND} cp /etc/apt/sources.list /etc/apt/sources.list.bak
         ${SUDO_COMMAND} cat ./sources.list.tuna-22.04 | sudo tee /etc/apt/sources.list || exit 1
         ${SUDO_COMMAND} cat ./sources.list.tuna-22.04 | sudo tee /etc/apt/sources.list || exit 1
         ${SUDO_COMMAND} apt update || exit 1
-    elif lsb_release -a | grep 20.04; then
+    elif lsb_release -a | grep '20\.04'; then
         ${SUDO_COMMAND} cp /etc/apt/sources.list /etc/apt/sources.list.bak
         ${SUDO_COMMAND} cat ./sources.list.tuna-20.04 | sudo tee /etc/apt/sources.list || exit 1
         ${SUDO_COMMAND} apt update || exit 1
@@ -72,7 +72,7 @@ if ! which fish && which add-apt-repository; then
 fi
 
 # update vim to vim-9
-if ! vim --version | grep '9.0'; then
+if ! vim --version | grep '9\.0'; then
     sudo add-apt-repository ppa:jonathonf/vim || exit 1
     sudo apt update || exit 1
     sudo apt install -y vim vim-gtk vim-nox || exit 1
