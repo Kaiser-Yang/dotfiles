@@ -111,7 +111,9 @@ sudo apt install -y clangd clang-format clang-tidy || exit 1
 sudo apt install -y sshfs || exit 1
 
 # sh lsp
-if ! sudo snap install bash-language-server --classic; then
+# this use snapp to install
+# you may isntall sanp by yourself
+if which snap && ! sudo snap install bash-language-server --classic; then
     echo "bash-language-server installation failed, don't worry, you can install it manually." | \
         tee installer.log
 fi
@@ -119,7 +121,8 @@ fi
 # install miniconda3
 if ! which conda; then
     mkdir -p ~/miniconda3 || exit 1
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh || exit 1
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+        -O ~/miniconda3/miniconda.sh || exit 1
     bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 || exit 1
     rm -rf ~/miniconda3/miniconda.sh || exit 1
     ~/miniconda3/bin/conda init bash || exit 1
@@ -136,4 +139,5 @@ if [ -d ~/.vim/plugged/markdown-preview.nvim ]; then
 fi
 vim +PlugInstall
 
-echo "Installation finished, but you may need restart your shell and run vim to install the extentsions for coc!!!"
+echo "Installation finished, "
+echo "but you may need restart your shell and run vim to install the extentsions for coc!!!"
