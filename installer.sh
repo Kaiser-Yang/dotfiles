@@ -111,8 +111,8 @@ sudo apt install -y clangd clang-format clang-tidy || exit 1
 sudo apt install -y sshfs || exit 1
 
 # sh lsp
-# this use snapp to install
-# you may isntall sanp by yourself
+# this use snap to install
+# you may isntall snap by yourself
 if which snap && ! sudo snap install bash-language-server --classic; then
     echo "bash-language-server installation failed, don't worry, you can install it manually." | \
         tee installer.log
