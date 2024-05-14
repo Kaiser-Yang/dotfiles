@@ -1,8 +1,11 @@
 {
     // enable cmake lsp
     "cmake.lsp.enable": true,
+    "cmake.lsp.serverPath": "cmake-language-server",
     // enable semantic highlight
     "semanticTokens.enable": true,
+    // don't show by default
+    "inlayHint.display": false,
     // enable code lens
     // this is not supported by my vim version
     // "codeLens.enable": true,
