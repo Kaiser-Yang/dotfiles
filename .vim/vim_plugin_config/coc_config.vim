@@ -3,7 +3,7 @@
 
 " cos-json is recommended strongly, this can help you write coc-settings.json
 " others depend on what you need
-let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-git', 'coc-pyright', 'coc-json', 'coc-html', 'coc-css', 'coc-word', 'coc-syntax', 'coc-cmake', 'coc-clang-format-style-options', 'coc-sh', 'coc-yaml', 'coc-diagnostic']
+let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-git', 'coc-pyright', 'coc-json', 'coc-html', 'coc-css', 'coc-word', 'coc-syntax', 'coc-cmake', 'coc-clang-format-style-options', 'coc-sh', 'coc-yaml', 'coc-diagnostic', 'coc-snippets']
 
 " some extensions are introduced below:
 " 1. coc-clang-format-options
@@ -34,10 +34,16 @@ nnoremap <leader>gcm <Plug>(coc-git-commit)
 set pumheight=30
 
 " use C-j and C-k to navigate
-inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<C-j>"
-inoremap <expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-k>"
+inoremap <silent><expr> <C-j>
+    \ coc#pum#visible() ? coc#pum#next(1) :
+    \ "\<C-j>"
+inoremap <silent><expr> <C-k>
+    \ coc#pum#visible() ? coc#pum#prev(1) :
+    \ "\<C-k>"
+
+" use tab and s-tab to navigate in code snippets
 let g:coc_snippet_next="<TAB>"
-let g:coc_snippet_pre="<S-TAB>"
+let g:coc_snippet_prev="<S-TAB>"
 
 " Some servers have issues with backup files, see #649
 set nobackup
@@ -73,7 +79,6 @@ nnoremap H <Plug>(coc-fix-current)
 " close by default is better, but I don't know how to set
 nnoremap <leader>i :<C-u>CocCommand document.toggleInlayHint<CR>
 
-
 " Use <leader>d to show documentation in preview window
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
@@ -81,7 +86,6 @@ function! ShowDocumentation()
   endif
 endfunction
 nnoremap <silent> <Leader>d :call ShowDocumentation()<CR>
-
 
 " Highlight the symbol and its references when holding the cursor
 autocmd CursorHold * silent call CocActionAsync('highlight')

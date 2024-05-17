@@ -138,6 +138,6 @@ if [ -d ~/.vim/plugged/markdown-preview.nvim ]; then
     rm -rf ~/.vim/plugged/markdown-preview.nvim
 fi
 vim +PlugInstall
-
+vim '+CocInstall https://github.com/rafamadriz/friendly-snippets@main'
 echo "Installation finished, "
-echo "but you may need restart your shell and run vim to install the extentsions for coc!!!"
+echo "but you may need restart your shell"
