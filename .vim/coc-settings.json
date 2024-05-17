@@ -15,8 +15,6 @@
     "coc.source.word.filetypes": null,
     // refresh diagnostic information in insert mode
     "diagnostic.refreshOnInsertMode": true,
-    // don't select the first one when triggering completion
-    "suggest.noselect": true,
     // those are maek coc-git use the icons of vim-gitgutter
     "git.addedSign.hlGroup": "GitGutterAdd",
     "git.changedSign.hlGroup": "GitGutterChange",

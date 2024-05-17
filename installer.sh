@@ -10,8 +10,8 @@ fi
 # this only works for Ubuntu 22.04 and Ubuntu 20.04
 # the original source.list will be renamed with source.list.bak
 if which lsb_release && lsb_release -a | grep -i ubuntu; then
+    SUDO_COMMAND=$(which sudo)
     if lsb_release -a | grep '22\.04'; then
-        SUDO_COMMAND=$(which sudo)
         ${SUDO_COMMAND} cp /etc/apt/sources.list /etc/apt/sources.list.bak
         ${SUDO_COMMAND} cat ./sources.list.tuna-22.04 | sudo tee /etc/apt/sources.list || exit 1
         ${SUDO_COMMAND} cat ./sources.list.tuna-22.04 | sudo tee /etc/apt/sources.list || exit 1

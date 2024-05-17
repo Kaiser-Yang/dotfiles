@@ -36,6 +36,8 @@ set pumheight=30
 " use C-j and C-k to navigate
 inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<C-j>"
 inoremap <expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-k>"
+let g:coc_snippet_next="<TAB>"
+let g:coc_snippet_pre="<S-TAB>"
 
 " Some servers have issues with backup files, see #649
 set nobackup
@@ -47,8 +49,10 @@ set updatetime=300
 
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice
-" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" use <C-c> to cancel a completion
+inoremap <silent><expr> <C-c> coc#pum#visible() ? coc#pum#cancel() : "\<C-c>"
 
 " d for diagnostics
 " Use `[d` and `]d` to navigate diagnostics
@@ -60,6 +64,7 @@ nnoremap <silent> ]d <Plug>(coc-diagnostic-next)
 nnoremap <silent> gd <Plug>(coc-definition)
 nnoremap <silent> gr <Plug>(coc-references)
 nnoremap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> gh :CocCommand clangd.switchSourceHeader<CR>
 
 " use H to quix fix error
 nnoremap H <Plug>(coc-fix-current)
@@ -79,7 +84,7 @@ nnoremap <silent> <Leader>d :call ShowDocumentation()<CR>
 
 
 " Highlight the symbol and its references when holding the cursor
-" autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Formatting selected code
 " xmap <leader>f  <Plug>(coc-format-selected)
