@@ -23,6 +23,10 @@ set scrolloff=5
 " show tips of column 100
 set cc=100
 
+" set fold method for folding code.
+set foldmethod=syntax
+set foldlevel=99
+
 " this will let you mouse be the middle, when you enter insert mode.
 " nnoremap i zzi
 " nnoremap I zzI
@@ -72,10 +76,6 @@ set encoding=utf-8
 " set list chars
 set list
 set listchars=tab:»·,trail:·
-
-" set fold method for folding code.
-set foldmethod=indent
-set foldlevel=99
 
 " set your working directory is where current file is.
 set autochdir
@@ -261,24 +261,18 @@ nnoremap <C-t> :tabnew<CR>
 set completeopt=popup
 
 source ~/.vim/vim_plugin_config/vimplug_config.vim
-" source ~/.vim/vim_plugin_config/ctrlp_config.vim
-" now we are using leaderf to find files.
 source ~/.vim/vim_plugin_config/leaderf_config.vim
-" source ~/.vim/vim_plugin_config/youcompleteme_config.vim
-" now use coc
-source ~/.vim/vim_plugin_config/coc_config.vim
 source ~/.vim/vim_plugin_config/nerdtree_config.vim
-source ~/.vim/vim_plugin_config/onedark_config.vim
+source ~/.vim/vim_plugin_config/vimone_config.vim
 source ~/.vim/vim_plugin_config/vimpolyglot_config.vim
 source ~/.vim/vim_plugin_config/undotree_config.vim
 source ~/.vim/vim_plugin_config/tagbar_config.vim
-" this can be replaced with coc-git
-" source ~/.vim/vim_plugin_config/vimgitgutter_config.vim
 source ~/.vim/vim_plugin_config/nerdcommenter_config.vim
 source ~/.vim/vim_plugin_config/vimwhichkey_config.vim
 source ~/.vim/vim_plugin_config/nerdtreegitplugin_config.vim
 source ~/.vim/vim_plugin_config/markdownpreview_config.vim
 source ~/.vim/vim_plugin_config/vimwiki_config.vim
+source ~/.vim/vim_plugin_config/coc_config.vim
 source ~/.vim/vim_plugin_config/indentline_config.vim
 source ~/.vim/vim_plugin_config/autopairs_config.vim
 source ~/.vim/vim_plugin_config/vimsurround_config.vim

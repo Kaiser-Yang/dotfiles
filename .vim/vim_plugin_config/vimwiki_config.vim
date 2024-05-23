@@ -44,6 +44,15 @@ let g:vimwiki_ext2syntax = {}
 " don't conceal links
 let g:vimwiki_conceallevel = 0
 
+" close lists_return
+let g:vimwiki_key_mappings = { 'lists_return': 0, }
+
+" remap lists_return
+autocmd FileType vimwiki inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+              \: "\<C-]>\<Esc>:VimwikiReturn 3 5\<CR>"
+autocmd FileType vimwiki inoremap <silent><buffer> <S-CR>
+              \ <Esc>:VimwikiReturn 2 2<CR>
+
 " use <LEADER>wh convert all files to html files
 autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
 " we add a empty line below to make sure the script append it coreectly.

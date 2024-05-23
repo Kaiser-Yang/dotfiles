@@ -5,22 +5,12 @@
 call plug#begin('~/.vim/plugged')
 " add status bar below
 Plug 'vim-airline/vim-airline'
-" CtrlP for find files
-" Plug 'kien/ctrlp.vim'
 " coc to complete
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" now we use coc, so these two are not used anymore
-" YouCompleteMe for code completion.
-" Plug 'ycm-core/YouCompleteMe'
-" for python fix and notations
-" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-" this can be replaced with coc-git
-" gitgutter to see the difference of git repositories' files
-" Plug 'airblade/vim-gitgutter'
 " Nerd Tree to navigation in folders.
 Plug 'preservim/nerdtree'
-" onedark theme
-Plug 'joshdick/onedark.vim'
+" vim-one theme
+Plug 'rakr/vim-one'
 " highlight for programming languages
 Plug 'sheerun/vim-polyglot'
 " undotree to show history of files

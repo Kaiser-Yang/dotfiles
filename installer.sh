@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
+# only support x86_64
+if ! arch | grep 'x86_64'; then
+    echo "this now only supports x86_64" | tee installer.log
+fi
+
 # this only runs on ubuntu
 if which lsb_release && ! lsb_release -a | grep -i ubuntu; then
-    echo "this now only support ubuntu" | tee installer.log
+    echo "this now only supports ubuntu" | tee installer.log
     exit 1
 fi
 
