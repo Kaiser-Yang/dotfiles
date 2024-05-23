@@ -122,7 +122,7 @@ exec "nohlsearch"
 set hlsearch
 nnoremap <LEADER><CR> :nohlsearch<CR>
 
-" use Y to copt to the end
+" use Y to copy to the end
 nnoremap Y y$
 
 " NOTE: do not use again, because <LEADER>c now is NerdCommenter's binding
@@ -136,10 +136,12 @@ nnoremap Y y$
 " vnoremap <LEADER>c :w !clip.exe<CR><CR>
 " nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 
-" NOTE: I've found new solution for this (copy and paste with windows using
+" NOTE: I've found a new solution for this (copy and paste with windows using
 " wsl vim). After 2021, wsl has internal gui app,  which is called wslg,
 " using windows to show gui apps, so now the system clipboard can be used.
 " make sure you have sudo apt install vim-gtk
+nnoremap <LEADER>Y "+y$
+nnoremap <LEADER>y "+y
 xnoremap <LEADER>y "+y
 nnoremap <LEADER>p "+p
 nnoremap <LEADER>P "+P
@@ -158,25 +160,11 @@ nnoremap Q :q!<CR>
 " nnoremap <TAB> :tabnext<CR>
 " nnoremap <S-TAB> :tabprev<CR>
 
-" Now we use <LEADER>n and <LEADER>b to got next and back
-" and <LEADER>nubmer to go specified tab.
-nnoremap <LEADER>b :tabprev<CR>
-nnoremap <LEADER>n :tabnext<CR>
-nnoremap <LEADER>1 1gt
-nnoremap <LEADER>2 2gt
-nnoremap <LEADER>3 3gt
-nnoremap <LEADER>4 4gt
-nnoremap <LEADER>5 5gt
-nnoremap <LEADER>6 6gt
-nnoremap <LEADER>7 7gt
-nnoremap <LEADER>8 8gt
-nnoremap <LEADER>9 9gt
-
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
 
-" Enable mouse support. You should avoid relying on this too much, but it can
-" sometimes be convenient.
+" Enable mouse support.
+" You should avoid relying on this too much, but it can sometimes be convenient.
 " set mouse+=a
 
 " show cursor line to let you know where are you now more efficiently
@@ -249,14 +237,23 @@ inoremap <Left> <C-o>:vertical resize -5<CR>
 inoremap <Right> <C-o>:vertical resize +5<CR>
 
 " set ^T to create new tab
-" set ^N and ^B to navigate between tabs
-" we don't use ^T and ^B, use <TAB> and <S-TAB> instead
 inoremap <C-t> <ESC>:tabnew<CR>
-" inoremap <C-n> <ESC>:tabnext<CR>
-" inoremap <C-b> <ESC>:tabprev<CR>
 nnoremap <C-t> :tabnew<CR>
-" nnoremap <C-n> :tabnext<CR>
-" nnoremap <C-b> :tabprev<CR>
+
+" Now we use <LEADER>n and <LEADER>b to got next and back
+" and <LEADER>nubmer to go specified tab.
+nnoremap <LEADER>b :tabprev<CR>
+nnoremap <LEADER>n :tabnext<CR>
+nnoremap <LEADER>1 1gt
+nnoremap <LEADER>2 2gt
+nnoremap <LEADER>3 3gt
+nnoremap <LEADER>4 4gt
+nnoremap <LEADER>5 5gt
+nnoremap <LEADER>6 6gt
+nnoremap <LEADER>7 7gt
+nnoremap <LEADER>8 8gt
+nnoremap <LEADER>9 9gt
+
 
 set completeopt=popup
 
