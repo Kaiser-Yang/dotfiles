@@ -1,1 +1,5 @@
+# back up files
 backup
+
+# log files
+*.log

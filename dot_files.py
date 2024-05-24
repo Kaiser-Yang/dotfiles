@@ -30,9 +30,8 @@
 #      finish install, I don't know why now. You can just rm LeaderF and markdownpreview's
 #      repositories at ~/.vim/plugged/ and then rum vim +PlugInstall to install manually.
 ignore_file = set(["./.git", "./LICENSE", "./README.md",
-                             "./dot_files.py", "./.gitignore", "./replace_md_image.py",
-                             "./sources.list.tuna", "./installer.sh", "./sources.list.tuna-20.04",
-                             "./sources.list.tuna-22.04", "./installer.log"])
+                   "./dot_files.py", "./.gitignore", "./replace_md_image.py",
+                   "./installer"])
 
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,
@@ -137,7 +136,7 @@ def recover_dot_files(home_current_dir, current_dir):
 
 def install_useful_softwares():
     print("install useful softwares...")
-    os.system("bash ./installer.sh")
+    os.system("cd installer && bash installer.sh")
 
 def operate_dot_files(home_current_dir : str, current_dir : str,
                       opcode : str):
@@ -161,11 +160,15 @@ def operate_dot_files(home_current_dir : str, current_dir : str,
 
 if __name__ == "__main__":
     if os.getuid() == 0:
-        print("Warning: you are installing for user root,"
-              "which is uncommon, are you sure to continue?[y/N]", end = '')
-        if input() != 'y':
-            exit(0)
-        is_root = True
+        while True:
+            print("Warning: you are installing for user root,"
+                  "which is uncommon, are you sure to continue?[y/N]", end = '')
+            confirm = input().lower()
+            if confirm == 'n':
+                exit(0)
+            elif confirm == 'y':
+                is_root = True
+                break
     else:
         is_root = False
     if len(sys.argv) == 2:
