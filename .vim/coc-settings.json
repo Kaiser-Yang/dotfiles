@@ -17,6 +17,11 @@
     "coc.source.file.ignoreHidden": false,
     // all files use word completion
     "coc.source.word.filetypes": null,
+    // python formatter settings
+    "python.formatting.autopep8Args": [
+        "--max-line-length=100",
+    ],
+    "suggest.noselect": false,
     // refresh diagnostic information in insert mode
     "diagnostic.refreshOnInsertMode": true,
     // those are maek coc-git use the icons of vim-gitgutter
