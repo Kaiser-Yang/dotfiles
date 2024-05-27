@@ -35,7 +35,10 @@ fi
 sudo apt install -y curl wget tar ripgrep || exit 1
 
 # formater for python3
-sudo apt install python3-autopep8
+sudo apt install -y python3-autopep8
+
+# lcov
+sudo apt install -y lcov
 
 # this is for add-apt-repository
 sudo apt install -y software-properties-common || exit 1
