@@ -13,21 +13,21 @@ fi
 # change the apt source
 # this only works for Ubuntu 22.04 and Ubuntu 20.04
 # the original source.list will be renamed with source.list.bak
-sudo_cmd=$(which sudo)
-if grep '22\.04' /etc/os-release; then
+sudo_cmd=$(command -v sudo)
+if grep 'VERSION="22.04' /etc/os-release; then
     ${sudo_cmd} cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    ${sudo_cmd} cat ./sources/ubuntu/tuna_22.04 | sudo tee /etc/apt/sources.list || exit 1
+    ${sudo_cmd} cat ./sources/ubuntu/tuna_22.04 | ${sudo_cmd} tee /etc/apt/sources.list || exit 1
     ${sudo_cmd} apt update || exit 1
-elif grep '20\.04' /etc/os-release; then
+elif grep 'VERSION="20.04' /etc/os-release; then
     ${sudo_cmd} cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    ${sudo_cmd} cat ./sources/ubuntu/tuna_20.04 | sudo tee /etc/apt/sources.list || exit 1
+    ${sudo_cmd} cat ./sources/ubuntu/tuna_20.04 | ${sudo_cmd} tee /etc/apt/sources.list || exit 1
     ${sudo_cmd} apt update || exit 1
 else
     log "only support ubuntu-22.04 and ubuntu-20.04, change the source by yourself"
 fi
 
 # install sudo
-if ! sudo --version; then
+if ! command -v sudo; then
     apt-get install -y sudo
 fi
 
@@ -44,11 +44,11 @@ sudo apt install -y lcov
 sudo apt install -y software-properties-common || exit 1
 
 # install fish 3
-if ! fish --version; then
+if ! command -v fish; then
     sudo add-apt-repository ppa:fish-shell/release-3 || exit 1
     sudo apt update || exit 1
     sudo apt install -y fish || exit 1
-    fish_cmd=$(which fish)
+    fish_cmd=$(command -v fish)
     if ! grep "^$fish_cmd\$" /etc/shells; then
         echo "$fish_cmd" | sudo tee -a /etc/shells || exit 1
     fi

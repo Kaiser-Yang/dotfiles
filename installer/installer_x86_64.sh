@@ -11,7 +11,7 @@ if ! arch | grep 'x86_64'; then
 fi
 
 # lazygit
-if ! lazygit --version; then
+if ! command -v lazygit; then
     cd ~ || exit 1
     LAZYGIT_VERSION=$(curl -s \
         "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \
@@ -26,7 +26,7 @@ if ! lazygit --version; then
 fi
 
 # vim-plug coc depends on nodejs
-if ! node --version; then
+if ! command -v node; then
     cd ~ || exit 1
     wget https://nodejs.org/dist/v20.13.0/node-v20.13.0-linux-x64.tar.xz \
         -O node-v20.13.0-linux-x64.tar.xz || exit 1
@@ -36,7 +36,7 @@ if ! node --version; then
 fi
 
 # install miniconda3
-if ! conda --version; then
+if ! command -v conda; then
     mkdir -p ~/miniconda3 || exit 1
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
         -O ~/miniconda3/miniconda.sh || exit 1
