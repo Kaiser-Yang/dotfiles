@@ -26,6 +26,8 @@ set cc=100
 " set fold method for folding code.
 set foldmethod=syntax
 set foldlevel=99
+" use indent to fold code in python files
+autocmd Filetype python setlocal foldmethod=indent
 
 " this will let you mouse be the middle, when you enter insert mode.
 " nnoremap i zzi
@@ -75,7 +77,7 @@ set encoding=utf-8
 
 " set list chars
 set list
-set listchars=tab:»·,trail:·
+set listchars=tab:»·,trail:·,lead:·
 
 " set your working directory is where current file is.
 set autochdir

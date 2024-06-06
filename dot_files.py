@@ -31,7 +31,7 @@
 #      repositories at ~/.vim/plugged/ and then rum vim +PlugInstall to install manually.
 ignore_file = set(["./.git", "./LICENSE", "./README.md",
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py",
-                   "./installer"])
+                   "./installer", "./vscode-setting"])
 
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,

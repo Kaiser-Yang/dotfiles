@@ -37,6 +37,8 @@ Plug 'godlygeek/tabular'
 Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
 " markdown preview
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+" Copilot
+Plug 'github/copilot.vim'
 call plug#end()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue

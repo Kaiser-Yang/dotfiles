@@ -3,7 +3,7 @@
 
 " cos-json is recommended strongly, this can help you write coc-settings.json
 " others depend on what you need
-let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-git', 'coc-pyright', 'coc-json', 'coc-html', 'coc-css', 'coc-word', 'coc-syntax', 'coc-cmake', 'coc-clang-format-style-options', 'coc-sh', 'coc-yaml', 'coc-diagnostic', 'coc-snippets']
+let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-git', 'coc-pyright', 'coc-json', 'coc-html', 'coc-css', 'coc-word', 'coc-syntax', 'coc-cmake', 'coc-clang-format-style-options', 'coc-sh', 'coc-yaml', 'coc-diagnostic', 'coc-snippets', 'coc-copilot']
 
 " some extensions are introduced below:
 " 1. coc-clang-format-options
@@ -128,8 +128,8 @@ set signcolumn=yes
 command! -nargs=0 Format :call CocActionAsync('format')
 
 " Add `:Fold` command to fold current buffer
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-nnoremap <leader>f :<C-u>Fold<CR>
+" command! -nargs=? Fold :call CocAction('fold', <f-args>)
+" nnoremap <leader>f :<C-u>Fold<CR>
 
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue

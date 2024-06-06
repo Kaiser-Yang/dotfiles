@@ -106,4 +106,21 @@ if [ -d ~/.vim/plugged/markdown-preview.nvim ]; then
 fi
 vim +PlugInstall
 vim '+CocInstall https://github.com/rafamadriz/friendly-snippets@main'
+
+# tldr for manual docs
+pip install tldr
+
+#install docker
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin \
+    docker-compose-plugin || exit 1
+
+# change source for docker
+sudo apt-get install -y ca-certificates gnupg-agent software-properties-common lsb-release || exit 1
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo \
+    gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg || exit 1
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || exit 1
+
+# restart docker
+sudo systemctl restart docker || exit 1
+
 log "Installation finished, but you may need restart your shell"
