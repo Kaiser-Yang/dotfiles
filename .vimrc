@@ -18,6 +18,10 @@
 "     \ let &scrolloff=winheight(win_getid())/2
 " augroup END
 
+" try to show part of the last line when the window is too small to show the whole last line
+" rather than useing @ to substitute
+set display=lastline
+
 set scrolloff=5
 
 " show tips of column 100
@@ -260,6 +264,7 @@ nnoremap <LEADER>9 9gt
 set completeopt=popup
 
 source ~/.vim/vim_plugin_config/vimplug_config.vim
+source ~/.vim/vim_plugin_config/copilot_config.vim
 source ~/.vim/vim_plugin_config/leaderf_config.vim
 source ~/.vim/vim_plugin_config/nerdtree_config.vim
 source ~/.vim/vim_plugin_config/vimone_config.vim

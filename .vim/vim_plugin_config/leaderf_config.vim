@@ -36,9 +36,17 @@ let g:Lf_RgConfig = [
     \ "--glob=!LICENSE",
 \ ]
 
+function! CopilotVisible()
+    let s = copilot#GetDisplayedSuggestion()
+    if !empty(s.text)
+        return 1
+    endif
+    return 0
+endfunction
+
 " we use <C-f> to find symbols in files.
 nnoremap <C-f> :Leaderf rg<CR>
-inoremap <C-f> <ESC>:Leaderf rg<CR>
+inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:Leaderf rg\<CR>" : copilot#AcceptLine()
 " we add a empty line below to make sure the script append it coreectly.
 " end_symbol_kaiserqzyue
 

@@ -36,10 +36,10 @@ set pumheight=30
 " use C-j and C-k to navigate
 inoremap <silent><expr> <C-j>
     \ coc#pum#visible() ? coc#pum#next(1) :
-    \ "\<C-j>"
+    \ copilot#Next()
 inoremap <silent><expr> <C-k>
     \ coc#pum#visible() ? coc#pum#prev(1) :
-    \ "\<C-k>"
+    \ copilot#Previous()
 
 " use tab and s-tab to navigate in code snippets
 let g:coc_snippet_next="<TAB>"
@@ -53,13 +53,13 @@ set nowritebackup
 " delays and poor user experience
 set updatetime=300
 
-" Make <CR> to accept selected completion item or notify coc.nvim to format
-" <C-g>u breaks current undo, please make your own choice
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Make <CR> to accept selected completion item
+inoremap <silent><expr> <CR>
+      \ coc#pum#visible() ? coc#pum#confirm() :
+      \ copilot#Accept("\<CR>")
 
 " use <C-c> to cancel a completion
-inoremap <silent><expr> <C-c> coc#pum#visible() ? coc#pum#cancel() : "\<C-c>"
+inoremap <silent><expr> <C-c> coc#pum#visible() ? coc#pum#cancel() : "<Plug>(copilot-dismiss)"
 
 " d for diagnostics
 " Use `[d` and `]d` to navigate diagnostics
