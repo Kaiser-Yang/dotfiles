@@ -76,7 +76,7 @@ sudo apt install -y universal-ctags
 vim +PlugInstall
 
 # some tools for development
-sudo apt install -y shellcheck build-essential cmake gdb python3-dev pip pandoc || exit 1
+sudo apt install -y shellcheck build-essential net-tools cmake gdb python3-dev pip pandoc || exit 1
 
 # cmake lsp
 # NOTE: if your conda is activated, this will use conda-pip

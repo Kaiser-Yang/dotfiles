@@ -36,7 +36,8 @@ ignore_file = set(["./.git", "./LICENSE", "./README.md",
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,
 # Add it to the variable.
-copy_file = set(["./.vscode-server", "./.vimrc", "./.vim", "./.tmux.conf"])
+copy_file = set(["./.vscode-server", "./.vimrc", "./.vim", "./.tmux.conf", "./proxy.sh",
+                 "./proxy.fish"])
 # Update the string to specify where you want to store the backed-up files
 # or where you want to recover from
 backup_dir = "./backup"

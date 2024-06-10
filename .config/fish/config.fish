@@ -57,6 +57,28 @@ abbr -a tmswt tmux switch -t
 abbr -a tmrnss tmux rename-session -t
 abbr -a tmrnwd tmux rename-window -t
 
+if test -e ~/proxy.fish
+    source ~/proxy.fish unset 2>&1 > /dev/null
+end
+
+# function for proxy setting
+function proxy
+    if ! test -e ~/proxy.fish
+        echo "Can not find file: ~/proxy.fish"
+    else if test (count $argv) -gt 1
+        echo "Usage: proxy [set|unset|debug]"
+    else if test (count $argv) -eq 0
+        source ~/proxy.fish set
+    else
+        switch $argv[1]
+            case 'set' 'unset' 'debug'
+                source ~/proxy.fish $argv[1]
+            case '*'
+                echo "Usage: proxy [set|unset|debug]"
+        end
+    end
+end
+
 # node for coc
 set PATH $PATH ~/node-v20.13.0-linux-x64/bin
 # the directory where user lib pip will install

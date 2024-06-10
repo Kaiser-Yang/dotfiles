@@ -1,4 +1,7 @@
 {
+    // lower label width makes preview window more readable
+    "copilot.timeout": 10000,
+    "suggest.labelMaxLength": 37,
     // enable cmake lsp
     "cmake.lsp.enable": true,
     "cmake.lsp.serverPath": "cmake-language-server",

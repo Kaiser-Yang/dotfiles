@@ -3,7 +3,7 @@
 
 " cos-json is recommended strongly, this can help you write coc-settings.json
 " others depend on what you need
-let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-git', 'coc-pyright', 'coc-json', 'coc-html', 'coc-css', 'coc-word', 'coc-syntax', 'coc-cmake', 'coc-clang-format-style-options', 'coc-sh', 'coc-yaml', 'coc-diagnostic', 'coc-snippets', 'coc-copilot']
+let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-git', 'coc-pyright', 'coc-json', 'coc-html', 'coc-css', 'coc-word', 'coc-syntax', 'coc-cmake', 'coc-clang-format-style-options', 'coc-sh', 'coc-yaml', 'coc-diagnostic', 'coc-snippets', '@hexuhua/coc-copilot']
 
 " some extensions are introduced below:
 " 1. coc-clang-format-options
@@ -36,10 +36,10 @@ set pumheight=30
 " use C-j and C-k to navigate
 inoremap <silent><expr> <C-j>
     \ coc#pum#visible() ? coc#pum#next(1) :
-    \ copilot#Next()
+    \ CopilotVisible() ? copilot#Next() : "\<Down>"
 inoremap <silent><expr> <C-k>
     \ coc#pum#visible() ? coc#pum#prev(1) :
-    \ copilot#Previous()
+    \ CopilotVisible() ? copilot#Previous() : "\<Up>"
 
 " use tab and s-tab to navigate in code snippets
 let g:coc_snippet_next="<TAB>"
@@ -56,10 +56,12 @@ set updatetime=300
 " Make <CR> to accept selected completion item
 inoremap <silent><expr> <CR>
       \ coc#pum#visible() ? coc#pum#confirm() :
-      \ copilot#Accept("\<CR>")
+      \ CopilotVisible() ? copilot#Accept() : "\<CR>"
 
 " use <C-c> to cancel a completion
-inoremap <silent><expr> <C-c> coc#pum#visible() ? coc#pum#cancel() : "<Plug>(copilot-dismiss)"
+inoremap <silent><expr> <C-c>
+      \ coc#pum#visible() ? coc#pum#cancel() :
+      \ CopilotVisible() ? "<Plug>(copilot-dismiss)" : "\<C-c>"
 
 " d for diagnostics
 " Use `[d` and `]d` to navigate diagnostics
