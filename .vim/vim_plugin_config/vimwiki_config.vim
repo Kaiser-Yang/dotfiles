@@ -49,7 +49,7 @@ let g:vimwiki_key_mappings = { 'lists_return': 0, }
 
 " remap lists_return
 autocmd FileType vimwiki inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-              \: "\<C-]>\<Esc>:VimwikiReturn 3 5\<CR>"
+              \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:VimwikiReturn 3 5\<CR>"
 autocmd FileType vimwiki inoremap <silent><buffer> <S-CR>
               \ <Esc>:VimwikiReturn 2 2<CR>
 
