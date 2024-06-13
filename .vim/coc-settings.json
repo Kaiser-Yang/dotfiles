@@ -1,6 +1,13 @@
 {
     // lower label width makes preview window more readable
     "copilot.timeout": 10000,
+    // add ".root" to make it possible by creating a file named ".root" in the root of the workspace
+    "workspace.rootPatterns": [
+        ".git",
+        ".hg",
+        ".projections.json",
+        ".root"
+    ],
     "suggest.labelMaxLength": 37,
     // enable cmake lsp
     "cmake.lsp.enable": true,

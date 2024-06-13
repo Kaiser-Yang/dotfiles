@@ -76,7 +76,8 @@ sudo apt install -y universal-ctags
 vim +PlugInstall
 
 # some tools for development
-sudo apt install -y shellcheck build-essential net-tools cmake gdb python3-dev pip pandoc || exit 1
+sudo apt install -y openjdk-17-jdk-headless shellcheck build-essential net-tools cmake gdb \
+    python3-dev pip pandoc || exit 1
 
 # cmake lsp
 # NOTE: if your conda is activated, this will use conda-pip
@@ -115,10 +116,10 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
     docker-compose-plugin || exit 1
 
 # change source for docker
-sudo apt-get install -y ca-certificates gnupg-agent software-properties-common lsb-release || exit 1
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo \
-    gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg || exit 1
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || exit 1
+# sudo apt-get install -y ca-certificates gnupg-agent software-properties-common lsb-release || exit 1
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo \
+#     gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg || exit 1
+# echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || exit 1
 
 # restart docker
 sudo systemctl restart docker || exit 1

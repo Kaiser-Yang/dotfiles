@@ -6,11 +6,9 @@
 
 import re
 import os
-import argparse
 import time
 import sys
 import io
-from itertools import chain
 from shutil import copy
 import requests
 
@@ -31,10 +29,10 @@ def getMarkdownFileList(filenameList):
 
 # copy src to dest
 # return the dest with the filename
-def copyFile(src: str, dest: str) -> bool:
+def copyFile(src: str, dest: str):
     try:
         copy(src, dest)
-    except IOError as e:
+    except IOError:
         print(f"fail to copy {src} to {dest}")
         return None
     except:
@@ -95,13 +93,12 @@ def processMarkdownFile(markdownFileList):
                 print(f'{os.path.basename(markdownFilename)} has nothing to be substituded.')
 
 # backup files before substitution
-def backup(filenames) -> bool:
+def backup(mdFilenames) -> bool:
     dest = os.path.join(sys.argv[1], 'backups')
     dest += str(time.time())
     if not os.path.exists(dest):
         os.makedirs(dest)
     for mdFilename in mdFilenames:
-        src = mdFilename
         if not copyFile(mdFilename, dest):
             return False
     return True
