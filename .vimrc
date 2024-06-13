@@ -285,37 +285,27 @@ source ~/.vim/vim_plugin_config/markdownhelper_config.vim
 source ~/.vim/vim_plugin_config/pythonmode_config.vim
 
 " Compile function
-func! CompileRunGcc()
-    exec "w"
+func! CompileRun()
+    write
     if &filetype == 'c'
-        exec "!gcc -g -Wall % -o %<.out"
-        if v:shell_error == 0
-            exec "!time ./%<.out"
-        endif
+        !clear; gcc -g -Wall % -o %<.out && echo RUNNING && time ./%<.out
     elseif &filetype == 'cpp'
-        exec "!g++ -g -Wall -std=c++17 % -o %<.out"
-        if v:shell_error == 0
-            exec "!time ./%<.out"
-        endif
+        !clear; g++ -g -Wall -std=c++17 % -o %<.out && echo RUNNING && time ./%<.out
     elseif &filetype == 'java'
-        exec "!javac %"
-        if v:shell_error == 0
-            exec "!time java %<"
-        endif
+        !clear; javac % && echo RUNNING && time java %<
     elseif &filetype == 'sh'
-        exec "!time ./%"
+        !clear; time ./%
     elseif &filetype == 'python'
-        silent! exec "!clear"
-        exec "!time python3 %"
+        !clear; time python3 %
     elseif &filetype == 'html'
-        exec "!wslview % &"
+        !wslview % &
     elseif &filetype == 'markdown'
-        exec "MarkdownPreviewToggle"
+        MarkdownPreviewToggle
     elseif &filetype == 'vimwiki'
-        exec "MarkdownPreviewToggle"
+        MarkdownPreviewToggle
     endif
 endfunc
-nnoremap <LEADER>r :call CompileRunGcc()<CR>
+nnoremap <LEADER>r :call CompileRun()<CR>
 
 " set empty filetype be none.
 function! SetFiletypeNewBuffer()
