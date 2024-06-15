@@ -28,7 +28,7 @@ Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V
 ## Window
 | Shortcut   | Mode | Description                                                    |
 | -          | -    | -                                                              |
-| \<C-H>     | N I  | Split window horizontally, and move cursor to the left window  |
+| \<C-H>     | N    | Split window horizontally, and move cursor to the left window  |
 | \<C-L>     | N I  | Split window horizontally, and move cursor to the right window |
 | \<C-T>     | N I  | Create a new tab                                               |
 | \<LEADER>h | N    | Move cursor to the next left window                            |
@@ -50,6 +50,8 @@ Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V
 | Down       | N I  | Resize -5 for the current window                               |
 | Left       | N I  | Resize -5 vertically for current window                        |
 | Right      | N I  | Resize +5 vertically for current window                        |
+
+NOTE: We can not bind `<C-H>` in insert mode, so in the insert mode, when you press `<C-H>`, it will trigger backspace.
 
 ## Copy and Paste
 | Shortcut    | Mode | Description                                                                                      |
@@ -99,12 +101,14 @@ This part has a lot of shortcuts, and I'll only list some common ones. All the s
 
 
 ## Cursor Movement
-| Shortcut | Description                                                                                                        |
-| -        | -                                                                                                                  |
-| \<C-J>   | When there is a selection list and `j` will input letter j, `<C-J>` will move the cursor to the next selection     |
-| \<C-K>   | When there is a selection list and `k` will input letter k, `<C-K>` will move the cursor to the previous selection |
-| j        | When there is a selection list and you can not input with `j`, `j` will move the cursor to the next selection      |
-| k        | When there is a selection list and you can not input with `k`, `k` will move the cursor to the previous selection  |
+| Shortcut | Mode | Description                                                                                                        |
+| -        | -    | -                                                                                                                  |
+| \<C-J>   |      | When there is a selection list and `j` will input letter j, `<C-J>` will move the cursor to the next selection     |
+| \<C-K>   |      | When there is a selection list and `k` will input letter k, `<C-K>` will move the cursor to the previous selection |
+| j        |      | When there is a selection list and you can not input with `j`, `j` will move the cursor to the next selection      |
+| k        |      | When there is a selection list and you can not input with `k`, `k` will move the cursor to the previous selection  |
+| \<C-J>   | I    | When there is no selection list, `<C-J>` will move the cursor to the next line                                     |
+| \<C-K>   | I    | When there is no selection list, `<C-K>` will move the cursor to the previous line                                 |
 
 Note that when `coc` suggestion list is not shown but `copilot` is shown, it is possible to use `<C-J>` and `<C-K>` to move the cursor to the next or previous selection of `copilot`.
 

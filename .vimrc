@@ -209,17 +209,7 @@ nnoremap S :wq<CR>
 " set <leader>H, J, K, L to move current window to left, down, up, right
 " set <leader>T to let current window be a new tab
 nnoremap <C-h> :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
-" I found that I don't split a screen vertically very often
-" and I usually use <C-j> when I'm in searching windows, this will split
-" this is very annoying, so I just turn it off.
-" nnoremap <C-j> :set splitbelow<CR>:split<CR>:set nosplitbelow<CR>
-" nnoremap <C-k> :set nosplitbelow<CR>:split<CR>
 nnoremap <C-l> :set splitright<CR>:vsplit<CR>
-inoremap <C-h> <ESC>:set nosplitright<CR><ESC>:vsplit<CR><ESC>:set splitright<CR>
-" we can not use <C-j> in insert mode,
-" because we use <C-j> to select code completion.
-" inoremap <C-j> <ESC>:set splitbelow<CR><ESC>:split<CR><ESC>:set nosplitbelow<CR>
-" inoremap <C-k> <ESC>:set nosplitbelow<CR><ESC>:split<CR>
 inoremap <C-l> <ESC>:set splitright<CR><ESC>:vsplit<CR>
 nnoremap <LEADER>h <C-w>h
 nnoremap <LEADER>j <C-w>j
@@ -259,7 +249,6 @@ nnoremap <LEADER>6 6gt
 nnoremap <LEADER>7 7gt
 nnoremap <LEADER>8 8gt
 nnoremap <LEADER>9 9gt
-
 
 set completeopt=popup
 

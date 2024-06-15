@@ -61,7 +61,7 @@ inoremap <silent><expr> <CR>
 " use <C-c> to cancel a completion
 inoremap <silent><expr> <C-c>
       \ coc#pum#visible() ? coc#pum#cancel() :
-      \ CopilotVisible() ? "<Plug>(copilot-dismiss)" : "\<C-c>"
+      \ CopilotVisible() ? copilot#Dismiss() : "\<C-c>"
 
 " d for diagnostics
 " Use `[d` and `]d` to navigate diagnostics

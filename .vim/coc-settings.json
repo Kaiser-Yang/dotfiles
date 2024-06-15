@@ -9,6 +9,8 @@
         ".root"
     ],
     "suggest.labelMaxLength": 37,
+    // highest priority to remove the delay of completion
+    "copilot.priority": 4096,
     // enable cmake lsp
     "cmake.lsp.enable": true,
     "cmake.lsp.serverPath": "cmake-language-server",
