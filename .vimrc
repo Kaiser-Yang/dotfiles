@@ -193,9 +193,11 @@ set wrap
 " never auto split
 set tw=0
 
-" when in wrap lines, j and k can move in wrap lines, rather than going to next line.
+" when in wrap lines, j, k, 0, and $ can move in wrap lines
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+noremap <silent> <expr> 0 (v:count == 0 ? 'g0' : '0')
+noremap <silent> <expr> $ (v:count == 0 ? 'g$' : '$')
 
 " set ^S to be :w
 nnoremap <C-s> :w<CR>
