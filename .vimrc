@@ -33,34 +33,13 @@ set foldlevel=99
 " use indent to fold code in python files
 autocmd Filetype python setlocal foldmethod=indent
 
-" this will let you mouse be the middle, when you enter insert mode.
-" nnoremap i zzi
-" nnoremap I zzI
-" nnoremap o zzo
-" nnoremap O zzO
-" nnoremap a zza
-" nnoremap A zzA
-
-" use pure text as pasted contents
-" don't use this, this will disable ycm, auto-pairs.
-" set paste
-
 " Those are for cursor to be changeable between normal mode and insert mode.
 let &t_SI.="\e[5 q"
 let &t_SR.="\e[3 q"
 let &t_EI.="\e[1 q"
 
-" this will print something weird at bottom, but I don't know how to fix it,
-" those two lines are to set cursur when enter vim, and when leave vim, set it
-" back.
-autocmd VimEnter * silent !echo -ne "\e[1 q"
-autocmd VimLeave * silent !echo -ne "\e[5 q"
-
 " This is to make <ESC> quicker
 set ttimeoutlen=0
-
-" use system clip board
-" set clipboard=unnamed
 
 " set leader be space
 let mapleader=" "
@@ -92,15 +71,15 @@ autocmd BufReadPost *
   \ |   exe "normal! g`\""
   \ | endif
 
-" Turn on syntax highlighting.
+" Turn on syntax highlight.
 syntax on
 
 " Disable the default Vim startup message.
 set shortmess+=I
 
-" set line number
-" Set relative line number
+" Set line number
 set number
+" Set relative line number
 set relativenumber
 
 " Always show the status line at the bottom, even if you only have one window open.
@@ -128,19 +107,8 @@ exec "nohlsearch"
 set hlsearch
 nnoremap <LEADER><CR> :nohlsearch<CR>
 
-" use Y to copy to the end
+" use Y to copy to the end of current line
 nnoremap Y y$
-
-" NOTE: do not use again, because <LEADER>c now is NerdCommenter's binding
-" key, you can use the right button of your mouse to copy and paste.
-" If you enable mouse in your vim, you may need press and hold shift for
-" Windows copy and paste in wsl.
-" Those two lines are for copy selected contents to Windows clipboard,
-" or copy from Windows clipboard with <leader>c and <space>v
-" those are mainly for wsl
-" those can only copy or paste entire lines
-" vnoremap <LEADER>c :w !clip.exe<CR><CR>
-" nnoremap <LEADER>v :r !powershell.exe Get-Clipboard<CR>
 
 " NOTE: I've found a new solution for this (copy and paste with windows using
 " wsl vim). After 2021, wsl has internal gui app,  which is called wslg,
@@ -171,7 +139,7 @@ set noerrorbells visualbell t_vb=
 
 " Enable mouse support.
 " You should avoid relying on this too much, but it can sometimes be convenient.
-" set mouse+=a
+set mouse+=a
 
 " show cursor line to let you know where are you now more efficiently
 set cursorline
@@ -229,13 +197,8 @@ nnoremap <Up> :res +5<CR>
 nnoremap <Down> :res -5<CR>
 nnoremap <Left> :vertical resize -5<CR>
 nnoremap <Right> :vertical resize +5<CR>
-inoremap <Up> <C-o>:res +5<CR>
-inoremap <Down> <C-o>:res -5<CR>
-inoremap <Left> <C-o>:vertical resize -5<CR>
-inoremap <Right> <C-o>:vertical resize +5<CR>
 
 " set ^T to create new tab
-inoremap <C-t> <ESC>:tabnew<CR>
 nnoremap <C-t> :tabnew<CR>
 
 " Now we use <LEADER>n and <LEADER>b to got next and back
@@ -298,7 +261,7 @@ func! CompileRun()
 endfunc
 nnoremap <LEADER>r :call CompileRun()<CR>
 
-" set empty filetype be none.
+" set empty file type be none.
 function! SetFiletypeNewBuffer()
   if @% == ""
     :set filetype=none

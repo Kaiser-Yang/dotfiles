@@ -36,6 +36,9 @@ let g:vimwiki_key_mappings =
 " this will make input in markdown files more easily
 let g:vimwiki_global_ext = 1
 
+" do not format table last column
+let g:vimwiki_table_reduce_last_col = 1
+
 " you should not let a single markdown file be seen as vimwiki,
 " and you should not add links for that,
 " if you want another index, you should add another config.

@@ -60,11 +60,6 @@ autocmd Filetype gitcommit inoremap<buffer> ,m $$<++><Esc>F$i
 autocmd FileType markdown inoremap<buffer> ,n <br><CR>
 autocmd FileType gitcommit inoremap<buffer> ,n <br><CR>
 
-" use mouse in markdown file,
-" this is useful when you are write Chinese
-" which is inconvenient to navigate with f/F or t/T.
-autocmd FileType markdown set mouse+=a
-autocmd FileType gitcommit set mouse+=a
 " not used
 " autocmd Filetype markdown inoremap<buffer> ,n ---<CR><CR>
 " autocmd Filetype gitcommit inoremap<buffer> ,n ---<CR><CR>
