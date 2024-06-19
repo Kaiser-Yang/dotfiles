@@ -6,7 +6,6 @@
 
 import re
 import os
-import time
 import sys
 import io
 from shutil import copy
@@ -17,14 +16,17 @@ import requests
 global imgPattern
 imgPattern = r'!\[.*\]\((.*)\)'
 
+backupName = 'markdownBackup'
+
 # find all the files in filenameList with .md extension
-def getMarkdownFileList(filenameList):
+def getMarkdownFileList(directoryName):
     res = []
-    for filename in filenameList:
-        fileWithPath = os.path.join(sys.argv[1], filename)
-        if os.path.splitext(fileWithPath)[1] != '.md':
-            continue
-        res.append(fileWithPath)
+    for filename in os.listdir(directoryName):
+        fileWithPath = os.path.join(directoryName, filename)
+        if os.path.isdir(fileWithPath) and filename != backupName:
+            res.extend(getMarkdownFileList(fileWithPath))
+        elif os.path.isfile(fileWithPath) and fileWithPath.endswith('.md'):
+            res.append(fileWithPath)
     return res
 
 # copy src to dest
@@ -58,12 +60,10 @@ def download(url: str, dir: str) -> str:
 # download from url and substitude with local filename
 def processMarkdownFile(markdownFileList):
     for markdownFilename in markdownFileList:
-        # create markdownFilename.assets directory
+        # markdownFilename.assets directory
         dirName = os.path.dirname(markdownFilename)
         dirName = os.path.join(dirName, os.path.splitext(markdownFilename)[0])
         dirName += '.assets'
-        if not os.path.exists(dirName):
-            os.makedirs(dirName)
         # open with utf-8
         with io.open(markdownFilename, 'r', encoding='utf-8') as f:
             imageDir = os.path.splitext(os.path.basename(markdownFilename))[0] + '.assets'
@@ -80,6 +80,8 @@ def processMarkdownFile(markdownFileList):
                 print(match)
                 if match[0:4] != 'http':
                     continue
+                if not os.path.exists(dirName):
+                    os.makedirs(dirName)
                 newPath = download(match, dirName)
                 relativePath = os.path.join(imageDir, os.path.basename(newPath))
                 # substitude url with local path
@@ -94,11 +96,11 @@ def processMarkdownFile(markdownFileList):
 
 # backup files before substitution
 def backup(mdFilenames) -> bool:
-    dest = os.path.join(sys.argv[1], 'backups')
-    dest += str(time.time())
-    if not os.path.exists(dest):
-        os.makedirs(dest)
     for mdFilename in mdFilenames:
+        dest = os.path.join(os.path.dirname(mdFilename), backupName)
+        print(f'backup {mdFilename} to {dest}')
+        if not os.path.exists(dest):
+            os.makedirs(dest)
         if not copyFile(mdFilename, dest):
             return False
     return True
@@ -108,14 +110,18 @@ if __name__ == '__main__':
     if argc != 2:
         print('usage: python3 replace_md_image.py <markdownFilesDir>')
         exit(1)
-    files = os.listdir(sys.argv[1])
-    mdFilenames = getMarkdownFileList(files)
-    print('----------------backup------------------')
+    if not os.path.exists(sys.argv[1]):
+        print(f'{sys.argv[1]} does not exist.')
+        exit(1)
+    os.chdir(sys.argv[1])
+    mdFilenames = getMarkdownFileList(os.getcwd())
+    print(mdFilenames)
+    print('-----------------backup------------------')
     if not backup(mdFilenames):
         print('-------------backup failed---------------')
         exit(1)
-    print('----------------backup-------------------')
-    print('\n\n\n')
+    print('--------------backup succeed-------------')
+    print('\n')
     print('----------------replace------------------')
     processMarkdownFile(mdFilenames)
     print('------------replace succeed--------------')
