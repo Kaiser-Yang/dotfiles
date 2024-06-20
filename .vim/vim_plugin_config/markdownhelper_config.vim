@@ -60,6 +60,8 @@ autocmd Filetype gitcommit inoremap<buffer> ,m $$<++><Esc>F$i
 autocmd FileType markdown inoremap<buffer> ,n <br><CR>
 autocmd FileType gitcommit inoremap<buffer> ,n <br><CR>
 
+autocmd FileType gitcommit set cc=50,72
+
 " not used
 " autocmd Filetype markdown inoremap<buffer> ,n ---<CR><CR>
 " autocmd Filetype gitcommit inoremap<buffer> ,n ---<CR><CR>
