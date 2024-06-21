@@ -84,6 +84,8 @@ set relativenumber
 
 " Always show the status line at the bottom, even if you only have one window open.
 set laststatus=2
+" Always show the tab line
+set showtabline=2
 
 " By default, Vim doesn't let you hide a buffer (i.e. have a buffer that isn't
 " shown in any window) that has unsaved changes. This is to prevent you from
@@ -237,6 +239,8 @@ source ~/.vim/vim_plugin_config/vimsurround_config.vim
 source ~/.vim/vim_plugin_config/tabular_config.vim
 source ~/.vim/vim_plugin_config/markdownhelper_config.vim
 source ~/.vim/vim_plugin_config/pythonmode_config.vim
+source ~/.vim/vim_plugin_config/vimdevicons_config.vim
+source ~/.vim/vim_plugin_config/vimairline_config.vim
 
 " Compile function
 func! CompileRun()

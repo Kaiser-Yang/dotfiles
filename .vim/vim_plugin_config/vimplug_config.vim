@@ -9,6 +9,12 @@ Plug 'vim-airline/vim-airline'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Nerd Tree to navigation in folders.
 Plug 'preservim/nerdtree'
+" icon for nerd tree
+Plug 'ryanoasis/vim-devicons'
+" nerdtree syntax highlight
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" nerdtree tabs
+Plug 'jistr/vim-nerdtree-tabs'
 " vim-one theme
 Plug 'rakr/vim-one'
 " highlight for programming languages
