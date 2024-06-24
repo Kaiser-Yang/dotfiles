@@ -44,6 +44,11 @@ set ttimeoutlen=0
 " set leader be space
 let mapleader=" "
 
+" move the selected content up and down
+" TODO: update this to support [count]J and [count]K
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
 " set <leader>sc to turn on or off spell check
 nnoremap <leader>sc :set spell!<CR>
 
@@ -180,13 +185,12 @@ nnoremap S :wq<CR>
 " set <leader> h, j, k and l to move cursor between Windows.
 " set <leader>H, J, K, L to move current window to left, down, up, right
 " set <leader>T to let current window be a new tab
-nnoremap <C-h> :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
-nnoremap <C-l> :set splitright<CR>:vsplit<CR>
-inoremap <C-l> <ESC>:set splitright<CR><ESC>:vsplit<CR>
-nnoremap <LEADER>h <C-w>h
-nnoremap <LEADER>j <C-w>j
-nnoremap <LEADER>k <C-w>k
-nnoremap <LEADER>l <C-w>l
+nnoremap <LEADER>h :set nosplitright<CR>:vsplit<CR>:set splitright<CR>
+nnoremap <LEADER>l :set splitright<CR>:vsplit<CR>
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 nnoremap <LEADER>H <C-w>H
 nnoremap <LEADER>J <C-w>J
 nnoremap <LEADER>K <C-w>K
@@ -200,8 +204,8 @@ nnoremap <Down> :res -5<CR>
 nnoremap <Left> :vertical resize -5<CR>
 nnoremap <Right> :vertical resize +5<CR>
 
-" set ^T to create new tab
-nnoremap <C-t> :tabnew<CR>
+" set <leader>t to create new tab
+nnoremap <LEADER>t :tabnew<CR>
 
 " Now we use <LEADER>n and <LEADER>b to got next and back
 " and <LEADER>nubmer to go specified tab.

@@ -28,13 +28,13 @@ Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V
 ## Window
 | Shortcut   | Mode | Description |
 | -          | -    | - |
-| \<C-H>     | N    | Split window horizontally, and move cursor to the left window |
-| \<C-L>     | N    | Split window horizontally, and move cursor to the right window |
-| \<C-T>     | N    | Create a new tab |
-| \<LEADER>h | N    | Move cursor to the next left window |
-| \<LEADER>j | N    | Move cursor to the next down window |
-| \<LEADER>k | N    | Move cursor to the next up window |
-| \<LEADER>l | N    | Move cursor to the next right window |
+| \<LEADER>h | N    | Split window horizontally, and move cursor to the left window |
+| \<LEADER>l | N    | Split window horizontally, and move cursor to the right window |
+| \<LEADER>t | N    | Create a new tab |
+| \<C-H>     | N    | Move cursor to the next left window |
+| \<C-J>     | N    | Move cursor to the next down window |
+| \<C-K>     | N    | Move cursor to the next up window |
+| \<C-L>     | N    | Move cursor to the next right window |
 | \<LEADER>H | N    | Close the current window, and reopen it at left |
 | \<LEADER>J | N    | Close the current window, and reopen it at bottom |
 | \<LEADER>K | N    | Close the current window, and reopen it at top |
@@ -74,6 +74,8 @@ NOTE: if you want to copy around a bracket, you can use `<LEADER>ya`, too. But y
 | k        |      | When there is a selection list and you can not input with `k`, `k` will move the cursor to the previous selection |
 | \<C-J>   | I    | When there is no selection list, `<C-J>` will move the cursor to the next line |
 | \<C-K>   | I    | When there is no selection list, `<C-K>` will move the cursor to the previous line |
+| J        | V    | Move the selected lines down |
+| K        | V    | Move the selected lines up |
 
 Note that when `coc` suggestion list is not shown but `copilot` is shown, it is possible to use `<C-J>` and `<C-K>` to move the cursor to the next or previous selection of `copilot`.
 

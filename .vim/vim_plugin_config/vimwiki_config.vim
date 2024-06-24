@@ -30,6 +30,7 @@ let g:vimwiki_key_mappings =
     \   'links': 1,
     \   'html': 0,
     \   'mouse': 0,
+    \   'lists_return': 0
     \ }
 
 " treat all .md files as vimwiki
@@ -46,9 +47,6 @@ let g:vimwiki_ext2syntax = {}
 
 " don't conceal links
 let g:vimwiki_conceallevel = 0
-
-" close lists_return
-let g:vimwiki_key_mappings = { 'lists_return': 0, }
 
 " remap lists_return
 autocmd FileType vimwiki inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()

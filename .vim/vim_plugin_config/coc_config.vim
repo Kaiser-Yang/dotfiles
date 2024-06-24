@@ -3,7 +3,7 @@
 
 " cos-json is recommended strongly, this can help you write coc-settings.json
 " others depend on what you need
-let g:coc_global_extensions = ['coc-json', 'coc-clangd', 'coc-git', 'coc-pyright', 'coc-json', 'coc-html', 'coc-css', 'coc-word', 'coc-syntax', 'coc-cmake', 'coc-clang-format-style-options', 'coc-sh', 'coc-yaml', 'coc-diagnostic', 'coc-snippets', '@hexuhua/coc-copilot', 'coc-java']
+let g:coc_global_extensions = ['coc-clangd', 'coc-git', 'coc-pyright', 'coc-json', 'coc-html', 'coc-css', 'coc-word', 'coc-syntax', 'coc-cmake', 'coc-clang-format-style-options', 'coc-sh', 'coc-yaml', 'coc-diagnostic', 'coc-snippets', '@hexuhua/coc-copilot', 'coc-java']
 
 " some extensions are introduced below:
 " 1. coc-clang-format-options
@@ -105,7 +105,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " augroup end
 
 " rename current symbol
-nmap <leader>R <Plug>(coc-rename)
+nnoremap <leader>R <Plug>(coc-rename)
 
 " I don't know how to use this now
 " xnoremap <silent> <leader>R <Plug>(coc-codeaction-refactor-selected)
