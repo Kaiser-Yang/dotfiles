@@ -27,7 +27,6 @@ map.set({ 'n' }, 'Y', 'y$', DefaultOpt())
 local function autoClose()
     if #vim.api.nvim_list_tabpages() == 1 then
         local buffer = vim.api.nvim_list_bufs()
-        local bufferCnt = 0
         for _, buf in ipairs(buffer) do
             if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted") then
                 for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -39,12 +38,9 @@ local function autoClose()
                         break
                     end
                 end
-                bufferCnt = bufferCnt + 1
             end
         end
-        if bufferCnt ~= 0 then
-            vim.cmd'qa'
-        end
+        vim.cmd'silent! qa'
         return
     end
     local windows = vim.api.nvim_tabpage_list_wins(0)
@@ -264,12 +260,17 @@ local function OpenNvimTreeOnStart(data)
 
     -- with no parameter or a file, then open nvim-tree on root directory, but do not focus
     if HasRootDirectory() and (nameFile or noName) then
-        -- open the tree, find the file but don't focus it
+        local lFocus = true
+        if nameFile then
+            lFocus = false
+        else
+            lFocus = true
+        end
         require('nvim-tree.api').tree.toggle({
             path = GetRootDirectory(),
             update_root = false,
             find_file = false,
-            focus = false,
+            focus = lFocus,
         })
     elseif directory then
         require('nvim-tree.api').tree.toggle({
@@ -277,6 +278,14 @@ local function OpenNvimTreeOnStart(data)
             update_root = false,
             find_file = false,
             focus = true,
+        })
+    -- must be a non-exist named file
+    else 
+        require('nvim-tree.api').tree.toggle({
+            path = GetRootDirectory(),
+            update_root = false,
+            find_file = false,
+            focus = false,
         })
     end
 end
