@@ -258,6 +258,13 @@ local function OpenNvimTreeOnStart(data)
     -- buffer is a directory
     local directory = vim.fn.isdirectory(data.file) == 1
 
+    -- current open file's filetype is gitcommit
+    local gitcommit = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype") == 'gitcommit'
+
+    if gitcommit then
+        return
+    end
+
     -- with no parameter or a file, then open nvim-tree on root directory, but do not focus
     if HasRootDirectory() and (nameFile or noName) then
         local lFocus = true
@@ -345,6 +352,20 @@ autocmd FileType vimwiki inoremap <silent><buffer><expr> <CR> coc#pum#visible() 
 autocmd FileType vimwiki inoremap <silent><buffer> <S-CR>
               \ <Esc>:VimwikiReturn 2 2<CR>
 autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
+" This function is copied from vimwiki
+function! s:COPY_CR(normal, just_mrkr) abort
+    let res = vimwiki#tbl#kbd_cr()
+    if res !=? ''
+        exe 'normal! ' . res . "\<Right>"
+        startinsert
+        return
+    endif
+    call vimwiki#lst#kbd_cr(a:normal, a:just_mrkr)
+endfunction
+autocmd FileType gitcommit inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+              \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call \<SID>COPY_CR(3, 5)\<CR>"
+autocmd FileType gitcommit inoremap <silent><buffer> <S-CR>
+              \ <Esc>:call <SID>COPY_CR(2, 2)<CR>
 ]]
 vim.cmd[[
 inoremap <silent><expr> <C-c>
