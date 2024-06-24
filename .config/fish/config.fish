@@ -57,6 +57,11 @@ abbr -a tmswt tmux switch -t
 abbr -a tmrnss tmux rename-session -t
 abbr -a tmrnwd tmux rename-window -t
 
+# nv for nvim
+abbr -a nv nvim
+abbr -a vim nvim
+abbr -a vi nvim
+
 if test -e ~/proxy.fish
     source ~/proxy.fish unset 2>&1 > /dev/null
 end
@@ -117,3 +122,8 @@ set fish_cursor_external line
 # The following variable can be used to configure cursor shape in
 # visual mode, but due to fish_cursor_default, is redundant here
 set fish_cursor_visual block
+
+# neovim path
+export PATH="$PATH:/opt/nvim-linux64/bin"
+
+export $NERD_FONTS=1 > /dev/null
