@@ -15,6 +15,7 @@ vim.g.coc_global_extensions = {
   'coc-yank',
   'coc-actions',
   'coc-marketplace',
+--   'coc-lightbulb',
 --   'coc-html',
 --   'coc-css',
 --   'coc-syntax',
@@ -22,9 +23,6 @@ vim.g.coc_global_extensions = {
 --   'coc-diagnostic',
 --   '@hexuhua/coc-copilot',
 }
-
-vim.g.coc_snippet_next = "<TAB>"
-vim.g.coc_snippet_prev = "<S-TAB>"
 
 -- " Formatting selected code
 -- " xmap <leader>f  <Plug>(coc-format-selected)

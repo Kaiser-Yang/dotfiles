@@ -56,7 +56,7 @@ end
 function QuitNotSaveOnBuffer()
     local fileType = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype")
     if AutoCloseFileType[fileType] then
-        vim.cmd('q!')
+        vim.cmd('silent! q!')
         autoClose()
         return
     end
@@ -79,7 +79,7 @@ function QuitNotSaveOnBuffer()
     if tabCnt == 1 and visibleBufCntCurrentTab == 1 and bufferCnt > 1 then
         pcall(require("bufdelete").bufdelete, 0, true)
     else
-        vim.cmd('q!')
+        vim.cmd('silent! q!')
     end
     autoClose()
 end
@@ -119,23 +119,23 @@ map.set({ 'n' }, '<leader>7', '7gt', DefaultOpt())
 map.set({ 'n' }, '<leader>8', '8gt', DefaultOpt())
 map.set({ 'n' }, '<leader>9', '9gt', DefaultOpt())
 map.set({ 'n' }, '<leader>gb','10gt', DefaultOpt())
--- vim.keymap.set({"v", "n"}, "g<Tab>", "<cmd>BufferLineTogglePin<CR>", { silent = true })
--- vim.keymap.set({"v", "n"}, "g<BS>", "<cmd>bdelete<CR>", { silent = true })
--- vim.keymap.set({"v", "n"}, "go", "<cmd>blast<CR>", { silent = true })
--- vim.keymap.set({"v", "n"}, "gO", "<cmd>bfirst<CR>", { silent = true })
--- vim.keymap.set({"v", "n"}, "gB", "<cmd>BufferLineMovePrev<CR>", { silent = true })
--- vim.keymap.set({"v", "n"}, "gT", "<cmd>BufferLineMoveNext<CR>", { silent = true })
--- vim.keymap.set({"v", "n"}, "g<S-Tab>", "<cmd>BufferLineCloseOthers<CR>", { silent = true })
--- vim.keymap.set({"v", "n"}, "g<C-b>", "<cmd>BufferLineCloseLeft<CR>", { silent = true })
--- vim.keymap.set({"v", "n"}, "g<C-t>", "<cmd>BufferLineCloseRight<CR>", { silent = true })
+-- map.set({"v", "n"}, "g<Tab>", "<cmd>BufferLineTogglePin<CR>", { silent = true })
+-- map.set({"v", "n"}, "g<BS>", "<cmd>bdelete<CR>", { silent = true })
+-- map.set({"v", "n"}, "go", "<cmd>blast<CR>", { silent = true })
+-- map.set({"v", "n"}, "gO", "<cmd>bfirst<CR>", { silent = true })
+-- map.set({"v", "n"}, "gB", "<cmd>BufferLineMovePrev<CR>", { silent = true })
+-- map.set({"v", "n"}, "gT", "<cmd>BufferLineMoveNext<CR>", { silent = true })
+-- map.set({"v", "n"}, "g<S-Tab>", "<cmd>BufferLineCloseOthers<CR>", { silent = true })
+-- map.set({"v", "n"}, "g<C-b>", "<cmd>BufferLineCloseLeft<CR>", { silent = true })
+-- map.set({"v", "n"}, "g<C-t>", "<cmd>BufferLineCloseRight<CR>", { silent = true })
 --
--- vim.keymap.set({"v", "n", "i"}, "<F1>", "<cmd>BufferLineTogglePin<CR>", { silent = true })
--- vim.keymap.set({"v", "n", "i"}, "<F13>", "<cmd>BufferLinePickClose<CR>", { silent = true })
--- vim.keymap.set({"v", "n", "i"}, "<F14>", "<cmd>BufferLineMovePrev<CR>", { silent = true })
--- vim.keymap.set({"v", "n", "i"}, "<F15>", "<cmd>BufferLineMoveNext<CR>", { silent = true })
--- vim.keymap.set({"v", "n", "i"}, "<C-F13>", "<cmd>BufferLineCloseOthers<CR>", { silent = true })
--- vim.keymap.set({"v", "n", "i"}, "<C-F14>", "<cmd>BufferLineCloseLeft<CR>", { silent = true })
--- vim.keymap.set({"v", "n", "i"}, "<C-F15>", "<cmd>BufferLineCloseRight<CR>", { silent = true })
+-- map.set({"v", "n", "i"}, "<F1>", "<cmd>BufferLineTogglePin<CR>", { silent = true })
+-- map.set({"v", "n", "i"}, "<F13>", "<cmd>BufferLinePickClose<CR>", { silent = true })
+-- map.set({"v", "n", "i"}, "<F14>", "<cmd>BufferLineMovePrev<CR>", { silent = true })
+-- map.set({"v", "n", "i"}, "<F15>", "<cmd>BufferLineMoveNext<CR>", { silent = true })
+-- map.set({"v", "n", "i"}, "<C-F13>", "<cmd>BufferLineCloseOthers<CR>", { silent = true })
+-- map.set({"v", "n", "i"}, "<C-F14>", "<cmd>BufferLineCloseLeft<CR>", { silent = true })
+-- map.set({"v", "n", "i"}, "<C-F15>", "<cmd>BufferLineCloseRight<CR>", { silent = true })
 
 map.set({ 'n' }, 'j', [[(v:count == 0 ? 'gj' : 'j')]], { expr = true, noremap = true, silent = true })
 map.set({ 'n' }, 'k', [[(v:count == 0 ? 'gk' : 'k')]], { expr = true, noremap = true, silent = true })
@@ -179,6 +179,8 @@ function CocShowDocument()
 end
 map.set({ 'n' }, '<leader>d', CocShowDocument, DefaultOpt())
 map.set({ 'n' }, 'gy', ':<C-u>CocList -A --normal yank<CR>', DefaultOpt())
+vim.g.coc_snippet_next = "<TAB>"
+vim.g.coc_snippet_prev = "<S-TAB>"
 -- Remap for do codeAction of selected region
 -- function! s:cocActionsOpenFromSelected(type) abort
 --   execute 'CocCommand actions.open ' . a:type
@@ -249,14 +251,18 @@ function NvimTreeToggleOnRootDirectory()
     })
 end
 local function OpenNvimTreeOnStart(data)
+    -- only support with one extra parameter: a file or directory
+    if #vim.v.argv > 3 then
+        return
+    end
     -- buffer is a real file on the disk
     local nameFile = vim.fn.filereadable(data.file) == 1
 
     -- buffer is a [No Name]
-    local noName = data.file == "" and vim.bo[data.buf].buftype == ""
+    local noName = #vim.v.argv == 2
 
     -- buffer is a directory
-    local directory = vim.fn.isdirectory(data.file) == 1
+    local directory = #vim.v.argv == 3 and vim.fn.isdirectory(vim.v.argv[3]) == 1
 
     -- current open file's filetype is gitcommit
     local gitcommit = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype") == 'gitcommit'
@@ -279,15 +285,8 @@ local function OpenNvimTreeOnStart(data)
             find_file = false,
             focus = lFocus,
         })
-    elseif directory then
-        require('nvim-tree.api').tree.toggle({
-            path = data.file,
-            update_root = false,
-            find_file = false,
-            focus = true,
-        })
     -- must be a non-exist named file
-    else 
+    elseif not directory and #vim.v.argv == 3 then
         require('nvim-tree.api').tree.toggle({
             path = GetRootDirectory(),
             update_root = false,
@@ -372,7 +371,17 @@ inoremap <silent><expr> <C-c>
             \ coc#pum#visible() ? coc#pum#cancel() :
             \ CopilotVisible() ? copilot#Dismiss() : "\<C-c>"
 ]]
-
+-- Apply codeAction to the selected region
+-- Example: `gaap` for current paragraph
+local opts = {silent = true, nowait = true, noremap = true}
+map.set("x", "ga", "<Plug>(coc-codeaction-selected)", opts)
+map.set("n", "ga", "<Plug>(coc-codeaction-selected)", opts)
+-- Remap keys for apply code actions at the cursor position.
+map.set("n", "gac", "<Plug>(coc-codeaction-cursor)", opts)
+-- Remap keys for apply source code actions for current file.
+map.set("n", "gas", "<Plug>(coc-codeaction-source)", opts)
+-- this seems not to work, but I don't know why
+-- map.set("n", "gcl", "<Plug>(coc-codelens-action)", opts)
 local success, telescope = pcall(require, 'telescope.builtin')
 function FindFilesOnRootDirectory()
     local rootDir = GetRootDirectory()
@@ -383,11 +392,11 @@ function LiveGrepOnRootDirectory()
     telescope.live_grep({search_dirs = {rootDir}, additional_args = {'--hidden'}})
 end
 if success then
-    vim.keymap.set({ 'n', 'i' }, '<c-p>', FindFilesOnRootDirectory, DefaultOpt())
-    vim.keymap.set({ 'n' }, '<c-f>', LiveGrepOnRootDirectory, DefaultOpt())
-    vim.keymap.set({ 'n' }, '<leader><leader>', telescope.current_buffer_fuzzy_find, DefaultOpt())
---     vim.keymap.set({ 'n' }, '<leader>fb', telescope.buffers, DefaultOpt())
---     vim.keymap.set({ 'n' }, '<leader>fh', telescope.help_tags, DefaultOpt())
+    map.set({ 'n', 'i' }, '<c-p>', FindFilesOnRootDirectory, DefaultOpt())
+    map.set({ 'n' }, '<c-f>', LiveGrepOnRootDirectory, DefaultOpt())
+    map.set({ 'n' }, '<leader><leader>', telescope.current_buffer_fuzzy_find, DefaultOpt())
+--     map.set({ 'n' }, '<leader>fb', telescope.buffers, DefaultOpt())
+--     map.set({ 'n' }, '<leader>fh', telescope.help_tags, DefaultOpt())
 end
 
 vim.cmd [[
