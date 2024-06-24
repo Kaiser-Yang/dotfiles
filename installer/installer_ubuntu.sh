@@ -83,6 +83,9 @@ sudo apt install -y openjdk-17-jdk-headless shellcheck build-essential net-tools
 # NOTE: if your conda is activated, this will use conda-pip
 pip install cmake-language-server || exit 1
 
+# pynvim for coc-actions
+pip install pynvim || exit 1
+
 # clang family
 sudo apt install -y clangd clang-format clang-tidy || exit 1
 
