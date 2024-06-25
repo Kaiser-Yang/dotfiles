@@ -33,6 +33,10 @@ require('lazy').setup({
         init = function() require'plugin_config/copilot_config' end,
     },
     {
+        'luozhiya/fittencode.nvim',
+        config = function() require('plugin_config/fittencode_config') end,
+    },
+    {
         'preservim/nerdcommenter',
         init = function() require'plugin_config/nerdcommenter_config' end,
     },
