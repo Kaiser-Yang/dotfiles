@@ -268,17 +268,11 @@ local function OpenNvimTreeOnStart(data)
 
     -- with no parameter or a file, then open nvim-tree on root directory, but do not focus
     if HasRootDirectory() and (nameFile or noName) then
-        local lFocus = true
-        if nameFile then
-            lFocus = false
-        else
-            lFocus = true
-        end
         require('nvim-tree.api').tree.toggle({
             path = GetRootDirectory(),
             update_root = false,
             find_file = false,
-            focus = lFocus,
+            focus = false,
         })
     -- must be a non-exist named file
     elseif not directory and #vim.v.argv == 3 then
