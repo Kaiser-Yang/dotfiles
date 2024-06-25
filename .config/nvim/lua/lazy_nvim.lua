@@ -29,6 +29,7 @@ require('lazy').setup({
     },
     {
         'github/copilot.vim',
+        lazy = false,
         init = function() require'plugin_config/copilot_config' end,
     },
     {

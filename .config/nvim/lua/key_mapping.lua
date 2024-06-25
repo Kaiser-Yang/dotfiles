@@ -20,7 +20,7 @@ map.set({ 'n' }, '<leader><cr>', '<cmd>nohlsearch<cr>', DefaultOpt())
 map.set({ 'n', 'x' }, '<leader>y', '"+y', DefaultOpt())
 map.set({ 'n', 'x' }, '<leader>p', '"+p', DefaultOpt())
 map.set({ 'n', 'x' }, '<leader>P', '"+P', DefaultOpt())
-map.set({ 'n' }, '<leader>ya', 'mzggVG"+y`z<cmd>delmark z<cr>`', DefaultOpt())
+map.set({ 'n' }, '<leader>ay', 'mzggVG"+y`z<cmd>delmark z<cr>`', DefaultOpt())
 map.set({ 'n' }, '<leader>Y', '"+y$', DefaultOpt())
 map.set({ 'n' }, 'Y', 'y$', DefaultOpt())
 
@@ -197,13 +197,6 @@ function! CopilotVisible()
     return 0
 endfunction
 ]]
-function SelectOneWordForCopilot()
-    if vim.fn['CopilotVisible']() ~= 0 then
-        return vim.fn['copilot#AcceptWord']()
-    else
-        return vim.api.nvim_input('<esc>f')
-    end
-end
 function SelectOneLineForCopilotOrLiveGrep()
     if vim.fn['CopilotVisible']() ~= 0 then
         return vim.fn['copilot#AcceptLine']()
@@ -212,9 +205,11 @@ function SelectOneLineForCopilotOrLiveGrep()
     end
 end
 
-map.set({ 'i' }, '<esc>f', SelectOneWordForCopilot, DefaultOpt())
-map.set({ 'i' }, '<c-f>', SelectOneLineForCopilotOrLiveGrep, DefaultOpt())
--- imap <script><silent><expr> <ESC>f CopilotVisible() ? copilot#AcceptWord() : "\<ESC>f"
+vim.cmd[[
+inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() : "\<esc>f"
+" inoremap <script><silent><expr> <TAB> CopilotVisible() ? copilot#Accept() : "\<TAB>"
+inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
+]]
 
 function GetRootDirectory()
     local rootDir = vim.fn.finddir(".root", ";")
@@ -384,12 +379,10 @@ map.set("n", "gas", "<Plug>(coc-codeaction-source)", opts)
 -- map.set("n", "gcl", "<Plug>(coc-codelens-action)", opts)
 local success, telescope = pcall(require, 'telescope.builtin')
 function FindFilesOnRootDirectory()
-    local rootDir = GetRootDirectory()
-    telescope.find_files({search_dirs = {rootDir}, hidden = true})
+    telescope.find_files({search_dirs = {GetRootDirectory()}, hidden = true})
 end
 function LiveGrepOnRootDirectory()
-    local rootDir = GetRootDirectory()
-    telescope.live_grep({search_dirs = {rootDir}, additional_args = {'--hidden'}})
+    telescope.live_grep({search_dirs = {GetRootDirectory()}, additional_args = {'--hidden'}})
 end
 if success then
     map.set({ 'n', 'i' }, '<c-p>', FindFilesOnRootDirectory, DefaultOpt())

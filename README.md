@@ -7,9 +7,9 @@ You can use `./dot_files.py recover` to copy the backed up files to `$HOME` dire
 
 You can use `./dot_files.py`, which is same with `./dot_files.py recover && ./dot_files.py update`.
 
-You can use `./dot_files.py init` for the first time install, which will install all plugins for vim and install fish and then set fith be your default shell, see the file for more details.
+You can use `./dot_files.py init` for the first time install, which will install all plugins for vim and install fish and then set `fish` be your default shell, see the file for more details.
 
-NOTE: if you want to use `./dot_files.py init`, be sure your conda is deactivated (there is no base or other conda name on your screen), and make sure you have `Python` order than `3.8` locally, because `ycm` can not be installed by this script within conda.
+NOTE: if you want to use `./dot_files.py init`, be sure your `conda` is deactivated (there is no base or other `conda` name on your screen), and make sure you have `Python` order than `3.8` locally, because `ycm` can not be installed by this script within `conda`.
 
 NOTE: There are `start_symbol_kaiserqzyue` and `end_symbol_kaiserqzyue` in every dot file. If you want to recover the dot files, you just need to delete contents from `start_symbol_kaiserqzyue` till `end_symbol_kaiserqzyue`. You can do this by `vim` easily: `gg/start_symbol_kaiserqzyue<Enter>d/end_symbol_kaiserqzyue<Enter>dd`. Besides, you can use `./dot_files.py recover` to recover, if your dot files have been updated after using `./dot_files.py update`.
 
@@ -156,3 +156,30 @@ NOTE: the difference between `ysw[` ans `ysw]` is that the former will add white
 | \<C-P>     | N I  | Find files in the current directory or a git root directory |
 | \<C-F>     | N I  | Find contents in the current directory or a git root directory |
 | \<LEADER>a | N    | Align a block, `:`, `=` and `\|` are supported, for example, you can use `<LEADER>a=` to align a block of assignments |
+
+# Neovim Shortcuts
+Most shortcuts in `nvim` are same with those in `vim`, therefore, this part will only list the different ones or those only supported in `nvim`.
+
+NOTE: I now use `nvim`, the `vim` part will not be updated any more.
+
+## Some Known Bugs
+`auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file, `auto-pairs` will be loaded.
+
+## Useful Plugins' Shortcuts
+| Shortcut          | Mode | Description |
+| -                 | -    | - |
+| ys{motion}f{name} | N    | Surround the part with a function call |
+| dsf               | N    | Delete a function call, only parameters will be left |
+| csf{name}         | N    | Change a function call with a new one |
+| \<CR>             | N    | In file explorer, this will enter a directory or open a file |
+| \<BS>             | N    | In file explorer, this will go to the `..` directory. You can use `?` to see more mappings in file explorer. |
+| gc                | N    | Open `coc-command` |
+| gl                | N    | Open `coc-list` |
+| gy                | N    | List all the yanked contented |
+| \<LEADER>ay       | N    | Yank all contents |
+| \<ESC>            | I    | When use `telescope` to search, `<ESC>` will let you back to normal mode |
+| \<ESC>            | N    | When use `telescope` to search and you are in normal mode, `<ESC>` will quit `telescope` |
+| \<C-C>            | I    | When use `telescope` to search and you are in insert mode, `<C-C>` will quit `telescope` |
+| \<LEADER>n        | N    | Go to the right buffer shown in `bufline` |
+| \<LEADER>b        | N    | Go to the left buffer shown in `bufline` |
+
