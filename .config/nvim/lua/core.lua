@@ -20,7 +20,7 @@ set signcolumn=yes
 set cursorline
 set showcmd
 set wildmenu
-set wildmode=longest:full
+set wildmode=longest:full,full
 
 set list
 set listchars=tab:»·,trail:·,lead:·
