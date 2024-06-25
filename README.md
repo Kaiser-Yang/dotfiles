@@ -183,3 +183,5 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 | \<LEADER>n        | N    | Go to the right buffer shown in `bufline` |
 | \<LEADER>b        | N    | Go to the left buffer shown in `bufline` |
 
+# Contribution
+If you have any suggestions or find any bugs, please feel free to open an issue or pull request.
