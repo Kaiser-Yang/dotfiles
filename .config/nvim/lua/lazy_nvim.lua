@@ -30,12 +30,10 @@ require('lazy').setup({
     {
         'luozhiya/fittencode.nvim',
         config = function() require('plugin_config/fittencode_config') end,
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter"
+        },
     },
---     {
---         'github/copilot.vim',
---         lazy = false,
---         init = function() require'plugin_config/copilot_config' end,
---     },
     {
         'preservim/nerdcommenter',
         init = function() require'plugin_config/nerdcommenter_config' end,
