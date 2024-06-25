@@ -140,7 +140,9 @@ require('lazy').setup({
     },
     {
         'jiangmiao/auto-pairs',
-        event = {'VimEnter', 'InsertEnter'},
-        init = function() require'plugin_config/autopairs_config' end
+        event = {'InsertEnter'},
+        init = function() require'plugin_config/autopairs_config' end,
+        -- lazy.nvim fails to load, we must initialize auto-pairs manually
+        config = function() vim.cmd[[call AutoPairsInit()]] end,
      },
 })

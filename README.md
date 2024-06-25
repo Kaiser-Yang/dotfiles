@@ -163,7 +163,10 @@ Most shortcuts in `nvim` are same with those in `vim`, therefore, this part will
 NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 
 ## Some Known Bugs
-`auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file, `auto-pairs` will be loaded.
+### Unfixed
+
+### Fixed
+* `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file, `auto-pairs` will be loaded.
 
 ## Useful Plugins' Shortcuts
 | Shortcut          | Mode | Description |
