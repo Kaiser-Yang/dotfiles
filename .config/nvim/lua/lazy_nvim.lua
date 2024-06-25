@@ -28,11 +28,6 @@ require('lazy').setup({
         },
     },
     {
-        'github/copilot.vim',
-        lazy = false,
-        init = function() require'plugin_config/copilot_config' end,
-    },
-    {
         'luozhiya/fittencode.nvim',
         config = function() require('plugin_config/fittencode_config') end,
     },

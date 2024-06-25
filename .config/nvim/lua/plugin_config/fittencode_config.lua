@@ -35,14 +35,12 @@ require('fittencode').setup({
     disable_specific_inline_completion = {
         -- Disable auto-completion for some specific file suffixes by entering them below
         -- For example, `suffixes = {'lua', 'cpp'}`
-        -- Use fittencode as chat, but not as a inline completion for all buffers.
-        suffixes = {'*'},
+        suffixes = {},
     },
     inline_completion = {
         -- Enable inline code completion.
         ---@type boolean
-        -- Use fittencode as chat, but not as a inline completion for all buffers.
-        enable = false,
+        enable = true,
         -- Disable auto completion when the cursor is within the line.
         ---@type boolean
         disable_completion_within_the_line = false,
@@ -114,11 +112,11 @@ require('fittencode').setup({
     -- Default keymaps
     keymaps = {
         inline = {
-            -- ['<C-Down>'] = 'accept_line',
-            -- ['<esc>f'] = 'accept_word',
-            -- ['<C-Right>'] = 'accept_word',
-            -- ['<C-Up>'] = 'revoke_line',
-            -- ['<C-Left>'] = 'revoke_word',
+            ['<esc>f'] = 'accept_word',
+            ['<C-Down>'] = 'accept_line',
+            ['<C-Right>'] = 'accept_word',
+            ['<C-Up>'] = 'revoke_line',
+            ['<C-Left>'] = 'revoke_word',
         },
         chat = {
             ['q'] = 'close',
@@ -129,6 +127,7 @@ require('fittencode').setup({
             ['C'] = 'copy_all_conversations',
             ['d'] = 'delete_conversation',
             ['D'] = 'delete_all_conversations',
+            -- this is not supported
             -- ['i'] = 'start_chat',
         }
     },

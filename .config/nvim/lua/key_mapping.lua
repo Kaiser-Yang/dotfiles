@@ -248,7 +248,10 @@ map.set({ 'n' }, 'S', QuitSaveOnBuffer, DefaultOpt())
 map.set({ 'n' }, '<c-s>', '<cmd>w<cr>', DefaultOpt())
 map.set({ 'i' }, '<c-s>', '<c-o><cmd>w<cr>', DefaultOpt())
 
-map.set({ 'n' }, '<leader>h', '<cmd>set nosplitright<cr><cmd>vsplit<cr><cmd>set splitright<cr>', DefaultOpt())
+map.set({ 'n' },
+        '<leader>h',
+        '<cmd>set nosplitright<cr><cmd>vsplit<cr><cmd>set splitright<cr>',
+        DefaultOpt())
 map.set({ 'n' }, '<leader>l', '<cmd>set splitright<cr><cmd>vsplit<cr>', DefaultOpt())
 map.set({ 'n' }, '<leader>t', '<cmd>tabnew<cr><cmd>lua ToggleTermOnTabEnter()<cr>', DefaultOpt())
 map.set({ 't' }, '<c-h>', '<c-\\><c-n><cmd>TmuxNavigateLeft<cr>', DefaultOpt())
@@ -294,10 +297,22 @@ map.set({ 'n' }, '<leader>0','10gt', DefaultOpt())
 -- map.set({"v", "n", "i"}, "<C-F14>", "<cmd>BufferLineCloseLeft<CR>", { silent = true })
 -- map.set({"v", "n", "i"}, "<C-F15>", "<cmd>BufferLineCloseRight<CR>", { silent = true })
 
-map.set({ 'n' }, 'j', [[(v:count == 0 ? 'gj' : 'j')]], { expr = true, noremap = true, silent = true })
-map.set({ 'n' }, 'k', [[(v:count == 0 ? 'gk' : 'k')]], { expr = true, noremap = true, silent = true })
-map.set({ 'n' }, '0', [[(v:count == 0 ? 'g0' : '0')]], { expr = true, noremap = true, silent = true })
-map.set({ 'n' }, '$', [[(v:count == 0 ? 'g$' : '$')]], { expr = true, noremap = true, silent = true })
+map.set({ 'n' },
+        'j',
+        [[(v:count == 0 ? 'gj' : 'j')]],
+        { expr = true, noremap = true, silent = true })
+map.set({ 'n' },
+        'k',
+        [[(v:count == 0 ? 'gk' : 'k')]],
+        { expr = true, noremap = true, silent = true })
+map.set({ 'n' },
+        '0',
+        [[(v:count == 0 ? 'g0' : '0')]],
+        { expr = true, noremap = true, silent = true })
+map.set({ 'n' },
+        '$',
+        [[(v:count == 0 ? 'g$' : '$')]],
+        { expr = true, noremap = true, silent = true })
 
 map.set({ 'n' }, '<up>', '<cmd>lua CalculateNewSize(5)<cr><cmd>res +5<cr>', DefaultOpt())
 map.set({ 'n' }, '<down>', '<cmd>lua CalculateNewSize(-5)<cr><cmd>res -5<cr>', DefaultOpt())
@@ -345,26 +360,26 @@ vim.g.coc_snippet_prev = "<S-TAB>"
 -- xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
 -- nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 
-vim.cmd [[
-function! CopilotVisible()
-    let s = copilot#GetDisplayedSuggestion()
-    if !empty(s.text)
-        return 1
-    endif
-    return 0
-endfunction
-]]
-function SelectOneLineForCopilotOrLiveGrep()
-    if vim.fn['CopilotVisible']() ~= 0 then
-        return vim.fn['copilot#AcceptLine']()
-    else
-        return LiveGrepOnRootDirectory()
-    end
-end
+-- vim.cmd [[
+-- function! CopilotVisible()
+--     let s = copilot#GetDisplayedSuggestion()
+--     if !empty(s.text)
+--         return 1
+--     endif
+--     return 0
+-- endfunction
+-- ]]
+-- function SelectOneLineForCopilotOrLiveGrep()
+--     if vim.fn['CopilotVisible']() ~= 0 then
+--         return vim.fn['copilot#AcceptLine']()
+--     else
+--         return LiveGrepOnRootDirectory()
+--     end
+-- end
 vim.cmd[[
-inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() : "\<esc>f"
+" inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() : "\<esc>f"
 " inoremap <script><silent><expr> <TAB> CopilotVisible() ? copilot#Accept() : "\<TAB>"
-inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
+inoremap <silent><expr> <C-f> luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_line()<cr>' : "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>"
 ]]
 vim.cmd[[
 augroup no_modify_files
@@ -504,12 +519,11 @@ vim.cmd[[
 set pumheight=30
 nnoremap <leader>gcm <Plug>(coc-git-commit)
 inoremap <silent><expr> <C-j>
-        \ coc#pum#visible() ? coc#pum#next(1) :
-        \ CopilotVisible() ? copilot#Next() : "\<Down>"
+        \ coc#pum#visible() ? coc#pum#next(1) : "\<Down>"
+"        \ CopilotVisible() ? copilot#Next() : "\<Down>"
 inoremap <silent><expr> <C-k>
-        \ coc#pum#visible() ? coc#pum#prev(1) :
-        \ CopilotVisible() ? copilot#Previous() : "\<Up>"
-inoremap <silent><expr> <c-space> CopilotVisible() ? "\<c-space>" : copilot#Suggest()
+        \ coc#pum#visible() ? coc#pum#prev(1) : "\<Up>"
+"        \ CopilotVisible() ? copilot#Previous() : "\<Up>"
 ]]
 -- set nobackup
 -- set nowritebackup
@@ -517,9 +531,11 @@ inoremap <silent><expr> <c-space> CopilotVisible() ? "\<c-space>" : copilot#Sugg
 vim.cmd[[
 inoremap <silent><expr> <CR>
       \ coc#pum#visible() ? coc#pum#confirm() :
-      \ CopilotVisible() ? copilot#Accept() : "\<CR>"
+      \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<CR>"
+"      \ CopilotVisible() ? copilot#Accept() : "\<CR>"
 autocmd FileType vimwiki inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-              \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:VimwikiReturn 3 5\<CR>"
+      \: luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-]>\<Esc>:VimwikiReturn 3 5\<CR>"
+"              \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:VimwikiReturn 3 5\<CR>"
 autocmd FileType vimwiki inoremap <silent><buffer> <S-CR>
               \ <Esc>:VimwikiReturn 2 2<CR>
 autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
@@ -534,14 +550,16 @@ function! s:COPY_CR(normal, just_mrkr) abort
     call vimwiki#lst#kbd_cr(a:normal, a:just_mrkr)
 endfunction
 autocmd FileType git* inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-              \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call \<SID>COPY_CR(3, 5)\<CR>"
-autocmd FileType git* inoremap <silent><buffer> <S-CR>
-              \ <Esc>:call <SID>COPY_CR(2, 2)<CR>
+      \: luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-]>\<Esc>:call \<SID>COPY_CR(3, 5)\<CR>"
+"              \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call \<SID>COPY_CR(3, 5)\<CR>"
+autocmd FileType git* inoremap <silent><buffer> <S-CR> <Esc>:call <SID>COPY_CR(2, 2)<CR>
 ]]
 vim.cmd[[
 inoremap <silent><expr> <C-c>
-            \ coc#pum#visible() ? coc#pum#cancel() :
-            \ CopilotVisible() ? copilot#Dismiss() : "\<C-c>"
+    \ coc#pum#visible() ? coc#pum#cancel() :
+    \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").dismiss_suggestions()<cr>' : "\<C-c>"
+inoremap <silent><expr> <c-space>
+    \ luaeval('require("fittencode").has_suggestions()') ? "\<c-space>" : '<cmd>lua require("fittencode").triggering_completion()<cr>'
 ]]
 
 -- generated by fitten code
