@@ -24,6 +24,8 @@ local function my_on_attach(bufnr)
     vim.keymap.del({ 'n' }, '<c-x>', { buffer = bufnr })
     vim.keymap.del({ 'n' }, '<c-t>', { buffer = bufnr })
     vim.keymap.del({ 'n' }, 'R', { buffer = bufnr })
+    vim.keymap.del({ 'n' }, '<tab>', { buffer = bufnr })
+
     vim.keymap.set({ 'n' }, '<leader>l', api.node.open.vertical, opts('Open: Vertical Split'))
     vim.keymap.set({ 'n' }, '<leader>j', api.node.open.horizontal, opts('Open: Horizontal Split'))
     vim.keymap.set({ 'n' }, '<leader>t', api.node.open.tab, opts('Open: New Tab'))

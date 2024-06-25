@@ -24,19 +24,22 @@ map.set({ 'n' }, '<leader>ay', 'mzggVG"+y`z<cmd>delmark z<cr>`', DefaultOpt())
 map.set({ 'n' }, '<leader>Y', '"+y$', DefaultOpt())
 map.set({ 'n' }, 'Y', 'y$', DefaultOpt())
 
+local function emptyBuf(buf)
+  local num_lines = vim.api.nvim_buf_line_count(buf)
+  return num_lines == 1 and vim.api.nvim_buf_get_lines(buf, 0, -1, true)[1] == ""
+end
+local function currentBufferInSingleWindow()
+    local windows = vim.api.nvim_tabpage_list_wins(0)
+    return #windows == 1 and vim.api.nvim_win_get_buf(windows[1]) == vim.api.nvim_get_current_buf()
+end
 local function autoClose()
     if #vim.api.nvim_list_tabpages() == 1 then
         local buffer = vim.api.nvim_list_bufs()
         for _, buf in ipairs(buffer) do
             if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted") then
-                for _, win in ipairs(vim.api.nvim_list_wins()) do
-                    if vim.api.nvim_win_get_buf(win) == buf then
-                        local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
-                        if not AutoCloseFileType[filetype] then
-                            return
-                        end
-                        break
-                    end
+                local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
+                if not AutoCloseFileType[filetype] then
+                    return
                 end
             end
         end
@@ -47,7 +50,11 @@ local function autoClose()
     for _, win in ipairs(windows) do
         local buf = vim.api.nvim_win_get_buf(win)
         local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
-        if not AutoCloseFileType[filetype] then
+        if filetype == nil or filetype == "" then
+            if not emptyBuf(buf) then
+                return
+            end
+        elseif not AutoCloseFileType[filetype] then
             return
         end
     end
@@ -55,7 +62,7 @@ local function autoClose()
 end
 function QuitNotSaveOnBuffer()
     local fileType = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype")
-    if AutoCloseFileType[fileType] then
+    if not currentBufferInSingleWindow() and AutoCloseFileType[fileType] then
         vim.cmd('silent! q!')
         autoClose()
         return
@@ -76,12 +83,17 @@ function QuitNotSaveOnBuffer()
             bufferCnt = bufferCnt + 1
         end
     end
-    if tabCnt == 1 and visibleBufCntCurrentTab == 1 and bufferCnt > 1 then
-        pcall(require("bufdelete").bufdelete, 0, true)
+    if visibleBufCntCurrentTab > 1 then
+        vim.cmd('silent! q')
     else
-        vim.cmd('silent! q!')
+        if tabCnt == 1 and bufferCnt > 1 then
+            pcall(require("bufdelete").bufdelete, 0, true)
+        elseif tabCnt > 1 then
+            vim.cmd('silent! tabclose!')
+        elseif bufferCnt == 1 then
+            vim.cmd('silent! qa!')
+        end
     end
-    autoClose()
 end
 function QuitSaveOnBuffer()
     vim.cmd('w')
@@ -209,8 +221,22 @@ inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() :
 " inoremap <script><silent><expr> <TAB> CopilotVisible() ? copilot#Accept() : "\<TAB>"
 inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
 ]]
--- i means we'll start to input questions
-map.set({ 'n' }, 'gpt', '<cmd>Fitten toggle_chat<cr>')
+vim.cmd[[
+augroup no_modify_files
+  autocmd!
+  autocmd BufEnter,FileType * if &readonly | nnoremap <buffer> i <cmd>Fitten start_chat<CR> | endif
+augroup END
+]]
+local firstGPT = true
+local function GPTToggle()
+    if firstGPT then
+        firstGPT = false
+        vim.cmd'Fitten start_chat'
+        return
+    end
+    vim.cmd'Fitten toggle_chat'
+end
+map.set({ 'n' }, 'gpt', GPTToggle, DefaultOpt())
 map.set({ 'v' }, 'gpt', '<cmd>Fitten explain_code<cr>')
 
 function GetRootDirectory()
@@ -385,7 +411,6 @@ inoremap <silent><expr> <C-c>
 --
 --     local cursor_x = win_x + col * font_width
 --     local cursor_y = win_y + row * font_height
---     print(cursor_x, cursor_y)
 --     os.execute(string.format("xdotool mousemove %d %d click 3", cursor_x, cursor_y))
 -- end
 -- map.set({'n', 'x'}, 'ga', '<rightmouse>', DefaultOpt())

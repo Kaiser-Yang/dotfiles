@@ -129,7 +129,7 @@ require('fittencode').setup({
             ['C'] = 'copy_all_conversations',
             ['d'] = 'delete_conversation',
             ['D'] = 'delete_all_conversations',
-            ['i'] = 'start_chat',
+            -- ['i'] = 'start_chat',
         }
     },
     -- Setting for source completion.
