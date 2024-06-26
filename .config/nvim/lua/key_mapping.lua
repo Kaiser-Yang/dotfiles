@@ -451,7 +451,9 @@ end
 vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = OpenNvimTreeOnStart })
 
 function CompileRun()
-    vim.cmd'w'
+    -- ignore the error
+    -- this usually happens on readonly file
+    pcall(vim.cmd, 'w')
     local filename = vim.fn.expand("%")
     local filename_noext = vim.fn.expand("%:r")
     local command = ""
