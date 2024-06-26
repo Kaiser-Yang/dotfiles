@@ -60,7 +60,6 @@ set termguicolors
 set encoding=utf-8
 
 set updatetime=100
-let &t_SI = "\<Esc>[6 q"
 ]]
 
 -- hi Normal guibg=none

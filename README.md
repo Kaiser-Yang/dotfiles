@@ -133,6 +133,7 @@ NOTE: the difference between `ysw[` ans `ysw]` is that the former will add white
 | gr         | N    | Go to references |
 | gh         | N    | Go to the header file |
 | \<LEADER>R | N    | Rename the current symbol |
+| \<LEADER>r | N    | Run the single file depending on its filetype |
 | H          | N    | Quick fix |
 | ]d         | N    | Go to next diagnostic |
 | [d         | N    | Go to previous diagnostic |
