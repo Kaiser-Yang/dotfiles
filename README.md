@@ -165,6 +165,7 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 
 ## Some Known Bugs
 ### Unfixed
+* When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line.
 
 ### Fixed
 * `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file, `auto-pairs` will be loaded.
