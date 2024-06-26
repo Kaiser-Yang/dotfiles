@@ -47,18 +47,27 @@ local function autoClose()
         return
     end
     local windows = vim.api.nvim_tabpage_list_wins(0)
+    local bdTime = 0
     for _, win in ipairs(windows) do
         local buf = vim.api.nvim_win_get_buf(win)
-        local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
-        if filetype == nil or filetype == "" then
-            if not emptyBuf(buf) then
+        if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted") then
+            local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
+            if filetype == nil or filetype == "" then
+                if not emptyBuf(buf) then
+                    return
+                end
+            elseif not AutoCloseFileType[filetype] then
                 return
             end
-        elseif not AutoCloseFileType[filetype] then
-            return
+            bdTime = bdTime + 1
         end
     end
-    vim.cmd'tabclose!'
+    -- unload all the auto close files in current tab
+    for _ = 1, bdTime do
+        vim.cmd'silent! bd!'
+    end
+    -- close curreent tab
+    vim.cmd'silent! tabclose!'
 end
 function QuitNotSaveOnBuffer()
     local fileType = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype")
@@ -89,7 +98,7 @@ function QuitNotSaveOnBuffer()
         if tabCnt == 1 and bufferCnt > 1 then
             pcall(require("bufdelete").bufdelete, 0, true)
         elseif tabCnt > 1 then
-            vim.cmd('silent! tabclose!')
+            autoClose()
         elseif bufferCnt == 1 then
             vim.cmd('silent! qa!')
         end
