@@ -188,7 +188,7 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 | \<C-C>            | I       | When use `telescope` to search and you are in insert mode, `<C-C>` will quit `telescope` |
 | \<LEADER>n        | N       | Go to the right buffer shown in `bufline` |
 | \<LEADER>b        | N       | Go to the left buffer shown in `bufline` |
-| gpt               | N       | Toggle `fitten-code` window, when fisrt use this, you must ask a question first |
+| gpt               | N       | Toggle `fitten-code` window |
 | gpt               | V       | Explain the selected code |
 | bp                | N       | Buffer pick |
 | \<C-T>            | N I T   | Toggle a terminal |

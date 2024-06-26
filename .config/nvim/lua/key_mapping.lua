@@ -372,16 +372,7 @@ augroup no_modify_files
   autocmd BufEnter,FileType * if &readonly | nnoremap <buffer> i <cmd>Fitten start_chat<CR> | endif
 augroup END
 ]]
-local firstGPT = true
-local function GPTToggle()
-    if firstGPT then
-        firstGPT = false
-        vim.cmd'Fitten start_chat'
-        return
-    end
-    vim.cmd'Fitten toggle_chat'
-end
-map.set({ 'n' }, 'gpt', GPTToggle, DefaultOpt())
+map.set({ 'n' }, 'gpt', require('fittencode').toggle_chat, DefaultOpt())
 map.set({ 'v' }, 'gpt', '<cmd>Fitten explain_code<cr>')
 
 function GetRootDirectory()
