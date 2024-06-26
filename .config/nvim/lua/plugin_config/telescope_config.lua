@@ -10,6 +10,9 @@ require'telescope'.setup({
                 ['<c-j>'] = 'move_selection_next',
                 ['<c-k>'] = 'move_selection_previous',
             },
+            n = {
+                ['<c-n>'] = 'close',
+            }
         },
         layout_strategy = "vertical",
         layout_config = {

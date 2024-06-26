@@ -31,7 +31,7 @@ require'bufferline'.setup {
     },
     close_command = function(bufnum)
         -- when closing some files, this function will throw a exception
-        -- I don't know how o fix, just ignore this exception
+        -- I don't know how to fix, just ignore this exception
         pcall(require('bufdelete').bufdelete, bufnum, true)
     end,
     diagnostics = "coc",
