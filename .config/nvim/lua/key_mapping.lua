@@ -6,7 +6,6 @@ end
 
 -- use c-j and c-k to navigate in cmd mode
 -- don't set silent for this, completion depend on output
--- TODO add fuzzy completion for this
 map.set({ 'c' }, '<c-j>', '<c-n>', { noremap = true })
 map.set({ 'c' }, '<c-k>', '<c-p>', { noremap = true })
 -- left and right to move cursor when wildmenu is on
@@ -286,7 +285,6 @@ map.set({ 'n' }, '<leader>0','10gt', DefaultOpt())
 -- map.set({"v", "n"}, "g<S-Tab>", "<cmd>BufferLineCloseOthers<CR>", { silent = true })
 -- map.set({"v", "n"}, "g<C-b>", "<cmd>BufferLineCloseLeft<CR>", { silent = true })
 -- map.set({"v", "n"}, "g<C-t>", "<cmd>BufferLineCloseRight<CR>", { silent = true })
---
 -- map.set({"v", "n", "i"}, "<F1>", "<cmd>BufferLineTogglePin<CR>", { silent = true })
 -- map.set({"v", "n", "i"}, "<F13>", "<cmd>BufferLinePickClose<CR>", { silent = true })
 -- map.set({"v", "n", "i"}, "<F14>", "<cmd>BufferLineMovePrev<CR>", { silent = true })
@@ -359,27 +357,6 @@ vim.g.coc_snippet_prev = "<S-TAB>"
 -- xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
 -- nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 
-vim.cmd [[
-function! CopilotVisible()
-    let s = copilot#GetDisplayedSuggestion()
-    if !empty(s.text)
-        return 1
-    endif
-    return 0
-endfunction
-]]
-function SelectOneLineForCopilotOrLiveGrep()
-    if vim.fn['CopilotVisible']() ~= 0 then
-        return vim.fn['copilot#AcceptLine']()
-    else
-        return LiveGrepOnRootDirectory()
-    end
-end
-vim.cmd[[
-inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() : "\<esc>f"
-" inoremap <script><silent><expr> <TAB> CopilotVisible() ? copilot#Accept() : "\<TAB>"
-inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
-]]
 map.set({ 'n' }, 'gpt', '<cmd>CopilotChatToggle<cr>', DefaultOpt())
 map.set({ 'v' }, 'gpt', ':CopilotChat', { silent = false, noremap = true })
 -- Custom buffer for CopilotChat
@@ -520,7 +497,6 @@ function CompileRun()
 end
 map.set({ 'n' }, '<leader>r', '<cmd>lua CompileRun()<cr>', DefaultOpt())
 
--- I don't know which plugin bind these two, this makes <c-w> slow
 map.del({ 'n' }, '<c-w>d')
 map.del({ 'n' }, '<c-w><c-d>')
 map.set({ 'n' }, '<c-w>', '<cmd>AerialToggle<cr>', DefaultOpt())
@@ -528,31 +504,10 @@ map.set({ 'i' }, '<c-w>', '<esc><cmd>AerialToggle<cr>', DefaultOpt())
 
 map.set({ 'n' }, '<c-e>', NvimTreeToggleOnRootDirectory, DefaultOpt())
 map.set({ 'i' }, '<c-e>', NvimTreeToggleOnRootDirectory, DefaultOpt())
-vim.cmd[[
-set pumheight=30
-nnoremap <leader>gcm <Plug>(coc-git-commit)
-inoremap <silent><expr> <C-j>
-        \ coc#pum#visible() ? coc#pum#next(1) :
-        \ CopilotVisible() ? copilot#Next() : "\<Down>"
-inoremap <silent><expr> <C-k>
-        \ coc#pum#visible() ? coc#pum#prev(1) :
-        \ CopilotVisible() ? copilot#Previous() : "\<Up>"
-inoremap <silent><expr> <c-space> CopilotVisible() ? "\<c-space>" : copilot#Suggest()
-]]
--- set nobackup
--- set nowritebackup
 
 vim.cmd[[
-inoremap <silent><expr> <CR>
-      \ coc#pum#visible() ? coc#pum#confirm() :
-      \ CopilotVisible() ? copilot#Accept() : "\<CR>"
-autocmd FileType vimwiki inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-              \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:VimwikiReturn 3 5\<CR>"
-autocmd FileType vimwiki inoremap <silent><buffer> <S-CR>
-              \ <Esc>:VimwikiReturn 2 2<CR>
-autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
 " This function is copied from vimwiki
-function! s:COPY_CR(normal, just_mrkr) abort
+function! COPY_CR(normal, just_mrkr) abort
     let res = vimwiki#tbl#kbd_cr()
     if res !=? ''
         exe 'normal! ' . res . "\<Right>"
@@ -561,15 +516,61 @@ function! s:COPY_CR(normal, just_mrkr) abort
     endif
     call vimwiki#lst#kbd_cr(a:normal, a:just_mrkr)
 endfunction
-autocmd FileType git*,markdown,copilot-chat inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-              \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call \<SID>COPY_CR(3, 5)\<CR>"
-autocmd FileType git*,markdown,copilot-chat inoremap <silent><buffer> <S-CR>
-              \ <Esc>:call <SID>COPY_CR(2, 2)<CR>
+autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><buffer> <S-CR>
+    \ <Esc>:call COPY_CR(2, 2)<CR>
+autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
 ]]
+if not CopilotDisable then
+    vim.cmd[[
+    function! CopilotVisible()
+        let s = copilot#GetDisplayedSuggestion()
+        if !empty(s.text)
+            return 1
+        endif
+        return 0
+    endfunction
+    inoremap <silent><expr> <C-j>
+        \ coc#pum#visible() ? coc#pum#next(1) :
+        \ CopilotVisible() ? copilot#Next() : "\<Down>"
+    inoremap <silent><expr> <C-k>
+        \ coc#pum#visible() ? coc#pum#prev(1) :
+        \ CopilotVisible() ? copilot#Previous() : "\<Up>"
+    autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+        \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
+    inoremap <silent><expr> <c-space> CopilotVisible() ? "\<c-space>" : copilot#Suggest()
+    inoremap <silent><expr> <C-c>
+        \ coc#pum#visible() ? coc#pum#cancel() :
+        \ CopilotVisible() ? copilot#Dismiss() : "\<C-c>"
+    inoremap <silent><expr> <CR>
+        \ coc#pum#visible() ? coc#pum#confirm() :
+        \ CopilotVisible() ? copilot#Accept() : "\<CR>"
+    inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() : "\<esc>f"
+    inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
+    ]]
+else
+    vim.cmd[[
+    inoremap <silent><expr> <C-j>
+            \ coc#pum#visible() ? coc#pum#next(1) : "\<Down>"
+    inoremap <silent><expr> <C-k>
+            \ coc#pum#visible() ? coc#pum#prev(1) : "\<Up>"
+    autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm() :
+        \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
+    inoremap <silent><expr> <c-space>
+        \ luaeval('require("fittencode").has_suggestions()') ? "\<c-space>" : '<cmd>lua require("fittencode").triggering_completion()<cr>'
+    inoremap <silent><expr> <C-c>
+        \ coc#pum#visible() ? coc#pum#cancel() :
+        \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").dismiss_suggestions()<cr>' : "\<C-c>"
+    inoremap <silent><expr> <CR>
+        \ coc#pum#visible() ? coc#pum#confirm() :
+        \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<CR>"
+    inoremap <silent><expr> <C-f> luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_line()<cr>' : "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>"
+    ]]
+end
+
 vim.cmd[[
-inoremap <silent><expr> <C-c>
-            \ coc#pum#visible() ? coc#pum#cancel() :
-            \ CopilotVisible() ? copilot#Dismiss() : "\<C-c>"
+" nnoremap <leader>gcm <Plug>(coc-git-commit)
+" set nobackup
+" set nowritebackup
 ]]
 
 -- generated by fitten code
@@ -596,6 +597,7 @@ inoremap <silent><expr> <C-c>
 --     os.execute(string.format("xdotool mousemove %d %d click 3", cursor_x, cursor_y))
 -- end
 -- map.set({'n', 'x'}, 'ga', '<rightmouse>', DefaultOpt())
+
 -- Apply codeAction to the selected region
 -- Example: `gaap` for current paragraph
 local opts = {silent = true, nowait = true, noremap = true}
@@ -607,20 +609,19 @@ map.set("n", "gac", "<Plug>(coc-codeaction-cursor)", opts)
 map.set("n", "gas", "<Plug>(coc-codeaction-source)", opts)
 -- this seems not to work, but I don't know why
 -- map.set("n", "gcl", "<Plug>(coc-codelens-action)", opts)
-local success, telescope = pcall(require, 'telescope.builtin')
+
+local telescope = require'telescope.builtin'
 function FindFilesOnRootDirectory()
     telescope.find_files({search_dirs = {GetRootDirectory()}, hidden = true})
 end
 function LiveGrepOnRootDirectory()
     telescope.live_grep({search_dirs = {GetRootDirectory()}, additional_args = {'--hidden'}})
 end
-if success then
-    map.set({ 'n', 'i' }, '<c-p>', FindFilesOnRootDirectory, DefaultOpt())
-    map.set({ 'n' }, '<c-f>', LiveGrepOnRootDirectory, DefaultOpt())
-    map.set({ 'n' }, '<leader><leader>', telescope.current_buffer_fuzzy_find, DefaultOpt())
---     map.set({ 'n' }, '<leader>fb', telescope.buffers, DefaultOpt())
---     map.set({ 'n' }, '<leader>fh', telescope.help_tags, DefaultOpt())
-end
+map.set({ 'n', 'i' }, '<c-p>', FindFilesOnRootDirectory, DefaultOpt())
+map.set({ 'n' }, '<c-f>', LiveGrepOnRootDirectory, DefaultOpt())
+map.set({ 'n' }, '<leader><leader>', telescope.current_buffer_fuzzy_find, DefaultOpt())
+-- map.set({ 'n' }, '<leader>fb', telescope.buffers, DefaultOpt())
+-- map.set({ 'n' }, '<leader>fh', telescope.help_tags, DefaultOpt())
 
 vim.cmd [[
 " find next placeholder and remove it.

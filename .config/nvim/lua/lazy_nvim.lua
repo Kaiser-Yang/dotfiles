@@ -10,7 +10,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     })
 end
 vim.opt.rtp:prepend(lazypath)
-
+CopilotDisable = false
 require('lazy').setup({
     -- TODO: undotree vim-which-key tabular
     spec = {
@@ -18,7 +18,7 @@ require('lazy').setup({
         {
             'luozhiya/fittencode.nvim',
             config = function()
-                require('fittencode').setup()
+                require'plugin_config/fittencode_config'
             end,
         },
         {

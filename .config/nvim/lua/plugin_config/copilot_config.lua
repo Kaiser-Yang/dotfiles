@@ -1,4 +1,6 @@
 vim.g.copilot_no_maps = true
--- vim.cmd [[
--- let g:copilot_filetypes = { '*': v:true }
--- ]]
+if CopilotDisable then
+    vim.cmd[[    
+    let g:copilot_filetypes = { '*': v:false }
+    ]]
+end
