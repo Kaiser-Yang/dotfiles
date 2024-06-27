@@ -14,6 +14,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
     -- TODO: undotree vim-which-key tabular
     spec = {
+        { import = 'plugin_config/copilotchat_config' },
         {
             'luozhiya/fittencode.nvim',
             config = function()

@@ -380,14 +380,28 @@ inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() :
 " inoremap <script><silent><expr> <TAB> CopilotVisible() ? copilot#Accept() : "\<TAB>"
 inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
 ]]
-vim.cmd[[
-augroup no_modify_files
-  autocmd!
-  autocmd BufEnter,FileType * if &readonly | nnoremap <buffer> i <cmd>Fitten start_chat<CR> | endif
-augroup END
-]]
-map.set({ 'n' }, 'gpt', require('fittencode').toggle_chat, DefaultOpt())
-map.set({ 'v' }, 'gpt', '<cmd>Fitten explain_code<cr>')
+map.set({ 'n' }, 'gpt', '<cmd>CopilotChatToggle<cr>', DefaultOpt())
+map.set({ 'v' }, 'gpt', ':CopilotChat', { silent = false, noremap = true })
+-- Custom buffer for CopilotChat
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "copilot-*",
+    callback = function()
+        vim.opt_local.relativenumber = true
+        vim.opt_local.number = true
+
+        -- insert at the end to chat with Copilot
+        vim.api.nvim_buf_set_keymap(0, 'n', 'i', 'Gi', { noremap = true, silent = true })
+        -- q for stop the chat
+        vim.api.nvim_buf_set_keymap(0, 'n', 'q', '<cmd>CopilotChatStop<cr>', { noremap = true, silent = true })
+
+        -- Get current filetype and set it to markdown if the current filetype is copilot-chat
+        local ft = vim.bo.filetype
+        if ft == "copilot-chat" then
+            vim.bo.filetype = "markdown"
+        end
+    end,
+})
+
 
 function GetRootDirectory()
     local rootDir = vim.fn.finddir(".root", ";")

@@ -188,29 +188,29 @@ NOTE: The `Q`'s behavior depending on the status. If current buffer is a termina
 There will only be one terminal globally, this is for some simply commands, such as run a single `python` file or check the `cpu` usage by `top` or `htop`. If you want something complex, you should depend on the `tmux` rather than `nvim` terminal. Besides, the terminal will auto open when entering a new tab if there has been one open terminal or auto close when entering a new tab if the one has been closed. There only one terminal buffer, so each terminal has same contents.
 
 ## Useful Plugins' Shortcuts
-| Shortcut          | Mode    | Description |
-| -                 | -       | - |
-| ys{motion}f{name} | N       | Surround the part with a function call |
-| dsf               | N       | Delete a function call, only parameters will be left |
-| csf{name}         | N       | Change a function call with a new one |
-| \<CR>             | N       | In file explorer, this will enter a directory or open a file |
-| \<BS>             | N       | In file explorer, this will go to the `..` directory. You can use `?` to see more mappings in file explorer. |
-| gc                | N       | Open `coc-command` |
-| gl                | N       | Open `coc-list` |
-| gy                | N       | List all the yanked contented |
-| \<LEADER>ay       | N       | Yank all contents |
-| \<ESC>            | I       | When use `telescope` to search, `<ESC>` will let you back to normal mode |
-| \<ESC>            | N       | When use `telescope` to search and you are in normal mode, `<ESC>` will quit `telescope` |
-| \<C-C>            | I       | When use `telescope` to search and you are in insert mode, `<C-C>` will quit `telescope` |
-| \<LEADER>n        | N       | Go to the right buffer shown in `bufline` |
-| \<LEADER>b        | N       | Go to the left buffer shown in `bufline` |
-| gpt               | N       | Toggle `fitten-code` window |
-| gpt               | V       | Explain the selected code |
-| bp                | N       | Buffer pick |
-| \<C-H>            | N T     | Move the cursor to the left window, this can jump over tmux |
-| \<C-J>            | N T     | Move the cursor to the bottom window, this can jump over tmux |
-| \<C-K>            | N T     | Move the cursor to the top window, this can jump over tmux |
-| \<C-L>            | N T     | Move the cursor to the right window, this can jump over tmux |
+| Shortcut          | Mode | Description |
+| -                 | -    | - |
+| ys{motion}f{name} | N    | Surround the part with a function call |
+| dsf               | N    | Delete a function call, only parameters will be left |
+| csf{name}         | N    | Change a function call with a new one |
+| \<CR>             | N    | In file explorer, this will enter a directory or open a file |
+| \<BS>             | N    | In file explorer, this will go to the `..` directory. You can use `?` to see more mappings in file explorer. |
+| gc                | N    | Open `coc-command` |
+| gl                | N    | Open `coc-list` |
+| gy                | N    | List all the yanked contented |
+| \<LEADER>ay       | N    | Yank all contents |
+| \<ESC>            | I    | When use `telescope` to search, `<ESC>` will let you back to normal mode |
+| \<ESC>            | N    | When use `telescope` to search and you are in normal mode, `<ESC>` will quit `telescope` |
+| \<C-C>            | I    | When use `telescope` to search and you are in insert mode, `<C-C>` will quit `telescope` |
+| \<LEADER>n        | N    | Go to the right buffer shown in `bufline` |
+| \<LEADER>b        | N    | Go to the left buffer shown in `bufline` |
+| gpt               | N    | Toggle `copilot-chat` window |
+| gpt               | V    | Input `:CopilotChat`, you can use `<TAB>` to trigger menu list of all commands |
+| bp                | N    | Buffer pick |
+| \<C-H>            | N T  | Move the cursor to the left window, this can jump over tmux |
+| \<C-J>            | N T  | Move the cursor to the bottom window, this can jump over tmux |
+| \<C-K>            | N T  | Move the cursor to the top window, this can jump over tmux |
+| \<C-L>            | N T  | Move the cursor to the right window, this can jump over tmux |
 
 # Contribution
 If you have any suggestions or find any bugs, please feel free to open an issue or pull request.
