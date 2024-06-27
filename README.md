@@ -252,7 +252,7 @@ There will only be one terminal globally, this is for some simply commands, such
 | \<BS>             | N    | In file explorer, this will go to the `..` directory. You can use `?` to see more mappings in file explorer. |
 | gc                | N    | Open `coc-command` |
 | gl                | N    | Open `coc-list` |
-| gy                | N    | List all the yanked contented |
+| gy                | N    | List all the yanked contents |
 | \<LEADER>ay       | N    | Yank all contents |
 | \<ESC>            | I    | When use `telescope` to search, `<ESC>` will let you back to normal mode |
 | \<ESC>            | N    | When use `telescope` to search and you are in normal mode, `<ESC>` will quit `telescope` |
