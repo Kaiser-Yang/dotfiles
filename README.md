@@ -10,7 +10,7 @@ My own configure files for UNIX/Linux tools.
 
 NOTE: Before copying the configuration files to your `$HOME` directory, the original files will be backed up to the `backup` directory in this repository. You can use `./dot_files.py recover` to recover the original files.
 
-## More information
+## More Information
 In `dot_files.py`, there are two variables:
 
 ```python
