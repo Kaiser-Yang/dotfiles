@@ -220,10 +220,11 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 ## Some Known Bugs
 ### Unfixed
 * When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line.
-* When the first time open terminal, it may be wrong highlight. This seems that the `treesitter` doesn't load yet, reopen the terminal will solve this.
 
 ### Fixed
 * `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file, `auto-pairs` will be loaded.
+* When you use `:q` to quit the terminal, the terminal cannot be opened again. This is because we will record the terminal's status when you use `Q`, but when you use `:q`, we will not record the terminal's status. So next time to open the terminal will think the terminal is visible, and hide it, which will trigger a error. The best way to quit the terminal is to use `Q`.
+* When the first time open terminal, it may be wrong highlight. I've disabled the `nvim-treesitter` for `fish` and `bash` to solve this.
 
 ## Basic Shortcuts
 | Shortcut  | Mode    | Description |

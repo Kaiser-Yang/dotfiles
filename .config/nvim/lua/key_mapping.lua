@@ -95,23 +95,30 @@ function ToggleTerm()
     -- Visible, hide it
     if term_visible then
         local term_win = getTermWinCurrentTab()
+        if term_win == -1 then
+            term_visible = false
+            goto create_term_win
+        end
         hideWin(term_win)
         term_visible = false
-    else
-        -- Exists but hidden, show it
-        if validTerminalBuf(term_buf) then
-            openTerminal()
-            adjustTermSize()
-        -- Not exist or invalid buffer
-        else
-            openTerminal()
-            term_buf = vim.api.nvim_get_current_buf()
-            adjustTermSize()
-            recordTermSize()
-            setBufHiddenUnlisted(term_buf)
-        end
-        term_visible = true
+        return
     end
+::create_term_win::
+    -- Exists but hidden, show it
+    if validTerminalBuf(term_buf) then
+        openTerminal()
+        adjustTermSize()
+        vim.cmd'setlocal syntax=off'
+    -- Not exist or invalid buffer
+    else
+        openTerminal()
+        term_buf = vim.api.nvim_get_current_buf()
+        adjustTermSize()
+        recordTermSize()
+        setBufHiddenUnlisted(term_buf)
+        vim.cmd'setlocal syntax=off'
+    end
+    term_visible = true
 end
 map.set({'i', 'n', 't' }, '<c-t>', '<cmd>lua ToggleTerm()<cr>', DefaultOpt())
 function ToggleTermOnTabEnter()
