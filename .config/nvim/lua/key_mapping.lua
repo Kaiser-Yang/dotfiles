@@ -304,8 +304,21 @@ map.set({ 'n' }, '<down>', '<cmd>lua CalculateNewSize(-5)<cr><cmd>res -5<cr>', D
 map.set({ 'n' }, '<left>', '<cmd>vertical resize -5<cr>', DefaultOpt())
 map.set({ 'n' }, '<right>', '<cmd>vertical resize +5<cr>', DefaultOpt())
 
-map.set({ 'v' }, 'J', '<cmd>m \'>+1<CR>gv=gv', DefaultOpt())
-map.set({ 'v' }, 'K', '<cmd>m \'<-2<CR>gv=gv', DefaultOpt())
+-- TODO relative line number does not work well
+function MoveSelectedLines(count, direction)
+    if count == nil or count == 0 then
+        count = 1
+    end
+    if direction == 'down' then
+        vim.cmd(string.format(":'<,'>move '>+%d", count))
+        vim.api.nvim_command('normal! gv')
+    elseif direction == 'up' then
+        vim.cmd(string.format(":'<,'>move '<-%d", count + 1))
+        vim.api.nvim_command('normal! gv')
+    end
+end
+vim.api.nvim_set_keymap('v', 'J', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'down')<CR>", DefaultOpt())
+vim.api.nvim_set_keymap('v', 'K', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'up')<CR>", DefaultOpt())
 
 map.set({ 'n' }, '[g', '<Plug>(coc-git-prevchunk)', DefaultOpt())
 map.set({ 'n' }, ']g', '<Plug>(coc-git-nextchunk)', DefaultOpt())

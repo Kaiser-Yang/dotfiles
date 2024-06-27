@@ -171,6 +171,22 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 ### Fixed
 * `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file, `auto-pairs` will be loaded.
 
+## Basic Shortcuts
+| Shortcut | Mode    | Description |
+| -        | -       | - |
+| \<C-T>   | N I T   | Toggle a terminal |
+| Q        | N       | Quit a window, quit a tab or unload a buffer, not save |
+| S        | N       | Similar with `Q`, but this will execute 'write' first |
+| \<C-N>   | I V X T | Back to normal mode in terminal |
+| \<C-N>   | N       | Same with `<ESC>` |
+| J        | V       | Move selected content down, support `{count}J` |
+| K        | V       | Move selected content up, support `{count}K` |
+
+NOTE: The `Q`'s behavior depending on the status. If current buffer is a terminal, `nvimtree`, `aerial`, or `help`, this will use `bd!` to unload the buffer. If current tab has more than one window whose buffer is a visible one, `Q` will use `:quit!` to close window, but not unload the buffer. If there are more than one tab and only one window in current tab, this will close the whole tab and unload the empty `noname` buffers and other hidden buffers. If there only one tab, this will unload current buffer.
+
+## Terminal Note
+There will only be one terminal globally, this is for some simply commands, such as run a single `python` file or check the `cpu` usage by `top` or `htop`. If you want something complex, you should depend on the `tmux` rather than `nvim` terminal. Besides, the terminal will auto open when entering a new tab if there has been one open terminal or auto close when entering a new tab if the one has been closed. There only one terminal buffer, so each terminal has same contents.
+
 ## Useful Plugins' Shortcuts
 | Shortcut          | Mode    | Description |
 | -                 | -       | - |
@@ -191,20 +207,10 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 | gpt               | N       | Toggle `fitten-code` window |
 | gpt               | V       | Explain the selected code |
 | bp                | N       | Buffer pick |
-| \<C-T>            | N I T   | Toggle a terminal |
 | \<C-H>            | N T     | Move the cursor to the left window, this can jump over tmux |
 | \<C-J>            | N T     | Move the cursor to the bottom window, this can jump over tmux |
 | \<C-K>            | N T     | Move the cursor to the top window, this can jump over tmux |
 | \<C-L>            | N T     | Move the cursor to the right window, this can jump over tmux |
-| \<C-N>            | I V X T | Back to normal mode in terminal |
-| \<C-N>            | N       | Same with `<ESC>` |
-| Q                 | N       | Quit a window, quit a tab or unload a buffer, not save |
-| S                 | N       | Similar with `Q`, but this will execute 'write' first |
-
-NOTE: The `Q`'s behavior depending on the status. If current buffer is a terminal, `nvimtree`, `aerial`, or `help`, this will use `bd!` to unload the buffer. If current tab has more than one window whose buffer is a visible one, `Q` will use `:quit!` to close window, but not unload the buffer. If there are more than one tab and only one window in current tab, this will close the whole tab and unload the empty `noname` buffers and other hidden buffers. If there only one tab, this will unload current buffer.
-
-## Terminal Note
-There will only be one terminal globally, this is for some simply commands, such as run a single `python` file or check the `cpu` usage by `top` or `htop`. If you want something complex, you should depend on the `tmux` rather than `nvim` terminal. Besides, the terminal will auto open when entering a new tab if there has been one open terminal or auto close when entering a new tab if the one has been closed. There only one terminal buffer, so each terminal has same contents.
 
 # Contribution
 If you have any suggestions or find any bugs, please feel free to open an issue or pull request.
