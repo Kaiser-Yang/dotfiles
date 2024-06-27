@@ -1,5 +1,8 @@
 # back up files
 backup
 
+# markdown backup directory
+markdownBackup
+
 # log files
 *.log

@@ -1,22 +1,76 @@
 # dotfiles
 My own configure files for UNIX/Linux tools.
 
-You can use `./dot_files.py update` to append contents to the `$HOME` directory automatically, and see the file for more details.
+## Quick Start
+1. Use the command `git clone https://github.com/Kaiser-Yang/dotfiles.git` to clone this repository.
+2. Use the command `cd dotfiles` to enter the directory. Run `./dot_files.py init` to install `tmux`, `fish`, `vim` and `nvim`.
+3. Use the command `./dot_files.py` to only copy the configuration files to your `$HOME` directory.
+4. You need to install `nodejs` and `yarn` first (If you use `./dot_files.py init` this has been done).
+5. Run `vim` or `nvim` to install plugins. 
 
-You can use `./dot_files.py recover` to copy the backed up files to `$HOME` directory automatically, and see the file for more details.
+NOTE: Before copying the configuration files to your `$HOME` directory, the original files will be backed up to the `backup` directory in this repository. You can use `./dot_files.py recover` to recover the original files.
 
-You can use `./dot_files.py`, which is same with `./dot_files.py recover && ./dot_files.py update`.
+## More information
+In `dot_files.py`, there are two variables:
 
-You can use `./dot_files.py init` for the first time install, which will install all plugins for vim and install fish and then set `fish` be your default shell, see the file for more details.
+```python
+ignore_file = set(["./.git", "./LICENSE", "./README.md",
+                   "./dot_files.py", "./.gitignore", "./replace_md_image.py",
+                   "./installer", "./vscode-setting"])
+copy_file = set(["./.vimrc", "./.vim", "./.tmux.conf", "./proxy.sh",
+                 "./proxy.fish", "./.config/nvim"])
+```
 
-NOTE: if you want to use `./dot_files.py init`, be sure your `conda` is deactivated (there is no base or other `conda` name on your screen), and make sure you have `Python` order than `3.8` locally, because `ycm` can not be installed by this script within `conda`.
+The files or directories in `ignore_file` will not be copied to your `$HOME` directory, and the files or directories in `copy_file` will be copied to your `$HOME` directory. The contents of files which are not in those two sets will be appended to the files in your `$HOME` directory.
 
-NOTE: There are `start_symbol_kaiserqzyue` and `end_symbol_kaiserqzyue` in every dot file. If you want to recover the dot files, you just need to delete contents from `start_symbol_kaiserqzyue` till `end_symbol_kaiserqzyue`. You can do this by `vim` easily: `gg/start_symbol_kaiserqzyue<Enter>d/end_symbol_kaiserqzyue<Enter>dd`. Besides, you can use `./dot_files.py recover` to recover, if your dot files have been updated after using `./dot_files.py update`.
+If you only want to install the configurations of `vim`, you just need to add `./.vimrc` and `./.vim` to `copy_file`, and add all other directory to `ignore_file`. Then run `./dot_files.py`.
+
+If you only want to install the configurations of `nvim`, you just need to add `./.config/nvim` to `copy_file`, and add all other directory to `ignore_file`. Then run `./dot_files.py`.
+
+If you only want to install the configurations of `tmux`, you just need to add `./.tmux.conf` to `copy_file`, and add all other directory to `ignore_file`. Then run `./dot_files.py`.
+
+If you only want to install the configurations of `fish`, you just need to add `./proxy.fish` to `copy_file`, and add all other directory, except for `.config/fish`, to `ignore_file`. Then run `./dot_files.py`.
+
+Besides, there are other types parameters you can pass to `dot_files.py`:
+* `update`: only update the configurations depending on the `ignore_file` and `copy_file`. This will backup the original files to `backup` directory first.
+* `recover`: recover all files from backup directory to `$HOME` directory.
+* `init`: install all plugins for `vim` and `nvim`, and install `fish` and set `fish` be your default shell.
+
+Indeed, if you run `./dot_files.py` with no parameters, it is same with `./dot_files.py recover && ./dot_files.py update`. So I strongly recommend you to use `./dot_files.py` to update the configurations.
+
+# Screenshots
+This part will only show the screenshots of `nvim`.
+
+## Terminal
+![](README.assets/20240627185327.png)
+
+## Telescope
+![](README.assets/20240627185429.png)
+
+## Completion of coc.nvim
+![](README.assets/20240627185530.png)
+
+## Inlay Hints from Copilot
+![](README.assets/20240627185713.png)
+
+## Copilot Chat
+![](README.assets/20240627185857.png)
+
+## Nvim Tree
+![](README.assets/20240627190204.png)
+
+## Markdown Preview
+![](README.assets/20240627190051.png)
+
+## Auto Download and Replace Images in Markdown
+There is a file called `replace_md_image.py`, this file receive a directory as a parameter, and it will download all the images in the markdown files (recursively) in the directory and replace the image links with the local links. This will backup your markdown files first:
+
+![](README.assets/20240627190253.png)
 
 # Vim Shortcuts
 Note that my leader key is `Space`.
 
-Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V` means visual mode, and `N I` means normal mode and insert mode.
+Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V` means visual mode, `T` means terminal mode, `X` means select mode, and `N I` means normal mode and insert mode.
 
 ## Save and Quit
 | Shortcut | Mode | Description |
@@ -172,15 +226,16 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 * `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file, `auto-pairs` will be loaded.
 
 ## Basic Shortcuts
-| Shortcut | Mode    | Description |
-| -        | -       | - |
-| \<C-T>   | N I T   | Toggle a terminal |
-| Q        | N       | Quit a window, quit a tab or unload a buffer, not save |
-| S        | N       | Similar with `Q`, but this will execute 'write' first |
-| \<C-N>   | I V X T | Back to normal mode in terminal |
-| \<C-N>   | N       | Same with `<ESC>` |
-| J        | V       | Move selected content down, support `{count}J` |
-| K        | V       | Move selected content up, support `{count}K` |
+| Shortcut  | Mode    | Description |
+| -         | -       | - |
+| \<C-T>    | N I T   | Toggle a terminal |
+| Q         | N       | Quit a window, quit a tab or unload a buffer, not save |
+| S         | N       | Similar with `Q`, but this will execute 'write' first |
+| \<C-N>    | I V X T | Back to normal mode in terminal |
+| \<C-N>    | N       | Same with `<ESC>` |
+| J         | V       | Move selected content down, support `{count}J` |
+| K         | V       | Move selected content up, support `{count}K` |
+| <LEADER>r | N       | Run the current file depends on its filetype, this will onpen a terminal for some filetypes |
 
 NOTE: The `Q`'s behavior depending on the status. If current buffer is a terminal, `nvimtree`, `aerial`, or `help`, this will use `bd!` to unload the buffer. If current tab has more than one window whose buffer is a visible one, `Q` will use `:quit!` to close window, but not unload the buffer. If there are more than one tab and only one window in current tab, this will close the whole tab and unload the empty `noname` buffers and other hidden buffers. If there only one tab, this will unload current buffer.
 

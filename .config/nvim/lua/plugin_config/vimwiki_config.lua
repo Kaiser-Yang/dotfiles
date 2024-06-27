@@ -33,8 +33,6 @@ vim.g.vimwiki_global_ext = 1
 
 vim.g.vimwiki_table_reduce_last_col = 1
 
-vim.api.nvim_set_var('vimwiki_ext2syntax', {})
-
 vim.g.vimwiki_ext2syntax = vim.empty_dict()
 
 vim.g.vimwiki_conceallevel = 0
