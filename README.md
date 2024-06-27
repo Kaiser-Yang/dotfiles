@@ -269,4 +269,4 @@ There will only be one terminal globally, this is for some simply commands, such
 | \<C-L>            | N T  | Move the cursor to the right window, this can jump over tmux |
 
 # Contribution
-If you have any suggestions or find any bugs, please feel free to open an issue or pull request.
+If you have any suggestion or find any bug, please feel free to open an issue or pull request.

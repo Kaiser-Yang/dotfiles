@@ -69,9 +69,9 @@ end
 # function for proxy setting
 function proxy
     if ! test -e ~/proxy.fish
-        echo "Can not find file: ~/proxy.fish"
+        echo "Can not find file: ~/proxy.fish" 1>&2
     else if test (count $argv) -gt 1
-        echo "Usage: proxy [set|unset|debug]"
+        echo "Usage: proxy [set|unset|debug]" 1>&2
     else if test (count $argv) -eq 0
         source ~/proxy.fish set
     else
@@ -79,7 +79,7 @@ function proxy
             case 'set' 'unset' 'debug'
                 source ~/proxy.fish $argv[1]
             case '*'
-                echo "Usage: proxy [set|unset|debug]"
+                echo "Usage: proxy [set|unset|debug]" 1>&2
         end
     end
 end

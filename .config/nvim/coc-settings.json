@@ -25,6 +25,7 @@
     "git.topRemovedSign.hlGroup": "GitGutterDelete",
     "git.changeRemovedSign.hlGroup": "GitGutterChangeDelete",
     "yank.enableCompletion": false,
+    "coc.preferences.extensionUpdateCheck": "weekly",
     "diagnostic-languageserver.filetypes": {
         "vim": "vint",
         "markdown": [
@@ -40,7 +41,6 @@
             "cmakelint"
         ],
     },
-    "coc.preferences.extensionUpdateCheck": "weekly",
     "lightbulb.text": {
         "default": "💡",
     },

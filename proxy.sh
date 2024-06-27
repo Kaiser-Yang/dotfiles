@@ -56,6 +56,6 @@ elif [ "$1" = "unset" ]; then
 elif [ "$1" = "debug" ]; then
     debugProxy
 else
-    echo "Unsupported arguments."
+    echo "Unsupported arguments." 1>&2
 fi
 
