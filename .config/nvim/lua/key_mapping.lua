@@ -203,7 +203,8 @@ end
 function QuitNotSaveOnBuffer()
     local terminal = validTerminalBuf(vim.api.nvim_get_current_buf())
     local fileType = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype")
-    if terminal or (not currentBufferInSingleWindow() and AutoCloseFileType[fileType]) then
+    if terminal or (not currentBufferInSingleWindow() and AutoCloseFileType[fileType]) or
+        not bufVisible(vim.api.nvim_get_current_buf()) then
         if terminal then
             term_visible = false
         end
@@ -546,9 +547,9 @@ function! s:COPY_CR(normal, just_mrkr) abort
     endif
     call vimwiki#lst#kbd_cr(a:normal, a:just_mrkr)
 endfunction
-autocmd FileType git* inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+autocmd FileType git*,markdown,copilot-chat inoremap <silent><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
               \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call \<SID>COPY_CR(3, 5)\<CR>"
-autocmd FileType git* inoremap <silent><buffer> <S-CR>
+autocmd FileType git*,markdown,copilot-chat inoremap <silent><buffer> <S-CR>
               \ <Esc>:call <SID>COPY_CR(2, 2)<CR>
 ]]
 vim.cmd[[
@@ -609,58 +610,43 @@ end
 
 vim.cmd [[
 " find next placeholder and remove it.
-autocmd Filetype markdown inoremap<buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>c4l
-autocmd Filetype git* inoremap<buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>c4l
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>c4l
 
 " bold
-autocmd Filetype markdown inoremap<buffer> ,b ****<++><Esc>F*hi
-autocmd Filetype git* inoremap<buffer> ,b ****<++><Esc>F*hi
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,b ****<++><Esc>F*hi
 
 " italic
-autocmd Filetype markdown inoremap<buffer> ,i **<++><Esc>F*i
-autocmd Filetype git* inoremap<buffer> ,i **<++><Esc>F*i
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,i **<++><Esc>F*i
 
 " for code blocks
-autocmd Filetype markdown inoremap<buffer> ,c <CR><CR>```<CR>```<CR><CR><++><Esc>3kA
-autocmd Filetype git* inoremap<buffer> ,c <CR><CR>```<CR>```<CR><CR><++><Esc>3kA
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,c <CR><CR>```<CR>```<CR><CR><++><Esc>3kA
 
 " for pictures, mostly, we don't add pictures' descriptions
-autocmd Filetype markdown inoremap<buffer> ,p <CR><CR>![]()<CR><CR><++><Esc>2k0f(a
-autocmd Filetype git* inoremap<buffer> ,p <CR><CR>![]()<CR><CR><++><Esc>2k0f(a
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,p <CR><CR>![]()<CR><CR><++><Esc>2k0f(a
 
 " for for links <a> are html links tag, so we use ,a
-autocmd Filetype markdown inoremap<buffer> ,a [](<++>)<++><Esc>F[a
-autocmd Filetype git* inoremap<buffer> ,a [](<++>)<++><Esc>F[a
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,a [](<++>)<++><Esc>F[a
 
 " for headers
-autocmd Filetype markdown inoremap<buffer> ,1 #<Space>
-autocmd Filetype git* inoremap<buffer> ,1 #<Space>
-autocmd Filetype markdown inoremap<buffer> ,2 ##<Space>
-autocmd Filetype git* inoremap<buffer> ,2 ##<Space>
-autocmd Filetype markdown inoremap<buffer> ,3 ###<Space>
-autocmd Filetype git* inoremap<buffer> ,3 ###<Space>
-autocmd Filetype markdown inoremap<buffer> ,4 ####<Space>
-autocmd Filetype git* inoremap<buffer> ,4 ####<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,1 #<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,2 ##<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,3 ###<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,4 ####<Space>
 
 " delete lines
-autocmd Filetype markdown inoremap<buffer> ,d ~~~~<++><Esc>F~hi
-autocmd Filetype git* inoremap<buffer> ,d ~~~~<++><Esc>F~hi
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,d ~~~~<++><Esc>F~hi
 
 " tilde
-autocmd Filetype markdown inoremap<buffer> ,t ``<++><Esc>F`i
-autocmd Filetype git* inoremap<buffer> ,t ``<++><Esc>F`i
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,t ``<++><Esc>F`i
 
 " math formulas
-autocmd Filetype markdown inoremap<buffer> ,M <CR><CR>$$<CR><CR>$$<CR><CR><++><Esc>3kA
-autocmd Filetype git* inoremap<buffer> ,M <CR><CR>$$<CR><CR>$$<CR><CR><++><Esc>3kA
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,M <CR><CR>$$<CR><CR>$$<CR><CR><++><Esc>3kA
 
 " math formulas in line
-autocmd Filetype markdown inoremap<buffer> ,m $$<++><Esc>F$i
-autocmd Filetype git* inoremap<buffer> ,m $$<++><Esc>F$i
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,m $$<++><Esc>F$i
 
 " newline but not new paragraph
-autocmd FileType markdown inoremap<buffer> ,n <br><CR>
-autocmd FileType git* inoremap<buffer> ,n <br><CR>
+autocmd FileType git*,markdown,copilot-chat inoremap<buffer> ,n <br><CR>
 
 autocmd FileType git* set cc=50,72
 ]]
