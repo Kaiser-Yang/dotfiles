@@ -16,7 +16,7 @@
     "python.formatting.autopep8Args": [
         "--max-line-length=100",
     ],
-    "suggest.noselect": false,
+    "suggest.noselect": true,
     "diagnostic.refreshOnInsertMode": true,
     "git.signPriority": 4096,
     "git.addedSign.hlGroup": "GitGutterAdd",
