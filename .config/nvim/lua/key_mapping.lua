@@ -394,7 +394,6 @@ function GetRootDirectory()
             rootDir = rootDir.sub(1, -2)
         end
         rootDir = rootDir:match("(.+)/[^/]*$")
-        print(rootDir)
         return rootDir
     else
         local gitDir = vim.fn.system("git rev-parse --show-toplevel 2> /dev/null")
