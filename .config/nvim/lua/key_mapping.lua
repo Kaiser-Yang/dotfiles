@@ -473,6 +473,10 @@ local function OpenNvimTreeOnStart(data)
 end
 vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = OpenNvimTreeOnStart })
 
+local function feedkeys(keys, mode)
+    local termcodes = vim.api.nvim_replace_termcodes(keys, true, true, true)
+    vim.api.nvim_feedkeys(termcodes, mode, true)
+end
 function CompileRun()
     -- ignore the error
     -- this usually happens on readonly file
@@ -511,6 +515,7 @@ function CompileRun()
         ToggleTerm()
     end
     vim.api.nvim_set_current_win(getTermWinCurrentTab())
+    feedkeys('G', 'n')
     local chan_id = vim.api.nvim_buf_get_var(term_buf, "terminal_job_id")
     vim.fn.chansend(chan_id, command .. "\n")
 end
@@ -539,10 +544,6 @@ autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><buffer> <S
     \ <Esc>:call COPY_CR(2, 2)<CR>
 autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
 ]]
-local function feedkeys(keys, mode)
-    local termcodes = vim.api.nvim_replace_termcodes(keys, true, true, true)
-    vim.api.nvim_feedkeys(termcodes, mode, true)
-end
 vim.cmd[[
 " this key mapping is not used, this if for trigger coc#pum#cancel in CancelCompletion()
 inoremap <expr><silent> <c-f12> coc#pum#cancel()
