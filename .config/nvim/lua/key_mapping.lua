@@ -494,6 +494,8 @@ function CompileRun()
         command = string.format('time python3 %s', filename)
     elseif vim.bo.filetype == 'html' then
         command = string.format('wslview %s &', filename)
+    elseif vim.bo.filetype == 'lua' then
+        command = string.format('lua %s', filename)
     elseif vim.bo.filetype == 'markdown' then
         vim.api.nvim_command('MarkdownPreviewToggle')
         return
