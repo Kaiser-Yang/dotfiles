@@ -275,6 +275,7 @@ There will only be one terminal globally, this is for some simply commands, such
 | \<C-L>            | N T  | Move the cursor to the right window, this can jump over tmux |
 | \<C-D>            | I    | Scroll down the completion preview window, if there is one |
 | \<C-U>            | I    | Scroll up the completion preview window, if there is one |
+| \<C-C>            | I    | Close all completion when no selection in coc; close coc completion when there is a selection of coc; close copilot completion when coc invisible and copilit visible; back to normal |
 
 # Contribution
 If you have any suggestion or find any bug, please feel free to open an issue or pull request.
