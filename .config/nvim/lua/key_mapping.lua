@@ -390,7 +390,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 function GetRootDirectory()
     local rootDir = vim.fn.finddir(".root", ";")
     if rootDir ~= "" then
-        return rootDir
+        return rootDir .. '/..'
     else
         local gitDir = vim.fn.system("git rev-parse --show-toplevel 2> /dev/null")
         if gitDir ~= "" and vim.fn.filereadable(gitDir) then
