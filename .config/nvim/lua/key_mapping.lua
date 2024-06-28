@@ -340,6 +340,10 @@ map.del({ 'n' }, 'gcc')
 map.set({ 'n' }, 'gc', ':<C-u>CocList commands<CR>', DefaultOpt())
 map.set({ 'n' }, 'H', '<Plug>(coc-fix-current)', DefaultOpt())
 map.set({ 'n' }, '<leader>i', ':<C-u>CocCommand document.toggleInlayHint<CR>', DefaultOpt())
+vim.cmd[[
+inoremap <silent><nowait><expr> <c-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<c-u>"
+inoremap <silent><nowait><expr> <c-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<c-d>"
+]]
 function CocShowDocument()
     local cw = vim.fn.expand('<cword>')
     if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
@@ -549,14 +553,14 @@ if not CopilotDisable then
     inoremap <silent><expr> <C-k>
         \ coc#pum#visible() ? coc#pum#prev(1) :
         \ CopilotVisible() ? copilot#Previous() : "\<Up>"
-    autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+    autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#has_item_selected() ? coc#pum#confirm()
         \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
     inoremap <silent><expr> <c-space> CopilotVisible() ? "\<c-space>" : copilot#Suggest()
     inoremap <silent><expr> <C-c>
         \ coc#pum#visible() ? coc#pum#cancel() :
         \ CopilotVisible() ? copilot#Dismiss() : "\<C-c>"
     inoremap <silent><expr> <CR>
-        \ coc#pum#visible() ? coc#pum#confirm() :
+        \ coc#pum#has_item_selected() ? coc#pum#confirm() :
         \ CopilotVisible() ? copilot#Accept() : "\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>"
     inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() : "\<esc>f"
     inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
@@ -567,7 +571,7 @@ else
             \ coc#pum#visible() ? coc#pum#next(1) : "\<Down>"
     inoremap <silent><expr> <C-k>
             \ coc#pum#visible() ? coc#pum#prev(1) : "\<Up>"
-    autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#visible() ? coc#pum#confirm() :
+    autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#has_item_selected() ? coc#pum#confirm() :
         \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
     inoremap <silent><expr> <c-space>
         \ luaeval('require("fittencode").has_suggestions()') ? "\<c-space>" : '<cmd>lua require("fittencode").triggering_completion()<cr>'
@@ -575,7 +579,7 @@ else
         \ coc#pum#visible() ? coc#pum#cancel() :
         \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").dismiss_suggestions()<cr>' : "\<C-c>"
     inoremap <silent><expr> <CR>
-        \ coc#pum#visible() ? coc#pum#confirm() :
+        \ coc#pum#has_item_selected() ? coc#pum#confirm() :
         \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>"
     inoremap <silent><expr> <C-f> luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_line()<cr>' : "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>"
     ]]

@@ -274,6 +274,8 @@ There will only be one terminal globally, this is for some simply commands, such
 | \<C-J>            | N T  | Move the cursor to the bottom window, this can jump over tmux |
 | \<C-K>            | N T  | Move the cursor to the top window, this can jump over tmux |
 | \<C-L>            | N T  | Move the cursor to the right window, this can jump over tmux |
+| \<C-D>            | I    | Scroll down the completion preview window, if there is one |
+| \<C-U>            | I    | Scroll up the completion preview window, if there is one |
 
 # Contribution
 If you have any suggestion or find any bug, please feel free to open an issue or pull request.

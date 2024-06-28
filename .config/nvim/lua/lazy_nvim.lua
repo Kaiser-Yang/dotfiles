@@ -77,7 +77,8 @@ require('lazy').setup({
         },
         {
             'neoclide/coc.nvim',
-            branch = 'release',
+            branch = 'master',
+            build = 'npm ci',
             init = function() require('plugin_config/coc_config') end
         },
         {
