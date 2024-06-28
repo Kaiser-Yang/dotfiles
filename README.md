@@ -16,7 +16,7 @@ In `dot_files.py`, there are two variables:
 ```python
 ignore_file = set(["./.git", "./LICENSE", "./README.md",
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py",
-                   "./installer", "./vscode-setting"])
+                   "./installer", "./vscode-setting", "./README.assets", "./markdownBackup"])
 copy_file = set(["./.vimrc", "./.vim", "./.tmux.conf", "./proxy.sh",
                  "./proxy.fish", "./.config/nvim"])
 ```
@@ -230,6 +230,7 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 * `<CR>` can not auto indent.
 * `telescope` can not find files and contents if there is a `.root` directory.
 * Pyhton `gd` does not work.
+* No hover highlight.
 
 ## Basic Shortcuts
 | Shortcut  | Mode    | Description |

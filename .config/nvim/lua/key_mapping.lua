@@ -353,6 +353,12 @@ function CocShowDocument()
         vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
     end
 end
+vim.api.nvim_create_autocmd("CursorHold", {
+    pattern = "*",
+    callback = function()
+        vim.fn.CocActionAsync('highlight')
+    end,
+})
 map.set({ 'n' }, '<leader>d', CocShowDocument, DefaultOpt())
 map.set({ 'n' }, 'gy', ':<C-u>CocList -A --normal yank<CR>', DefaultOpt())
 vim.g.coc_snippet_next = "<TAB>"
