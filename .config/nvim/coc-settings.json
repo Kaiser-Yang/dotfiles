@@ -3,6 +3,7 @@
         ".root",
         ".git",
     ],
+    "signature.enable": false,
     "suggest.labelMaxLength": 37,
     "suggest.noselect": true,
     "cmake.lsp.enable": true,
