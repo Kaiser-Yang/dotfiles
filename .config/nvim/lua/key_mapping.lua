@@ -259,8 +259,7 @@ map.set({ 't' }, '<c-h>', '<c-\\><c-n><cmd>TmuxNavigateLeft<cr>', DefaultOpt())
 map.set({ 't' }, '<c-j>', '<c-\\><c-n><cmd>TmuxNavigateDown<cr>', DefaultOpt())
 map.set({ 't' }, '<c-k>', '<c-\\><c-n><cmd>TmuxNavigateUp<cr>', DefaultOpt())
 map.set({ 't' }, '<c-l>', '<c-\\><c-n><cmd>TmuxNavigateRight<cr>', DefaultOpt())
-map.set({ 'i', 'v', 'x', 'c', 'n' }, '<c-n>', '<esc>', DefaultOpt())
-map.set({ 't' }, '<c-n>', '<c-\\><c-n>', DefaultOpt())
+map.set({ 't', 'i', 'c', 'x', 'v', 'n' }, '<c-n>', '<c-\\><c-n>', DefaultOpt())
 map.set({ 'n' }, '<leader>J', '<c-w>J', DefaultOpt())
 map.set({ 'n' }, '<leader>K', '<c-w>K', DefaultOpt())
 map.set({ 'n' }, '<leader>H', '<c-w>H', DefaultOpt())
@@ -538,7 +537,27 @@ autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><buffer> <S
     \ <Esc>:call COPY_CR(2, 2)<CR>
 autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
 ]]
+local function feedkeys(keys, mode)
+    local termcodes = vim.api.nvim_replace_termcodes(keys, true, true, true)
+    vim.api.nvim_feedkeys(termcodes, mode, true)
+end
+vim.cmd[[
+" this key mapping is not used, this if for trigger coc#pum#cancel in CancelCompletion()
+inoremap <expr><silent> <c-f12> coc#pum#cancel()
+]]
 if not CopilotDisable then
+    function CancelCompletion()
+        if vim.fn['coc#pum#has_item_selected']() == 1 then
+            feedkeys("<c-f12>", 'i')
+        elseif vim.fn['coc#pum#visible']() == 1 then
+            feedkeys("<c-f12>", 'i')
+            vim.defer_fn(vim.fn['copilot#Dismiss'], 0)
+        elseif vim.fn['CopilotVisible']() == 1 then
+            vim.fn['copilot#Dismiss']()
+        else
+            feedkeys("<c-\\><c-n>", 'i')
+        end
+    end
     vim.cmd[[
     function! CopilotVisible()
         let s = copilot#GetDisplayedSuggestion()
@@ -556,9 +575,6 @@ if not CopilotDisable then
     autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#has_item_selected() ? coc#pum#confirm()
         \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
     inoremap <silent><expr> <c-space> CopilotVisible() ? "\<c-space>" : copilot#Suggest()
-    inoremap <silent><expr> <C-c>
-        \ coc#pum#visible() ? coc#pum#cancel() :
-        \ CopilotVisible() ? copilot#Dismiss() : "\<C-c>"
     inoremap <silent><expr> <CR>
         \ coc#pum#has_item_selected() ? coc#pum#confirm() :
         \ CopilotVisible() ? copilot#Accept() : "\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>"
@@ -566,6 +582,18 @@ if not CopilotDisable then
     inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
     ]]
 else
+    function CancelCompletion()
+        if vim.fn['coc#pum#has_item_selected']() == 1 then
+            feedkeys("<c-f12>", 'i')
+        elseif vim.fn['coc#pum#visible']() == 1 then
+            feedkeys("<c-f12>", 'i')
+            vim.defer_fn(require("fittencode").dismiss_suggestions, 0)
+        elseif require("fittencode").has_suggestions() then
+            require("fittencode").dismiss_suggestions()
+        else
+            feedkeys("<c-\\><c-n>", 'i')
+        end
+    end
     vim.cmd[[
     inoremap <silent><expr> <C-j>
             \ coc#pum#visible() ? coc#pum#next(1) : "\<Down>"
@@ -575,15 +603,13 @@ else
         \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
     inoremap <silent><expr> <c-space>
         \ luaeval('require("fittencode").has_suggestions()') ? "\<c-space>" : '<cmd>lua require("fittencode").triggering_completion()<cr>'
-    inoremap <silent><expr> <C-c>
-        \ coc#pum#visible() ? coc#pum#cancel() :
-        \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").dismiss_suggestions()<cr>' : "\<C-c>"
     inoremap <silent><expr> <CR>
         \ coc#pum#has_item_selected() ? coc#pum#confirm() :
         \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>"
     inoremap <silent><expr> <C-f> luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_line()<cr>' : "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>"
     ]]
 end
+map.set({ 'i' }, '<c-c>', CancelCompletion, { noremap = true, silent = false })
 
 vim.cmd[[
 " nnoremap <leader>gcm <Plug>(coc-git-commit)
