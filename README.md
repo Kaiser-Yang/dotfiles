@@ -228,6 +228,7 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 * When the first time open terminal, it may be wrong highlight. I've disabled the `nvim-treesitter` for `fish` and `bash` to solve this.
 * When there is a `.root` directory, the `nvim-tree` will enter the root directory rather than the parent directory of `.root`.
 * `<CR>` can not auto indent.
+* `telescope` can not find files and contents if there is a `.root` directory.
 
 ## Basic Shortcuts
 | Shortcut  | Mode    | Description |
