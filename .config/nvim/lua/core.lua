@@ -1,5 +1,5 @@
 vim.cmd [[
-set pumheight=10
+set pumheight=15
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable

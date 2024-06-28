@@ -231,6 +231,7 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 * `telescope` can not find files and contents if there is a `.root` directory.
 * Pyhton `gd` does not work.
 * No hover highlight.
+* When quit a help file which is editable, this may cause problem.
 
 ## Basic Shortcuts
 | Shortcut  | Mode    | Description |

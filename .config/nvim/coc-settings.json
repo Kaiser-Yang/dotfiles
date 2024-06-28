@@ -4,6 +4,7 @@
         ".git",
     ],
     "suggest.labelMaxLength": 37,
+    "suggest.noselect": true,
     "cmake.lsp.enable": true,
     "cmake.lsp.serverPath": "cmake-language-server",
     "semanticTokens.enable": true,
@@ -16,7 +17,6 @@
     "python.formatting.autopep8Args": [
         "--max-line-length=100",
     ],
-    "suggest.noselect": true,
     "diagnostic.refreshOnInsertMode": true,
     "git.signPriority": 4096,
     "git.addedSign.hlGroup": "GitGutterAdd",

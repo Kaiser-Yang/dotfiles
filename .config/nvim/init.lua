@@ -4,11 +4,6 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.mapleader = ' '
 
-AutoCloseFileType = {
-    NvimTree = true,
-    help = true,
-    aerial = true,
-}
 -- first time installation may fail, so we use pcall
 -- we first load all the plugins
 pcall(require, 'lazy_nvim')

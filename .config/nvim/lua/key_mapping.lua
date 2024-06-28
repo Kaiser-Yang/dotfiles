@@ -163,16 +163,12 @@ local function emptyBuf(buf)
     local num_lines = vim.api.nvim_buf_line_count(buf)
     return num_lines == 1 and vim.api.nvim_buf_get_lines(buf, 0, -1, true)[1] == ""
 end
-local function currentBufferInSingleWindow()
-    local windows = vim.api.nvim_tabpage_list_wins(0)
-    return #windows == 1 and vim.api.nvim_win_get_buf(windows[1]) == vim.api.nvim_get_current_buf()
-end
 local function autoClose()
     local windowsInCurrentTab = vim.api.nvim_tabpage_list_wins(0)
-    local bdTime = 0
     local terminalBuf = -1
     local terminalWin = -1
     local hiddenBuf = 0
+    local emptyBuffer = {}
     for _, win in ipairs(windowsInCurrentTab) do
         local buf = vim.api.nvim_win_get_buf(win)
         if validTerminalBuf(buf) then
@@ -181,13 +177,14 @@ local function autoClose()
         elseif bufVisible(buf) then
             local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
             if filetype == nil or filetype == "" then
-                if not emptyBuf(buf) then
+                if emptyBuf(buf) then
+                    emptyBuffer[#emptyBuffer + 1] = buf
+                else
                     return
                 end
-            elseif not AutoCloseFileType[filetype] then
+            else
                 return
             end
-            bdTime = bdTime + 1
         else
             hiddenBuf = hiddenBuf + 1
         end
@@ -196,9 +193,11 @@ local function autoClose()
     if terminalBuf ~= -1 then
         hideWin(terminalWin)
     end
-    -- unload all the auto close files in current tab
-    for _ = 1, bdTime do
-        vim.cmd'silent! bd!'
+    -- unload all empty buffers
+    if #emptyBuffer > 0 then
+        for buf in emptyBuffer do
+            vim.cmd('silent! bd!' .. buf)
+        end
     end
     -- only when there are hidden buffers, we need close current tab
     -- because when there is no hidden buffer, bd! will close the tab, too
@@ -208,12 +207,10 @@ local function autoClose()
 end
 function QuitNotSaveOnBuffer()
     local terminal = validTerminalBuf(vim.api.nvim_get_current_buf())
-    local fileType = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype")
-    if terminal or (not currentBufferInSingleWindow() and AutoCloseFileType[fileType]) or
-        not bufVisible(vim.api.nvim_get_current_buf()) then
-        if terminal then
-            term_visible = false
-        end
+    if terminal then
+        term_visible = false
+    end
+    if terminal or not bufVisible(vim.api.nvim_get_current_buf()) then
         vim.cmd('silent! bd!')
         return
     end
