@@ -220,6 +220,7 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 ## Some Known Bugs
 ### Unfixed
 * When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line.
+* `<C-N>` can not back to normal when in replacing mode (after pressing `r`). This seems impossible to fix, because when press `r<C-N>`, your key sequence is `r<C-N>` (pressing `r` will still waiting your input, you can see that through the statusline). But `R` is OK, because pressing `R` will let you enter `REPLACE` mode, you can use `<C-N>` to go back to normal mode.
 
 ### Fixed
 * `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file, `auto-pairs` will be loaded.
@@ -234,8 +235,8 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 | \<C-T>    | N I T   | Toggle a terminal |
 | Q         | N       | Quit a window, quit a tab or unload a buffer, not save |
 | S         | N       | Similar with `Q`, but this will execute 'write' first |
-| \<C-N>    | I V X T | Back to normal mode in terminal |
-| \<C-N>    | N       | Same with `<ESC>` |
+| \<C-N>    | I V X N | Same with `<ESC>` |
+| \<C-N>    | T       | Back to normal mode by `<C-\><C-N>` |
 | J         | V       | Move selected content down, support `{count}J` |
 | K         | V       | Move selected content up, support `{count}K` |
 | <LEADER>r | N       | Run the current file depends on its filetype, this will onpen a terminal for some filetypes |
