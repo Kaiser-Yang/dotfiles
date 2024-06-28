@@ -550,7 +550,7 @@ if not CopilotDisable then
         \ CopilotVisible() ? copilot#Dismiss() : "\<C-c>"
     inoremap <silent><expr> <CR>
         \ coc#pum#visible() ? coc#pum#confirm() :
-        \ CopilotVisible() ? copilot#Accept() : "\<CR>"
+        \ CopilotVisible() ? copilot#Accept() : "\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>"
     inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() : "\<esc>f"
     inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
     ]]
@@ -569,7 +569,7 @@ else
         \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").dismiss_suggestions()<cr>' : "\<C-c>"
     inoremap <silent><expr> <CR>
         \ coc#pum#visible() ? coc#pum#confirm() :
-        \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<CR>"
+        \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>"
     inoremap <silent><expr> <C-f> luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_line()<cr>' : "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>"
     ]]
 end
