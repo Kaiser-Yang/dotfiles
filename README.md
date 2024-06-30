@@ -234,15 +234,16 @@ NOTE: I now use `nvim`, the `vim` part will not be updated any more.
 * When quit a help file which is editable, this may cause problem.
 
 ## Basic Shortcuts
-| Shortcut  | Mode      | Description |
-| -         | -         | - |
-| \<C-T>    | N I T     | Toggle a terminal |
-| Q         | N         | Quit a window, quit a tab or unload a buffer, not save |
-| S         | N         | Similar with `Q`, but this will execute 'write' first |
-| \<C-N>    | T I V X N | Back to normal mode by `<C-\><C-N>` |
-| J         | V         | Move selected content down, support `{count}J` |
-| K         | V         | Move selected content up, support `{count}K` |
-| <LEADER>r | N         | Run the current file depends on its filetype, this will onpen a terminal for some filetypes |
+| Shortcut    | Mode      | Description |
+| -           | -         | - |
+| \<C-T>      | N I T     | Toggle a terminal |
+| Q           | N         | Quit a window, quit a tab or unload a buffer, not save |
+| S           | N         | Similar with `Q`, but this will execute 'write' first |
+| \<C-N>      | T I V X N | Back to normal mode by `<C-\><C-N>` |
+| J           | V         | Move selected content down, support `{count}J` |
+| K           | V         | Move selected content up, support `{count}K` |
+| \<LEADER>r  | N         | Run the current file depends on its filetype, this will onpen a terminal for some filetypes |
+| \<LEADER>ay | N         | Copy all lines of current buffer to plus register |
 
 NOTE: The `Q`'s behavior depending on the status. If current buffer is a terminal, `nvimtree`, `aerial`, or `help`, this will use `bd!` to unload the buffer. If current tab has more than one window whose buffer is a visible one, `Q` will use `:quit!` to close window, but not unload the buffer. If there are more than one tab and only one window in current tab, this will close the whole tab and unload the empty `noname` buffers and other hidden buffers. If there only one tab, this will unload current buffer.
 

@@ -14,12 +14,17 @@ map.set({ 'c' }, '<right>', '<space><bs><right>', { noremap = true })
 map.set({ 'c' }, '<c-h>', '<left>', { noremap = false })
 map.set({ 'c' }, '<c-l>', '<right>', { noremap = false })
 
+function CopyBufferToPlusRegister()
+    local cur = vim.api.nvim_win_get_cursor(0)
+    vim.api.nvim_command('normal! ggVG"+y')
+    vim.api.nvim_win_set_cursor(0, cur)
+end
 map.set({ 'n' }, '<leader>sc', '<cmd>set spell!<cr>', DefaultOpt())
 map.set({ 'n' }, '<leader><cr>', '<cmd>nohlsearch<cr>', DefaultOpt())
 map.set({ 'n', 'x' }, '<leader>y', '"+y', DefaultOpt())
 map.set({ 'n', 'x' }, '<leader>p', '"+p', DefaultOpt())
 map.set({ 'n', 'x' }, '<leader>P', '"+P', DefaultOpt())
-map.set({ 'n' }, '<leader>ay', 'mzggVG"+y`z<cmd>delmark z<cr>`', DefaultOpt())
+map.set({ 'n' }, '<leader>ay', CopyBufferToPlusRegister, DefaultOpt())
 map.set({ 'n' }, '<leader>Y', '"+y$', DefaultOpt())
 map.set({ 'n' }, 'Y', 'y$', DefaultOpt())
 
@@ -485,10 +490,10 @@ function CompileRun()
     local filename_noext = vim.fn.expand("%:r")
     local command = ""
     if vim.bo.filetype == 'c' then
-        command = string.format('gcc -g -Wall %s -o %s.out && echo RUNNING && time ./%s.out',
+        command = string.format('gcc -g -Wall %s -I include -o %s.out && echo RUNNING && time ./%s.out',
             filename, filename_noext, filename_noext)
     elseif vim.bo.filetype == 'cpp' then
-        command = string.format('g++ -g -Wall -std=c++17 %s -o %s.out && echo RUNNING && time ./%s.out',
+        command = string.format('g++ -g -Wall -std=c++17 -I include %s -o %s.out && echo RUNNING && time ./%s.out',
             filename, filename_noext, filename_noext)
     elseif vim.bo.filetype == 'java' then
         command = string.format('javac %s && echo RUNNING && time java %s', filename, filename_noext)
