@@ -21,7 +21,7 @@ copy_file = set(["./.vimrc", "./.vim", "./.tmux.conf", "./proxy.sh",
                  "./proxy.fish", "./.config/nvim"])
 ```
 
-The files or directories in `ignore_file` will not be copied to your `$HOME` directory, and the files or directories in `copy_file` will be copied to your `$HOME` directory. The contents of files which are not in those two sets will be appended to the files in your `$HOME` directory.
+The files or directories in `ignore_file` will be ignored during installation, and the files or directories in `copy_file` will be copied to your `$HOME` directory. The contents of files which are not in those two sets will be appended to the files in your `$HOME` directory.
 
 If you only want to install the configurations of `vim`, you just need to add `./.vimrc` and `./.vim` to `copy_file`, and add all other directory to `ignore_file`. Then run `./dot_files.py`.
 
