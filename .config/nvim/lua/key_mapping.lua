@@ -16,8 +16,9 @@ map.set({ 'c' }, '<c-l>', '<right>', { noremap = false })
 
 function CopyBufferToPlusRegister()
     local cur = vim.api.nvim_win_get_cursor(0)
-    vim.api.nvim_command('normal! ggVG"+y')
+    vim.api.nvim_command('normal! ggVGy')
     vim.api.nvim_win_set_cursor(0, cur)
+    vim.defer_fn(function () vim.fn.setreg('+', vim.fn.getreg('"')) end, 0)
 end
 map.set({ 'n' }, '<leader>sc', '<cmd>set spell!<cr>', DefaultOpt())
 map.set({ 'n' }, '<leader><cr>', '<cmd>nohlsearch<cr>', DefaultOpt())
