@@ -274,7 +274,7 @@ map.set({ 'n' }, '<leader>T', '<c-w>T<cmd>lua ToggleTermOnTabEnter()<cr>', Defau
 
 map.set({ 'n' }, '<leader>b', '<cmd>BufferLineCyclePrev<cr>', DefaultOpt())
 map.set({ 'n' }, '<leader>n', '<cmd>BufferLineCycleNext<cr>', DefaultOpt())
-map.set({ 'n' }, "bp", "<cmd>BufferLinePick<CR>", DefaultOpt())
+map.set({ 'n' }, "gb", "<cmd>BufferLinePick<CR>", DefaultOpt())
 map.set({ 'n' }, '<leader>1', '1gt', DefaultOpt())
 map.set({ 'n' }, '<leader>2', '2gt', DefaultOpt())
 map.set({ 'n' }, '<leader>3', '3gt', DefaultOpt())

@@ -265,11 +265,11 @@ There will only be one terminal globally, this is for some simply commands, such
 | \<ESC>            | I    | When use `telescope` to search, `<ESC>` will let you back to normal mode |
 | \<ESC>            | N    | When use `telescope` to search and you are in normal mode, `<ESC>` will quit `telescope` |
 | \<C-C>            | I    | When use `telescope` to search and you are in insert mode, `<C-C>` will quit `telescope` |
-| \<LEADER>n        | N    | Go to the right buffer shown in `bufline` |
-| \<LEADER>b        | N    | Go to the left buffer shown in `bufline` |
 | gpt               | N    | Toggle `copilot-chat` window |
 | gpt               | V    | Input `:CopilotChat`, you can use `<TAB>` to trigger menu list of all commands |
-| bp                | N    | Buffer pick |
+| gb                | N    | Buffer pick |
+| \<LEADER>n        | N    | Go to the right buffer shown in `bufline` |
+| \<LEADER>b        | N    | Go to the left buffer shown in `bufline` |
 | \<C-H>            | N T  | Move the cursor to the left window, this can jump over tmux |
 | \<C-J>            | N T  | Move the cursor to the bottom window, this can jump over tmux |
 | \<C-K>            | N T  | Move the cursor to the top window, this can jump over tmux |
