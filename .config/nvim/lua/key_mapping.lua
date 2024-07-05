@@ -130,7 +130,6 @@ map.set({'i', 'n', 't' }, '<c-t>', '<cmd>lua ToggleTerm()<cr>', DefaultOpt())
 function ToggleTermOnTabEnter()
     local term_win = getTermWinCurrentTab()
     -- create a new one
-    print(term_win, term_visible)
     if term_win == -1 and term_visible then
         local current_win = vim.api.nvim_get_current_win()
         vim.cmd('belowright split | buffer ' .. term_buf)
@@ -301,11 +300,6 @@ map.set({ 'n' }, '<leader>0','10gt', DefaultOpt())
 -- map.set({"v", "n", "i"}, "<C-F13>", "<cmd>BufferLineCloseOthers<CR>", { silent = true })
 -- map.set({"v", "n", "i"}, "<C-F14>", "<cmd>BufferLineCloseLeft<CR>", { silent = true })
 -- map.set({"v", "n", "i"}, "<C-F15>", "<cmd>BufferLineCloseRight<CR>", { silent = true })
-
-map.set({ 'n' }, 'j', [[(v:count ? 'j' : 'gj')]], { expr = true, noremap = true, silent = true })
-map.set({ 'n' }, 'k', [[(v:count ? 'k' : 'gk')]], { expr = true, noremap = true, silent = true })
-map.set({ 'n' }, '0', [[(v:count ? '0' : 'g0')]], { expr = true, noremap = true, silent = true })
-map.set({ 'n' }, '$', [[(v:count ? '$' : 'g$')]], { expr = true, noremap = true, silent = true })
 
 map.set({ 'n' }, '<up>', '<cmd>lua CalculateNewSize(5)<cr><cmd>res +5<cr>', DefaultOpt())
 map.set({ 'n' }, '<down>', '<cmd>lua CalculateNewSize(-5)<cr><cmd>res -5<cr>', DefaultOpt())
