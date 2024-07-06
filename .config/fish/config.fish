@@ -62,10 +62,6 @@ abbr -a nv nvim
 abbr -a vim nvim
 abbr -a vi nvim
 
-if test -e ~/proxy.fish
-    source ~/proxy.fish unset 2>&1 > /dev/null
-end
-
 # function for proxy setting
 function proxy
     if ! test -e ~/proxy.fish
