@@ -153,7 +153,7 @@ require('lazy').setup({
             init = function() require'plugin_config/autopairs_config' end,
             -- lazy.nvim fails to load, we must initialize auto-pairs manually
             config = function() vim.cmd[[call AutoPairsInit()]] end,
-         },
+        },
         {
             "folke/noice.nvim",
             event = "VeryLazy",
@@ -166,6 +166,10 @@ require('lazy').setup({
                 --   If not available, we use `mini` as the fallback
                 "rcarriga/nvim-notify",
               }
+        },
+        {
+            "Pocco81/auto-save.nvim",
+            opts = {},
         }
     },
 })
