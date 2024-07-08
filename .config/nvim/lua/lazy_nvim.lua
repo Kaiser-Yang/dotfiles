@@ -170,6 +170,10 @@ require('lazy').setup({
         {
             "Pocco81/auto-save.nvim",
             opts = {},
+        },
+        {
+            "rcarriga/nvim-notify",
+            config = function () require'plugin_config/nvimnotify_config' end,
         }
     },
 })
