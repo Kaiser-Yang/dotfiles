@@ -53,3 +53,11 @@ if ! command -v neovim; then
     sudo tar -C /opt -xzf nvim-linux64.tar.gz
     rm nvim-linux64.tar.gz
 fi
+
+cd ~ || exit 1
+rm -rf codelldb.vsix
+wget https://github.com/vadimcn/codelldb/releases/download/v1.10.0/codelldb-x86_64-linux.vsix -O codelldb.vsix
+unzip codelldb.vsix -d codelldb
+rm -rf codelldb.vsix
+cd - || exit 1
+

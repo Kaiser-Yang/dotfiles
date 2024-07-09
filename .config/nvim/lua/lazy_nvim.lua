@@ -174,6 +174,15 @@ require('lazy').setup({
         {
             "rcarriga/nvim-notify",
             config = function () require'plugin_config/nvimnotify_config' end,
-        }
+        },
+        {
+            "rcarriga/nvim-dap-ui",
+            dependencies = {
+                "mfussenegger/nvim-dap",
+                "nvim-neotest/nvim-nio",
+                'theHamsta/nvim-dap-virtual-text',
+            },
+            config = function () require 'plugin_config/nvimdap_config' end,
+        },
     },
 })

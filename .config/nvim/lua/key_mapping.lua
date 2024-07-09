@@ -670,6 +670,32 @@ map.set({ 'n' }, '<leader><leader>', telescope.current_buffer_fuzzy_find, Defaul
 -- map.set({ 'n' }, '<leader>fb', telescope.buffers, DefaultOpt())
 -- map.set({ 'n' }, '<leader>fh', telescope.help_tags, DefaultOpt())
 
+Nvim_tree_visible = false
+DapUIVisible = false
+function DapUIToggle()
+    DapUIVisible = not DapUIVisible
+    if DapUIVisible and require('nvim-tree.api').tree.is_visible() then
+        Nvim_tree_visible = true
+        require('nvim-tree.api').tree.close()
+    elseif not DapUIVisible and Nvim_tree_visible then
+        Nvim_tree_visible = false
+        require('nvim-tree.api').tree.toggle({
+            path = GetRootDirectory(),
+            update_root = false,
+            find_file = false,
+            focus = false,
+        })
+    end
+    require'dapui'.toggle()
+end
+map.set({ 'n' }, '<leader>D', DapUIToggle, DefaultOpt())
+map.set({ 'n' }, '<leader>C', require'dap'.continue, DefaultOpt())
+map.set({ 'n' }, '<leader>B', require'dap'.toggle_breakpoint, DefaultOpt())
+map.set({ 'n' }, '<leader>N', require'dap'.step_over, DefaultOpt())
+map.set({ 'n' }, '<leader>S', require'dap'.step_into, DefaultOpt())
+map.set({ 'n' }, '<leader>F', require'dap'.step_out, DefaultOpt())
+map.set({ 'n' }, '<leader>T', require'dap'.terminate, DefaultOpt())
+
 vim.cmd [[
 " find next placeholder and remove it.
 autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>c4l

@@ -331,5 +331,16 @@ been closed. There only one terminal buffer, so each terminal has same contents.
 | \<C-U>            | I    | Scroll up the completion preview window, if there is one |
 | \<C-C>            | I    | Close all completion when no selection in coc; close coc completion when there is a selection of coc; close copilot completion when coc invisible and copilit visible; back to normal |
 
+## Debugger
+| Shortcut   | Mode | Description |
+| -          | -    | - |
+| \<LEADER>D | N    | Toggle the `dap-ui`. |
+| \<LEADER>C | N    | Continue. |
+| \<LEADER>B | N    | Toggle the break point at current line. |
+| \<LEADER>N | N    | Next (step over). |
+| \<LEADER>S | N    | Step in. |
+| \<LEADER>F | N    | Finish (step out). |
+| \<LEADER>T | N    | Terminate current process. |
+
 # Contribution
 If you have any suggestion or find any bug, please feel free to open an issue or pull request.

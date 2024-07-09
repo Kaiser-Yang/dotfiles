@@ -139,4 +139,12 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 # restart docker
 sudo systemctl restart docker || exit 1
 
+cd ~ || exit 1
+mkdir .virtualenvs
+cd - || exit 1
+cd ~/.virtualenvs || exit 1
+python -m venv debugpy
+debugpy/bin/python -m pip install debugpy
+cd - || exit 1
+
 log "Installation finished, but you may need restart your shell"
