@@ -25,7 +25,6 @@ if ! command -v lazygit; then
     cd - || exit 1
 fi
 
-# vim-plug coc depends on nodejs
 if ! command -v node; then
     cd ~ || exit 1
     wget https://nodejs.org/dist/v20.13.0/node-v20.13.0-linux-x64.tar.xz \

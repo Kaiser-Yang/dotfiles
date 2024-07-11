@@ -63,22 +63,22 @@ abbr -a vim nvim
 abbr -a vi nvim
 
 # function for proxy setting
-function proxy
-    if ! test -e ~/proxy.fish
-        echo "Can not find file: ~/proxy.fish" 1>&2
-    else if test (count $argv) -gt 1
-        echo "Usage: proxy [set|unset|debug]" 1>&2
-    else if test (count $argv) -eq 0
-        source ~/proxy.fish set
-    else
-        switch $argv[1]
-            case 'set' 'unset' 'debug'
-                source ~/proxy.fish $argv[1]
-            case '*'
-                echo "Usage: proxy [set|unset|debug]" 1>&2
-        end
-    end
-end
+# function proxy
+#     if ! test -e ~/proxy.fish
+#         echo "Can not find file: ~/proxy.fish" 1>&2
+#     else if test (count $argv) -gt 1
+#         echo "Usage: proxy [set|unset|debug]" 1>&2
+#     else if test (count $argv) -eq 0
+#         source ~/proxy.fish set
+#     else
+#         switch $argv[1]
+#             case 'set' 'unset' 'debug'
+#                 source ~/proxy.fish $argv[1]
+#             case '*'
+#                 echo "Usage: proxy [set|unset|debug]" 1>&2
+#         end
+#     end
+# end
 
 # node for coc
 set PATH $PATH ~/node-v20.13.0-linux-x64/bin

@@ -1,4 +1,25 @@
 require'telescope'.setup({
+    pickers = {
+        lsp_references = {
+            mappings = {
+                n = {
+                    ['<c-n>'] = 'close',
+                    ['q'] = 'close',
+                }
+            },
+            layout_strategy = "vertical",
+            layout_config = {
+                vertical = {
+                    anchor = 'S',
+                    height = 0.5,
+                    preview_height = 0.3,
+                    width = { padding = 0 },
+                    prompt_position = 'bottom',
+                },
+            },
+            initial_mode = 'normal',
+        }
+    },
     defaults = {
         mappings = {
             i = {
@@ -12,6 +33,7 @@ require'telescope'.setup({
             },
             n = {
                 ['<c-n>'] = 'close',
+                ['q'] = 'close',
             }
         },
         layout_strategy = "vertical",
