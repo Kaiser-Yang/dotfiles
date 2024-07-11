@@ -1,6 +1,9 @@
 # dotfiles
 My own configure files for UNIX/Linux tools.
 
+## TODO
+* update the doc: now we don't use `vim` anymore, we don't use `coc` anymore.
+
 ## Quick Start
 1. Use the command `git clone https://github.com/Kaiser-Yang/dotfiles.git` to clone this repository.
 2. Use the command `cd dotfiles` to enter the directory. Run `./dot_files.py init` to install `tmux`

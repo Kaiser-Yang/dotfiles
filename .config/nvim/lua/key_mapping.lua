@@ -4,13 +4,6 @@ local function DefaultOpt()
     return { noremap = true, silent = true }
 end
 
--- use c-j and c-k to navigate in cmd mode
--- don't set silent for this, completion depend on output
-map.set({ 'c' }, '<c-j>', '<c-n>', { noremap = true })
-map.set({ 'c' }, '<c-k>', '<c-p>', { noremap = true })
--- left and right to move cursor when wildmenu is on
-map.set({ 'c' }, '<left>', '<space><bs><left>', { noremap = true })
-map.set({ 'c' }, '<right>', '<space><bs><right>', { noremap = true })
 map.set({ 'c' }, '<c-h>', '<left>', { noremap = false })
 map.set({ 'c' }, '<c-l>', '<right>', { noremap = false })
 
@@ -319,56 +312,42 @@ function MoveSelectedLines(count, direction)
         vim.api.nvim_command('normal! gv')
     end
 end
-vim.api.nvim_set_keymap('v', 'J', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'down')<CR>", DefaultOpt())
-vim.api.nvim_set_keymap('v', 'K', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'up')<CR>", DefaultOpt())
+map.set({ 'v' }, 'J', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'down')<CR>", DefaultOpt())
+map.set({ 'v' }, 'K', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'up')<CR>", DefaultOpt())
 
-map.set({ 'n' }, '[g', '<Plug>(coc-git-prevchunk)zz', DefaultOpt())
-map.set({ 'n' }, ']g', '<Plug>(coc-git-nextchunk)zz', DefaultOpt())
-map.set({ 'n' }, '[c', '<Plug>(coc-git-prevconflict)zz', DefaultOpt())
-map.set({ 'n' }, ']c', '<Plug>(coc-git-nextconflict)zz', DefaultOpt())
-map.set({ 'n' }, '<leader>gdf', '<Plug>(coc-git-chunkinfo)', DefaultOpt())
-map.set({ 'n' }, '[d', '<Plug>(coc-diagnostic-prev)zz', DefaultOpt())
-map.set({ 'n' }, ']d', '<Plug>(coc-diagnostic-next)zz', DefaultOpt())
-map.set({ 'n' }, 'gd', '<Plug>(coc-definition)', DefaultOpt())
-map.set({ 'n' }, 'gr', '<Plug>(coc-references)', DefaultOpt())
-map.set({ 'n' }, 'gi', '<Plug>(coc-implementation)', DefaultOpt())
-map.set({ 'n' }, 'gh', '<cmd>CocCommand clangd.switchSourceHeader<CR>', DefaultOpt())
-map.set({ 'n' }, '<leader>R', '<Plug>(coc-rename)', DefaultOpt())
-map.set({ 'n' }, 'gl', ':<C-u>CocList<space>', { noremap = true })
-map.del({ 'n' }, 'gcc')
-map.set({ 'n' }, 'gc', ':<C-u>CocList commands<CR>', DefaultOpt())
-map.set({ 'n' }, 'H', '<Plug>(coc-fix-current)', DefaultOpt())
-map.set({ 'n' }, '<leader>i', ':<C-u>CocCommand document.toggleInlayHint<CR>', DefaultOpt())
-vim.cmd[[
-inoremap <silent><nowait><expr> <c-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<c-u>"
-inoremap <silent><nowait><expr> <c-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<c-d>"
+map.set({ 'n' }, '[g', require'gitsigns'.prev_hunk, DefaultOpt())
+map.set({ 'n' }, ']g', require'gitsigns'.next_hunk, DefaultOpt())
+map.set({ 'n' }, '[c', '<cmd>GitConflictPrevConflict<cr>', DefaultOpt())
+map.set({ 'n' }, ']c', '<cmd>GitConflictNextConflict<cr>', DefaultOpt())
+map.set({ 'n' }, 'gcc', '<cmd>GitConflictChooseOurs<cr>', DefaultOpt())
+map.set({ 'n' }, 'gci', '<cmd>GitConflictChooseTheirs<cr>', DefaultOpt())
+map.set({ 'n' }, 'gcb', '<cmd>GitConflictChooseBoth<cr>', DefaultOpt())
+map.set({ 'n' }, 'gcn', '<cmd>GitConflictChooseNone<cr>', DefaultOpt())
+map.set({ 'n' }, 'gcu', require'gitsigns'.undo_stage_hunk, DefaultOpt())
+map.set({ 'n' }, 'gcd', require'gitsigns'.preview_hunk, DefaultOpt())
+
+map.set({ 'n' }, 'gy', '<cmd>Telescope yank_history<cr>', DefaultOpt())
+map.set({ 'n' }, '[d', '<cmd>Lspsaga diagnostic_jump_next<cr>', DefaultOpt())
+map.set({ 'n' }, ']d', '<cmd>Lspsaga diagnostic_jump_next<cr>', DefaultOpt())
+map.set({ 'n' }, 'gr', '<cmd>Telescope lsp_references<cr>', DefaultOpt())
+-- optional implementation of goto definitions
+-- map.set({ 'n' }, 'gd', '<cmd>Telescope lsp_definitions<cr>', DefaultOpt())
+-- map.set({ 'n' }, 'gd', vim.lsp.tagfunc, DefaultOpt())
+map.set({ 'n' }, 'gd', "<cmd>Lspsaga goto_definition<cr>", DefaultOpt())
+map.set({ 'n' }, '<leader>d', '<cmd>Lspsaga hover_doc<cr>', DefaultOpt())
+map.set({ 'n' }, '<leader>R', "<cmd>Lspsaga rename mode=n<cr>", DefaultOpt())
+map.set({ 'n' }, '<leader>i', function()
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, DefaultOpt())
+map.set({ 'n', 'x' }, 'ga', "<cmd>Lspsaga code_action<cr>", DefaultOpt())
+map.set({ 'n' }, 'gi', "<cmd>Lspsaga finder imp<cr>", DefaultOpt())
+vim.cmd [[
+autocmd CursorHold  <buffer><silent> lua if vim.lsp.get_clients()[1].server_capabilities['documentHighlightProvider'] then vim.lsp.buf.document_highlight() end
+autocmd CursorHoldI <buffer><silent> lua if vim.lsp.get_clients()[1].server_capabilities['documentHighlightProvider'] then vim.lsp.buf.document_highlight() end
+autocmd CursorMoved <buffer><silent> lua if vim.lsp.get_clients()[1].server_capabilities['documentHighlightProvider'] then vim.lsp.buf.clear_references() end
 ]]
-function CocShowDocument()
-    local cw = vim.fn.expand('<cword>')
-    if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
-        vim.api.nvim_command('h ' .. cw)
-    elseif vim.api.nvim_eval('coc#rpc#ready()') then
-        vim.fn.CocActionAsync('doHover')
-    else
-        vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
-    end
-end
-vim.api.nvim_create_autocmd("CursorHold", {
-    pattern = "*",
-    callback = function()
-        vim.fn.CocActionAsync('highlight')
-    end,
-})
-map.set({ 'n' }, '<leader>d', CocShowDocument, DefaultOpt())
-map.set({ 'n' }, 'gy', ':<C-u>CocList -A --normal yank<CR>', DefaultOpt())
-vim.g.coc_snippet_next = "<TAB>"
-vim.g.coc_snippet_prev = "<S-TAB>"
--- Remap for do codeAction of selected region
--- function! s:cocActionsOpenFromSelected(type) abort
---   execute 'CocCommand actions.open ' . a:type
--- endfunction
--- xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
--- nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
+-- TODO without implementation
+-- map.set({ 'n' }, 'gh', '<cmd>CocCommand clangd.switchSourceHeader<CR>', DefaultOpt())
 
 map.set({ 'n' }, 'gpt', '<cmd>CopilotChatToggle<cr>', DefaultOpt())
 map.set({ 'v' }, 'gpt', ':CopilotChat', { silent = false, noremap = true })
@@ -475,7 +454,7 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = OpenNvimTreeOnStart })
 
 local function feedkeys(keys, mode)
     local termcodes = vim.api.nvim_replace_termcodes(keys, true, true, true)
-    vim.api.nvim_feedkeys(termcodes, mode, true)
+    vim.api.nvim_feedkeys(termcodes, mode, false)
 end
 function CompileRun()
     -- ignore the error
@@ -523,8 +502,8 @@ map.set({ 'n' }, '<leader>r', '<cmd>lua CompileRun()<cr>', DefaultOpt())
 
 map.del({ 'n' }, '<c-w>d')
 map.del({ 'n' }, '<c-w><c-d>')
-map.set({ 'n' }, '<c-w>', '<cmd>AerialToggle<cr>', DefaultOpt())
-map.set({ 'i' }, '<c-w>', '<esc><cmd>AerialToggle<cr>', DefaultOpt())
+map.set({ 'n' }, '<c-w>', '<cmd>Lspsaga outline<cr>', DefaultOpt())
+map.set({ 'i' }, '<c-w>', '<esc><cmd>Lspsaga outline<cr>', DefaultOpt())
 
 map.set({ 'n' }, '<c-e>', NvimTreeToggleOnRootDirectory, DefaultOpt())
 map.set({ 'i' }, '<c-e>', NvimTreeToggleOnRootDirectory, DefaultOpt())
@@ -544,23 +523,11 @@ autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><buffer> <S
     \ <Esc>:call COPY_CR(2, 2)<CR>
 autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
 ]]
-vim.cmd[[
-" this key mapping is not used, this if for trigger coc#pum#cancel in CancelCompletion()
-inoremap <expr><silent> <c-f12> coc#pum#cancel()
-]]
+local cmp = require'cmp'
+function CmpSelected()
+    return cmp.get_active_entry() ~= nil
+end
 if not CopilotDisable then
-    function CancelCompletion()
-        if vim.fn['coc#pum#has_item_selected']() == 1 then
-            feedkeys("<c-f12>", 'i')
-        elseif vim.fn['coc#pum#visible']() == 1 then
-            feedkeys("<c-f12>", 'i')
-            vim.defer_fn(vim.fn['copilot#Dismiss'], 0)
-        elseif vim.fn['CopilotVisible']() == 1 then
-            vim.fn['copilot#Dismiss']()
-        else
-            feedkeys("<c-\\><c-n>", 'i')
-        end
-    end
     vim.cmd[[
     function! CopilotVisible()
         let s = copilot#GetDisplayedSuggestion()
@@ -569,56 +536,78 @@ if not CopilotDisable then
         endif
         return 0
     endfunction
-    inoremap <silent><expr> <C-j>
-        \ coc#pum#visible() ? coc#pum#next(1) :
-        \ CopilotVisible() ? copilot#Next() : "\<Down>"
-    inoremap <silent><expr> <C-k>
-        \ coc#pum#visible() ? coc#pum#prev(1) :
-        \ CopilotVisible() ? copilot#Previous() : "\<Up>"
-    autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#has_item_selected() ? coc#pum#confirm()
-        \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
     inoremap <silent><expr> <c-space> CopilotVisible() ? "\<c-space>" : copilot#Suggest()
-    inoremap <silent><expr> <CR>
-        \ coc#pum#has_item_selected() ? coc#pum#confirm() :
-        \ CopilotVisible() ? copilot#Accept() : "\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>"
     inoremap <script><silent><expr> <esc>f CopilotVisible() ? copilot#AcceptWord() : "\<esc>f"
     inoremap <silent><expr> <C-f> !CopilotVisible() ? "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>" : copilot#AcceptLine()
     ]]
-else
-    function CancelCompletion()
-        if vim.fn['coc#pum#has_item_selected']() == 1 then
-            feedkeys("<c-f12>", 'i')
-        elseif vim.fn['coc#pum#visible']() == 1 then
-            feedkeys("<c-f12>", 'i')
-            vim.defer_fn(require("fittencode").dismiss_suggestions, 0)
-        elseif require("fittencode").has_suggestions() then
-            require("fittencode").dismiss_suggestions()
+    map.set({ 'i' }, '<c-j>', function ()
+        if cmp.visible() then
+            cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        elseif vim.fn['CopilotVisible']() == 1 then
+            vim.fn['copilot#Next']()
         else
-            feedkeys("<c-\\><c-n>", 'i')
+            feedkeys('<down>', 'n')
         end
-    end
+    end, DefaultOpt())
+    map.set({ 'i' }, '<c-k>', function ()
+        if cmp.visible() then
+            cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        elseif vim.fn['CopilotVisible']() == 1 then
+            vim.fn['copilot#Previous']()
+        else
+            feedkeys('<up>', 'n')
+        end
+    end, DefaultOpt())
     vim.cmd[[
-    inoremap <silent><expr> <C-j>
-            \ coc#pum#visible() ? coc#pum#next(1) : "\<Down>"
-    inoremap <silent><expr> <C-k>
-            \ coc#pum#visible() ? coc#pum#prev(1) : "\<Up>"
-    autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#has_item_selected() ? coc#pum#confirm() :
-        \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
-    inoremap <silent><expr> <c-space>
-        \ luaeval('require("fittencode").has_suggestions()') ? "\<c-space>" : '<cmd>lua require("fittencode").triggering_completion()<cr>'
-    inoremap <silent><expr> <CR>
-        \ coc#pum#has_item_selected() ? coc#pum#confirm() :
-        \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>"
-    inoremap <silent><expr> <C-f> luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_line()<cr>' : "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>"
+    inoremap <silent><expr> <CR> luaeval('CmpSelected()') ? "<cmd>lua require'cmp'.confirm({select = false, behavior = require'cmp'.ConfirmBehavior.Insert})<cr>"
+        \: (CopilotVisible() ? copilot#Accept() : "<C-g>u<CR><C-r>=AutoPairsReturn()<CR>")
+    autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> luaeval('CmpSelected()') ? "<cmd>lua require'cmp'.confirm({select = false, behavior = require'cmp'.ConfirmBehavior.Insert})<cr>"
+        \: CopilotVisible() ? copilot#Accept() : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
     ]]
+-- TODO: Not finished yet, update this with nvim-cmp
+-- else
+--     function CancelCompletion()
+--         if vim.fn['coc#pum#has_item_selected']() == 1 then
+--             feedkeys("<c-f12>", 'i')
+--         elseif vim.fn['coc#pum#visible']() == 1 then
+--             feedkeys("<c-f12>", 'i')
+--             vim.defer_fn(require("fittencode").dismiss_suggestions, 0)
+--         elseif require("fittencode").has_suggestions() then
+--             require("fittencode").dismiss_suggestions()
+--         else
+--             feedkeys("<c-\\><c-n>", 'i')
+--         end
+--     end
+--     vim.cmd[[
+--     inoremap <silent><expr> <C-j>
+--             \ coc#pum#visible() ? coc#pum#next(1) : "\<Down>"
+--     inoremap <silent><expr> <C-k>
+--             \ coc#pum#visible() ? coc#pum#prev(1) : "\<Up>"
+--     autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><script><buffer><expr> <CR> coc#pum#has_item_selected() ? coc#pum#confirm() :
+--         \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>"
+--     inoremap <silent><expr> <c-space>
+--         \ luaeval('require("fittencode").has_suggestions()') ? "\<c-space>" : '<cmd>lua require("fittencode").triggering_completion()<cr>'
+--     inoremap <silent><expr> <CR>
+--         \ coc#pum#has_item_selected() ? coc#pum#confirm() :
+--         \ luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' : "\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>"
+--     inoremap <silent><expr> <C-f> luaeval('require("fittencode").has_suggestions()') ? '<cmd>lua require("fittencode").accept_line()<cr>' : "\<ESC>:lua LiveGrepOnRootDirectory()\<CR>"
+--     ]]
+end
+function CancelCompletion()
+    if CmpSelected() then
+        cmp.abort()
+    elseif cmp.visible() then
+        cmp.abort()
+        vim.defer_fn(vim.fn['copilot#Dismiss'], 0)
+    elseif vim.fn['CopilotVisible']() == 1 then
+        vim.fn['copilot#Dismiss']()
+    else
+        feedkeys("<c-\\><c-n>", 'i')
+    end
 end
 map.set({ 'i' }, '<c-c>', CancelCompletion, { noremap = true, silent = false })
-
-vim.cmd[[
-" nnoremap <leader>gcm <Plug>(coc-git-commit)
-" set nobackup
-" set nowritebackup
-]]
+map.set({ 'c' }, '<c-j>', cmp.select_next_item, DefaultOpt())
+map.set({ 'c' }, '<c-k>', cmp.select_prev_item, DefaultOpt())
 
 -- generated by fitten code
 -- this does not work on wsl
@@ -645,15 +634,9 @@ vim.cmd[[
 -- end
 -- map.set({'n', 'x'}, 'ga', '<rightmouse>', DefaultOpt())
 
+-- TODO: update this with nvim-cmp
 -- Apply codeAction to the selected region
 -- Example: `gaap` for current paragraph
-local opts = {silent = true, nowait = true, noremap = true}
-map.set("x", "ga", "<Plug>(coc-codeaction-selected)", opts)
-map.set("n", "ga", "<Plug>(coc-codeaction-selected)", opts)
--- Remap keys for apply code actions at the cursor position.
-map.set("n", "gac", "<Plug>(coc-codeaction-cursor)", opts)
--- Remap keys for apply source code actions for current file.
-map.set("n", "gas", "<Plug>(coc-codeaction-source)", opts)
 -- this seems not to work, but I don't know why
 -- map.set("n", "gcl", "<Plug>(coc-codelens-action)", opts)
 

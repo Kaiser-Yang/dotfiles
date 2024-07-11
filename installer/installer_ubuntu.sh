@@ -59,24 +59,11 @@ if ! command -v fish; then
     fi
 fi
 
-# update vim to vim-9
-if ! vim --version | grep '9\.0'; then
-    sudo add-apt-repository ppa:jonathonf/vim || exit 1
-    sudo apt update || exit 1
-    sudo apt install -y vim vim-gtk vim-nox || exit 1
-fi
-
 # universal-ctags are used for the outlooks of markdown files
 sudo apt install -y universal-ctags 
 
-# install vim plugins
-# after installation you may need quit vim manually by using :qa
-# this will fail to install LeaaderF and markdown-preview,
-# but don't worry, the script will solve this at last
-vim +PlugInstall
-
 # some tools for development
-sudo apt install -y openjdk-17-jdk-headless shellcheck build-essential net-tools cmake gdb \
+sudo apt install -y openjdk-17-source openjdk-17-jdk shellcheck build-essential net-tools cmake gdb \
     python3-dev pip pandoc || exit 1
 
 # cmake lsp
@@ -99,17 +86,6 @@ sudo apt install -y sshfs || exit 1
 if ! snap --version || ! sudo snap install bash-language-server --classic; then
     log "bash-language-server installation failed, don't worry, you can install it manually."
 fi
-
-# the first time to install markdownpreview and LeaderF will fail
-# the simple way to solve this is to remove the LeaderF and markdownpreview, then reinstall them
-if [ -d  ~/.vim/plugged/LeaderF ]; then
-    rm -rf ~/.vim/plugged/LeaderF 
-fi
-if [ -d ~/.vim/plugged/markdown-preview.nvim ]; then
-    rm -rf ~/.vim/plugged/markdown-preview.nvim
-fi
-vim +PlugInstall
-vim '+CocInstall https://github.com/rafamadriz/friendly-snippets@main'
 
 # tldr for manual docs
 pip install tldr
@@ -139,12 +115,35 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 # restart docker
 sudo systemctl restart docker || exit 1
 
+# TODO: check this
 cd ~ || exit 1
-mkdir .virtualenvs
+wget 'https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.9.0/jdt-language-server-1.9.0-202203031534.tar.gz' -O jdtls.tar.gz
+mkdir -p jdtls
+tar -zxf jdtls.tar.gz -C jdtls
+rm -rf jdtls.tar.gz
+cd - || exit 1
+
+cd ~ || exit 1
+git clone https://github.com/microsoft/java-debug.git || exit 1
+cd - || exit 1
+cd ~/java-debug/ || exit 1
+./mvnw clean install -T 16 || exit 1
+cd - || exit 1
+
+cd ~ || exit 1
+git clone https://github.com/microsoft/vscode-java-test.git || exit 1
+cd - || exit 1
+cd ~/vscode-java-test/ || exit 1
+npm install || exit 1
+npm run build-plugin || exit 1
+cd - || exit 1
+
+cd ~ || exit 1
+mkdir -p .virtualenvs || exit 1
 cd - || exit 1
 cd ~/.virtualenvs || exit 1
-python -m venv debugpy
-debugpy/bin/python -m pip install debugpy
+python -m venv debugpy || exit 1
+debugpy/bin/python -m pip install debugpy || exit 1
 cd - || exit 1
 
 log "Installation finished, but you may need restart your shell"
