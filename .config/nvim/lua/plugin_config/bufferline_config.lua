@@ -15,19 +15,26 @@ require'bufferline'.setup {
 --     right_trunc_marker = plain and '>' or nil,
     offsets = {
         {
-            filetype = "aerial",
-            text = "File Outlook",
-            highlight = "Directory",
-            text_align = "left",
-            separator = true
-        },
-        {
             filetype = "NvimTree",
             text = "File Explorer",
             highlight = "Directory",
             text_align = "left",
             separator = true
         },
+        -- {
+        --     filetype = "aerial",
+        --     text = "File Outlook",
+        --     highlight = "Directory",
+        --     text_align = "left",
+        --     separator = true
+        -- },
+        -- {
+        --     filetype = "sagaoutline",
+        --     text = "File Outline",
+        --     highlight = "Directory",
+        --     text_align = "left",
+        --     separator = true
+        -- },
     },
     close_command = function(bufnum)
         -- when closing some files, this function will throw a exception

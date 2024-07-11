@@ -5,10 +5,6 @@
 #                  append all the contents of ./file to $HOME/file or
 #                  copy ./file to $HOME/
 # Recover Function: copy ./backup/file to $HOME/
-# Init Function: this is for first use this, it will backup, update and install plugins
-#                automatically, this will use vim commands :PlugInstall to install,
-#                and will install ycm clangd-completer automatically.
-#                this code will use sudo, so you need enter your password.
 # No Args: this will recover, backup and update.
 # NOTE: any operation reference to update will overwrite the backup files,
 #       so use ./dot_files.py with no args are strongly recommended.
@@ -26,9 +22,6 @@
 #       your conda environment is where you install pandoc,
 #       if you never convert vimwiki to html files, you can ignore this.
 # NOTE: make sure you conda environments are all deactived before runnint with init
-# BUG: the leader f and markdown preview must be re-installed after all the plugins
-#      finish install, I don't know why now. You can just rm LeaderF and markdownpreview's
-#      repositories at ~/.vim/plugged/ and then rum vim +PlugInstall to install manually.
 ignore_file = set(["./.git", "./LICENSE", "./README.md",
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py",
                    "./installer", "./vscode-setting", "./README.assets", "./markdownBackup"])
@@ -36,8 +29,7 @@ ignore_file = set(["./.git", "./LICENSE", "./README.md",
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,
 # Add it to the variable.
-copy_file = set(["./.vimrc", "./.vim", "./.tmux.conf", "./proxy.sh",
-                 "./proxy.fish", "./.config/nvim"])
+copy_file = set(["./.tmux.conf", "./proxy.sh", "./proxy.fish", "./.config/nvim"])
 # Update the string to specify where you want to store the backed-up files
 # or where you want to recover from
 backup_dir = "./backup"
@@ -136,7 +128,6 @@ def recover_dot_files(home_current_dir, current_dir):
                              current_dir + recover_file)
 
 def install_useful_softwares():
-    print("install useful softwares...")
     os.system("cd installer && bash installer.sh")
 
 def operate_dot_files(home_current_dir : str, current_dir : str,
@@ -168,10 +159,7 @@ if __name__ == "__main__":
             if confirm == 'n':
                 exit(0)
             elif confirm == 'y':
-                is_root = True
                 break
-    else:
-        is_root = False
     if len(sys.argv) == 2:
         opcode =  sys.argv[1]
     elif len(sys.argv) > 2:

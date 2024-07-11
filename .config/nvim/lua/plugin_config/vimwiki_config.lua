@@ -4,14 +4,14 @@ vim.g.vimwiki_list = {
     path = "/mnt/e/vimwiki/programming",
     syntax = "markdown",
     ext = ".md",
-    custom_wiki2html = "~/.vim/autoload/wiki2html.sh",
+    custom_wiki2html = "~/.config/nvim/wiki2html.sh",
   },
   {
     path_html = "/mnt/e/vimwiki/blog/html",
     path = "/mnt/e/vimwiki/blog",
     syntax = "markdown",
     ext = ".md",
-    custom_wiki2html = "~/.vim/autoload/wiki2html.sh",
+    custom_wiki2html = "~/.config/nvim/wiki2html.sh",
   },
 }
 

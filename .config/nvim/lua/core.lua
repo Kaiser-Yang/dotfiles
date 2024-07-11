@@ -1,4 +1,5 @@
 vim.cmd [[
+set spelllang=en_us,en
 set pumheight=15
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()

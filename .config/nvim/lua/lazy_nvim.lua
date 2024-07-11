@@ -14,36 +14,123 @@ CopilotDisable = false
 require('lazy').setup({
     -- TODO: undotree vim-which-key tabular
     spec = {
-        { import = 'plugin_config/copilotchat_config' },
         {
-            'luozhiya/fittencode.nvim',
-            config = function()
-                require'plugin_config/fittencode_config'
-            end,
+            'gbprod/yanky.nvim',
+            config = function() require'plugin_config/yanky_config' end,
         },
         {
-            "iamcco/markdown-preview.nvim",
-            cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-            ft = { "markdown" },
-            build = function() vim.fn["mkdp#util#install"]() end,
+            'akinsho/git-conflict.nvim',
+            version = "*",
+            config = function() require'plugin_config/gitconflict_config' end,
         },
         {
-            'stevearc/aerial.nvim',
-            config = function() require'plugin_config/aerial_config' end,
+            'lewis6991/gitsigns.nvim',
+            config = function() require'plugin_config/gitsigns_config' end,
+        },
+        {
+            "williamboman/mason.nvim",
+                -- "mason-org/mason-registry",
+            -- do not update this with config, nvim-java requires this be loaded with opts
+            opts = {
+                ui = {
+                    icons = {
+                        package_installed = "✓",
+                        package_pending = "➜",
+                        package_uninstalled = "✗"
+                    }
+                }
+            }
+        },
+        {
+            'williamboman/mason-lspconfig.nvim',
             dependencies = {
-                "nvim-treesitter/nvim-treesitter",
-                "nvim-tree/nvim-web-devicons"
+                "williamboman/mason.nvim",
             },
+            config = function ()
+                require("mason-lspconfig").setup {
+                ensure_installed = { "clangd", "cmake", "pyright", "lua_ls", "tsserver", "jdtls", "jsonls",
+                    "lemminx" },
+                automatic_installation = true}
+            end
         },
+        {
+            'neovim/nvim-lspconfig',
+            config = function() require'plugin_config/nvimlspconfig_config' end,
+        },
+        {
+            'hrsh7th/nvim-cmp',
+            dependencies = {
+                'hrsh7th/cmp-nvim-lsp',
+                'hrsh7th/cmp-buffer',
+                'hrsh7th/cmp-path',
+                'hrsh7th/cmp-cmdline',
+                'hrsh7th/cmp-nvim-lua',
+                'chrisgrieser/cmp_yanky',
+                'onsails/lspkind-nvim',
+                'saadparwaiz1/cmp_luasnip',
+                'uga-rosa/cmp-dictionary',
+                'f3fora/cmp-spell',
+                {
+                    'L3MON4D3/LuaSnip',
+                    build = 'make install_jsregexp || true',
+                    dependencies = {
+                        'rafamadriz/friendly-snippets',
+                    },
+                    config = function() require'plugin_config/luasnip_config' end,
+                },
+                -- 'hrsh7th/cmp-nvim-lsp-signature-help',
+                -- 'hrsh7th/cmp-calc',
+                -- 'petertriho/cmp-git',
+                -- 'lukas-reineke/cmp-rg',
+                -- 'roobert/tailwindcss-colorizer-cmp.nvim',
+                -- "lukas-reineke/cmp-under-comparator",
+                -- 'hrsh7th/cmp-copilot', -- INFO: uncomment this for AI completion
+                -- {
+                --     'Ninlives/cmp-rime',
+                --     run = ':UpdateRemotePlugins | !rm -rf /tmp/tmp-pyrime && git clone https://github.com/Ninlives/pyrime /tmp/tmp-pyrime && cd /tmp/tmp-pyrime && python setup.py install --prefix ~/.local',
+                -- },
+                -- {
+                --     os.getenv('ARCHIBATE_COMPUTER') and '/home/bate/Codes/cmp-rime' or 'archibate/cmp-rime',
+                --     run = 'make',
+                -- },
+            },
+            config = function() require'plugin_config/nvimcmp_config' end,
+        },
+        {
+            'dgagn/diagflow.nvim',
+            event = 'LspAttach',
+            config = function() require'plugin_config/diagflow_config' end,
+        },
+        {
+            'nvimdev/lspsaga.nvim',
+            config = function() require'plugin_config/lspsaga_config' end,
+            event = 'LspAttach',
+            dependencies = {
+                'nvim-treesitter/nvim-treesitter', -- optional
+                'nvim-tree/nvim-web-devicons',     -- optional
+            }
+        },
+        -- {
+        --     'ray-x/lsp_signature.nvim',
+        --     config = function() require'plugin_config/lspsignature_config' end,
+        -- },
+
         {
             'github/copilot.vim',
             lazy = false,
             init = function() require'plugin_config/copilot_config' end,
         },
-        {
-            'preservim/nerdcommenter',
-            init = function() require'plugin_config/nerdcommenter_config' end,
-        },
+        { import = 'plugin_config/copilotchat_config' },
+
+        -- Now use lspsaga outline
+        -- {
+        --     'stevearc/aerial.nvim',
+        --     config = function() require'plugin_config/aerial_config' end,
+        --     dependencies = {
+        --         "nvim-treesitter/nvim-treesitter",
+        --         "nvim-tree/nvim-web-devicons"
+        --     },
+        -- },
         {
             "lukas-reineke/indent-blankline.nvim",
             main = "ibl",
@@ -64,28 +151,42 @@ require('lazy').setup({
             end,
         },
         {
-            "kylechui/nvim-surround",
-            version = "*", -- Use for stability; omit to use `main` branch for the latest features
-            event = "VeryLazy",
-            opts = {},
-        },
-        {
             'akinsho/bufferline.nvim',
             version = '*',
             dependencies = { 'famiu/bufdelete.nvim' },
             config = function() require'plugin_config/bufferline_config' end,
         },
+
         {
-            'neoclide/coc.nvim',
-            branch = 'master',
-            build = 'npm ci',
-            init = function() require('plugin_config/coc_config') end
+            'preservim/nerdcommenter',
+            init = function() require'plugin_config/nerdcommenter_config' end,
+        },
+        {
+            'jiangmiao/auto-pairs',
+            event = {'InsertEnter'},
+            init = function() require'plugin_config/autopairs_config' end,
+            -- lazy.nvim fails to load, we must initialize auto-pairs manually
+            config = function() vim.cmd[[call AutoPairsInit()]] end,
+        },
+        {
+            "kylechui/nvim-surround",
+            version = "*", -- Use for stability; omit to use `main` branch for the latest features
+            event = "VeryLazy",
+            opts = {},
+        },
+
+        {
+            "iamcco/markdown-preview.nvim",
+            cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+            ft = { "markdown" },
+            build = function() vim.fn["mkdp#util#install"]() end,
         },
         {
             'vimwiki/vimwiki',
             lazy = false,
             init = function() require('plugin_config/vimwiki_config') end
         },
+
         {
             "christoomey/vim-tmux-navigator",
             cmd = {
@@ -93,14 +194,14 @@ require('lazy').setup({
                 "TmuxNavigateDown",
                 "TmuxNavigateUp",
                 "TmuxNavigateRight",
-    --          "TmuxNavigatePrevious",
+                "TmuxNavigatePrevious",
             },
             keys = {
                 { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
                 { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
                 { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
                 { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
-    --             { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+                -- { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
             },
             init = function() require'plugin_config/vimtmuxnavigator_config' end
         },
@@ -109,14 +210,15 @@ require('lazy').setup({
             build = function() require('nvim-treesitter.install').update({ with_sync = true })() end,
             config = function() require'plugin_config/nvimtreesitter_config' end,
             dependencies = {
-                'p00f/nvim-ts-rainbow',
+                -- TODO: this will cause problems
+                -- 'p00f/nvim-ts-rainbow',
                 'nvim-treesitter/nvim-treesitter-context',
                 'JoosepAlviste/nvim-ts-context-commentstring',
                 -- TODO: check which one is needed
-    --             'nvim-treesitter/nvim-treesitter-textobjects',
-    --             'windwp/nvim-ts-autotag',
-    --             'andymass/vim-matchup',
-    --             'mfussenegger/nvim-treehopper',
+                -- 'nvim-treesitter/nvim-treesitter-textobjects',
+                -- 'windwp/nvim-ts-autotag',
+                -- 'andymass/vim-matchup',
+                -- 'mfussenegger/nvim-treehopper',
             },
         },
         {
@@ -124,7 +226,6 @@ require('lazy').setup({
             version = "*",
             lazy = false,
             dependencies = { "nvim-tree/nvim-web-devicons" },
-    --         config = function() require'nvim-tree'.setup() end
             config = function() require("plugin_config/nvimtree_config") end,
         },
         {
@@ -148,11 +249,8 @@ require('lazy').setup({
             build = function() require("telescope").load_extension("ui-select") end,
         },
         {
-            'jiangmiao/auto-pairs',
-            event = {'InsertEnter'},
-            init = function() require'plugin_config/autopairs_config' end,
-            -- lazy.nvim fails to load, we must initialize auto-pairs manually
-            config = function() vim.cmd[[call AutoPairsInit()]] end,
+            "rcarriga/nvim-notify",
+            config = function () require'plugin_config/nvimnotify_config' end,
         },
         {
             "folke/noice.nvim",
@@ -171,10 +269,7 @@ require('lazy').setup({
             "Pocco81/auto-save.nvim",
             opts = {},
         },
-        {
-            "rcarriga/nvim-notify",
-            config = function () require'plugin_config/nvimnotify_config' end,
-        },
+
         {
             "rcarriga/nvim-dap-ui",
             dependencies = {
@@ -184,5 +279,27 @@ require('lazy').setup({
             },
             config = function () require 'plugin_config/nvimdap_config' end,
         },
-    },
+        {
+            'nvim-java/nvim-java',
+        },
+        -- {
+        --     "mfussenegger/nvim-jdtls",
+        --     ft = { "java" },
+        --     dependencies = {
+        --         "mfussenegger/nvim-dap",
+        --     }
+        -- },
+        -- {
+        --         'neoclide/coc.nvim',
+        --         branch = 'master',
+        --         build = 'npm ci',
+        --         init = function() require('plugin_config/coc_config') end
+        -- },
+        -- {
+        --     'luozhiya/fittencode.nvim',
+        --     config = function()
+        --         require'plugin_config/fittencode_config'
+        --     end,
+        -- },
+    }
 })

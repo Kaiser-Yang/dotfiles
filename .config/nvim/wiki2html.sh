@@ -36,4 +36,3 @@ fi
 sed -r 's/^[^!]*(\[.+\])\(([^.]+?)\)/\1(\2.html)/g' < "$INPUT" \
 | pandoc $MATH -s -f $SYNTAX -t html -c $CSSFILENAME --metadata pagetitle="$FILE" \
 > "$OUTPUT"
-
