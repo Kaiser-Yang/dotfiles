@@ -1,5 +1,6 @@
 local mapping = require("yanky.telescope.mapping")
 require("telescope").load_extension("yank_history")
+-- TODO there will be some errors
 require'yanky'.setup({
     picker = {
         highlight = {

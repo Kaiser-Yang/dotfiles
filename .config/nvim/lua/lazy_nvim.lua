@@ -29,11 +29,29 @@ require('lazy').setup({
         },
         {
             "williamboman/mason.nvim",
-            dependencies = {
-                'williamboman/mason-lspconfig.nvim',
                 -- "mason-org/mason-registry",
+            -- do not update this with config, nvim-java requires this be loaded with opts
+            opts = {
+                ui = {
+                    icons = {
+                        package_installed = "✓",
+                        package_pending = "➜",
+                        package_uninstalled = "✗"
+                    }
+                }
+            }
+        },
+        {
+            'williamboman/mason-lspconfig.nvim',
+            dependencies = {
+                "williamboman/mason.nvim",
             },
-            config = function () require"plugin_config/mason_config" end,
+            config = function ()
+                require("mason-lspconfig").setup {
+                ensure_installed = { "clangd", "cmake", "pyright", "lua_ls", "tsserver", "jdtls", "jsonls",
+                    "lemminx" },
+                automatic_installation = true}
+            end
         },
         {
             'neovim/nvim-lspconfig',
@@ -261,11 +279,15 @@ require('lazy').setup({
             config = function () require 'plugin_config/nvimdap_config' end,
         },
         {
-            "mfussenegger/nvim-jdtls",
-            dependencies = {
-                "mfussenegger/nvim-dap",
-            }
+            'nvim-java/nvim-java',
         },
+        -- {
+        --     "mfussenegger/nvim-jdtls",
+        --     ft = { "java" },
+        --     dependencies = {
+        --         "mfussenegger/nvim-dap",
+        --     }
+        -- },
         -- {
         --         'neoclide/coc.nvim',
         --         branch = 'master',

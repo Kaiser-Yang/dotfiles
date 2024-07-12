@@ -115,14 +115,6 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 # restart docker
 sudo systemctl restart docker || exit 1
 
-# TODO: check this
-cd ~ || exit 1
-wget 'https://www.eclipse.org/downloads/download.php?file=/jdtls/milestones/1.9.0/jdt-language-server-1.9.0-202203031534.tar.gz' -O jdtls.tar.gz
-mkdir -p jdtls
-tar -zxf jdtls.tar.gz -C jdtls
-rm -rf jdtls.tar.gz
-cd - || exit 1
-
 cd ~ || exit 1
 git clone https://github.com/microsoft/java-debug.git || exit 1
 cd - || exit 1

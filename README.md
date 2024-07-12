@@ -1,8 +1,32 @@
 # dotfiles
 My own configure files for UNIX/Linux tools.
 
-## TODO
-* update the doc: now we don't use `vim` anymore, we don't use `coc` anymore.
+## Some Known Bugs
+### Unfixed
+* When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line.
+* `<C-N>` can not back to normal when in replacing mode (after pressing `r`). This seems impossible
+to fix, because when press `r<C-N>`, your key sequence is `r<C-N>` (pressing `r` will still waiting
+your input, you can see that through the statusline). But `R` is OK, because pressing `R` will let
+you enter `REPLACE` mode, you can use `<C-N>` to go back to normal mode.
+* When there are more than `3` notifications, the cursor will be flickring. This may have something
+to do with the `novim-notify`.
+
+### Fixed
+* `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file,
+`auto-pairs` will be loaded.
+* When you use `:q` to quit the terminal, the terminal cannot be opened again. This is because we
+will record the terminal's status when you use `Q`, but when you use `:q`, we will not record the
+terminal's status. So next time to open the terminal will think the terminal is visible, and hide
+it, which will trigger a error. The best way to quit the terminal is to use `Q`.
+* When the first time open terminal, it may be wrong highlight. I've disabled the `nvim-treesitter`
+for `fish` and `bash` to solve this.
+* When there is a `.root` directory, the `nvim-tree` will enter the root directory rather than the
+parent directory of `.root`.
+* `<CR>` can not auto indent.
+* `telescope` can not find files and contents if there is a `.root` directory.
+* Pyhton `gd` does not work.
+* No hover highlight.
+* When quit a help file which is editable, this may cause problem.
 
 ## Quick Start
 1. Use the command `git clone https://github.com/Kaiser-Yang/dotfiles.git` to clone this repository.
@@ -24,16 +48,12 @@ In `dot_files.py`, there are two variables:
 ignore_file = set(["./.git", "./LICENSE", "./README.md",
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py",
                    "./installer", "./vscode-setting", "./README.assets", "./markdownBackup"])
-copy_file = set(["./.vimrc", "./.vim", "./.tmux.conf", "./proxy.sh",
-                 "./proxy.fish", "./.config/nvim"])
+copy_file = set(["./.tmux.conf", "./proxy.sh", "./proxy.fish", "./.config/nvim"])
 ```
 
 The files or directories in `ignore_file` will be ignored during installation, and the files or
 directories in `copy_file` will be copied to your `$HOME` directory. The contents of files which are
 not in those two sets will be appended to the files in your `$HOME` directory.
-
-If you only want to install the configurations of `vim`, you just need to add `./.vimrc` and
-`./.vim` to `copy_file`, and add all other directory to `ignore_file`. Then run `./dot_files.py`.
 
 If you only want to install the configurations of `nvim`, you just need to add `./.config/nvim` to
 `copy_file`, and add all other directory to `ignore_file`. Then run `./dot_files.py`.
@@ -49,8 +69,8 @@ Besides, there are other types parameters you can pass to `dot_files.py`:
 * `update`: only update the configurations depending on the `ignore_file` and `copy_file`. This will
 backup the original files to `backup` directory first.
 * `recover`: recover all files from backup directory to `$HOME` directory.
-* `init`: install all plugins for `vim` and `nvim`, and install `fish` and set `fish` be your
-default shell.
+* `init`: install all plugins for `nvim`, `tmux` and install `fish` and set `fish` be your default
+shell.
 
 Indeed, if you run `./dot_files.py` with no parameters, it is same with
 `./dot_files.py recover && ./dot_files.py update`. So I strongly recommend you to use
@@ -65,8 +85,8 @@ This part will only show the screenshots of `nvim`.
 ## Telescope
 ![](README.assets/20240627185429.png)
 
-## Completion of coc.nvim
-![](README.assets/20240627185530.png)
+## Completion of nvim-cmp
+![](https://raw.githubusercontent.com/Kaiser-Yang/image-hosting-site/main/20240421-20250421/20240712151138.png)
 
 ## Inlay Hints from Copilot
 ![](README.assets/20240627185713.png)
@@ -87,18 +107,37 @@ image links with the local links. This will backup your markdown files first:
 
 ![](README.assets/20240627190253.png)
 
-# Vim Shortcuts
+# Shortcuts
 Note that my leader key is `Space`.
 
 Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V` means visual mode,
 `T` means terminal mode, `X` means select mode, and `N I` means normal mode and insert mode.
 
-## Save and Quit
-| Shortcut | Mode | Description |
-| -        | -    | - |
-| Q        | N    | Quit but not save |
+## Basic Shortcuts
+| Shortcut    | Mode      | Description |
+| -           | -         | - |
+| \<C-T>      | N I T     | Toggle a terminal |
 | \<C-S>   | N I  | Save but not quit |
-| S        | N    | Save and quit |
+| Q           | N         | Quit a window, quit a tab or unload a buffer, not save |
+| S           | N         | Similar with `Q`, but this will execute 'write' first |
+| \<C-N>      | T I V X N | Back to normal mode by `<C-\><C-N>` |
+| J           | V         | Move selected content down, support `{count}J` |
+| K           | V         | Move selected content up, support `{count}K` |
+| \<LEADER>r  | N         | Run the current file depends on its filetype, this will onpen a terminal for some filetypes |
+| \<LEADER>ay | N         | Copy all lines of current buffer to plus register |
+
+NOTE: The `Q`'s behavior depending on the status. If current buffer is a terminal, `nvimtree`,
+`aerial`, or `help`, this will use `bd!` to unload the buffer. If current tab has more than one
+window whose buffer is a visible one, `Q` will use `:quit!` to close window, but not unload the
+buffer. If there are more than one tab and only one window in current tab, this will close the whole
+tab and unload the empty `noname` buffers and other hidden buffers. If there only one tab, this will
+unload current buffer.
+
+NOTE: There will only be one terminal globally, this is for some simply commands, such as run a single
+`python` file or check the `cpu` usage by `top` or `htop`. If you want something complex, you should
+depend on the `tmux` rather than `nvim` terminal. Besides, the terminal will auto open when entering
+a new tab if there has been one open terminal or auto close when entering a new tab if the one has
+been closed. There only one terminal buffer, so each terminal has same contents.
 
 ## Window
 | Shortcut   | Mode | Description |
@@ -106,10 +145,10 @@ Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V
 | \<LEADER>h | N    | Split window horizontally, and move cursor to the left window |
 | \<LEADER>l | N    | Split window horizontally, and move cursor to the right window |
 | \<LEADER>t | N    | Create a new tab |
-| \<C-H>     | N    | Move cursor to the next left window |
-| \<C-J>     | N    | Move cursor to the next down window |
-| \<C-K>     | N    | Move cursor to the next up window |
-| \<C-L>     | N    | Move cursor to the next right window |
+| \<C-H>     | N T  | Move the cursor to the left window, this can jump over tmux |
+| \<C-J>     | N T  | Move the cursor to the bottom window, this can jump over tmux |
+| \<C-K>     | N T  | Move the cursor to the top window, this can jump over tmux |
+| \<C-L>     | N T  | Move the cursor to the right window, this can jump over tmux |
 | \<LEADER>H | N    | Close the current window, and reopen it at left |
 | \<LEADER>J | N    | Close the current window, and reopen it at bottom |
 | \<LEADER>K | N    | Close the current window, and reopen it at top |
@@ -155,7 +194,7 @@ can press `a`.
 | J        | V    | Move the selected lines down |
 | K        | V    | Move the selected lines up |
 
-Note that when `coc` suggestion list is not shown but `copilot` is shown, it is possible to use
+Note that when `cmp` suggestion list is not shown but `copilot` is shown, it is possible to use
 `<C-J>` and `<C-K>` to move the cursor to the next or previous selection of `copilot`.
 
 For example when you use `gr` to go to references of a function or a variable, there may be a
@@ -216,106 +255,55 @@ NOTE: the difference between `ysw[` ans `ysw]` is that the former will add white
 right, the latter will not.
 
 ### Code Related
+<!--| gh         | N    | Go to the header file |-->
+<!--| H          | N    | Quick fix |-->
 | Shortcut   | Mode | Description |
 | -          | -    | - |
 | gd         | N    | Go to definition |
 | gr         | N    | Go to references |
-| gh         | N    | Go to the header file |
 | \<LEADER>R | N    | Rename the current symbol |
 | \<LEADER>r | N    | Run the single file depending on its filetype |
-| H          | N    | Quick fix |
 | ]d         | N    | Go to next diagnostic |
 | [d         | N    | Go to previous diagnostic |
 | \<LEADER>d | N    | Show document symbols, this can also be used to show variables' types |
+
+### Git Related
+| Shortcut | Mode | Description |
+| -        | -    | - |
+| ]g       | N    | Go to next git hunk |
+| [g       | N    | Go to previous git hunk |
+| ]c       | N    | Go to next git conflict |
+| [c       | N    | Go to previous git conflict |
+| gcu      | N    | Undo current git hunk |
+| gcd      | N    | Show difference of current git hunk |
+| gcc      | N    | When there is a conflict, this will keep current change |
+| gci      | N    | When there is a conflict, this will keep incoming change |
+| gcb      | N    | When there is a conflict, this will keep both changes |
+| gcn      | N    | When there is a conflict, this will keep none change |
 
 ### Automatic Completion
 | Shortcut | Mode | Description |
 | -        | -    | - |
 | C-F      | I    | Select one line when `copilot` suggestions are shown |
 | \<ESC>f  | I    | Select one word when `copilot` suggestions are shown. In 7-bit terminal press `<M-F>` will trigger `<ESC>f` |
-| \<ENTER> | I    | Select current suggestion when one `coc` suggestion is selected |
-| \<ENTER> | I    | Select first suggestion when `coc` is not shown and `copilot` is shown |
-| \<C-C>   | I    | Cancel the completion, if `coc` and `copilot` are both shown, this will quit `coc`'s completion |
+| \<ENTER> | I    | Select current suggestion when one `cmp` suggestion is selected |
+| \<ENTER> | I    | Select first suggestion when `cmp` is not shown and `copilot` is shown |
+| \<C-C>   | I    | Close all completion when no selection in `cmp`; close `cmp` completion when there is a selection of `cmp`; close copilot completion when `cmp` invisible and copilit visible; back to normal |
 
 ### Others
-| Shortcut   | Mode | Description |
-| -          | -    | - |
-| \<C-Q>     | N I  | Open undo history |
-| \<C-W>     | N I  | Open outlook |
-| \<C-E>     | N I  | Open explorer |
-| \<C-P>     | N I  | Find files in the current directory or a git root directory |
-| \<C-F>     | N I  | Find contents in the current directory or a git root directory |
-| \<LEADER>a | N    | Align a block, `:`, `=` and `\|` are supported, for example, you can use `<LEADER>a=` to align a block of assignments |
-
-# Neovim Shortcuts
-Most shortcuts in `nvim` are same with those in `vim`, therefore, this part will only list the
-different ones or those only supported in `nvim`.
-
-NOTE: I now use `nvim`, the `vim` part will not be updated any more.
-
-## Some Known Bugs
-### Unfixed
-* When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line.
-* `<C-N>` can not back to normal when in replacing mode (after pressing `r`). This seems impossible
-to fix, because when press `r<C-N>`, your key sequence is `r<C-N>` (pressing `r` will still waiting
-your input, you can see that through the statusline). But `R` is OK, because pressing `R` will let
-you enter `REPLACE` mode, you can use `<C-N>` to go back to normal mode.
-* When there are more than `3` notifications, the cursor will be flickring. This may have something
-to do with the `novim-notify`.
-
-### Fixed
-* `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file,
-`auto-pairs` will be loaded.
-* When you use `:q` to quit the terminal, the terminal cannot be opened again. This is because we
-will record the terminal's status when you use `Q`, but when you use `:q`, we will not record the
-terminal's status. So next time to open the terminal will think the terminal is visible, and hide
-it, which will trigger a error. The best way to quit the terminal is to use `Q`.
-* When the first time open terminal, it may be wrong highlight. I've disabled the `nvim-treesitter`
-for `fish` and `bash` to solve this.
-* When there is a `.root` directory, the `nvim-tree` will enter the root directory rather than the
-parent directory of `.root`.
-* `<CR>` can not auto indent.
-* `telescope` can not find files and contents if there is a `.root` directory.
-* Pyhton `gd` does not work.
-* No hover highlight.
-* When quit a help file which is editable, this may cause problem.
-
-## Basic Shortcuts
-| Shortcut    | Mode      | Description |
-| -           | -         | - |
-| \<C-T>      | N I T     | Toggle a terminal |
-| Q           | N         | Quit a window, quit a tab or unload a buffer, not save |
-| S           | N         | Similar with `Q`, but this will execute 'write' first |
-| \<C-N>      | T I V X N | Back to normal mode by `<C-\><C-N>` |
-| J           | V         | Move selected content down, support `{count}J` |
-| K           | V         | Move selected content up, support `{count}K` |
-| \<LEADER>r  | N         | Run the current file depends on its filetype, this will onpen a terminal for some filetypes |
-| \<LEADER>ay | N         | Copy all lines of current buffer to plus register |
-
-NOTE: The `Q`'s behavior depending on the status. If current buffer is a terminal, `nvimtree`,
-`aerial`, or `help`, this will use `bd!` to unload the buffer. If current tab has more than one
-window whose buffer is a visible one, `Q` will use `:quit!` to close window, but not unload the
-buffer. If there are more than one tab and only one window in current tab, this will close the whole
-tab and unload the empty `noname` buffers and other hidden buffers. If there only one tab, this will
-unload current buffer.
-
-## Terminal Note
-There will only be one terminal globally, this is for some simply commands, such as run a single
-`python` file or check the `cpu` usage by `top` or `htop`. If you want something complex, you should
-depend on the `tmux` rather than `nvim` terminal. Besides, the terminal will auto open when entering
-a new tab if there has been one open terminal or auto close when entering a new tab if the one has
-been closed. There only one terminal buffer, so each terminal has same contents.
-
-## Useful Plugins' Shortcuts
+<!--| \<C-Q>     | N I  | Open undo history |-->
+<!--| \<LEADER>a | N    | Align a block, `:`, `=` and `\|` are supported, for example, you can use `<LEADER>a=` to align a block of assignments |-->
 | Shortcut          | Mode | Description |
 | -                 | -    | - |
+| \<C-W>            | N I  | Open code outline |
+| \<C-E>            | N I  | Open explorer |
+| \<C-P>            | N I  | Find files in the current directory or a git root directory |
+| \<C-F>            | N I  | Find contents in the current directory or a git root directory |
 | ys{motion}f{name} | N    | Surround the part with a function call |
 | dsf               | N    | Delete a function call, only parameters will be left |
 | csf{name}         | N    | Change a function call with a new one |
 | \<CR>             | N    | In file explorer, this will enter a directory or open a file |
 | \<BS>             | N    | In file explorer, this will go to the `..` directory. You can use `?` to see more mappings in file explorer. |
-| gc                | N    | Open `coc-command` |
-| gl                | N    | Open `coc-list` |
 | gy                | N    | List all the yanked contents |
 | \<LEADER>ay       | N    | Yank all contents |
 | \<ESC>            | I    | When use `telescope` to search, `<ESC>` will let you back to normal mode |
@@ -326,15 +314,10 @@ been closed. There only one terminal buffer, so each terminal has same contents.
 | gb                | N    | Buffer pick |
 | \<LEADER>n        | N    | Go to the right buffer shown in `bufline` |
 | \<LEADER>b        | N    | Go to the left buffer shown in `bufline` |
-| \<C-H>            | N T  | Move the cursor to the left window, this can jump over tmux |
-| \<C-J>            | N T  | Move the cursor to the bottom window, this can jump over tmux |
-| \<C-K>            | N T  | Move the cursor to the top window, this can jump over tmux |
-| \<C-L>            | N T  | Move the cursor to the right window, this can jump over tmux |
 | \<C-D>            | I    | Scroll down the completion preview window, if there is one |
 | \<C-U>            | I    | Scroll up the completion preview window, if there is one |
-| \<C-C>            | I    | Close all completion when no selection in coc; close coc completion when there is a selection of coc; close copilot completion when coc invisible and copilit visible; back to normal |
 
-## Debugger
+### Debugger
 | Shortcut   | Mode | Description |
 | -          | -    | - |
 | \<LEADER>D | N    | Toggle the `dap-ui`. |

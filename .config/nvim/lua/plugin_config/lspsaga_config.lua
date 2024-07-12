@@ -28,5 +28,9 @@ require('lspsaga').setup({
         keys = {
             quit = { 'Q', 'q' }
         }
-    }
+    },
+    lightbulb = {
+        enabled = true,
+        sign = false,
+    },
 })

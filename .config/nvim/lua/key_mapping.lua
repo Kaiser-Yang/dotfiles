@@ -327,7 +327,7 @@ map.set({ 'n' }, 'gcu', require'gitsigns'.undo_stage_hunk, DefaultOpt())
 map.set({ 'n' }, 'gcd', require'gitsigns'.preview_hunk, DefaultOpt())
 
 map.set({ 'n' }, 'gy', '<cmd>Telescope yank_history<cr>', DefaultOpt())
-map.set({ 'n' }, '[d', '<cmd>Lspsaga diagnostic_jump_next<cr>', DefaultOpt())
+map.set({ 'n' }, '[d', '<cmd>Lspsaga diagnostic_jump_prev<cr>', DefaultOpt())
 map.set({ 'n' }, ']d', '<cmd>Lspsaga diagnostic_jump_next<cr>', DefaultOpt())
 map.set({ 'n' }, 'gr', '<cmd>Telescope lsp_references<cr>', DefaultOpt())
 -- optional implementation of goto definitions
@@ -342,9 +342,9 @@ end, DefaultOpt())
 map.set({ 'n', 'x' }, 'ga', "<cmd>Lspsaga code_action<cr>", DefaultOpt())
 map.set({ 'n' }, 'gi', "<cmd>Lspsaga finder imp<cr>", DefaultOpt())
 vim.cmd [[
-autocmd CursorHold  <buffer><silent> lua if vim.lsp.get_clients()[1].server_capabilities['documentHighlightProvider'] then vim.lsp.buf.document_highlight() end
-autocmd CursorHoldI <buffer><silent> lua if vim.lsp.get_clients()[1].server_capabilities['documentHighlightProvider'] then vim.lsp.buf.document_highlight() end
-autocmd CursorMoved <buffer><silent> lua if vim.lsp.get_clients()[1].server_capabilities['documentHighlightProvider'] then vim.lsp.buf.clear_references() end
+autocmd CursorHold  <buffer><silent> lua if vim.lsp.get_clients()[1] and vim.lsp.get_clients()[1].server_capabilities['documentHighlightProvider'] then vim.lsp.buf.document_highlight() end
+autocmd CursorHoldI <buffer><silent> lua if vim.lsp.get_clients()[1] and vim.lsp.get_clients()[1].server_capabilities['documentHighlightProvider'] then vim.lsp.buf.document_highlight() end
+autocmd CursorMoved <buffer><silent> lua if vim.lsp.get_clients()[1] and vim.lsp.get_clients()[1].server_capabilities['documentHighlightProvider'] then vim.lsp.buf.clear_references() end
 ]]
 -- TODO without implementation
 -- map.set({ 'n' }, 'gh', '<cmd>CocCommand clangd.switchSourceHeader<CR>', DefaultOpt())

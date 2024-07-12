@@ -19,19 +19,19 @@ require'telescope'.setup({
             },
             initial_mode = 'normal',
         },
-        yanky_history = {
-            layout_strategy = "vertical",
-            layout_config = {
-                vertical = {
-                    anchor = 'S',
-                    height = 0.5,
-                    preview_height = 0.3,
-                    width = { padding = 0 },
-                    prompt_position = 'bottom',
-                },
-            },
-            initial_mode = 'normal',
-        }
+        -- yanky_history = {
+        --     layout_strategy = "vertical",
+        --     layout_config = {
+        --         vertical = {
+        --             anchor = 'S',
+        --             height = 0.5,
+        --             preview_height = 0.3,
+        --             width = { padding = 0 },
+        --             prompt_position = 'bottom',
+        --         },
+        --     },
+        --     initial_mode = 'normal',
+        -- }
     },
     defaults = {
         mappings = {
