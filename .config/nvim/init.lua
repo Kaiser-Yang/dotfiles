@@ -7,7 +7,5 @@ vim.g.mapleader = ' '
 -- first time installation may fail, so we use pcall
 -- we first load all the plugins
 pcall(require, 'lazy_nvim')
-pcall(require, 'coc_dap_init.lua')
-pcall(require, 'key_mapping')
--- place this at the last so that the autocmd can be effective
 pcall(require, 'core')
+-- place this at the last so that the autocmd can be effective
