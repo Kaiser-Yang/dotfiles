@@ -32,7 +32,7 @@ if ! command -v sudo; then
 fi
 
 # basic tools
-sudo apt install -y curl wget tar ripgrep || exit 1
+sudo apt install -y curl unzip wget tar ripgrep || exit 1
 
 # formater for python3
 sudo apt install -y python3-autopep8
