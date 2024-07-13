@@ -213,14 +213,18 @@ local function autoClose()
     end
     -- unload all empty buffers
     if #emptyBuffer > 0 then
-        for buf in emptyBuffer do
-            vim.cmd('silent! bd!' .. buf)
+        for _, buf in ipairs(emptyBuffer) do
+            vim.cmd('silent! bd! ' .. buf)
         end
     end
-    -- only when there are hidden buffers, we need close current tab
-    -- because when there is no hidden buffer, bd! will close the tab, too
-    if hiddenBuf > 0 then
-        vim.cmd'silent! tabclose!'
+    if #vim.api.nvim_list_tabpages() > 1 then
+        -- only when there are hidden buffers, we need close current tab
+        -- because when there is no hidden buffer, bd! will close the tab, too
+        if hiddenBuf > 0 then
+            vim.cmd'silent! tabclose!'
+        end
+    else
+        vim.cmd('qa')
     end
 end
 function QuitNotSaveOnBuffer()
@@ -230,6 +234,7 @@ function QuitNotSaveOnBuffer()
     end
     if terminal or not bufVisible(vim.api.nvim_get_current_buf()) then
         vim.cmd('silent! bd!')
+        autoClose()
         return
     end
     local windows = vim.api.nvim_tabpage_list_wins(0)
@@ -255,11 +260,11 @@ function QuitNotSaveOnBuffer()
             pcall(require("bufdelete").bufdelete, 0, true)
         elseif tabCnt > 1 then
             vim.cmd('silent! q!')
-            autoClose()
         elseif bufferCnt == 1 then
             vim.cmd('silent! qa!')
         end
     end
+    autoClose()
 end
 function QuitSaveOnBuffer()
     vim.cmd('w')
@@ -439,11 +444,12 @@ local function OpenNvimTreeOnStart(data)
     -- buffer is a real file on the disk
     local nameFile = vim.fn.filereadable(data.file) == 1
 
+    -- check if data.file contain NvimTree
     -- buffer is a [No Name]
     local noName = #vim.v.argv == 2
 
     -- buffer is a directory
-    local directory = #vim.v.argv == 3 and vim.fn.isdirectory(vim.v.argv[3]) == 1
+    local directory = string.find(data.file, "NvimTree") ~= nil
 
     -- current open file's filetype is git*
     local filetype = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), "filetype")

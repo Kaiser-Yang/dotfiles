@@ -296,8 +296,8 @@ right, the latter will not.
 <!--| \<LEADER>a | N    | Align a block, `:`, `=` and `\|` are supported, for example, you can use `<LEADER>a=` to align a block of assignments |-->
 | Shortcut          | Mode | Description |
 | -                 | -    | - |
-| \<C-W>            | N I  | Open code outline |
-| \<C-E>            | N I  | Open explorer |
+| \<C-W>            | N I  | Toggle code outline |
+| \<C-E>            | N I  | Toggle explorer |
 | \<C-P>            | N I  | Find files in the current directory or a git root directory |
 | \<C-F>            | N I  | Find contents in the current directory or a git root directory |
 | ys{motion}f{name} | N    | Surround the part with a function call |
