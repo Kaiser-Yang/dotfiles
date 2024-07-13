@@ -1,3 +1,40 @@
+# Table of Contents
+
+<!-- vim-markdown-toc GFM -->
+
+* [dotfiles](#dotfiles)
+    * [Some Known Bugs](#some-known-bugs)
+        * [Unfixed](#unfixed)
+        * [Fixed](#fixed)
+    * [Quick Start](#quick-start)
+    * [More Information](#more-information)
+* [Screenshots](#screenshots)
+    * [Terminal](#terminal)
+    * [Telescope](#telescope)
+    * [Completion of nvim-cmp](#completion-of-nvim-cmp)
+    * [Inlay Hints from Copilot](#inlay-hints-from-copilot)
+    * [Copilot Chat](#copilot-chat)
+    * [Nvim Tree](#nvim-tree)
+    * [Markdown Preview](#markdown-preview)
+    * [Auto Download and Replace Images in Markdown](#auto-download-and-replace-images-in-markdown)
+* [Shortcuts](#shortcuts)
+    * [Basic Shortcuts](#basic-shortcuts)
+    * [Window](#window)
+    * [Copy and Paste](#copy-and-paste)
+    * [Cursor Movement](#cursor-movement)
+    * [Markdown Helper](#markdown-helper)
+    * [Useful Plugins' Shortcuts](#useful-plugins-shortcuts)
+        * [Commenting](#commenting)
+        * [Surrounding](#surrounding)
+        * [Code Related](#code-related)
+        * [Git Related](#git-related)
+        * [Automatic Completion](#automatic-completion)
+        * [Others](#others)
+        * [Debugger](#debugger)
+* [Contribution](#contribution)
+
+<!-- vim-markdown-toc -->
+
 # dotfiles
 My own configure files for UNIX/Linux tools.
 
@@ -11,6 +48,7 @@ you enter `REPLACE` mode, you can use `<C-N>` to go back to normal mode.
 * When there are more than `3` notifications, the cursor will be flickring. This may have something
 to do with the `novim-notify`.
 * In `cmd` search, when you remove the last character, the removed character is still visible.
+* Quit may be slow.
 
 ### Fixed
 * `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file,
@@ -28,6 +66,7 @@ parent directory of `.root`.
 * Pyhton `gd` does not work.
 * No hover highlight.
 * When quit a help file which is editable, this may cause problem.
+* Quit with `Q` take a long time when quiting the last buffer.
 
 ## Quick Start
 1. Use the command `git clone https://github.com/Kaiser-Yang/dotfiles.git` to clone this repository.
@@ -227,23 +266,25 @@ with `<LEADER>`, `[` or `]` can be seen in `vimwhichkey` plugin, which means you
 started with the key you press.
 
 ### Commenting
-| Shortcut            | Mode | Description |
-| -                   | -    | - |
-| \<LEADER>c\<LEADER> | N    | Comment or uncomment the current line, this can be used as `2<LEADER>c<LEADER>` to comment or uncomment 2 lines |
-| \<LEADER>c\<LEADER> | V    | Comment or uncomment the selected line |
-| \<LEADER>cl         | N    | Comment the current line and align left, this can be used as `2<LEADER>cl` to comment 2 lines |
-| \<LEADER>cl         | V    | Comment the selected lines and align left |
+| Shortcut                   | Mode | Description |
+| -                          | -    | - |
+| [count]\<LEADER>c\<LEADER> | N    | Toggle comments (line style) |
+| [count]\<LEADER>cs         | N    | Toggle comments (block style) |
+| \<LEADER>c[count][motion]  | N    | Toggle comments (line style) with motion |
+| \<LEADER>s[count][motion]  | N    | Toggle comments (block style) with motion |
+| \<LEADER>c\<LEADER>        | V    | Toggle comments (line style) of the selected line |
+| \<LEADER>cs                | V    | Toggle comments (block style) of the selected line |
 
 ### Surrounding
-| Shortcut            | Mode | Description |
-| -                   | -    | - |
-| ys                  | N    | Surround something, you can use `ysw[` or `ysw]` to surround a word with `[]`, and you can use `ysf` and `yst` to find or till some character |
-| yss                 | N    | Surround the whole line with the character you input, this one will put the surrounding in the current line |
-| ySS                 | N    | Surround the whole line with the character you input, this one will put the surrounding in new lines |
-| ds                  | N    | Delete the surrounding you input |
-| cs                  | N    | Change the surround with a new one |
-| S                   | V    | Surround the selected characters |
-| \<C-B>              | I    | Back insert a surrounding, when a surrounding does not match, you press the close surrounding, the cursor may jump to the next close surrounding rather than inserting a new close surrounding. In this case, you can use `<C-B>` to back insert a close surrounding |
+| Shortcut              | Mode | Description |
+| -                     | -    | - |
+| ys\<motion>\<bracket> | N    | Surround something |
+| yss\<bracket>         | N    | Surround the whole line with the character you input, this one will put the surrounding in the current line |
+| ySS\<bracket>         | N    | Surround the whole line with the character you input, this one will put the surrounding in new lines |
+| ds\<bracket>          | N    | Delete the surrounding you input |
+| cs\<old>\<new>        | N    | Change the surround with a new one |
+| S\<bracket>           | V    | Surround the selected characters |
+| \<C-B>                | I    | Back insert a surrounding, when a surrounding does not match, you press the close surrounding, the cursor may jump to the next close surrounding rather than inserting a new close surrounding. In this case, you can use `<C-B>` to back insert a close surrounding |
 
 Some examples of surrounding:
 * `ysf;{`: surround the character from the cursor to next `;` with `{}`.
@@ -317,6 +358,7 @@ right, the latter will not.
 | \<LEADER>b        | N    | Go to the left buffer shown in `bufline` |
 | \<C-D>            | I    | Scroll down the completion preview window, if there is one |
 | \<C-U>            | I    | Scroll up the completion preview window, if there is one |
+| gz                | N    | Toggle Zen Mode |
 
 ### Debugger
 | Shortcut   | Mode | Description |

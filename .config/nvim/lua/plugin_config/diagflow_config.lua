@@ -9,13 +9,14 @@ require('diagflow').setup({
         hint = "DiagnosticFloatingHint",
     },
     format = function(diagnostic)
-        if vim.fn.mode() == "i" then
+        -- for normal mode we have lspsaga
+        if vim.fn.mode() == "n" then
             return ''
         end
         local severity = vim.diagnostic.severity[diagnostic.severity]
         local status, sign = pcall(function()
             return vim.trim(
-                vim.fn.sign_getdefined(
+            vim.fn.sign_getdefined(
                     "DiagnosticSign" .. severity:lower():gsub("^%l", string.upper)
                 )[1].text
             )
@@ -33,7 +34,7 @@ require('diagflow').setup({
     placement = 'inline', -- 'top', 'inline'
     inline_padding_left = 0, -- the padding left when the placement is inline
     update_event = { 'DiagnosticChanged', 'BufReadPost', 'BufEnter' }, -- the event that updates the diagnostics cache
-    toggle_event = { 'InsertEnter', 'InsertLeave' }, -- if InsertEnter, can toggle the diagnostics on inserts
+    toggle_event = {  }, -- if InsertEnter, can toggle the diagnostics on inserts
     show_sign = false, -- set to true if you want to render the diagnostic sign before the diagnostic message
     render_event = { 'DiagnosticChanged', 'CursorMoved' },
     border_chars = {

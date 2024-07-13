@@ -12,24 +12,10 @@ end
 vim.opt.rtp:prepend(lazypath)
 CopilotDisable = false
 require('lazy').setup({
-    -- TODO: undotree vim-which-key tabular
+    -- TODO: undotree tabular
     spec = {
         {
-            'gbprod/yanky.nvim',
-            config = function() require'plugin_config/yanky_config' end,
-        },
-        {
-            'akinsho/git-conflict.nvim',
-            version = "*",
-            config = function() require'plugin_config/gitconflict_config' end,
-        },
-        {
-            'lewis6991/gitsigns.nvim',
-            config = function() require'plugin_config/gitsigns_config' end,
-        },
-        {
             "williamboman/mason.nvim",
-                -- "mason-org/mason-registry",
             -- do not update this with config, nvim-java requires this be loaded with opts
             opts = {
                 ui = {
@@ -48,15 +34,49 @@ require('lazy').setup({
             },
             config = function ()
                 require("mason-lspconfig").setup {
-                ensure_installed = { "clangd", "cmake", "pyright", "lua_ls", "tsserver", "jdtls", "jsonls",
-                    "lemminx" },
-                automatic_installation = true}
+                    ensure_installed = {
+                        "clangd",
+                        "cmake",
+                        "pyright",
+                        "lua_ls",
+                        "tsserver",
+                        "jdtls",
+                        "jsonls",
+                        "lemminx", -- xml lsp
+                        "yamlls",
+                        "vuels",
+                        -- FIX: this will fail: cargo failed with...
+                        -- "gitlab_ci_ls",
+                    },
+                    automatic_installation = true
+                }
             end
         },
         {
             'neovim/nvim-lspconfig',
+            dependencies = {
+                'williamboman/mason-lspconfig.nvim',
+            },
             config = function() require'plugin_config/nvimlspconfig_config' end,
         },
+        -- lazydev is for nvim configuration function completion
+        {
+            "folke/lazydev.nvim",
+            ft = "lua", -- only load on lua files
+            opts = {
+                library = {
+                    -- See the configuration section for more details
+                    -- Load luvit types when the `vim.uv` word is found
+                    { path = "luvit-meta/library", words = { "vim%.uv" } },
+                },
+                -- enable this may not complete right on other lua projects
+                -- NOTE: you can create a .luarc.json in your project root to disable this
+                enabled = function(root_dir)
+                    return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
+                end,
+            },
+        },
+        { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
         {
             'hrsh7th/nvim-cmp',
             dependencies = {
@@ -65,34 +85,32 @@ require('lazy').setup({
                 'hrsh7th/cmp-path',
                 'hrsh7th/cmp-cmdline',
                 'hrsh7th/cmp-nvim-lua',
+                'hrsh7th/cmp-calc',
                 'chrisgrieser/cmp_yanky',
                 'onsails/lspkind-nvim',
-                'saadparwaiz1/cmp_luasnip',
                 'uga-rosa/cmp-dictionary',
                 'f3fora/cmp-spell',
+                'petertriho/cmp-git',
+                'lukas-reineke/cmp-rg',
+                'saadparwaiz1/cmp_luasnip',
                 {
                     'L3MON4D3/LuaSnip',
-                    build = 'make install_jsregexp || true',
+                    version = "v2.*",
+                    build = 'make install_jsregexp',
                     dependencies = {
                         'rafamadriz/friendly-snippets',
                     },
                     config = function() require'plugin_config/luasnip_config' end,
                 },
-                -- 'hrsh7th/cmp-nvim-lsp-signature-help',
-                -- 'hrsh7th/cmp-calc',
-                -- 'petertriho/cmp-git',
-                -- 'lukas-reineke/cmp-rg',
-                -- 'roobert/tailwindcss-colorizer-cmp.nvim',
-                -- "lukas-reineke/cmp-under-comparator",
+                -- comparators making underlines lower priority
+                'lukas-reineke/cmp-under-comparator'
+
+                -- input method of Chinese
+                -- 'yehuohan/cmp-im',
+                -- 'yehuohan/cmp-im-zh',
+
+                -- 'roobert/tailwindcss-colorizer-cmp.nvim', -- INFO: uncomment this for css color
                 -- 'hrsh7th/cmp-copilot', -- INFO: uncomment this for AI completion
-                -- {
-                --     'Ninlives/cmp-rime',
-                --     run = ':UpdateRemotePlugins | !rm -rf /tmp/tmp-pyrime && git clone https://github.com/Ninlives/pyrime /tmp/tmp-pyrime && cd /tmp/tmp-pyrime && python setup.py install --prefix ~/.local',
-                -- },
-                -- {
-                --     os.getenv('ARCHIBATE_COMPUTER') and '/home/bate/Codes/cmp-rime' or 'archibate/cmp-rime',
-                --     run = 'make',
-                -- },
             },
             config = function() require'plugin_config/nvimcmp_config' end,
         },
@@ -110,27 +128,17 @@ require('lazy').setup({
                 'nvim-tree/nvim-web-devicons',     -- optional
             }
         },
-        -- {
-        --     'ray-x/lsp_signature.nvim',
-        --     config = function() require'plugin_config/lspsignature_config' end,
-        -- },
 
         {
-            'github/copilot.vim',
-            lazy = false,
-            init = function() require'plugin_config/copilot_config' end,
+            'akinsho/git-conflict.nvim',
+            version = "*",
+            config = function() require'plugin_config/gitconflict_config' end,
         },
-        { import = 'plugin_config/copilotchat_config' },
+        {
+            'lewis6991/gitsigns.nvim',
+            config = function() require'plugin_config/gitsigns_config' end,
+        },
 
-        -- Now use lspsaga outline
-        -- {
-        --     'stevearc/aerial.nvim',
-        --     config = function() require'plugin_config/aerial_config' end,
-        --     dependencies = {
-        --         "nvim-treesitter/nvim-treesitter",
-        --         "nvim-tree/nvim-web-devicons"
-        --     },
-        -- },
         {
             "lukas-reineke/indent-blankline.nvim",
             main = "ibl",
@@ -158,8 +166,19 @@ require('lazy').setup({
         },
 
         {
-            'preservim/nerdcommenter',
-            init = function() require'plugin_config/nerdcommenter_config' end,
+            'github/copilot.vim',
+            lazy = false,
+            init = function() require'plugin_config/copilot_config' end,
+        },
+        { import = 'plugin_config/copilotchat_config' },
+
+        {
+            'gbprod/yanky.nvim',
+            config = function() require'plugin_config/yanky_config' end,
+        },
+        {
+            'numToStr/Comment.nvim',
+            config = function() require'plugin_config/comment_config' end,
         },
         {
             'jiangmiao/auto-pairs',
@@ -174,19 +193,26 @@ require('lazy').setup({
             event = "VeryLazy",
             opts = {},
         },
-
         {
             "iamcco/markdown-preview.nvim",
             cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-            ft = { "markdown" },
-            build = function() vim.fn["mkdp#util#install"]() end,
+            build = "cd app && yarn install",
+            ft = { "markdown", "vimwiki", "gitcommit" },
+            init = function()
+                vim.g.mkdp_filetypes = { "markdown", "vimwiki", "gitcommit" }
+            end,
+            dependencies = { 'iamcco/mathjax-support-for-mkdp' }
+        },
+        {
+            'mzlogin/vim-markdown-toc',
+            ft = { "markdown", "vimwiki" },
+            init = function() require'plugin_config/vimmarkdowntoc_config' end,
         },
         {
             'vimwiki/vimwiki',
             lazy = false,
             init = function() require('plugin_config/vimwiki_config') end
         },
-
         {
             "christoomey/vim-tmux-navigator",
             cmd = {
@@ -206,20 +232,42 @@ require('lazy').setup({
             init = function() require'plugin_config/vimtmuxnavigator_config' end
         },
         {
+            "folke/todo-comments.nvim",
+            dependencies = { "nvim-lua/plenary.nvim" },
+            config = function() require'plugin_config/todocomments_config' end,
+        },
+        {
+            require'plugin_config/conform_config'
+        },
+        {
             'nvim-treesitter/nvim-treesitter',
             build = function() require('nvim-treesitter.install').update({ with_sync = true })() end,
             config = function() require'plugin_config/nvimtreesitter_config' end,
             dependencies = {
-                -- TODO: this will cause problems
-                -- 'p00f/nvim-ts-rainbow',
                 'nvim-treesitter/nvim-treesitter-context',
-                'JoosepAlviste/nvim-ts-context-commentstring',
-                -- TODO: check which one is needed
-                -- 'nvim-treesitter/nvim-treesitter-textobjects',
-                -- 'windwp/nvim-ts-autotag',
-                -- 'andymass/vim-matchup',
-                -- 'mfussenegger/nvim-treehopper',
+                -- FIX: this will cause problems
+                -- 'p00f/nvim-ts-rainbow',
             },
+        },
+        {
+            'JoosepAlviste/nvim-ts-context-commentstring',
+            config = function() require'plugin_config/nvimtscontextcommentstring_config' end,
+        },
+        {
+            'andymass/vim-matchup',
+            config = function() require'plugin_config/vimmatchup_config' end,
+        },
+        {
+            'windwp/nvim-ts-autotag',
+            config = function() require'plugin_config/nvimtsautotag_config' end,
+        },
+        -- NOTE: if you want to open session when next time use nvim, you should use :qa to quit
+        {
+            'rmagatti/auto-session',
+            dependencies = {
+                'nvim-telescope/telescope.nvim', -- Only needed if you want to use sesssion lens
+            },
+            config = function() require'plugin_config/autosession_config' end,
         },
         {
             "nvim-tree/nvim-tree.lua",
@@ -238,15 +286,6 @@ require('lazy').setup({
                 },
             },
             config = function() require'plugin_config/telescope_config' end,
-        },
-        {
-            "nvim-telescope/telescope-frecency.nvim",
-            config = function() require'telescope'.load_extension 'frecency' end,
-            dependencies = {"tami5/sqlite.lua"},   -- need to install sqlite lib
-        },
-        {
-            "nvim-telescope/telescope-ui-select.nvim",
-            build = function() require("telescope").load_extension("ui-select") end,
         },
         {
             "rcarriga/nvim-notify",
@@ -269,6 +308,23 @@ require('lazy').setup({
             "Pocco81/auto-save.nvim",
             opts = {},
         },
+        {
+            'folke/which-key.nvim',
+            event = 'VeryLazy',
+            config = function() require'plugin_config/whichkey_config' end,
+        },
+        {
+            'RRethy/vim-illuminate',
+            config = function() require'plugin_config/vimilluminate_config' end,
+        },
+        {
+            "folke/zen-mode.nvim",
+            opts = function() require'plugin_config/zenmode_config' end,
+        },
+        {
+            "folke/twilight.nvim",
+            opts = function() require'plugin_config/twilight_config' end,
+        },
 
         {
             "rcarriga/nvim-dap-ui",
@@ -282,6 +338,9 @@ require('lazy').setup({
         {
             'nvim-java/nvim-java',
         },
+        { 'dstein64/vim-startuptime' },
+
+        -- INFO: now use nvim-java which is easy to configure
         -- {
         --     "mfussenegger/nvim-jdtls",
         --     ft = { "java" },
@@ -289,17 +348,66 @@ require('lazy').setup({
         --         "mfussenegger/nvim-dap",
         --     }
         -- },
+        -- INFO: now use cmp + lsp + mason
         -- {
         --         'neoclide/coc.nvim',
         --         branch = 'master',
         --         build = 'npm ci',
         --         init = function() require('plugin_config/coc_config') end
         -- },
+        -- INFO: now use copilot + copilot-chat
+        -- the key mappings for fittencode is not finished yet
         -- {
         --     'luozhiya/fittencode.nvim',
         --     config = function()
         --         require'plugin_config/fittencode_config'
         --     end,
+        -- },
+        -- INFO: now use lspsaga outline
+        -- {
+        --     'stevearc/aerial.nvim',
+        --     config = function() require'plugin_config/aerial_config' end,
+        --     dependencies = {
+        --         "nvim-treesitter/nvim-treesitter",
+        --         "nvim-tree/nvim-web-devicons"
+        --     },
+        -- },
+        -- NOTE: now use comment.nvim
+        -- {
+        --     'preservim/nerdcommenter',
+        --     init = function() require'plugin_config/nerdcommenter_config' end,
+        -- },
+        -- INFO: for signature, uncomment those lines to use
+        -- {
+        --     'ray-x/lsp_signature.nvim',
+        --      event = "VeryLazy",
+        --     config = function() require'plugin_config/lspsignature_config' end,
+        -- },
+        -- INFO: not used now
+        -- {
+        --     'mfussenegger/nvim-treehopper',
+        -- },
+        -- INFO: not used now
+        -- {
+        --     'nvim-treesitter/nvim-treesitter-textobjects',
+        --     dependencies = {
+        --         'nvim-treesitter/nvim-treesitter',
+        --     },
+        -- },
+        -- INFO: I find that I never use this plugin
+        -- {
+        --     "nvim-telescope/telescope-frecency.nvim",
+        --     config = function() require'telescope'.load_extension 'frecency' end,
+        -- },
+        -- INFO: I find that I never use this plugin
+        -- {
+        --     "nvim-telescope/telescope-ui-select.nvim",
+        --     build = function() require("telescope").load_extension("ui-select") end,
+        -- },
+        -- TODO: using this to substitute my own configured terminal may be better
+        -- {
+        --     'akinsho/toggleterm.nvim',
+        --     config = function() require'archvim/config/toggleterm' end,
         -- },
     }
 })

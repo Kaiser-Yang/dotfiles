@@ -30,7 +30,9 @@ require('lspsaga').setup({
         }
     },
     lightbulb = {
-        enabled = true,
-        sign = false,
+        enable = true,
+        sign = true,
+        virtual_text = false,
+        sign_priority = 1,
     },
 })

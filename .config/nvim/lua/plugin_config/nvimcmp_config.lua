@@ -11,10 +11,10 @@ cmp.setup {
 
     snippet = {
         expand = function(args)
-            -- -- For `vsnip` users.
-            -- vim.fn["vsnip#anonymous"](args.body)
             -- For `luasnip` users.
             require('luasnip').lsp_expand(args.body)
+            -- -- For `vsnip` users.
+            -- vim.fn["vsnip#anonymous"](args.body)
             -- For `ultisnips` users.
             -- vim.fn["UltiSnips#Anon"](args.body)
             -- For `snippy` users.
@@ -27,9 +27,10 @@ cmp.setup {
         { name = "buffer" },
         { name = "luasnip" },
         { name = "path" },
-        { name = "dictionary", keyword_length = 2, max_item_count = 20 },
+        { name = "dictionary", keyword_length = 2, max_item_count = 5 },
         { name = 'nvim_lua' },
-        { name = "cmp_yanky" },
+        { name = 'lazydev', group_index = 0 }, -- for nvim config
+        { name = "cmp_yanky", max_item_count = 3 },
         {
             name = "spell",
             option = {
@@ -39,33 +40,13 @@ cmp.setup {
                 end,
                 preselect_correct_word = true,
             },
+            max_item_count = 5
         },
-        -- {name = "nvim_lsp_signature_help", max_item_count = 1},
-        -- {name = "nvim_lsp", max_item_count = 10},
-        -- {name = "buffer", max_item_count = 8, keyword_length = 2},
-        -- {name = "rg", max_item_count = 5, keyword_length = 4},
-        -- {name = "git", max_item_count = 5, keyword_length = 2},
-        -- {
-        --     name = 'rime',
-        --     option = {
-        --     },
-        -- },
-        -- {
-        --     name = 'rime_punct',
-        --     option = {
-        --     },
-        -- },
-        -- {name = "luasnip", max_item_count = 8},
-        -- {name = "path"},
-        -- {name = "codeium"}, -- INFO: uncomment this for AI completion
-        -- {name = "spell", max_item_count = 4},
-		-- {name = "cmp_yanky", max_item_count = 2},
-        -- {name = "calc", max_item_count = 3},
-        -- {name = "cmdline"},
-        -- {name = "git"},
-        -- {name = "emoji", max_item_count = 3},
-        -- {name = "copilot"}, -- INFO: uncomment this for AI completion
-        -- {name = "cmp_tabnine"}, -- INFO: uncomment this for AI completion
+        { name = "calc", max_item_count = 3 },
+        { name = "git", max_item_count = 5 },
+        { name = "rg", max_item_count = 5, keyword_length = 4 },
+        -- { name = "emoji", max_item_count = 3 },
+        -- { name = "copilot" }, -- INFO: uncomment this for AI completion
     },
 
     mapping = {
@@ -85,41 +66,19 @@ cmp.setup {
         end, { "i", "s" }),
         ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
         ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-        -- ['<c-j>'] = cmp.mapping({
-        --     c = cmp.mapping.select_next_item(),
-        -- }),
-        -- ['<c-k>'] = cmp.mapping({
-        --     c = cmp.mapping.select_prev_item(),
-        -- }),
-        -- ['<C-c>'] = cmp.mapping({
-        --     c = cmp.mapping.close(),
-        -- }),
-        -- trigger completion
-        -- ['<C-j>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-        -- ['<Space>'] = cmp.mapping(function(fallback)
-        --     if cmp.visible() then
-        --         cmp.mapping.confirm({
-        --             select = true,
-        --             behavior = cmp.ConfirmBehavior.Replace,
-        --         })
-        --     else
-        --         fallback()
-        --     end
-        -- end, { 'i', 's' }),
+        -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+        ['<C-y>'] = cmp.config.disable,
+        ['<C-Space>'] = cmp.mapping.disable,
+        -- cmp.mapping.complete(): trigger completion
 
         -- Accept currently selected item. If none selected, `select` first item.
         -- Set `select` to `false` to only confirm explicitly selected items.
-
-        -- ['<Space>'] = cmp.mapping.confirm({
+        -- cmp.mapping.confirm({
         --     select = false,
         --     behavior = cmp.ConfirmBehavior.Insert,
         -- }),
-        -- ['<C-Space>'] = cmp.mapping.disable,
-        -- ['<CR>'] = cmp.mapping({
-        --     i = cmp.mapping.abort(),
-        --     c = cmp.mapping.close(),
-        -- }),
 
+        -- whether or not to use number to select completion item
         -- ['1'] = cmp.mapping(function(fallback)
         --     if cmp.visible() then
         --         cmp.mapping.confirm({
@@ -145,7 +104,6 @@ cmp.setup {
         --         fallback()
         --     end
         -- end, { "i", "s" }),
-        -- ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
     },
 
     formatting = {
@@ -201,16 +159,12 @@ cmp.setup {
                     vim_item.kind = "Search"
                 end
 
-                if entry.source.name == "rime" then
-                    vim_item.kind = "Rime"
-                end
-
                 if entry.source.name == "cmp_yanky" then
                     vim_item.kind = "Clipboard"
                 end
 
-                -- if entry.source.name == "nvim_lsp_signature_help" then
-                --     vim_item.kind = "Call"
+                -- if entry.source.name == "rime" then
+                --     vim_item.kind = "Rime"
                 -- end
 
                 -- vim_item = require("tailwindcss-colorizer-cmp").formatter(entry, vim_item)
@@ -219,20 +173,19 @@ cmp.setup {
         },
     },
 
-    -- sorting = {
-    --     comparators = {
-    --         cmp.config.compare.offset,
-    --         cmp.config.compare.exact,
-    --         cmp.config.compare.score,
-    --         cmp.config.compare.recently_used,
-    --         require("cmp-under-comparator").under,
-    --         -- require("cmp_tabnine.compare"), -- INFO: uncomment this for AI completion
-    --         cmp.config.compare.kind,
-    --         cmp.config.compare.sort_text,
-    --         cmp.config.compare.length,
-    --         cmp.config.compare.order,
-    --     }
-    -- },
+    sorting = {
+        comparators = {
+            cmp.config.compare.offset,
+            cmp.config.compare.exact,
+            cmp.config.compare.score,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.recently_used,
+            require("cmp-under-comparator").under,
+            cmp.config.compare.kind,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
+        }
+    },
 }
 
 -- Use buffer source for `/`.

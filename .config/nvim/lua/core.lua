@@ -27,8 +27,6 @@ set wildmode=longest:full,full
 set list
 set listchars=tab:»·,trail:·,lead:·
 
-set autochdir
-
 autocmd BufReadPost *
   \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
   \ |   exe "normal! g`\""
@@ -74,6 +72,8 @@ autocmd!
 autocmd FileType * setlocal formatoptions-=cro
 augroup end
 ]]
+
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 -- disable mouse when open telescope
 -- we do this because mouse events in telescope will close the window

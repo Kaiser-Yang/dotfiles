@@ -122,7 +122,7 @@ set fish_cursor_visual block
 # neovim path
 export PATH="$PATH:/opt/nvim-linux64/bin"
 
-export $NERD_FONTS=1 > /dev/null
+export NERD_FONTS=1 > /dev/null
 
 function fish_mode_prompt
     switch $fish_bind_mode
