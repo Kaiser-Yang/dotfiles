@@ -17,40 +17,14 @@ require('lazy').setup({
         {
             "williamboman/mason.nvim",
             -- do not update this with config, nvim-java requires this be loaded with opts
-            opts = {
-                ui = {
-                    icons = {
-                        package_installed = "✓",
-                        package_pending = "➜",
-                        package_uninstalled = "✗"
-                    }
-                }
-            }
+            opts = function () require'plugin_config/mason_config' end,
         },
         {
             'williamboman/mason-lspconfig.nvim',
             dependencies = {
                 "williamboman/mason.nvim",
             },
-            config = function ()
-                require("mason-lspconfig").setup {
-                    ensure_installed = {
-                        "clangd",
-                        "cmake",
-                        "pyright",
-                        "lua_ls",
-                        "tsserver",
-                        "jdtls",
-                        "jsonls",
-                        "lemminx", -- xml lsp
-                        "yamlls",
-                        "vuels",
-                        -- FIX: this will fail: cargo failed with...
-                        -- "gitlab_ci_ls",
-                    },
-                    automatic_installation = true
-                }
-            end
+            config = function () require'plugin_config/masonlspconfig_config' end,
         },
         {
             'neovim/nvim-lspconfig',
@@ -63,18 +37,7 @@ require('lazy').setup({
         {
             "folke/lazydev.nvim",
             ft = "lua", -- only load on lua files
-            opts = {
-                library = {
-                    -- See the configuration section for more details
-                    -- Load luvit types when the `vim.uv` word is found
-                    { path = "luvit-meta/library", words = { "vim%.uv" } },
-                },
-                -- enable this may not complete right on other lua projects
-                -- NOTE: you can create a .luarc.json in your project root to disable this
-                enabled = function(root_dir)
-                    return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
-                end,
-            },
+            opts = { require'plugin_config/lazydev_config' },
         },
         { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
         {
@@ -110,7 +73,6 @@ require('lazy').setup({
                 -- 'yehuohan/cmp-im-zh',
 
                 -- 'roobert/tailwindcss-colorizer-cmp.nvim', -- INFO: uncomment this for css color
-                -- 'hrsh7th/cmp-copilot', -- INFO: uncomment this for AI completion
             },
             config = function() require'plugin_config/nvimcmp_config' end,
         },
@@ -198,9 +160,7 @@ require('lazy').setup({
             cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
             build = "cd app && yarn install",
             ft = { "markdown", "vimwiki", "gitcommit" },
-            init = function()
-                vim.g.mkdp_filetypes = { "markdown", "vimwiki", "gitcommit" }
-            end,
+            init = function() vim.g.mkdp_filetypes = { "markdown", "vimwiki", "gitcommit" } end,
             dependencies = { 'iamcco/mathjax-support-for-mkdp' }
         },
         {

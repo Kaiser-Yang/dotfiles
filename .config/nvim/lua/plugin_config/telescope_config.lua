@@ -49,20 +49,7 @@ require'telescope'.setup({
             '%.jpg', '%.so', '%.a', '%.dll', '%.dylib', '%.class', '%.jar', '%.zip', '%.tar.gz',},
         sorting_strategy = "ascending",
         prompt_prefix = "🔍 ",
-        -- selection_caret = "❯ ",
-        -- entry_prefix = "  ",
-        -- selection_strategy = "reset",
-        -- file_sorter = require'telescope.sorters'.get_fuzzy_file,
-        -- path_display = {
-        --     "shorten",
-        -- },
-        -- winblend = 0,
-        -- color_devicons = true,
-        -- use_less = true,
-        -- set_env = {["COLORTERM"] = "truecolor"}, -- default = nil,
-        -- file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
-        -- grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
-        -- qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
+        set_env = {["COLORTERM"] = "truecolor"}, -- default = nil,
     },
     extensions = {
         fzf = {

@@ -46,7 +46,6 @@ cmp.setup {
         { name = "git", max_item_count = 5 },
         { name = "rg", max_item_count = 5, keyword_length = 4 },
         -- { name = "emoji", max_item_count = 3 },
-        -- { name = "copilot" }, -- INFO: uncomment this for AI completion
     },
 
     mapping = {

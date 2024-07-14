@@ -48,7 +48,7 @@ you enter `REPLACE` mode, you can use `<C-N>` to go back to normal mode.
 * When there are more than `3` notifications, the cursor will be flickring. This may have something
 to do with the `novim-notify`.
 * In `cmd` search, when you remove the last character, the removed character is still visible.
-* Quit may be slow.
+* Quit with `qa` may be slow.
 
 ### Fixed
 * `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file,
@@ -66,7 +66,6 @@ parent directory of `.root`.
 * Pyhton `gd` does not work.
 * No hover highlight.
 * When quit a help file which is editable, this may cause problem.
-* Quit with `Q` take a long time when quiting the last buffer.
 
 ## Quick Start
 1. Use the command `git clone https://github.com/Kaiser-Yang/dotfiles.git` to clone this repository.

@@ -11,12 +11,12 @@ return {
             java = { "google-java-format" },
             markdown = { "markdownlint" },
             vimwiki = { "markdownlint" },
+            lua = { "stylua" },
             -- Use the "_" filetype to run formatters on filetypes that don't
             -- have other formatters configured.
             ["_"] = { "trim_whitespace", "codespell" },
             -- Use the "*" filetype to run formatters on all filetypes.
             -- ["*"] = { "codespell" },
-            -- lua = { "stylua" },
             -- Conform will run multiple formatters sequentially
             -- go = { "goimports", "gofmt" },
             -- Use a sub-list to run only the first available formatter
