@@ -1,4 +1,4 @@
-local function my_on_attach(bufnr)
+local function nvimtree_on_attach(bufnr)
     local api = require('nvim-tree.api')
 
     local function opts(desc)
@@ -43,7 +43,7 @@ require("nvim-tree").setup({
         sorter = "case_sensitive",
     },
     view = {
-        width = 30,
+        width = 35,
         number = true,
         relativenumber = true,
         -- when false, will let all the new windows have the same size
@@ -56,7 +56,7 @@ require("nvim-tree").setup({
             ignore = {},
         },
     },
-    on_attach = my_on_attach,
+    on_attach = nvimtree_on_attach,
 })
 -- Use the parser of markdown to parse the vimwiki files
 vim.treesitter.language.register('markdown', 'vimwiki')

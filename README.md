@@ -43,9 +43,9 @@ My own configure files for UNIX/Linux tools.
 * When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line.
 * `<C-N>` can not back to normal when in replacing mode (after pressing `r`). This seems impossible
 to fix, because when press `r<C-N>`, your key sequence is `r<C-N>` (pressing `r` will still waiting
-your input, you can see that through the statusline). But `R` is OK, because pressing `R` will let
+your input, you can see that through the status line). But `R` is OK, because pressing `R` will let
 you enter `REPLACE` mode, you can use `<C-N>` to go back to normal mode.
-* When there are more than `3` notifications, the cursor will be flickring. This may have something
+* When there are more than `3` notifications, the cursor will be flickering. This may have something
 to do with the `novim-notify`.
 * In `cmd` search, when you remove the last character, the removed character is still visible.
 * Quit with `qa` may be slow.
@@ -63,7 +63,7 @@ for `fish` and `bash` to solve this.
 parent directory of `.root`.
 * `<CR>` can not auto indent.
 * `telescope` can not find files and contents if there is a `.root` directory.
-* Pyhton `gd` does not work.
+* Python `gd` does not work.
 * No hover highlight.
 * When quit a help file which is editable, this may cause problem.
 

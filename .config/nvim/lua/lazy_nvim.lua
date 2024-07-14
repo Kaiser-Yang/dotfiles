@@ -166,7 +166,6 @@ require('lazy').setup({
         {
             'mzlogin/vim-markdown-toc',
             ft = { "markdown", "vimwiki" },
-            init = function() require'plugin_config/vimmarkdowntoc_config' end,
         },
         {
             'vimwiki/vimwiki',
