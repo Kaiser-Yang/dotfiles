@@ -163,6 +163,7 @@ cmp.setup {
                 -- if entry.source.name == "copilot" then
                 --     vim_item.kind = "Copilot"
                 -- end
+
                 -- if entry.source.name == "rime" then
                 --     vim_item.kind = "Rime"
                 -- end

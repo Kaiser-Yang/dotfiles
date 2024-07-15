@@ -589,7 +589,7 @@ local copilot = require'copilot.suggestion'
 local _, fittencode = pcall(require, 'fittencode')
 map.set({ 'c' }, '<c-j>', cmp.select_next_item, opts())
 map.set({ 'c' }, '<c-k>', cmp.select_prev_item, opts())
--- TEST: the mapping for fittencode si not tested yet
+-- TEST: the mapping for fittencode is not tested yet
 map.set({ 'i' }, '<c-space>', function()
     if not DisableCopilot then
         if copilot.is_visible() then
@@ -621,7 +621,7 @@ map.set({ 'i' }, '<c-f>', function()
 end, opts())
 map.set({ 'i' }, '<c-j>', function ()
     if cmp.visible() then
-        cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+        cmp.select_next_item()
     elseif not DisableCopilot and copilot.is_visible() then
         copilot.next()
     elseif DisableCopilot and fittencode.has_suggestions() then
@@ -632,7 +632,7 @@ map.set({ 'i' }, '<c-j>', function ()
 end, opts())
 map.set({ 'i' }, '<c-k>', function ()
     if cmp.visible() then
-        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+        cmp.select_prev_item()
     elseif not DisableCopilot and copilot.is_visible() then
         copilot.prev()
     elseif DisableCopilot and fittencode.has_suggestions() then
@@ -726,13 +726,14 @@ function DapUIToggle()
     end
     require'dapui'.toggle()
 end
+local dap = require'dap'
 map.set({ 'n' }, '<leader>D', DapUIToggle, opts({ desc = 'Toggle debug ui' }))
-map.set({ 'n' }, '<leader>C', require'dap'.continue, opts({ desc = 'Debug continue' }))
-map.set({ 'n' }, '<leader>B', require'dap'.toggle_breakpoint, opts({ desc = 'Toggle breakpoint' }))
-map.set({ 'n' }, '<leader>N', require'dap'.step_over, opts({ desc = 'Debug next' }))
-map.set({ 'n' }, '<leader>S', require'dap'.step_into, opts({ desc = 'Debug step into' }))
-map.set({ 'n' }, '<leader>F', require'dap'.step_out, opts({ desc = 'Debug step out' }))
-map.set({ 'n' }, '<leader>T', require'dap'.terminate, opts({ desc = 'Debug terminate' }))
+map.set({ 'n' }, '<leader>C', dap.continue, opts({ desc = 'Debug continue' }))
+map.set({ 'n' }, '<leader>B', dap.toggle_breakpoint, opts({ desc = 'Toggle breakpoint' }))
+map.set({ 'n' }, '<leader>N', dap.step_over, opts({ desc = 'Debug next' }))
+map.set({ 'n' }, '<leader>S', dap.step_into, opts({ desc = 'Debug step into' }))
+map.set({ 'n' }, '<leader>F', dap.step_out, opts({ desc = 'Debug step out' }))
+map.set({ 'n' }, '<leader>T', dap.terminate, opts({ desc = 'Debug terminate' }))
 
 vim.cmd [[
 " find next placeholder and remove it.
