@@ -579,8 +579,9 @@ function! COPY_CR(normal, just_mrkr) abort
 endfunction
 autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><buffer> <S-CR>
     \ <Esc>:call COPY_CR(2, 2)<CR>
-autocmd Filetype vimwiki nnoremap <LEADER>wh :VimwikiAll2HTML<CR>
 ]]
+map.set({ 'n' }, '<leader>wh', '<cmd>VimwikiAll2HTML<cr>', opts({ desc = 'Vimwiki all to HTML' }))
+
 local cmp = require'cmp'
 function CmpSelected()
     return cmp.get_active_entry() ~= nil
@@ -673,7 +674,7 @@ if not DisableCopilot then
         \ '<cmd>lua require"cmp".confirm()<cr>' :
         \ luaeval('require"copilot.suggestion".is_visible()') ?
         \ '<cmd>lua require"copilot.suggestion".accept()<cr>' :
-        \ '\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>'
+        \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
     ]]
 else
     vim.cmd[[
@@ -689,7 +690,7 @@ else
         \ '<cmd>lua require"cmp".confirm()<cr>' :
         \ luaeval('require("fittencode").has_suggestions()') ?
         \ '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' :
-        \ '\<C-]>\<Esc>:call COPY_CR(3, 5)\<CR>'
+        \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
     ]]
 end
 
