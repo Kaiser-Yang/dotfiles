@@ -1,13 +1,9 @@
+---@diagnostic disable: assign-type-mismatch, missing-fields
 local lspkind = require('lspkind')
 local cmp = require'cmp'
 
 cmp.setup {
     preselect = cmp.PreselectMode.None,
-    -- completion = {
-    --     completeopt = 'menu,menuone,noinsert,noselect'
-    --     -- completeopt = 'menu,menuone'
-    -- },
-    -- experimental = { ghost_text = true },
 
     snippet = {
         expand = function(args)
@@ -78,6 +74,7 @@ cmp.setup {
         -- }),
 
         -- whether or not to use number to select completion item
+        -- These may be useful for input method
         -- ['1'] = cmp.mapping(function(fallback)
         --     if cmp.visible() then
         --         cmp.mapping.confirm({
@@ -142,6 +139,7 @@ cmp.setup {
                 Rime = "",
                 Clipboard = "",
                 Call = "",
+                Copilot = "",
             },
             before = function(entry, vim_item)
                 vim_item.menu = "["..string.upper(entry.source.name).."]"
@@ -162,6 +160,9 @@ cmp.setup {
                     vim_item.kind = "Clipboard"
                 end
 
+                -- if entry.source.name == "copilot" then
+                --     vim_item.kind = "Copilot"
+                -- end
                 -- if entry.source.name == "rime" then
                 --     vim_item.kind = "Rime"
                 -- end
@@ -173,6 +174,7 @@ cmp.setup {
     },
 
     sorting = {
+        priority_weight = 2,
         comparators = {
             cmp.config.compare.offset,
             cmp.config.compare.exact,
@@ -223,6 +225,14 @@ require("cmp_dictionary").setup({
         command = { "wn", "${label}", "-over" },
     },
 })
+
+-- cmp.event:on("menu_opened", function()
+--     vim.b.copilot_suggestion_hidden = true
+-- end)
+--
+-- cmp.event:on("menu_closed", function()
+--     vim.b.copilot_suggestion_hidden = false
+-- end)
 
 -- require("tailwindcss-colorizer-cmp").setup({
 --     color_square_width = 2,

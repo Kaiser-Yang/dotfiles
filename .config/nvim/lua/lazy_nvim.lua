@@ -10,7 +10,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     })
 end
 vim.opt.rtp:prepend(lazypath)
-CopilotDisable = false
+DisableCopilot = false
 require('lazy').setup({
     -- TODO: undotree tabular
     spec = {
@@ -68,6 +68,13 @@ require('lazy').setup({
                 -- comparators making underlines lower priority
                 'lukas-reineke/cmp-under-comparator'
 
+                -- {
+                --     "zbirenbaum/copilot-cmp",
+                --     config = function ()
+                --         require("copilot_cmp").setup()
+                --     end
+                -- },
+
                 -- input method of Chinese
                 -- 'yehuohan/cmp-im',
                 -- 'yehuohan/cmp-im-zh',
@@ -111,6 +118,7 @@ require('lazy').setup({
             dependencies = { 'nvim-tree/nvim-web-devicons' },
             config = function() require'plugin_config/lualine_config' end,
         },
+        { 'AndreM222/copilot-lualine' },
         {
             "folke/tokyonight.nvim",
             lazy = false,
@@ -128,9 +136,10 @@ require('lazy').setup({
         },
 
         {
-            'github/copilot.vim',
-            lazy = false,
-            init = function() require'plugin_config/copilot_config' end,
+            'zbirenbaum/copilot.lua',
+            cmd = 'Copilot',
+            event = 'InsertEnter',
+            config = function() require'plugin_config/copilotlua_config' end,
         },
         { import = 'plugin_config/copilotchat_config' },
 
@@ -299,6 +308,11 @@ require('lazy').setup({
         },
         { 'dstein64/vim-startuptime' },
 
+        -- TODO: using this to substitute my own configured terminal may be better
+        -- {
+        --     'akinsho/toggleterm.nvim',
+        --     config = function() require'archvim/config/toggleterm' end,
+        -- },
         -- INFO: now use nvim-java which is easy to configure
         -- {
         --     "mfussenegger/nvim-jdtls",
@@ -363,10 +377,11 @@ require('lazy').setup({
         --     "nvim-telescope/telescope-ui-select.nvim",
         --     build = function() require("telescope").load_extension("ui-select") end,
         -- },
-        -- TODO: using this to substitute my own configured terminal may be better
+        -- INFO: now we use copilot.lua
         -- {
-        --     'akinsho/toggleterm.nvim',
-        --     config = function() require'archvim/config/toggleterm' end,
+        --     'github/copilot.vim',
+        --     lazy = false,
+        --     init = function() require'plugin_config/copilot_config' end,
         -- },
     }
 })

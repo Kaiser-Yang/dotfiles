@@ -42,7 +42,7 @@ require('fittencode').setup({
         -- Enable inline code completion.
         ---@type boolean
         -- Use fittencode as chat, but not as a inline completion for all buffers.
-        enable = CopilotDisable,
+        enable = DisableCopilot,
         -- Disable auto completion when the cursor is within the line.
         ---@type boolean
         disable_completion_within_the_line = false,
