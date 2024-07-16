@@ -76,38 +76,8 @@ if ! command -v fish; then
     fi
 fi
 
-# update vim to vim-9
-if ! vim --version | grep '^VIM - Vi IMproved 9'; then
-    sudo yum install -y git gcc make ncurses-devel || exit 1
-    sudo git clone https://github.com/vim/vim.git /usr/local/src/vim || exit 1
-
-    cd /usr/local/src/vim || exit 1
-
-    sudo ./configure || exit 1
-    sudo make || exit 1
-    sudo make install || exit 1
-    cd - || exit 1
-    cd /usr/local/src/vim/src || exit 1
-    sudo ./vim
-    cd - || exit 1
-
-    # check vim version
-    if vim --version | grep '^VIM - Vi IMproved 9'; then
-        log "vim install successfully" 
-    else
-        log "Failed to install Vim 9"
-        exit 1
-    fi
-fi 
 # ctags are used for the outlooks of markdown files
 sudo yum install -y ctags || exit 1
-
-# install vim plugins
-# after installation you may need quit vim manually by using :qa
-# this will fail to install LeaaderF and markdown-preview,
-# but don't worry, the script will solve this at last
-vim +PlugInstall 
-
 
 # some tool for development 
 sudo yum groupinstall -y "Development Tools" || exit 1
@@ -124,12 +94,13 @@ sudo yum install -y llvm-toolset-7-clang-analyzer llvm-toolset-7-clang-tools-ext
 scl enable llvm-toolset-7 'clang -v' 'lldb -v' || exit 1
 scl enable llvm-toolset-7 bash
 
-# sshfs 
+# sshfs
 sudo yum install -y sshfs || exit 1
 
-# cmake-language-server
 sudo yum install -y python3 python3-pip || exit 1
 sudo pip3 install --upgrade pip || exit 1
+
+# cmake-language-server
 pip3 install --trusted-host pypi.python.org cmake-language-server || exit 1
 
 # snapd
@@ -137,21 +108,16 @@ sudo yum install -y snapd || exit 1
 sudo systemctl enable --now snapd.socket 
 sudo ln -s /var/lib/snapd/snap /snap
 
-# bash-language-server
-if ! sudo snap install bash-language-server --classic; then
-    log "bash-language-server installation failed, don't worry,you can install it manually."
-fi
-# reinstall vim plugged 
-if [ -d ~/.vim/plugged/LeaderF ]; then
-    rm -rf ~/.vim/plugged/LeaderF
-fi
+pip install tldr
+pip install pynvim || exit 1
+sudo yum -y install aspell wordnet
 
-if [ -d ~/.vim/plugged/markdown-preview.nvim ]; then
-    rm -rf ~/.vim/plugged/markdown-preview.nvim
-fi
+cd ~ || exit 1
+mkdir -p .virtualenvs || exit 1
+cd - || exit 1
+cd ~/.virtualenvs || exit 1
+python -m venv debugpy || exit 1
+debugpy/bin/python -m pip install debugpy || exit 1
+cd - || exit 1
 
-vim +PlugInstall
-
-# friendly-snippets Coc plugged
-vim '+CocInstall https://github.com/rafamadriz/friendly-snippets@main'
 log "Installation finished, but you may need restart your shell"
