@@ -511,9 +511,10 @@ function CompileRun()
     -- ignore the error
     -- this usually happens on readonly file
     pcall(vim.cmd, 'w')
-    local filename = vim.fn.expand("%")
-    local filename_noext = vim.fn.expand("%:r")
-    local directory = vim.fn.fnamemodify(vim.fn.expand('%:p'), ':h')
+    local fullpath = vim.fn.expand('%:p')
+    local directory = vim.fn.fnamemodify(fullpath, ':h')
+    local filename = vim.fn.fnamemodify(fullpath, ':t')
+    local filename_noext = vim.fn.fnamemodify(fullpath, ':t:r')
     local command = ""
     if vim.bo.filetype == 'c' then
         command = string.format(
