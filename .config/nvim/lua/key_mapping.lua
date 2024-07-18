@@ -526,16 +526,16 @@ function CompileRun()
             directory, filename, filename_noext, filename_noext)
     elseif vim.bo.filetype == 'java' then
         command = string.format(
-            'javac %s && echo RUNNING && time java %s',
-            filename, filename_noext)
+            'cd %s && javac %s && echo RUNNING && time java %s',
+            directory, filename, filename_noext)
     elseif vim.bo.filetype == 'sh' then
         command = string.format('cd %s && time ./%s', directory, filename)
     elseif vim.bo.filetype == 'python' then
-        command = string.format('time python3 %s', filename)
+        command = string.format('cd %s && time python3 %s', directory, filename)
     elseif vim.bo.filetype == 'html' then
-        command = string.format('wslview %s &', filename)
+        command = string.format('cd %s && wslview %s &', directory, filename)
     elseif vim.bo.filetype == 'lua' then
-        command = string.format('lua %s', filename)
+        command = string.format('cd %s && lua %s', directory, filename)
     elseif vim.bo.filetype == 'markdown' then
         vim.api.nvim_command('MarkdownPreviewToggle')
         return
