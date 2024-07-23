@@ -364,13 +364,13 @@ right, the latter will not.
 | -          | -    | - |
 | \<LEADER>D | N    | Toggle the `dap-ui`. |
 | \<c-b>     | N    | Toggle the break point at current line. |
-| \<f4>      | N    | Terminate current process. |
-| \<f5>      | N    | Continue. |
-| \<f6>      | N    | Restart current process. |
-| \<f9>      | N    | Back. |
-| \<f10>     | N    | Next (step over). |
-| \<f11>     | N    | Step in. |
-| \<f12>     | N    | Finish (step out). |
+| \<F4>      | N    | Terminate current process. |
+| \<F5>      | N    | Continue. |
+| \<F6>      | N    | Restart current process. |
+| \<F9>      | N    | Back. |
+| \<F10>     | N    | Next (step over). |
+| \<F11>     | N    | Step in. |
+| \<F12>     | N    | Finish (step out). |
 
 # Contribution
 If you have any suggestion or find any bug, please feel free to open an issue or pull request.
