@@ -731,12 +731,14 @@ function DapUIToggle()
 end
 local dap = require'dap'
 map.set({ 'n' }, '<leader>D', DapUIToggle, opts({ desc = 'Toggle debug ui' }))
-map.set({ 'n' }, '<leader>C', dap.continue, opts({ desc = 'Debug continue' }))
-map.set({ 'n' }, '<leader>B', dap.toggle_breakpoint, opts({ desc = 'Toggle breakpoint' }))
-map.set({ 'n' }, '<leader>N', dap.step_over, opts({ desc = 'Debug next' }))
-map.set({ 'n' }, '<leader>S', dap.step_into, opts({ desc = 'Debug step into' }))
-map.set({ 'n' }, '<leader>F', dap.step_out, opts({ desc = 'Debug step out' }))
-map.set({ 'n' }, '<leader>T', dap.terminate, opts({ desc = 'Debug terminate' }))
+map.set({ 'n' }, '<c-b>', dap.toggle_breakpoint, opts({ desc = 'Toggle breakpoint' }))
+map.set({ 'n' }, '<f4>', dap.terminate, opts({ desc = 'Debug terminate' }))
+map.set({ 'n' }, '<f5>', dap.continue, opts({ desc = 'Debug continue' }))
+map.set({ 'n' }, '<f6>', dap.restart, opts({ desc = 'Debug restart' }))
+map.set({ 'n' }, '<f9>', dap.step_back, opts({ desc = 'Debug back' }))
+map.set({ 'n' }, '<f10>', dap.step_over, opts({ desc = 'Debug next' }))
+map.set({ 'n' }, '<f11>', dap.step_into, opts({ desc = 'Debug step into' }))
+map.set({ 'n' }, '<f12>', dap.step_out, opts({ desc = 'Debug step out' }))
 
 vim.cmd [[
 " find next placeholder and remove it.
