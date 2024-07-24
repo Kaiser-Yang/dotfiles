@@ -84,6 +84,8 @@ abbr -a vi nvim
 set PATH $PATH ~/node-v20.13.0-linux-x64/bin
 # the directory where user lib pip will install
 set PATH $PATH ~/.local/bin
+# the directory where user cargo will install
+set PATH $PATH ~/.cargo/bin
 
 # this enable .. be cd ../, ... be cd ../../
 # .... be cd ../../../

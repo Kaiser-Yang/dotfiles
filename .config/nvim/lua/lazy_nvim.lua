@@ -66,7 +66,11 @@ require('lazy').setup({
                     config = function() require'plugin_config/luasnip_config' end,
                 },
                 -- comparators making underlines lower priority
-                'lukas-reineke/cmp-under-comparator'
+                'lukas-reineke/cmp-under-comparator',
+                {
+                    "micangl/cmp-vimtex",
+                    config = function() require'plugin_config/cmpvimtex_config' end,
+                },
 
                 -- {
                 --     "zbirenbaum/copilot-cmp",
@@ -307,6 +311,12 @@ require('lazy').setup({
             'nvim-java/nvim-java',
         },
         { 'dstein64/vim-startuptime' },
+
+        {
+            "lervag/vimtex",
+            lazy = false,     -- we don't want to lazy load VimTeX
+            init = function() require'plugin_config/vimtex_config' end,
+        },
 
         -- TODO: using this to substitute my own configured terminal may be better
         -- {

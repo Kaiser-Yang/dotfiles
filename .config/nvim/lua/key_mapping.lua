@@ -29,32 +29,33 @@ map.set({ 'n' }, '<leader>s', '<Plug>(comment_toggle_blockwise)',
     opts({ desc = 'Comment toggle block' }))
 
 map.set({ 'n' }, '<leader>f', function()
-    require'conform'.format({ async = true, lsp_format = "fallback" })
+    require 'conform'.format({ async = true, lsp_format = "fallback" })
 end, opts({ desc = 'Format current buffer' }))
 vim.api.nvim_create_user_command("Format", function(args)
-  local range = nil
-  if args.count ~= -1 then
-    local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
-    range = {
-      start = { args.line1, 0 },
-      ["end"] = { args.line2, end_line:len() },
-    }
-  end
-  require("conform").format({ async = true, lsp_format = "fallback", range = range })
+    local range = nil
+    if args.count ~= -1 then
+        local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+        range = {
+            start = { args.line1, 0 },
+            ["end"] = { args.line2, end_line:len() },
+        }
+    end
+    require("conform").format({ async = true, lsp_format = "fallback", range = range })
 end, { range = true })
 
 function CopyBufferToPlusRegister()
     local cur = vim.api.nvim_win_get_cursor(0)
     vim.api.nvim_command('normal! ggVGy')
     vim.api.nvim_win_set_cursor(0, cur)
-    vim.defer_fn(function () vim.fn.setreg('+', vim.fn.getreg('"')) end, 0)
+    vim.defer_fn(function() vim.fn.setreg('+', vim.fn.getreg('"')) end, 0)
 end
+
 -- TODO: system clipboard not support this
-map.set({ "n","x" }, "p", "<Plug>(YankyPutAfter)", opts())
-map.set({ "n","x" }, "P", "<Plug>(YankyPutBefore)", opts())
+map.set({ "n", "x" }, "p", "<Plug>(YankyPutAfter)", opts())
+map.set({ "n", "x" }, "P", "<Plug>(YankyPutBefore)", opts())
 -- TODO: add descriptions
-map.set({ "n","x" }, "gp", "<Plug>(YankyGPutAfter)", opts({ desc = '' }))
-map.set({ "n","x" }, "gP", "<Plug>(YankyGPutBefore)", opts({ desc = '' }))
+map.set({ "n", "x" }, "gp", "<Plug>(YankyGPutAfter)", opts({ desc = '' }))
+map.set({ "n", "x" }, "gP", "<Plug>(YankyGPutBefore)", opts({ desc = '' }))
 map.set({ "n" }, "]p", "<Plug>(YankyPutIndentAfterLinewise)", opts({ desc = '' }))
 map.set({ "n" }, "[p", "<Plug>(YankyPutIndentBeforeLinewise)", opts({ desc = '' }))
 map.set({ "n" }, "]P", "<Plug>(YankyPutIndentAfterLinewise)", opts({ desc = '' }))
@@ -80,9 +81,10 @@ local term_visible = false
 function CalculateNewSize(delta)
     term_win_height = math.max(1, term_win_height + delta)
 end
+
 local function validTerminalBuf(buf)
     return vim.api.nvim_buf_is_valid(buf) and
-           vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal'
+        vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal'
 end
 local function bufVisible(buf)
     return vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted")
@@ -154,24 +156,25 @@ function ToggleTerm()
         term_visible = false
         return
     end
-::create_term_win::
+    ::create_term_win::
     -- Exists but hidden, show it
     if validTerminalBuf(term_buf) then
         openTerminal()
         adjustTermSize()
-        vim.cmd'setlocal syntax=off'
-    -- Not exist or invalid buffer
+        vim.cmd 'setlocal syntax=off'
+        -- Not exist or invalid buffer
     else
         openTerminal()
         term_buf = vim.api.nvim_get_current_buf()
         adjustTermSize()
         recordTermSize()
         setBufHiddenUnlisted(term_buf)
-        vim.cmd'setlocal syntax=off'
+        vim.cmd 'setlocal syntax=off'
     end
     term_visible = true
 end
-map.set({'i', 'n', 't' }, '<c-t>', '<cmd>lua ToggleTerm()<cr>',
+
+map.set({ 'i', 'n', 't' }, '<c-t>', '<cmd>lua ToggleTerm()<cr>',
     opts({ desc = 'Toggle terminal' }))
 function ToggleTermOnTabEnter()
     local term_win = getTermWinCurrentTab()
@@ -182,14 +185,15 @@ function ToggleTermOnTabEnter()
         adjustTermSize()
         -- set the cursor back to the original window
         vim.api.nvim_set_current_win(current_win)
-    -- close the opened one
+        -- close the opened one
     elseif term_win ~= -1 and not term_visible then
         hideWin(term_win)
-    -- resize the opened one
+        -- resize the opened one
     else
         adjustTermSize()
     end
 end
+
 vim.api.nvim_create_augroup('TabEnterToggleTerm', { clear = true })
 local newestTab = -1
 vim.api.nvim_create_autocmd({ 'TabNew' }, {
@@ -254,7 +258,7 @@ local function autoClose()
         -- only when there are hidden buffers, we need close current tab
         -- because when there is no hidden buffer, bd! will close the tab, too
         if hiddenBuf > 0 then
-            vim.cmd'silent! tabclose!'
+            vim.cmd 'silent! tabclose!'
         end
     else
         vim.cmd('qa!')
@@ -302,10 +306,12 @@ function QuitNotSaveOnBuffer()
         end
     end
 end
+
 function QuitSaveOnBuffer()
     vim.cmd('w')
     QuitNotSaveOnBuffer()
 end
+
 map.set({ 'n' }, 'Q', QuitNotSaveOnBuffer, opts())
 map.set({ 'n' }, 'S', QuitSaveOnBuffer, opts())
 map.set({ 'n' }, '<c-s>', '<cmd>w<cr>', opts())
@@ -361,13 +367,14 @@ function MoveSelectedLines(count, direction)
         vim.api.nvim_command('normal! gv')
     end
 end
+
 map.set({ 'v' }, 'J', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'down')<CR>",
     opts({ desc = 'Selected up' }))
 map.set({ 'v' }, 'K', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'up')<CR>",
     opts({ desc = 'Selected down' }))
 
-map.set({ 'n' }, '[g', require'gitsigns'.prev_hunk, opts({ desc = 'Previous git hunk' }))
-map.set({ 'n' }, ']g', require'gitsigns'.next_hunk, opts({ desc = 'Next git hunk' }))
+map.set({ 'n' }, '[g', require 'gitsigns'.prev_hunk, opts({ desc = 'Previous git hunk' }))
+map.set({ 'n' }, ']g', require 'gitsigns'.next_hunk, opts({ desc = 'Next git hunk' }))
 map.set({ 'n' }, '[c', '<cmd>GitConflictPrevConflict<cr>', opts({ desc = 'Previous git conflict' }))
 map.set({ 'n' }, ']c', '<cmd>GitConflictNextConflict<cr>', opts({ desc = 'Next git conflict' }))
 map.del({ 'x', 'n' }, 'gc')
@@ -375,8 +382,8 @@ map.set({ 'n' }, 'gcc', '<cmd>GitConflictChooseOurs<cr>', opts({ desc = 'Git kee
 map.set({ 'n' }, 'gci', '<cmd>GitConflictChooseTheirs<cr>', opts({ desc = 'Git keep incomming' }))
 map.set({ 'n' }, 'gcb', '<cmd>GitConflictChooseBoth<cr>', opts({ desc = 'Git keep both' }))
 map.set({ 'n' }, 'gcn', '<cmd>GitConflictChooseNone<cr>', opts({ desc = 'Git keep none' }))
-map.set({ 'n' }, 'gcu', require'gitsigns'.reset_hunk, opts({ desc = 'Git reset current hunk' }))
-map.set({ 'n' }, 'gcd', require'gitsigns'.preview_hunk, opts({ desc = 'Git diff current hunk' }))
+map.set({ 'n' }, 'gcu', require 'gitsigns'.reset_hunk, opts({ desc = 'Git reset current hunk' }))
+map.set({ 'n' }, 'gcd', require 'gitsigns'.preview_hunk, opts({ desc = 'Git diff current hunk' }))
 
 -- TODO update this with new layout
 map.set({ 'n' }, 'gy',
@@ -443,6 +450,7 @@ function GetRootDirectory()
         end
     end
 end
+
 function HasRootDirectory()
     local rootDir = vim.fn.finddir(".root", ";")
     if rootDir ~= "" then
@@ -453,9 +461,10 @@ function HasRootDirectory()
             return true
         else
             return false
+        end
     end
 end
-end
+
 function NvimTreeToggleOnRootDirectory()
     require('nvim-tree.api').tree.toggle({
         path = GetRootDirectory(),
@@ -464,6 +473,7 @@ function NvimTreeToggleOnRootDirectory()
         focus = true,
     })
 end
+
 local function OpenNvimTreeOnStart(data)
     -- only support with one extra parameter: a file or directory
     if #vim.v.argv > 3 then
@@ -495,7 +505,7 @@ local function OpenNvimTreeOnStart(data)
             find_file = false,
             focus = false,
         })
-    -- must be a non-exist named file
+        -- must be a non-exist named file
     elseif not directory and #vim.v.argv == 3 then
         require('nvim-tree.api').tree.toggle({
             path = GetRootDirectory(),
@@ -507,10 +517,34 @@ local function OpenNvimTreeOnStart(data)
 end
 vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = OpenNvimTreeOnStart })
 
+local autoFollow = false
+local function toggleVimtexCursorFollow()
+    if autoFollow then
+        vim.cmd([[
+        augroup VimtexViewOnCursorMove
+            autocmd!
+        augroup END
+        ]])
+        autoFollow = false
+        vim.cmd('echo "Cursor follow disabled"')
+    else
+        vim.cmd([[
+        augroup VimtexViewOnCursorMove
+            autocmd!
+            autocmd CursorMoved *.tex silent! VimtexView
+        augroup END
+        ]])
+        autoFollow = true
+        vim.cmd('echo "Cursor follow enabled"')
+    end
+end
+vim.api.nvim_create_user_command("VimtexToggleCursorFollow", toggleVimtexCursorFollow,
+    { range = false, nargs = 0 })
+
 function CompileRun()
     -- ignore the error
     -- this usually happens on readonly file
-    pcall(vim.cmd, 'w')
+    pcall(vim.cmd, 'silent w')
     local fullpath = vim.fn.expand('%:p')
     local directory = vim.fn.fnamemodify(fullpath, ':h')
     local filename = vim.fn.fnamemodify(fullpath, ':t')
@@ -536,6 +570,9 @@ function CompileRun()
         command = string.format('cd %s && wslview %s &', directory, filename)
     elseif vim.bo.filetype == 'lua' then
         command = string.format('cd %s && lua %s', directory, filename)
+    elseif vim.bo.filetype == 'tex' then
+        vim.api.nvim_command('VimtexView')
+        return
     elseif vim.bo.filetype == 'markdown' then
         vim.api.nvim_command('MarkdownPreviewToggle')
         return
@@ -547,7 +584,7 @@ function CompileRun()
         return
     end
     if command == "" then
-        vim.cmd'echo "Unsupported filetype"'
+        vim.cmd 'echo "Unsupported filetype"'
         return
     end
     if not term_visible then
@@ -558,6 +595,7 @@ function CompileRun()
     local chan_id = vim.api.nvim_buf_get_var(term_buf, "terminal_job_id")
     vim.fn.chansend(chan_id, command .. "\n")
 end
+
 map.set({ 'n' }, '<leader>r', '<cmd>lua CompileRun()<cr>', opts({ desc = 'Compile run' }))
 
 map.del({ 'n' }, '<c-w>d')
@@ -568,7 +606,7 @@ map.set({ 'i' }, '<c-w>', '<esc><cmd>Lspsaga outline<cr>', opts())
 map.set({ 'n' }, '<c-e>', NvimTreeToggleOnRootDirectory, opts())
 map.set({ 'i' }, '<c-e>', NvimTreeToggleOnRootDirectory, opts())
 
-vim.cmd[[
+vim.cmd [[
 " This function is copied from vimwiki
 function! COPY_CR(normal, just_mrkr) abort
     let res = vimwiki#tbl#kbd_cr()
@@ -584,11 +622,12 @@ autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><buffer> <S
 ]]
 map.set({ 'n' }, '<leader>wh', '<cmd>VimwikiAll2HTML<cr>', opts({ desc = 'Vimwiki all to HTML' }))
 
-local cmp = require'cmp'
+local cmp = require 'cmp'
 function CmpSelected()
     return cmp.get_active_entry() ~= nil
 end
-local copilot = require'copilot.suggestion'
+
+local copilot = require 'copilot.suggestion'
 local _, fittencode = pcall(require, 'fittencode')
 map.set({ 'c' }, '<c-j>', cmp.select_next_item, opts())
 map.set({ 'c' }, '<c-k>', cmp.select_prev_item, opts())
@@ -612,7 +651,7 @@ map.set({ 'i' }, '<c-space>', function()
         end
     end
 end, opts())
-    map.set({ 'i' }, '<esc>f', copilot.accept_word, opts())
+map.set({ 'i' }, '<esc>f', copilot.accept_word, opts())
 map.set({ 'i' }, '<c-f>', function()
     if not DisableCopilot and copilot.is_visible() then
         copilot.accept_line()
@@ -622,7 +661,7 @@ map.set({ 'i' }, '<c-f>', function()
         LiveGrepOnRootDirectory()
     end
 end, opts())
-map.set({ 'i' }, '<c-j>', function ()
+map.set({ 'i' }, '<c-j>', function()
     if cmp.visible() then
         cmp.select_next_item()
     elseif not DisableCopilot and copilot.is_visible() then
@@ -633,7 +672,7 @@ map.set({ 'i' }, '<c-j>', function ()
         feedkeys('<down>', 'n')
     end
 end, opts())
-map.set({ 'i' }, '<c-k>', function ()
+map.set({ 'i' }, '<c-k>', function()
     if cmp.visible() then
         cmp.select_prev_item()
     elseif not DisableCopilot and copilot.is_visible() then
@@ -663,7 +702,7 @@ map.set({ 'i' }, '<c-c>', function()
     end
 end, opts({ silent = false }))
 if not DisableCopilot then
-    vim.cmd[[
+    vim.cmd [[
     inoremap <silent><expr> <CR>
         \ luaeval('CmpSelected()') ?
         \ '<cmd>lua require"cmp".confirm()<cr>' :
@@ -679,7 +718,7 @@ if not DisableCopilot then
         \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
     ]]
 else
-    vim.cmd[[
+    vim.cmd [[
     inoremap <silent><expr> <CR>
         \ luaeval('CmpSelected()') ?
         \ '<cmd>lua require"cmp".confirm()<cr>' :
@@ -699,13 +738,15 @@ end
 -- TODO: update this with nvim-cmp
 -- map.set("n", "gcl", "<Plug>(coc-codelens-action)", opts)
 
-local telescope = require'telescope.builtin'
+local telescope = require 'telescope.builtin'
 function FindFilesOnRootDirectory()
-    telescope.find_files({search_dirs = {GetRootDirectory()}, hidden = true})
+    telescope.find_files({ search_dirs = { GetRootDirectory() }, hidden = true })
 end
+
 function LiveGrepOnRootDirectory()
-    telescope.live_grep({search_dirs = {GetRootDirectory()}, additional_args = { '--hidden', }})
+    telescope.live_grep({ search_dirs = { GetRootDirectory() }, additional_args = { '--hidden', } })
 end
+
 map.set({ 'n', 'i' }, '<c-p>', FindFilesOnRootDirectory, opts())
 map.set({ 'n' }, '<c-f>', LiveGrepOnRootDirectory, opts())
 map.set({ 'n' }, '<leader><leader>', telescope.current_buffer_fuzzy_find,
@@ -727,9 +768,10 @@ function DapUIToggle()
             focus = false,
         })
     end
-    require'dapui'.toggle()
+    require 'dapui'.toggle()
 end
-local dap = require'dap'
+
+local dap = require 'dap'
 map.set({ 'n' }, '<leader>D', DapUIToggle, opts({ desc = 'Toggle debug ui' }))
 map.set({ 'n' }, '<c-b>', dap.toggle_breakpoint, opts({ desc = 'Toggle breakpoint' }))
 map.set({ 'n' }, '<f4>', dap.terminate, opts({ desc = 'Debug terminate' }))

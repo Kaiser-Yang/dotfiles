@@ -1,7 +1,7 @@
 ---@diagnostic disable: missing-fields
 require'nvim-treesitter.configs'.setup {
     ensure_installed = {"c", "cpp", "cmake", "lua", "python", "html", "javascript", "css", "json",
-        "bash", "regex", "markdown",    "markdown_inline", "diff", "vimdoc", "java"},
+        "bash", "regex", "markdown",    "markdown_inline", "diff", "vimdoc", "java", "latex"},
     sync_install = false,
     auto_install = true,
     highlight = {

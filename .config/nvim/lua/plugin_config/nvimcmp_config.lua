@@ -41,6 +41,7 @@ cmp.setup {
         { name = "calc", max_item_count = 3 },
         { name = "git", max_item_count = 5 },
         { name = "rg", max_item_count = 5, keyword_length = 4 },
+        { name = 'vimtex', },
         -- { name = "emoji", max_item_count = 3 },
     },
 
@@ -159,7 +160,6 @@ cmp.setup {
                 if entry.source.name == "cmp_yanky" then
                     vim_item.kind = "Clipboard"
                 end
-
                 -- if entry.source.name == "copilot" then
                 --     vim_item.kind = "Copilot"
                 -- end

@@ -118,4 +118,10 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 # restart docker
 sudo systemctl restart docker || exit 1
 
+# latex
+sudo apt install -y texlive-full || exit 1
+
+sudo apt install -y cargo
+cargo install tree-sitter-cli
+
 log "Installation finished, but you may need restart your shell"
