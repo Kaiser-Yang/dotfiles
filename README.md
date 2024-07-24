@@ -156,7 +156,6 @@ Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V
 | Shortcut    | Mode      | Description |
 | -           | -         | - |
 | \<C-T>      | N I T     | Toggle a terminal |
-| \<C-S>   | N I  | Save but not quit |
 | Q           | N         | Quit a window, quit a tab or unload a buffer, not save |
 | S           | N         | Similar with `Q`, but this will execute 'write' first |
 | \<C-N>      | T I V X N | Back to normal mode by `<C-\><C-N>` |
@@ -358,6 +357,7 @@ right, the latter will not.
 | \<C-D>            | I    | Scroll down the completion preview window, if there is one |
 | \<C-U>            | I    | Scroll up the completion preview window, if there is one |
 | gz                | N    | Toggle Zen Mode |
+| \<C-S>            | I    | Search the selected bib in cmp selection |
 
 ### Debugger
 | Shortcut   | Mode | Description |

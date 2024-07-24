@@ -314,8 +314,7 @@ end
 
 map.set({ 'n' }, 'Q', QuitNotSaveOnBuffer, opts())
 map.set({ 'n' }, 'S', QuitSaveOnBuffer, opts())
-map.set({ 'n' }, '<c-s>', '<cmd>w<cr>', opts())
-map.set({ 'i' }, '<c-s>', '<c-o><cmd>w<cr>', opts())
+map.set({ "i" }, "<c-s>", require('cmp_vimtex.search').search_menu, opts())
 
 map.set({ 'n' }, '<leader>h', '<cmd>set nosplitright<cr><cmd>vsplit<cr><cmd>set splitright<cr>',
     opts({ desc = 'Split right' }))
