@@ -41,7 +41,7 @@ cmp.setup {
         { name = "calc", max_item_count = 3 },
         { name = "git", max_item_count = 5 },
         { name = "rg", max_item_count = 5, keyword_length = 4 },
-        { name = 'vimtex', },
+        { name = "vimtex", },
         -- { name = "emoji", max_item_count = 3 },
     },
 
@@ -143,7 +143,9 @@ cmp.setup {
                 Copilot = "",
             },
             before = function(entry, vim_item)
-                vim_item.menu = "["..string.upper(entry.source.name).."]"
+                if entry.source.name ~= 'vimtex' then
+                    vim_item.menu = "["..string.upper(entry.source.name).."]"
+                end
 
                 if entry.source.name == "calc" then
                     vim_item.kind = "Calc"

@@ -67,10 +67,7 @@ require('lazy').setup({
                 },
                 -- comparators making underlines lower priority
                 'lukas-reineke/cmp-under-comparator',
-                {
-                    "micangl/cmp-vimtex",
-                    config = function() require'plugin_config/cmpvimtex_config' end,
-                },
+                "micangl/cmp-vimtex",
 
                 -- {
                 --     "zbirenbaum/copilot-cmp",
