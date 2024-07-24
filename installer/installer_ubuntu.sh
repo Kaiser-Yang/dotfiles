@@ -14,6 +14,9 @@ fi
 # this only works for Ubuntu 22.04 and Ubuntu 20.04
 # the original source.list will be renamed with source.list.bak
 sudo_cmd=$(command -v sudo)
+# we must install ca-certificates first in docker
+${sudo_cmd} apt update || exit 1
+${sudo_cmd} apt install -y ca-certificates || exit 1
 if grep 'VERSION="22.04' /etc/os-release; then
     ${sudo_cmd} cp /etc/apt/sources.list /etc/apt/sources.list.bak
     ${sudo_cmd} cat ./sources/ubuntu/tuna_22.04 | ${sudo_cmd} tee /etc/apt/sources.list || exit 1
@@ -97,7 +100,7 @@ cd - || exit 1
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
     sudo apt-get remove $pkg;
 done
-sudo apt-get install -y ca-certificates curl gnupg
+sudo apt-get install -y curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
