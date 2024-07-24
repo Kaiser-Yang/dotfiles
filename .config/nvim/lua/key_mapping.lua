@@ -521,7 +521,7 @@ local autoFollow = false
 local function toggleVimtexCursorFollow()
     if autoFollow then
         vim.cmd([[
-        augroup VimtexViewOnCursorMove
+        augroup VimtexViewOnCursorHold
             autocmd!
         augroup END
         ]])
@@ -529,9 +529,9 @@ local function toggleVimtexCursorFollow()
         vim.cmd('echo "Cursor follow disabled"')
     else
         vim.cmd([[
-        augroup VimtexViewOnCursorMove
+        augroup VimtexViewOnCursorHold
             autocmd!
-            autocmd CursorMoved *.tex silent! VimtexView
+            autocmd CursorHold *.tex silent! VimtexView
         augroup END
         ]])
         autoFollow = true
@@ -571,6 +571,8 @@ function CompileRun()
     elseif vim.bo.filetype == 'lua' then
         command = string.format('cd %s && lua %s', directory, filename)
     elseif vim.bo.filetype == 'tex' then
+        autoFollow = false
+        toggleVimtexCursorFollow()
         vim.api.nvim_command('VimtexView')
         return
     elseif vim.bo.filetype == 'markdown' then
