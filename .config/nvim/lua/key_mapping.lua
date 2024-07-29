@@ -12,8 +12,8 @@ local function feedkeys(keys, mode)
     vim.api.nvim_feedkeys(termcodes, mode, false)
 end
 
-map.set({ 'c' }, '<c-h>', '<left>', opts())
-map.set({ 'c' }, '<c-l>', '<right>', opts())
+map.set({ 'c' }, '<c-h>', '<left>', opts({ silent = false }))
+map.set({ 'c' }, '<c-l>', '<right>', opts({ silent = false }))
 
 map.set({ 'n' }, 'gz', '<cmd>ZenMode<cr>', opts({ desc = 'Toggle ZenMode' }))
 
@@ -577,9 +577,10 @@ function CompileRun()
     elseif vim.bo.filetype == 'lua' then
         command = string.format('cd %s && lua %s', directory, filename)
     elseif vim.bo.filetype == 'tex' then
-        autoFollow = false
         toggleVimtexCursorFollow()
-        vim.api.nvim_command('VimtexView')
+        if autoFollow then
+            vim.api.nvim_command('VimtexView')
+        end
         return
     elseif vim.bo.filetype == 'markdown' then
         vim.api.nvim_command('MarkdownPreviewToggle')
