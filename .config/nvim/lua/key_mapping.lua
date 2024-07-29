@@ -1,5 +1,3 @@
--- TODO: add descriptions for all key mappings
-
 local map = vim.keymap
 
 local function opts(opts_var)
@@ -384,12 +382,21 @@ map.set({ 'n' }, 'gcn', '<cmd>GitConflictChooseNone<cr>', opts({ desc = 'Git kee
 map.set({ 'n' }, 'gcu', require 'gitsigns'.reset_hunk, opts({ desc = 'Git reset current hunk' }))
 map.set({ 'n' }, 'gcd', require 'gitsigns'.preview_hunk, opts({ desc = 'Git diff current hunk' }))
 
--- TODO update this with new layout
-map.set({ 'n' }, 'gy',
-    '<cmd>lua require("telescope").extensions.yank_history.'
-    ..
-    'yank_history(require("telescope.themes").get_ivy{})<cr><esc>',
-    opts({ desc = 'List yank contents' }))
+map.set({ 'n' }, 'gy', function()
+    require 'telescope'.extensions.yank_history.yank_history({
+        layout_strategy = "vertical",
+        layout_config = {
+            vertical = {
+                anchor = 'S',
+                height = 0.5,
+                preview_height = 0.3,
+                width = { padding = 0 },
+                prompt_position = 'bottom',
+            },
+        },
+        initial_mode = 'normal',
+    })
+end, opts())
 map.set({ 'n' }, '[d', '<cmd>Lspsaga diagnostic_jump_prev<cr>',
     opts({ desc = 'Previous diagnostic' }))
 map.set({ 'n' }, ']d', '<cmd>Lspsaga diagnostic_jump_next<cr>', opts({ desc = 'Next diagnostic' }))
