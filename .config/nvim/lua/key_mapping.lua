@@ -1,9 +1,18 @@
 local map = vim.keymap
 
 local function opts(opts_var)
-    local desc = (opts_var and opts_var.desc) or ""
-    local noremap = (opts_var and opts_var.noremap) or true
-    local silent = (opts_var and opts_var.silent) or true
+    local desc = "";
+    local noremap = true;
+    local silent = true;
+    if opts_var and opts_var.desc ~= nil then
+        desc = opts_var.desc
+    end
+    if opts_var and opts_var.desc ~= nil then
+        noremap = opts_var.noremap
+    end
+    if opts_var and opts_var.desc ~= nil then
+        silent = opts_var.silent
+    end
     return { noremap = noremap, silent = silent, desc = desc }
 end
 
@@ -12,9 +21,12 @@ local function feedkeys(keys, mode)
     vim.api.nvim_feedkeys(termcodes, mode, false)
 end
 
-map.set({ 'c' }, '<c-h>', '<left>', opts({ silent = false }))
-map.set({ 'c' }, '<c-l>', '<right>', opts({ silent = false }))
-
+map.set({ 'c' }, '<c-h>', '<left>',
+    { silent = false, noremap = true, callback = function() vim.api.nvim_feedkeys(
+        vim.api.nvim_replace_termcodes('<left>', true, true, true), 'n', true) end })
+map.set({ 'c' }, '<c-l>', '<right>',
+    { silent = false, noremap = true, callback = function() vim.api.nvim_feedkeys(
+        vim.api.nvim_replace_termcodes('<right>', true, true, true), 'n', true) end })
 map.set({ 'n' }, 'gz', '<cmd>ZenMode<cr>', opts({ desc = 'Toggle ZenMode' }))
 
 map.set({ 'x' }, '<leader>c<leader>', '<Plug>(comment_toggle_linewise_visual)',

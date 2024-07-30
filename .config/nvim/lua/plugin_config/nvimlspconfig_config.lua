@@ -50,6 +50,9 @@ require'lspconfig'.jsonls.setup{
 require'lspconfig'.lemminx.setup{
     capabilities = lsp_capabilities
 }
+require'lspconfig'.bashls.setup{
+    capabilities = lsp_capabilities
+}
 vim.diagnostic.config({
     update_in_insert = true,
 })
