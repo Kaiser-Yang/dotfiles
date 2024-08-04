@@ -627,20 +627,20 @@ map.set({ 'i' }, '<c-w>', '<esc><cmd>Lspsaga outline<cr>', opts())
 map.set({ 'n' }, '<c-e>', NvimTreeToggleOnRootDirectory, opts())
 map.set({ 'i' }, '<c-e>', NvimTreeToggleOnRootDirectory, opts())
 
-vim.cmd [[
-" This function is copied from vimwiki
-function! COPY_CR(normal, just_mrkr) abort
-    let res = vimwiki#tbl#kbd_cr()
-    if res !=? ''
-        exe 'normal! ' . res . "\<Right>"
-        startinsert
-        return
-    endif
-    call vimwiki#lst#kbd_cr(a:normal, a:just_mrkr)
-endfunction
-autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><buffer> <S-CR>
-    \ <Esc>:call COPY_CR(2, 2)<CR>
-]]
+-- vim.cmd [[
+-- " This function is copied from vimwiki
+-- function! COPY_CR(normal, just_mrkr) abort
+--     let res = vimwiki#tbl#kbd_cr()
+--     if res !=? ''
+--         exe 'normal! ' . res . "\<Right>"
+--         startinsert
+--         return
+--     endif
+--     call vimwiki#lst#kbd_cr(a:normal, a:just_mrkr)
+-- endfunction
+-- autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><buffer> <S-CR>
+--     \ <Esc>:call COPY_CR(2, 2)<CR>
+-- ]]
 map.set({ 'n' }, '<leader>wh', '<cmd>VimwikiAll2HTML<cr>', opts({ desc = 'Vimwiki all to HTML' }))
 
 local cmp = require 'cmp'
@@ -730,13 +730,13 @@ if not DisableCopilot then
         \ luaeval('require"copilot.suggestion".is_visible()') ?
         \ '<cmd>lua require"copilot.suggestion".accept()<cr>' :
         \ '<C-g>u<CR><C-r>=AutoPairsReturn()<CR>'
-    autocmd FileType vimwiki,git*,markdown,copilot-chat
-        \ inoremap <silent><script><buffer><expr> <CR>
-        \ luaeval('CmpSelected()') ?
-        \ '<cmd>lua require"cmp".confirm()<cr>' :
-        \ luaeval('require"copilot.suggestion".is_visible()') ?
-        \ '<cmd>lua require"copilot.suggestion".accept()<cr>' :
-        \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
+    " autocmd FileType vimwiki,git*,markdown,copilot-chat
+    "     \ inoremap <silent><script><buffer><expr> <CR>
+    "     \ luaeval('CmpSelected()') ?
+    "     \ '<cmd>lua require"cmp".confirm()<cr>' :
+    "     \ luaeval('require"copilot.suggestion".is_visible()') ?
+    "     \ '<cmd>lua require"copilot.suggestion".accept()<cr>' :
+    "     \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
     ]]
 else
     vim.cmd [[
@@ -746,13 +746,13 @@ else
         \ luaeval('require("fittencode").has_suggestions()') ?
         \ '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' :
         \ '\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>'
-    autocmd FileType vimwiki,git*,markdown,copilot-chat
-        \ inoremap <silent><script><buffer><expr> <CR>
-        \ luaeval('CmpSelected()') ?
-        \ '<cmd>lua require"cmp".confirm()<cr>' :
-        \ luaeval('require("fittencode").has_suggestions()') ?
-        \ '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' :
-        \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
+    " autocmd FileType vimwiki,git*,markdown,copilot-chat
+    "     \ inoremap <silent><script><buffer><expr> <CR>
+    "     \ luaeval('CmpSelected()') ?
+    "     \ '<cmd>lua require"cmp".confirm()<cr>' :
+    "     \ luaeval('require("fittencode").has_suggestions()') ?
+    "     \ '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' :
+    "     \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
     ]]
 end
 
