@@ -1,5 +1,5 @@
 patch:
-  "menu/page_size": 9
+  "menu/page_size": 7
   schema_list:
     - schema: double_pinyin_flypy  # 小鶴雙拼
     - schema: luna_pinyin          # 朙月拼音
