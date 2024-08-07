@@ -112,7 +112,7 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin \
     docker-compose-plugin || exit 1
 
-# change source for docker
+# change source for docker, this may be the wrong method
 # sudo apt-get install -y ca-certificates gnupg-agent software-properties-common lsb-release || exit 1
 # curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo \
 #     gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg || exit 1
@@ -122,7 +122,8 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 sudo systemctl restart docker || exit 1
 
 # latex
-sudo apt install -y zathura texlive-full || exit 1
+# installation of these is time-consuming, uncomment this if you need this one
+# sudo apt install -y zathura texlive-full || exit 1
 
 sudo apt install -y cargo
 cargo install tree-sitter-cli
