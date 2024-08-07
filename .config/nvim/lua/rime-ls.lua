@@ -1,4 +1,5 @@
 local M = {}
+local rime_ls_filetypes = { 'markdown', 'vimwiki' }
 
 function M.setup_rime()
     -- global status
@@ -28,8 +29,7 @@ function M.setup_rime()
             default_config = {
                 name = "rime_ls",
                 cmd = { vim.fn.expand'~/rime-ls/target/release/rime_ls' },
-                -- cmd = vim.lsp.rpc.connect('127.0.0.1', 9257),
-                filetypes = { 'markdown', 'vimwiki' },
+                filetypes = rime_ls_filetypes,
                 single_file_support = true,
             },
             settings = {},
@@ -116,13 +116,30 @@ local function auto_upload_rime()
         end
     end
 end
-for numkey = 1, 9 do
-    local numkey_str = tostring(numkey)
-    vim.keymap.set({ 'i', 's' }, numkey_str, function()
-        vim.fn.feedkeys(numkey_str, 'n')
-        vim.schedule(auto_upload_rime)
-    end, { noremap = true, silent = false })
-end
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = rime_ls_filetypes,
+    callback = function ()
+        for numkey = 1, 9 do
+            local numkey_str = tostring(numkey)
+            vim.api.nvim_buf_set_keymap(0, 'i', numkey_str, '', {
+                noremap = true,
+                silent = false,
+                callback = function()
+                    vim.fn.feedkeys(numkey_str, 'n')
+                    vim.schedule(auto_upload_rime)
+                end
+            })
+            vim.api.nvim_buf_set_keymap(0, 's', numkey_str, '', {
+                noremap = true,
+                silent = false,
+                callback = function()
+                    vim.fn.feedkeys(numkey_str, 'n')
+                    vim.schedule(auto_upload_rime)
+                end
+            })
+        end
+    end
+})
 
 return M
 
