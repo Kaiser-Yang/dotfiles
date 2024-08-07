@@ -1,8 +1,7 @@
 ---@diagnostic disable: assign-type-mismatch, missing-fields
 local lspkind = require('lspkind')
 local cmp = require'cmp'
-
-cmp.setup {
+cmp.setup({
     preselect = cmp.PreselectMode.None,
 
     snippet = {
@@ -64,7 +63,8 @@ cmp.setup {
         ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
         -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
         ['<C-y>'] = cmp.config.disable,
-        ['<C-Space>'] = cmp.mapping.disable,
+        ['<C-Space>'] = cmp.config.disable,
+        ['<c-x>'] = cmp.mapping.complete(),
         -- cmp.mapping.complete(): trigger completion
 
         -- Accept currently selected item. If none selected, `select` first item.
@@ -73,34 +73,6 @@ cmp.setup {
         --     select = false,
         --     behavior = cmp.ConfirmBehavior.Insert,
         -- }),
-
-        -- whether or not to use number to select completion item
-        -- These may be useful for input method
-        -- ['1'] = cmp.mapping(function(fallback)
-        --     if cmp.visible() then
-        --         cmp.mapping.confirm({
-        --             select = true,
-        --             behavior = cmp.ConfirmBehavior.Replace,
-        --         })
-        --     else
-        --         fallback()
-        --     end
-        -- end),
-        -- ['2'] = cmp.mapping(function(fallback)
-        --     if cmp.visible() then
-        --         cmp.select_next_item()
-        --     else
-        --         fallback()
-        --     end
-        -- end, { "i", "s" }),
-        -- ['3'] = cmp.mapping(function(fallback)
-        --     if cmp.visible() then
-        --         cmp.select_next_item()
-        --         cmp.select_next_item()
-        --     else
-        --         fallback()
-        --     end
-        -- end, { "i", "s" }),
     },
 
     formatting = {
@@ -190,7 +162,7 @@ cmp.setup {
             cmp.config.compare.order,
         }
     },
-}
+})
 
 -- Use buffer source for `/`.
 cmp.setup.cmdline({'/', '?'}, {

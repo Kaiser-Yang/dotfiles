@@ -127,4 +127,13 @@ sudo apt install -y zathura texlive-full || exit 1
 sudo apt install -y cargo
 cargo install tree-sitter-cli
 
+# rime
+sudo apt-get install -y ibus-rime librime-data-double-pinyin clang librime-dev
+cd || exit 1
+git clone https://github.com/wlh320/rime-ls.git
+cd - || exit 1
+cd ~/rime-ls || exit 1
+cargo build --release || exit 1
+cd - || exit 1
+
 log "Installation finished, but you may need restart your shell"
