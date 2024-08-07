@@ -80,60 +80,49 @@ A language server for librime
     }
 end
 
-local just_inserted = false
 local function is_rime_entry(entry)
   return vim.tbl_get(entry, "source", "name") == "nvim_lsp"
     and vim.tbl_get(entry, "source", "source", "client", "name")
       == "rime_ls"
 end
-local rime_ls_auto_confirm = vim.schedule_wrap(function()
-  local cmp = require("cmp")
-  if not cmp.visible() then
-    return
-  end
-  local entries = cmp.core.view:get_entries()
-  if entries == nil or #entries == 0 then
-    return
-  end
-  local rime_ls_entries_cnt = 0
-  for _, entry in ipairs(entries) do
-    if is_rime_entry(entry) then
-      rime_ls_entries_cnt = rime_ls_entries_cnt + 1
+local cmp = require("cmp")
+local function auto_upload_rime()
+    if not cmp.visible() then
+        return
     end
-  end
-  local first_entry = cmp.get_selected_entry()
-  if first_entry == nil then
-    first_entry = cmp.core.view:get_first_entry()
-  end
-  if
-    first_entry ~= nil
-    and rime_ls_entries_cnt == 1
-    and is_rime_entry(first_entry)
-    -- and text_edit_range_length(first_entry) == 4
-  then
-    cmp.confirm {
-      behavior = cmp.ConfirmBehavior.Insert,
-      select = true,
-    }
-  end
-end)
-
-vim.api.nvim_create_autocmd("InsertCharPre", {
-  buffer = bufnr,
-  callback = function()
-    just_inserted = true
-  end,
-})
-vim.api.nvim_create_autocmd({ "TextChangedI", "TextChangedP" }, {
-  buffer = bufnr,
-  callback = function()
-    if just_inserted then
-      -- check completion
-      rime_ls_auto_confirm()
-      just_inserted = false
+    local entries = cmp.core.view:get_entries()
+    if entries == nil or #entries == 0 then
+        return
     end
-  end,
-})
+    local first_entry = cmp.get_selected_entry()
+    if first_entry == nil then
+        first_entry = cmp.core.view:get_first_entry()
+    end
+    if first_entry ~= nil and is_rime_entry(first_entry) then
+        local rime_ls_entries_cnt = 0
+        for _, entry in ipairs(entries) do
+            if is_rime_entry(entry) then
+                rime_ls_entries_cnt = rime_ls_entries_cnt + 1
+                if rime_ls_entries_cnt == 2 then
+                    break
+                end
+            end
+        end
+        if rime_ls_entries_cnt == 1 then
+            cmp.confirm {
+                behavior = cmp.ConfirmBehavior.Insert,
+                select = true,
+            }
+        end
+    end
+end
+for numkey = 1, 9 do
+    local numkey_str = tostring(numkey)
+    vim.keymap.set({ 'i', 's' }, numkey_str, function()
+        vim.fn.feedkeys(numkey_str, 'n')
+        vim.schedule(auto_upload_rime)
+    end, { noremap = true, silent = false })
+end
 
 return M
 
