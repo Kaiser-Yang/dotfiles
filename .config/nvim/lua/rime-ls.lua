@@ -87,7 +87,7 @@ A language server for librime
 end
 
 local function is_rime_entry(entry)
-  return vim.tbl_get(entry, "source", "name") == "nvim_lsp"
+  return entry ~= nil and vim.tbl_get(entry, "source", "name") == "nvim_lsp"
     and vim.tbl_get(entry, "source", "source", "client", "name")
       == "rime_ls"
 end
@@ -104,16 +104,16 @@ local function auto_upload_rime()
         first_entry = cmp.core.view:get_first_entry()
     end
     if first_entry ~= nil and is_rime_entry(first_entry) then
-        local rime_ls_entries_cnt = 0
+        local rime_ls_entry_occur = false
         for _, entry in ipairs(entries) do
             if is_rime_entry(entry) then
-                rime_ls_entries_cnt = rime_ls_entries_cnt + 1
-                if rime_ls_entries_cnt == 2 then
-                    break
+                if rime_ls_entry_occur then
+                    return
                 end
+                rime_ls_entry_occur= true
             end
         end
-        if rime_ls_entries_cnt == 1 then
+        if rime_ls_entry_occur then
             cmp.confirm {
                 behavior = cmp.ConfirmBehavior.Insert,
                 select = true,
@@ -164,14 +164,13 @@ vim.api.nvim_create_autocmd('FileType', {
                     if entry == nil then
                         entry = cmp.core.view:get_first_entry()
                     end
-                    if entry and entry.source.name == "nvim_lsp"
-                        and entry.source.source.client.name == "rime_ls" then
+                    if is_rime_entry(entry) then
                         cmp.confirm({
                             behavior = cmp.ConfirmBehavior.Replace,
                             select = true,
                         })
                     else
-                        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', true)
+                        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', false)
                     end
                 end
             })

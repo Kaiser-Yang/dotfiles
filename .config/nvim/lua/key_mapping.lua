@@ -807,7 +807,7 @@ map.set({ 'i' }, '<space>', '<f30>', opts({ remap = true }))
 
 vim.cmd [[
 " find next placeholder and remove it.
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,f <Esc>/<++><CR>:nohlsearch<CR>c4l
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer><silent> ,f <Esc>/<++><CR>:nohlsearch<CR>c4l
 
 " bold
 autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,b ****<++><Esc>F*hi
