@@ -45,21 +45,6 @@ cmp.setup({
     },
 
     mapping = {
-        ['<Space>'] = cmp.mapping(function(fallback)
-            local entry = cmp.get_selected_entry()
-            if entry == nil then
-                entry = cmp.core.view:get_first_entry()
-            end
-            if entry and entry.source.name == "nvim_lsp"
-                and entry.source.source.client.name == "rime_ls" then
-                cmp.confirm({
-                    behavior = cmp.ConfirmBehavior.Replace,
-                    select = true,
-                })
-            else
-                fallback()
-            end
-        end, {'i', 's'}),
         ["<Tab>"] = cmp.mapping(function(fallback)
             if require("luasnip").expand_or_jumpable() then
                 require("luasnip").expand_or_jump()
