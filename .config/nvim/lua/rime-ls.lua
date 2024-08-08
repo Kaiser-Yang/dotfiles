@@ -77,10 +77,9 @@ A language server for librime
             shared_data_dir = "/usr/share/rime-data",
             user_data_dir = vim.fn.expand"~/.local/share/rime-ls",
             log_dir = vim.fn.expand"~/.local/share/rime-ls",
-            max_candidates = 9,
-            paging_characters = {",", ".", "-", "="},
+            paging_characters = {"-", "="},
             trigger_characters = {},
-            schema_trigger_character = "&" -- [since v0.2.0] 当输入此字符串时请求补全会触发 “方案选单”
+            schema_trigger_character = "&"
         },
         on_attach = rime_on_attach,
         capabilities = capabilities,
@@ -126,7 +125,16 @@ local punc_en = {',', '.', ':', ';', '?'}
 local punc_zh = {'，', '。', '：', '；', '？'}
 vim.api.nvim_create_autocmd('FileType', {
     pattern = rime_ls_filetypes,
-    callback = function ()
+    callback = function (env)
+        -- copilot cannot attach client automatically, we must attach manually.
+        local rime_ls_client = vim.lsp.get_clients({ name = 'rime_ls' })
+        if #rime_ls_client == 0 then
+            vim.cmd('LspStart rime_ls')
+            rime_ls_client = vim.lsp.get_clients({ name = 'rime_ls' })
+        end
+        if #rime_ls_client > 0 then
+            vim.lsp.buf_attach_client(env.buf, rime_ls_client[1].id)
+        end
         for _, mode in ipairs({'i', 's'}) do
             for numkey = 1, 9 do
                 local numkey_str = tostring(numkey)
