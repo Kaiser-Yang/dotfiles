@@ -653,7 +653,7 @@ local _, fittencode = pcall(require, 'fittencode')
 map.set({ 'c' }, '<c-j>', cmp.select_next_item, opts())
 map.set({ 'c' }, '<c-k>', cmp.select_prev_item, opts())
 -- TEST: the mapping for fittencode is not tested yet
-map.set({ 'i' }, '<c-space>', function()
+map.set({ 'i' }, '<c-z>', function()
     if not DisableCopilot then
         if copilot.is_visible() then
             vim.b.copilot_suggestion_auto_trigger = false
@@ -704,6 +704,8 @@ map.set({ 'i' }, '<c-k>', function()
         feedkeys('<up>', 'n')
     end
 end, opts())
+map.set({ 'i' }, '<c-h>', '<left>', opts())
+map.set({ 'i' }, '<c-l>', '<right>', opts())
 map.set({ 'i' }, '<c-c>', function()
     if CmpSelected() then
         cmp.abort()
