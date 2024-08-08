@@ -88,8 +88,7 @@ end
 
 local function is_rime_entry(entry)
   return entry ~= nil and vim.tbl_get(entry, "source", "name") == "nvim_lsp"
-    and vim.tbl_get(entry, "source", "source", "client", "name")
-      == "rime_ls"
+    and vim.tbl_get(entry, "source", "source", "client", "name") == "rime_ls"
 end
 local function auto_upload_rime()
     if not cmp.visible() then
