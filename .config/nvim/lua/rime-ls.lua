@@ -150,7 +150,7 @@ vim.api.nvim_create_autocmd('FileType', {
             end
             vim.api.nvim_buf_set_keymap(0, mode, '<space>', '', {
                 noremap = true,
-                silent = false,
+                silent = true,
                 callback = function()
                     local entry = cmp.get_selected_entry()
                     if entry == nil then
@@ -163,7 +163,7 @@ vim.api.nvim_create_autocmd('FileType', {
                             select = true,
                         })
                     else
-                         vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<c-]><c-r>=AutoPairsSpace()<cr>', true, true, true), 'n', true)
+                        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', true)
                     end
                 end
             })

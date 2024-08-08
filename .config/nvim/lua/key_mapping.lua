@@ -1,19 +1,19 @@
 local map = vim.keymap
 
 local function opts(opts_var)
-    local desc = "";
-    local noremap = true;
-    local silent = true;
+    local desc = ""
+    local silent = true
+    local remap = false
     if opts_var and opts_var.desc ~= nil then
         desc = opts_var.desc
     end
-    if opts_var and opts_var.desc ~= nil then
-        noremap = opts_var.noremap
-    end
-    if opts_var and opts_var.desc ~= nil then
+    if opts_var and opts_var.silent ~= nil then
         silent = opts_var.silent
     end
-    return { noremap = noremap, silent = silent, desc = desc }
+    if opts_var and opts_var.remap ~= nil then
+        remap = opts_var.remap
+    end
+    return { silent = silent, desc = desc, remap = remap }
 end
 
 local function feedkeys(keys, mode)
@@ -21,12 +21,8 @@ local function feedkeys(keys, mode)
     vim.api.nvim_feedkeys(termcodes, mode, false)
 end
 
-map.set({ 'c' }, '<c-h>', '<left>',
-    { silent = false, noremap = true, callback = function() vim.api.nvim_feedkeys(
-        vim.api.nvim_replace_termcodes('<left>', true, true, true), 'n', true) end })
-map.set({ 'c' }, '<c-l>', '<right>',
-    { silent = false, noremap = true, callback = function() vim.api.nvim_feedkeys(
-        vim.api.nvim_replace_termcodes('<right>', true, true, true), 'n', true) end })
+map.set({ 'c' }, '<c-h>', '<left>', opts({ silent = false }))
+map.set({ 'c' }, '<c-l>', '<right>', opts({ silent = false }))
 map.set({ 'n' }, 'gz', '<cmd>ZenMode<cr>', opts({ desc = 'Toggle ZenMode' }))
 
 map.set({ 'x' }, '<leader>c<leader>', '<Plug>(comment_toggle_linewise_visual)',
@@ -804,6 +800,10 @@ map.set({ 'n' }, '<f9>', dap.step_back, opts({ desc = 'Debug back' }))
 map.set({ 'n' }, '<f10>', dap.step_over, opts({ desc = 'Debug next' }))
 map.set({ 'n' }, '<f11>', dap.step_into, opts({ desc = 'Debug step into' }))
 map.set({ 'n' }, '<f12>', dap.step_out, opts({ desc = 'Debug step out' }))
+
+-- <f30> not used
+map.set({ 'i' }, '<f30>', '<c-]><c-r>=AutoPairsSpace()<cr>', opts())
+map.set({ 'i' }, '<space>', '<f30>', opts({ remap = true }))
 
 vim.cmd [[
 " find next placeholder and remove it.
