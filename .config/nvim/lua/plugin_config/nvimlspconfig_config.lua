@@ -53,6 +53,9 @@ require'lspconfig'.lemminx.setup{
 require'lspconfig'.bashls.setup{
     capabilities = lsp_capabilities
 }
+require'lspconfig'.markdown_oxide.setup{
+    capabilities = lsp_capabilities
+}
 require'rime-ls'.setup_rime()
 vim.diagnostic.config({
     update_in_insert = true,

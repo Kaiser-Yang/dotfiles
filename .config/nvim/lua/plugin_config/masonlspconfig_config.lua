@@ -10,7 +10,8 @@ require("mason-lspconfig").setup {
         "lemminx", -- xml lsp
         "yamlls",
         "vuels",
-        "bashls"
+        "bashls",
+        "markdown_oxide"
         -- FIX: this will fail: cargo failed with...
         -- "gitlab_ci_ls",
     },

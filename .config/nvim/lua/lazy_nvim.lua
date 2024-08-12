@@ -85,11 +85,6 @@ require('lazy').setup({
             config = function() require'plugin_config/nvimcmp_config' end,
         },
         {
-            'dgagn/diagflow.nvim',
-            event = 'LspAttach',
-            config = function() require'plugin_config/diagflow_config' end,
-        },
-        {
             'nvimdev/lspsaga.nvim',
             config = function() require'plugin_config/lspsaga_config' end,
             event = 'LspAttach',
@@ -314,7 +309,12 @@ require('lazy').setup({
             lazy = false,     -- we don't want to lazy load VimTeX
             init = function() require'plugin_config/vimtex_config' end,
         },
-
+        -- INFO: this plugin is used very few times
+        -- {
+        --     'dgagn/diagflow.nvim',
+        --     event = 'LspAttach',
+        --     config = function() require'plugin_config/diagflow_config' end,
+        -- },
         -- TODO: using this to substitute my own configured terminal may be better
         -- {
         --     'akinsho/toggleterm.nvim',
