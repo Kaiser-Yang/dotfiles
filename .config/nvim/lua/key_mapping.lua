@@ -434,15 +434,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
         vim.opt_local.number = true
 
         -- insert at the end to chat with Copilot
-        vim.api.nvim_buf_set_keymap(0, 'n', 'i', 'Gi', { silent = true, noremap = true })
+        map.set({ 'n' }, 'i', 'Gi', { silent = true, noremap = true, buffer = true })
         -- q for stop the chat
-        vim.api.nvim_buf_set_keymap(0, 'n', 'q', '<cmd>CopilotChatStop<cr>', { silent = true, noremap = true })
-
-        -- Get current filetype and set it to markdown if the current filetype is copilot-chat
-        local ft = vim.bo.filetype
-        if ft == "copilot-chat" then
-            vim.bo.filetype = "markdown"
-        end
+        map.set({ 'n' }, 'q', '<cmd>CopilotChatStop<cr>', { silent = true, noremap = true, buffer = true })
     end,
 })
 

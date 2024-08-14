@@ -29,7 +29,7 @@ function M.setup_rime()
         configs.rime_ls = {
             default_config = {
                 name = "rime_ls",
-                cmd = { vim.fn.expand'~/rime-ls/target/release/rime_ls' },
+                cmd = { vim.fn.expand '~/rime-ls/target/release/rime_ls' },
                 filetypes = rime_ls_filetypes,
                 single_file_support = true,
             },
@@ -75,9 +75,9 @@ A language server for librime
         init_options = {
             enabled = vim.g.rime_enabled,
             shared_data_dir = "/usr/share/rime-data",
-            user_data_dir = vim.fn.expand"~/.local/share/rime-ls",
-            log_dir = vim.fn.expand"~/.local/share/rime-ls",
-            paging_characters = {"-", "="},
+            user_data_dir = vim.fn.expand "~/.local/share/rime-ls",
+            log_dir = vim.fn.expand "~/.local/share/rime-ls",
+            paging_characters = { "-", "=" },
             trigger_characters = {},
             schema_trigger_character = "&"
         },
@@ -87,8 +87,8 @@ A language server for librime
 end
 
 local function is_rime_entry(entry)
-  return entry ~= nil and vim.tbl_get(entry, "source", "name") == "nvim_lsp"
-    and vim.tbl_get(entry, "source", "source", "client", "name") == "rime_ls"
+    return entry ~= nil and vim.tbl_get(entry, "source", "name") == "nvim_lsp"
+        and vim.tbl_get(entry, "source", "source", "client", "name") == "rime_ls"
 end
 local function auto_upload_rime()
     if not cmp.visible() then
@@ -109,7 +109,7 @@ local function auto_upload_rime()
                 if rime_ls_entry_occur then
                     return
                 end
-                rime_ls_entry_occur= true
+                rime_ls_entry_occur = true
             end
         end
         if rime_ls_entry_occur then
@@ -120,11 +120,11 @@ local function auto_upload_rime()
         end
     end
 end
-local punc_en = {',', '.', ':', ';', '?'}
-local punc_zh = {'，', '。', '：', '；', '？'}
+local punc_en = { ',', '.', ':', ';', '?', '\\' }
+local punc_zh = { '，', '。', '：', '；', '？', '、' }
 vim.api.nvim_create_autocmd('FileType', {
     pattern = rime_ls_filetypes,
-    callback = function (env)
+    callback = function(env)
         -- copilot cannot attach client automatically, we must attach manually.
         local rime_ls_client = vim.lsp.get_clients({ name = 'rime_ls' })
         if #rime_ls_client == 0 then
@@ -134,47 +134,48 @@ vim.api.nvim_create_autocmd('FileType', {
         if #rime_ls_client > 0 then
             vim.lsp.buf_attach_client(env.buf, rime_ls_client[1].id)
         end
-        for _, mode in ipairs({'i', 's'}) do
-            for numkey = 1, 9 do
-                local numkey_str = tostring(numkey)
-                vim.api.nvim_buf_set_keymap(0, mode, numkey_str, '', {
-                    noremap = true,
-                    silent = false,
-                    callback = function()
-                        vim.fn.feedkeys(numkey_str, 'n')
-                        vim.schedule(auto_upload_rime)
-                    end
-                })
-            end
-            for i = 1, #punc_en do
-                local src = punc_en[i] .. '<space>'
-                local dst = 'rime_enabled ? "' .. punc_zh[i] .. '" : "' .. punc_en[i] .. ' "'
-                vim.api.nvim_buf_set_keymap(0, mode, src, dst, {
-                    noremap = true,
-                    silent = false,
-                    expr = true,
-                })
-            end
-            vim.api.nvim_buf_set_keymap(0, mode, '<space>', '', {
-                noremap = true,
-                silent = true,
-                callback = function()
-                    local entry = cmp.get_selected_entry()
-                    if entry == nil then
-                        entry = cmp.core.view:get_first_entry()
-                    end
-                    if is_rime_entry(entry) then
-                        cmp.confirm({
-                            behavior = cmp.ConfirmBehavior.Replace,
-                            select = true,
-                        })
-                    else
-                        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', false)
-                    end
+        for numkey = 1, 9 do
+            local numkey_str = tostring(numkey)
+            vim.keymap.set({ 'i', 's' }, numkey_str, function()
+                local visible = cmp.visible()
+                vim.fn.feedkeys(numkey_str, 'n')
+                if visible then
+                    vim.schedule(auto_upload_rime)
                 end
+            end, {
+                noremap = true,
+                silent = false,
+                buffer = true,
             })
         end
+        for i = 1, #punc_en do
+            local src = punc_en[i] .. '<space>'
+            local dst = 'rime_enabled ? "' .. punc_zh[i] .. '" : "' .. punc_en[i] .. ' "'
+            vim.keymap.set({ 'i', 's' }, src, dst, {
+                noremap = true,
+                silent = false,
+                expr = true,
+                buffer = true,
+            })
+        end
+        vim.keymap.set({ 'i', 's' }, '<space>', function()
+            local entry = cmp.get_selected_entry()
+            if entry == nil then
+                entry = cmp.core.view:get_first_entry()
+            end
+            if is_rime_entry(entry) then
+                cmp.confirm({
+                    behavior = cmp.ConfirmBehavior.Replace,
+                    select = true,
+                })
+            else
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', false)
+            end
+        end, {
+            noremap = true,
+            silent = true,
+            buffer =true
+        })
     end
 })
 return M
-
