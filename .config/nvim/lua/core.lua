@@ -6,6 +6,7 @@ set foldexpr=nvim_treesitter#foldexpr()
 set nofoldenable
 set foldtext='+--'
 
+set timeoutlen=300
 set ttimeoutlen=0
 
 set mouse=a

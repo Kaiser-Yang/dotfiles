@@ -77,7 +77,7 @@ A language server for librime
             shared_data_dir = "/usr/share/rime-data",
             user_data_dir = vim.fn.expand "~/.local/share/rime-ls",
             log_dir = vim.fn.expand "~/.local/share/rime-ls",
-            paging_characters = { "-", "=" },
+            paging_characters = { "-", "=", ',', '.' },
             trigger_characters = {},
             schema_trigger_character = "&"
         },
@@ -144,7 +144,7 @@ vim.api.nvim_create_autocmd('FileType', {
                 end
             end, {
                 noremap = true,
-                silent = false,
+                silent = true,
                 buffer = true,
             })
         end
@@ -153,7 +153,7 @@ vim.api.nvim_create_autocmd('FileType', {
             local dst = 'rime_enabled ? "' .. punc_zh[i] .. '" : "' .. punc_en[i] .. ' "'
             vim.keymap.set({ 'i', 's' }, src, dst, {
                 noremap = true,
-                silent = false,
+                silent = true,
                 expr = true,
                 buffer = true,
             })
@@ -174,7 +174,7 @@ vim.api.nvim_create_autocmd('FileType', {
         end, {
             noremap = true,
             silent = true,
-            buffer =true
+            buffer = true
         })
     end
 })
