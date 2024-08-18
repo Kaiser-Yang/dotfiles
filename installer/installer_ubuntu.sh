@@ -137,4 +137,8 @@ cd ~/rime-ls || exit 1
 cargo build --release || exit 1
 cd - || exit 1
 
+# ruby and jekyll
+sudo apt install -y ruby-full
+sudo gem install jekyll bundler
+
 log "Installation finished, but you may need restart your shell"
