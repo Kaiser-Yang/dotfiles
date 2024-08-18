@@ -87,8 +87,8 @@ A language server for librime
 end
 
 local function is_rime_entry(entry)
-    return entry ~= nil and vim.tbl_get(entry, "source", "name") == "nvim_lsp"
-        and vim.tbl_get(entry, "source", "source", "client", "name") == "rime_ls"
+    return entry ~= nil and entry.source.name == "nvim_lsp"
+        and entry.source.source.client.name == "rime_ls"
 end
 local function auto_upload_rime()
     if not cmp.visible() then
@@ -153,7 +153,7 @@ vim.api.nvim_create_autocmd('FileType', {
             local dst = 'rime_enabled ? "' .. punc_zh[i] .. '" : "' .. punc_en[i] .. ' "'
             vim.keymap.set({ 'i', 's' }, src, dst, {
                 noremap = true,
-                silent = true,
+                silent = false,
                 expr = true,
                 buffer = true,
             })
