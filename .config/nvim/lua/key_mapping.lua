@@ -800,48 +800,52 @@ map.set({ 'i' }, '<f30>', '<c-]><c-r>=AutoPairsSpace()<cr>', opts())
 map.set({ 'i' }, '<space>', '<f30>', opts({ remap = true }))
 
 vim.cmd [[
+" undo the last ,
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer><silent> ,u <esc>u`z:delmarks z<CR>a
+
 " find next placeholder and remove it.
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer><silent> ,f <Esc>/<++><CR>:nohlsearch<CR>c4l
+autocmd Filetype git*,markdown,copilot-chat
+    \ inoremap<buffer><silent> ,f <c-g>u<c-o>mz<Esc>/<++><CR>:nohlsearch<CR>c4l
 
 " bold
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,b ****<++><Esc>F*hi
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,b <c-g>u<c-o>mz****<++><Esc>F*hi
 
 " italic
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,i **<++><Esc>F*i
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,i <c-g>u<c-o>mz**<++><Esc>F*i
 
 " for code blocks
 autocmd Filetype git*,markdown,copilot-chat
-    \ inoremap<buffer> ,c <CR><CR>```<CR>```<CR><CR><++><Esc>3kA
+    \ inoremap<buffer> ,c <c-g>u<CR><CR>```<CR>```<CR><CR><++><Esc>3kA
 
 " for pictures, mostly, we don't add pictures' descriptions
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,p <CR><CR>![]()<CR><CR><++><Esc>2k0f(a
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,p <c-g>u<c-o>mz<CR><CR>![]()<CR><CR><++><Esc>2k0f(a
 
 " for for links <a> are html links tag, so we use ,a
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,a [](<++>)<++><Esc>F[a
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,a <c-g>u<c-o>mz[](<++>)<++><Esc>F[a
 
 " for headers
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,1 #<Space>
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,2 ##<Space>
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,3 ###<Space>
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,4 ####<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> <c-g>u<c-o>mz,1 #<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> <c-g>u<c-o>mz,2 ##<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> <c-g>u<c-o>mz,3 ###<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> <c-g>u<c-o>mz,4 ####<Space>
 
 " delete lines
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,d ~~~~<++><Esc>F~hi
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,d <c-g>u<c-o>mz~~~~<++><Esc>F~hi
 
 " tilde
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,t ``<++><Esc>F`i
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,t <c-g>u<c-o>mz``<++><Esc>F`i
 
 " math formulas
 autocmd Filetype git*,markdown,copilot-chat
-    \ inoremap<buffer> ,M <CR><CR>$$<CR><CR>$$<CR><CR><++><Esc>3kA
+    \ inoremap<buffer> ,M <c-g>u<c-o>mz<CR><CR>$$<CR><CR>$$<CR><CR><++><Esc>3kA
 
 " math formulas in line
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,m $$<++><Esc>F$i
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,m <c-g>u<c-o>mz$$<++><Esc>F$i
 
 " newline but not new paragraph
-autocmd FileType git*,markdown,copilot-chat inoremap<buffer> ,n <br><CR>
+autocmd FileType git*,markdown,copilot-chat inoremap<buffer> ,n <c-g>u<c-o>mz<br><CR>
 
-autocmd FileType git* set cc=50,72
+autocmd FileType git* setlocal cc=50,72
 
 autocmd Filetype git*,markdown,copilot-chat setlocal spell
 ]]
