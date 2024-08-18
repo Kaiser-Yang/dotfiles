@@ -24,15 +24,14 @@ else
     MATH=""
 fi
 # find []() and ![]() won't match, because ![]() is image link, we should ignore this.
-# and there is no any dot in (), which means your filename mast have no dot,
-# note that you filename will have the extension when you use ls, if you set extension in vimwiki,
-# but the contents which imply the filename in your index.md should have no dot.
+# and there is no any dot your base filename,
 # Then we add .html at the end of ().
-# e.g. [abc](abc) will be chagned into [abc](abc.html)
+# e.g. [abc](abc) will not be chagned
 # e.g. ![abc](abc) will not be chagned.
 # e.g. [abc](http://test.com) will not be changed.
+# e.g. [abc](abc-def.md) will be changed to [abc](abc-def.html)
 # this is mainly making the links work in html files.
 # This works not perfectly, but it works for me.
-sed -r 's/^[^!]*(\[.+\])\(([^.]+?)\)/\1(\2.html)/g' < "$INPUT" \
-| pandoc $MATH -s -f $SYNTAX -t html -c $CSSFILENAME --metadata pagetitle="$FILE" \
+sed -r 's/^[^!]*(\[.+\])\(([^/]+?)\.md\)/\1(\2.html)/g' < "$INPUT" \
+| pandoc "$MATH" -s -f "$SYNTAX" -t html -c "$CSSFILENAME" --metadata pagetitle="$FILE" \
 > "$OUTPUT"
