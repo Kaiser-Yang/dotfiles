@@ -1,14 +1,7 @@
 vim.g.vimwiki_list = {
   {
-    path_html = "/mnt/e/vimwiki/programming/html",
-    path = "/mnt/e/vimwiki/programming",
-    syntax = "markdown",
-    ext = ".md",
-    custom_wiki2html = "~/.config/nvim/wiki2html.sh",
-  },
-  {
-    path_html = "/mnt/e/vimwiki/blog/html",
-    path = "/mnt/e/vimwiki/blog",
+    path_html = "/mnt/e/vimwiki/html",
+    path = "/mnt/e/vimwiki/",
     syntax = "markdown",
     ext = ".md",
     custom_wiki2html = "~/.config/nvim/wiki2html.sh",

@@ -818,7 +818,7 @@ autocmd Filetype git*,markdown,copilot-chat
     \ inoremap<buffer> ,c <c-g>u<CR><CR>```<CR>```<CR><CR><++><Esc>3kA
 
 " for pictures, mostly, we don't add pictures' descriptions
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,p <c-g>u<c-o>mz<CR><CR>![]()<CR><CR><++><Esc>2k0f(a
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,p <c-g>u<c-o>mz<CR><CR>![](){: .img-fluid}<CR><CR><++><Esc>2k0f(a
 
 " for for links <a> are html links tag, so we use ,a
 autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,a <c-g>u<c-o>mz[](<++>)<++><Esc>F[a
