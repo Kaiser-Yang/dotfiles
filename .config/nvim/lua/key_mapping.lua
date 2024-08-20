@@ -753,7 +753,7 @@ end
 
 local telescope = require 'telescope.builtin'
 function FindFilesOnRootDirectory()
-    telescope.find_files({ search_dirs = { GetRootDirectory() }, hidden = true })
+    telescope.find_files({ search_dirs = { GetRootDirectory() }, hidden = true, no_ignore = true })
 end
 
 function LiveGrepOnRootDirectory()

@@ -45,7 +45,7 @@ require'telescope'.setup({
                 prompt_position = 'top',
             },
         },
-        file_ignore_patterns = {'.git/', 'build/', 'lib/', '.root', '%.o', '%.out', '%.exe', '%.png',
+        file_ignore_patterns = {'.git/', 'target/', 'build/', 'lib/', '.root', '%.o', '%.out', '%.exe', '%.png',
             '%.jpg', '%.so', '%.a', '%.dll', '%.dylib', '%.class', '%.jar', '%.zip', '%.tar.gz',},
         sorting_strategy = "ascending",
         prompt_prefix = "🔍 ",
