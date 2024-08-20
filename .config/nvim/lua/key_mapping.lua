@@ -824,10 +824,10 @@ autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,p <c-g>u<c-o>mz<CR
 autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,a <c-g>u<c-o>mz[](<++>)<++><Esc>F[a
 
 " for headers
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> <c-g>u<c-o>mz,1 #<Space>
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> <c-g>u<c-o>mz,2 ##<Space>
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> <c-g>u<c-o>mz,3 ###<Space>
-autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> <c-g>u<c-o>mz,4 ####<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,1 <c-g>u<c-o>mz#<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,2 <c-g>u<c-o>mz##<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,3 <c-g>u<c-o>mz###<Space>
+autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,4 <c-g>u<c-o>mz####<Space>
 
 " delete lines
 autocmd Filetype git*,markdown,copilot-chat inoremap<buffer> ,d <c-g>u<c-o>mz~~~~<++><Esc>F~hi
