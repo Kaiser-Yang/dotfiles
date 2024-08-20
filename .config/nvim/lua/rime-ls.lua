@@ -62,8 +62,7 @@ A language server for librime
             )
         end
         -- keymaps for executing command
-        vim.keymap.set('i', '<c-space>', toggle_rime)
-        -- vim.keymap.set('n', '<leader><space>', function() toggle_rime() end)
+        vim.keymap.set({ 'n', 'i' }, '<c-space>', toggle_rime)
         -- vim.keymap.set('n', '<leader>rs', function() vim.lsp.buf.execute_command({ command = "rime-ls.sync-user-data" }) end)
     end
 
@@ -159,17 +158,22 @@ vim.api.nvim_create_autocmd('FileType', {
             })
         end
         vim.keymap.set({ 'i', 's' }, '<space>', function()
-            local entry = cmp.get_selected_entry()
-            if entry == nil then
-                entry = cmp.core.view:get_first_entry()
-            end
-            if is_rime_entry(entry) then
-                cmp.confirm({
-                    behavior = cmp.ConfirmBehavior.Replace,
-                    select = true,
-                })
-            else
+            if not vim.g.rime_enabled then
                 vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', false)
+            else
+                local entry = cmp.get_selected_entry()
+                if entry ~= nil then
+                    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', false)
+                end
+                entry = cmp.core.view:get_first_entry()
+                if is_rime_entry(entry) then
+                    cmp.confirm({
+                        behavior = cmp.ConfirmBehavior.Replace,
+                        select = true,
+                    })
+                else
+                    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', false)
+                end
             end
         end, {
             noremap = true,
