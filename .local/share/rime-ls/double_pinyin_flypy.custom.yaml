@@ -9,3 +9,5 @@ patch:
     - name: ascii_punct
       reset: 1
       states: [ 。，, ．， ]
+  'engine/translators/+':
+    - lua_translator@date_translator
