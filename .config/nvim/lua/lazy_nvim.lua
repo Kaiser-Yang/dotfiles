@@ -53,7 +53,10 @@ require('lazy').setup({
                 'onsails/lspkind-nvim',
                 'uga-rosa/cmp-dictionary',
                 'f3fora/cmp-spell',
-                'petertriho/cmp-git',
+                {
+                    "petertriho/cmp-git",
+                    config = function () require'cmp_git'.setup() end,
+                },
                 'lukas-reineke/cmp-rg',
                 'saadparwaiz1/cmp_luasnip',
                 {
