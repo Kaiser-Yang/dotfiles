@@ -141,4 +141,6 @@ cd - || exit 1
 sudo apt install -y ruby-full
 sudo gem install jekyll bundler
 
+sudo apt install -y gh
+
 log "Installation finished, but you may need restart your shell"

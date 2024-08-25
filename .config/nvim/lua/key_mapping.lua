@@ -560,24 +560,24 @@ function CompileRun()
     local command = ""
     if vim.bo.filetype == 'c' then
         command = string.format(
-            'cd %s && gcc -g -Wall %s -I include -o %s.out && echo RUNNING && time ./%s.out',
+            "cd '%s' && gcc -g -Wall '%s' -I include -o '%s.out' && echo RUNNING && time './%s.out'",
             directory, filename, filename_noext, filename_noext)
     elseif vim.bo.filetype == 'cpp' then
         command = string.format(
-            'cd %s && g++ -g -Wall -std=c++17 -I include %s -o %s.out && echo RUNNING && time ./%s.out',
+            "cd '%s' && g++ -g -Wall -std=c++17 -I include '%s' -o '%s.out' && echo RUNNING && time './%s.out'",
             directory, filename, filename_noext, filename_noext)
     elseif vim.bo.filetype == 'java' then
         command = string.format(
-            'cd %s && javac %s && echo RUNNING && time java %s',
+            "cd '%s' && javac '%s' && echo RUNNING && time java '%s'",
             directory, filename, filename_noext)
     elseif vim.bo.filetype == 'sh' then
-        command = string.format('cd %s && time ./%s', directory, filename)
+        command = string.format("cd '%s' && time './%s'", directory, filename)
     elseif vim.bo.filetype == 'python' then
-        command = string.format('cd %s && time python3 %s', directory, filename)
+        command = string.format("cd '%s' && time python3 '%s'", directory, filename)
     elseif vim.bo.filetype == 'html' then
-        command = string.format('cd %s && wslview %s &', directory, filename)
+        command = string.format("cd '%s' && wslview '%s' &", directory, filename)
     elseif vim.bo.filetype == 'lua' then
-        command = string.format('cd %s && lua %s', directory, filename)
+        command = string.format("cd '%s' && lua '%s'", directory, filename)
     elseif vim.bo.filetype == 'tex' then
         toggleVimtexCursorFollow()
         if autoFollow then
