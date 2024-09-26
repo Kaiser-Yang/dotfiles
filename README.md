@@ -159,8 +159,6 @@ Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V
 | Q           | N         | Quit a window, quit a tab or unload a buffer, not save |
 | S           | N         | Similar with `Q`, but this will execute 'write' first |
 | \<C-N>      | T I V X N | Back to normal mode by `<C-\><C-N>` |
-| J           | V         | Move selected content down, support `{count}J` |
-| K           | V         | Move selected content up, support `{count}K` |
 | \<LEADER>r  | N         | Run the current file depends on its filetype, this will onpen a terminal for some filetypes |
 | \<LEADER>ay | N         | Copy all lines of current buffer to plus register |
 

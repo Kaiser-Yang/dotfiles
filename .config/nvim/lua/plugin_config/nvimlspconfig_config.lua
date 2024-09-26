@@ -1,5 +1,6 @@
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 require('java').setup({
+    capabilities = lsp_capabilities,
     root_markers = {
         '.root',
         '.git',
@@ -38,7 +39,7 @@ require'lspconfig'.lua_ls.setup{
 require'lspconfig'.cmake.setup{
     capabilities = lsp_capabilities
 }
-require'lspconfig'.tsserver.setup{
+require'lspconfig'.ts_ls.setup{
     capabilities = lsp_capabilities
 }
 require'lspconfig'.clangd.setup{
@@ -59,4 +60,7 @@ require'lspconfig'.markdown_oxide.setup{
 require'rime-ls'.setup_rime()
 vim.diagnostic.config({
     update_in_insert = true,
+    virtual_text = false,
+    signs = true,
+    underline = true,
 })

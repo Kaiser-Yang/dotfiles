@@ -8,6 +8,7 @@
 abbr -a lzg lazygit
 abbr -a gco git checkout
 abbr -a gst git status
+abbr -a gswt git switch
 abbr -a gaa git add :/
 abbr -a gad git add .
 abbr -a gcm git commit

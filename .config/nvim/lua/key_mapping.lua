@@ -373,10 +373,10 @@ function MoveSelectedLines(count, direction)
     end
 end
 
-map.set({ 'v' }, 'J', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'down')<CR>",
-    opts({ desc = 'Selected up' }))
-map.set({ 'v' }, 'K', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'up')<CR>",
-    opts({ desc = 'Selected down' }))
+-- map.set({ 'v' }, 'J', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'down')<CR>",
+--     opts({ desc = 'Selected up' }))
+-- map.set({ 'v' }, 'K', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'up')<CR>",
+--     opts({ desc = 'Selected down' }))
 
 map.set({ 'n' }, '[g', require 'gitsigns'.prev_hunk, opts({ desc = 'Previous git hunk' }))
 map.set({ 'n' }, ']g', require 'gitsigns'.next_hunk, opts({ desc = 'Next git hunk' }))

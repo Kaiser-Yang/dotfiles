@@ -4,7 +4,7 @@ require("mason-lspconfig").setup {
         "cmake",
         "pyright",
         "lua_ls",
-        "tsserver",
+        "ts_ls",
         "jdtls",
         "jsonls",
         "lemminx", -- xml lsp

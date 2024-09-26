@@ -14,7 +14,7 @@ require("noice").setup {
         bottom_search = false, -- use a classic bottom cmdline for search
         command_palette = true, -- position the cmdline and popupmenu together
         long_message_to_split = true, -- long messages will be sent to a split
-        inc_rename = true, -- enables an input dialog for inc-rename.nvim
+        inc_rename = false, -- enables an input dialog for inc-rename.nvim
         lsp_doc_border = false, -- add a border to hover docs and signature help
     },
     cmdline = {
@@ -33,8 +33,28 @@ require("noice").setup {
             filter = { pattern = "^:%s*!", icon = "", lang = "bash" },
             lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
             help = { pattern = "^:%s*he?l?p?%s+", icon = "󰋗" },
-            inc_rename = { pattern = { "^:%s*IncRename%s+" }, icon = "" }, -- this plugin is not used
+            -- inc_rename = { pattern = { "^:%s*IncRename%s+" }, icon = "" }, -- this plugin is not used
             -- lua = false, -- to disable a format, set to `false`
         },
     },
 }
+
+vim.api.nvim_create_autocmd("RecordingEnter", {
+  callback = function()
+    local msg = string.format("Recording @%s", vim.fn.reg_recording())
+    _MACRO_RECORDING_STATUS = true
+    vim.notify(msg, vim.log.levels.INFO, {
+      title = "Macro Recording",
+      keep = function() return _MACRO_RECORDING_STATUS end,
+      timeout = 0
+    })
+  end,
+  group = vim.api.nvim_create_augroup("NoiceMacroNotfication", {clear = true})
+})
+
+vim.api.nvim_create_autocmd("RecordingLeave", {
+  callback = function()
+    _MACRO_RECORDING_STATUS = false
+  end,
+  group = vim.api.nvim_create_augroup("NoiceMacroNotficationDismiss", {clear = true})
+})
