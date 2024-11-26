@@ -43,5 +43,7 @@ bind "\C-l":clear-screen
 export PATH=$PATH:~/node-v20.13.0-linux-x64/bin:~/.local/bin
 # neovim path
 export PATH="$PATH:/opt/nvim-linux64/bin"
+# yarn bin
+export PATH="$PATH:~/.yarn/bin"
 # we add a empty line below to make sure the script append it coreectly.
 ### end_symbol_kaiserqzyue

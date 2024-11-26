@@ -35,7 +35,7 @@ if ! command -v sudo; then
 fi
 
 # basic tools
-sudo apt install -y curl unzip wget tar ripgrep cargo || exit 1
+sudo apt install -y curl unzip wget tar ripgrep || exit 1
 
 # formater for python3
 sudo apt install -y python3-autopep8
@@ -125,15 +125,13 @@ sudo systemctl restart docker || exit 1
 # installation of these is time-consuming, uncomment this if you need this one
 # sudo apt install -y zathura texlive-full || exit 1
 
-sudo apt install -y cargo
-cargo install tree-sitter-cli
-
 # rime
 sudo apt-get install -y ibus-rime librime-data-double-pinyin clang librime-dev
 cd || exit 1
 git clone https://github.com/wlh320/rime-ls.git
 cd - || exit 1
 cd ~/rime-ls || exit 1
+sudo apt install -y cargo
 cargo build --release || exit 1
 cd - || exit 1
 

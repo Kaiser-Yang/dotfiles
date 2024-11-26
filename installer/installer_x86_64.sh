@@ -31,6 +31,8 @@ if ! command -v node; then
         -O node-v20.13.0-linux-x64.tar.xz || exit 1
     tar -xf node-v20.13.0-linux-x64.tar.xz || exit 1
     rm -f node-v20.13.0-linux-x64.tar.xz
+    node-v20.13.0-linux-x64/bin/npm install -g yarn
+    node-v20.13.0-linux-x64/bin/yarn global add tree-sitter-cli
     cd - || exit 1
 fi
 

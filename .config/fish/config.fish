@@ -87,6 +87,10 @@ set PATH $PATH ~/node-v20.13.0-linux-x64/bin
 set PATH $PATH ~/.local/bin
 # the directory where user cargo will install
 set PATH $PATH ~/.cargo/bin
+# the yarn bin
+set PATH $PATH ~/.yarn/bin
+# neovim path
+set PATH $PATH /opt/nvim-linux64/bin
 
 # this enable .. be cd ../, ... be cd ../../
 # .... be cd ../../../
@@ -121,11 +125,6 @@ set fish_cursor_external line
 # The following variable can be used to configure cursor shape in
 # visual mode, but due to fish_cursor_default, is redundant here
 set fish_cursor_visual block
-
-# neovim path
-export PATH="$PATH:/opt/nvim-linux64/bin"
-
-export NERD_FONTS=1 > /dev/null
 
 function fish_mode_prompt
     switch $fish_bind_mode
