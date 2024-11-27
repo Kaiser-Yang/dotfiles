@@ -23,7 +23,6 @@ end
 
 map.set({ 'c' }, '<c-h>', '<left>', opts({ silent = false }))
 map.set({ 'c' }, '<c-l>', '<right>', opts({ silent = false }))
-map.set({ 'n' }, 'gz', '<cmd>ZenMode<cr>', opts({ desc = 'Toggle ZenMode' }))
 
 map.set({ 'x' }, '<leader>c<leader>', '<Plug>(comment_toggle_linewise_visual)',
     opts({ desc = 'Comment toggle current line' }))
@@ -34,20 +33,15 @@ map.set({ 'n' }, '<leader>c', '<Plug>(comment_toggle_linewise)',
 map.set({ 'n' }, '<leader>s', '<Plug>(comment_toggle_blockwise)',
     opts({ desc = 'Comment toggle block' }))
 
-map.set({ 'n' }, '<leader>f', function()
-    require 'conform'.format({ async = true, lsp_format = "fallback" })
+map.set({ 'n', 'v' }, '<leader>f', function()
+    require 'conform'.format({ async = true, lsp_format = "fallback" }, function()
+        local mode = vim.api.nvim_get_mode().mode
+        if mode == 'v' or mode == 'V' then
+            -- go back to normal mode
+            feedkeys('<esc>', 'v')
+        end
+    end)
 end, opts({ desc = 'Format current buffer' }))
-vim.api.nvim_create_user_command("Format", function(args)
-    local range = nil
-    if args.count ~= -1 then
-        local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
-        range = {
-            start = { args.line1, 0 },
-            ["end"] = { args.line2, end_line:len() },
-        }
-    end
-    require("conform").format({ async = true, lsp_format = "fallback", range = range })
-end, { range = true })
 
 function CopyBufferToPlusRegister()
     local cur = vim.api.nvim_win_get_cursor(0)
@@ -57,23 +51,39 @@ function CopyBufferToPlusRegister()
 end
 
 -- TODO: system clipboard not support this
+map.set({ 'n', 'x' }, 'y', '<Plug>(YankyYank)', opts())
+map.set({ 'n' }, 'gy', function()
+    require 'telescope'.extensions.yank_history.yank_history({
+        layout_strategy = "vertical",
+        layout_config = {
+            vertical = {
+                anchor = 'S',
+                height = 0.5,
+                preview_height = 0.3,
+                width = { padding = 0 },
+                prompt_position = 'bottom',
+            },
+        },
+        initial_mode = 'normal',
+    })
+end, opts())
 map.set({ "n", "x" }, "p", "<Plug>(YankyPutAfter)", opts())
 map.set({ "n", "x" }, "P", "<Plug>(YankyPutBefore)", opts())
+map.set({ "n", "x" }, "gp", "<Plug>(YankyGPutAfter)",
+    opts({ desc = 'Put yanked text after cursor and leave the cursor after pasted text' }))
+map.set({ "n", "x" }, "gP", "<Plug>(YankyGPutBefore)",
+    opts({ desc = 'Put yanked text before cursor and leave the cursor after pasted text' }))
 -- TODO: add descriptions
-map.set({ "n", "x" }, "gp", "<Plug>(YankyGPutAfter)", opts({ desc = '' }))
-map.set({ "n", "x" }, "gP", "<Plug>(YankyGPutBefore)", opts({ desc = '' }))
-map.set({ "n" }, "]p", "<Plug>(YankyPutIndentAfterLinewise)", opts({ desc = '' }))
-map.set({ "n" }, "[p", "<Plug>(YankyPutIndentBeforeLinewise)", opts({ desc = '' }))
-map.set({ "n" }, "]P", "<Plug>(YankyPutIndentAfterLinewise)", opts({ desc = '' }))
-map.set({ "n" }, "[P", "<Plug>(YankyPutIndentBeforeLinewise)", opts({ desc = '' }))
-map.set({ "n" }, ">p", "<Plug>(YankyPutIndentAfterShiftRight)", opts({ desc = '' }))
-map.set({ "n" }, "<p", "<Plug>(YankyPutIndentAfterShiftLeft)", opts({ desc = '' }))
-map.set({ "n" }, ">P", "<Plug>(YankyPutIndentBeforeShiftRight)", opts({ desc = '' }))
-map.set({ "n" }, "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)", opts({ desc = '' }))
-map.set({ "n" }, "=p", "<Plug>(YankyPutAfterFilter)", opts({ desc = '' }))
-map.set({ "n" }, "=P", "<Plug>(YankyPutBeforeFilter)", opts({ desc = '' }))
-map.set({ 'n' }, '<leader>sc', '<cmd>set spell!<cr>', opts({ desc = 'Toggle spell check' }))
-map.set({ 'n' }, '<leader><cr>', '<cmd>nohlsearch<cr>', opts({ desc = 'No hlsearch' }))
+-- map.set({ "n" }, "]p", "<Plug>(YankyPutIndentAfterLinewise)", opts({ desc = '' }))
+-- map.set({ "n" }, "]P", "<Plug>(YankyPutIndentAfterLinewise)", opts({ desc = '' }))
+-- map.set({ "n" }, "[p", "<Plug>(YankyPutIndentBeforeLinewise)", opts({ desc = '' }))
+-- map.set({ "n" }, "[P", "<Plug>(YankyPutIndentBeforeLinewise)", opts({ desc = '' }))
+-- map.set({ "n" }, ">p", "<Plug>(YankyPutIndentAfterShiftRight)", opts({ desc = '' }))
+-- map.set({ "n" }, "<p", "<Plug>(YankyPutIndentAfterShiftLeft)", opts({ desc = '' }))
+-- map.set({ "n" }, ">P", "<Plug>(YankyPutIndentBeforeShiftRight)", opts({ desc = '' }))
+-- map.set({ "n" }, "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)", opts({ desc = '' }))
+-- map.set({ "n" }, "=p", "<Plug>(YankyPutAfterFilter)", opts({ desc = '' }))
+-- map.set({ "n" }, "=P", "<Plug>(YankyPutBeforeFilter)", opts({ desc = '' }))
 map.set({ 'n', 'x' }, '<leader>y', '"+y', opts({ desc = 'Yank to + reg' }))
 map.set({ 'n', 'x' }, '<leader>p', '"+p', opts({ desc = 'Paste from + reg' }))
 map.set({ 'n', 'x' }, '<leader>P', '"+P', opts({ desc = 'Paste before from + reg' }))
@@ -81,6 +91,10 @@ map.set({ 'n' }, '<leader>ay', CopyBufferToPlusRegister, opts({ desc = 'Yank all
 map.set({ 'n' }, '<leader>Y', '"+y$', opts({ desc = 'Yank till eol to + reg' }))
 map.set({ 'n' }, 'Y', 'y$', opts())
 
+map.set({ 'n' }, '<leader>sc', '<cmd>set spell!<cr>', opts({ desc = 'Toggle spell check' }))
+map.set({ 'n' }, '<leader><cr>', '<cmd>nohlsearch<cr>', opts({ desc = 'No hlsearch' }))
+
+-- map.set({ 'n' }, 'gz', '<cmd>ZenMode<cr>', opts({ desc = 'Toggle ZenMode' }))
 local term_buf = -1
 local term_win_height = -1
 local term_visible = false
@@ -313,21 +327,19 @@ function QuitNotSaveOnBuffer()
     end
 end
 
-function QuitSaveOnBuffer()
-    vim.cmd('w')
-    QuitNotSaveOnBuffer()
-end
+-- function QuitSaveOnBuffer()
+--     vim.cmd('w')
+--     QuitNotSaveOnBuffer()
+-- end
+-- map.set({ 'n' }, 'S', QuitSaveOnBuffer, opts())
 
+-- map.set({ "i" }, "<c-s>", require('cmp_vimtex.search').search_menu, opts())
 map.set({ 'n' }, 'Q', QuitNotSaveOnBuffer, opts())
-map.set({ 'n' }, 'S', QuitSaveOnBuffer, opts())
-map.set({ "i" }, "<c-s>", require('cmp_vimtex.search').search_menu, opts())
 
 map.set({ 'n' }, '<leader>h', '<cmd>set nosplitright<cr><cmd>vsplit<cr><cmd>set splitright<cr>',
     opts({ desc = 'Split right' }))
 map.set({ 'n' }, '<leader>l', '<cmd>set splitright<cr><cmd>vsplit<cr>',
     opts({ desc = 'Split left' }))
-map.set({ 'n' }, '<leader>t', '<cmd>tabnew<cr><cmd>lua ToggleTermOnTabEnter()<cr>',
-    opts({ desc = 'Tabnew' }))
 map.set({ 't' }, '<c-h>', '<c-\\><c-n><cmd>TmuxNavigateLeft<cr>', opts({ desc = 'Cursor left' }))
 map.set({ 't' }, '<c-j>', '<c-\\><c-n><cmd>TmuxNavigateDown<cr>', opts({ desc = 'Cursor down' }))
 map.set({ 't' }, '<c-k>', '<c-\\><c-n><cmd>TmuxNavigateUp<cr>', opts({ desc = 'Curor up' }))
@@ -337,22 +349,20 @@ map.set({ 'n' }, '<leader>J', '<c-w>J', opts({ desc = 'Reopen window down' }))
 map.set({ 'n' }, '<leader>K', '<c-w>K', opts({ desc = 'Reopen window up' }))
 map.set({ 'n' }, '<leader>H', '<c-w>H', opts({ desc = 'Reopen window left' }))
 map.set({ 'n' }, '<leader>L', '<c-w>L', opts({ desc = 'Reopen window right' }))
-map.set({ 'n' }, '<leader>T', '<c-w>T<cmd>lua ToggleTermOnTabEnter()<cr>',
-    opts({ desc = 'Reopen window in tab' }))
-
+local bufferline = require 'bufferline'
+map.set({ 'n' }, '<leader>1', function() bufferline.go_to(1, true) end, opts({ desc = 'Go to the 1st buffer' }))
+map.set({ 'n' }, '<leader>2', function() bufferline.go_to(2, true) end, opts({ desc = 'Go to the 2nd buffer' }))
+map.set({ 'n' }, '<leader>3', function() bufferline.go_to(3, true) end, opts({ desc = 'Go to the 3rd buffer' }))
+map.set({ 'n' }, '<leader>4', function() bufferline.go_to(4, true) end, opts({ desc = 'Go to the 4th buffer' }))
+map.set({ 'n' }, '<leader>5', function() bufferline.go_to(5, true) end, opts({ desc = 'Go to the 5th buffer' }))
+map.set({ 'n' }, '<leader>6', function() bufferline.go_to(6, true) end, opts({ desc = 'Go to the 6th buffer' }))
+map.set({ 'n' }, '<leader>7', function() bufferline.go_to(7, true) end, opts({ desc = 'Go to the 7th buffer' }))
+map.set({ 'n' }, '<leader>8', function() bufferline.go_to(8, true) end, opts({ desc = 'Go to the 8th buffer' }))
+map.set({ 'n' }, '<leader>9', function() bufferline.go_to(9, true) end, opts({ desc = 'Go to the 9th buffer' }))
+map.set({ 'n' }, '<leader>0', function() bufferline.go_to(10, true) end, opts({ desc = 'Go to the 10th buffer' }))
 map.set({ 'n' }, '<leader>b', '<cmd>BufferLineCyclePrev<cr>', opts({ desc = 'Buffer switch left' }))
-map.set({ 'n' }, '<leader>n', '<cmd>BufferLineCycleNext<cr>',
-    opts({ desc = 'Buffer switch right' }))
+map.set({ 'n' }, '<leader>n', '<cmd>BufferLineCycleNext<cr>', opts({ desc = 'Buffer switch right' }))
 map.set({ 'n' }, "gb", "<cmd>BufferLinePick<CR>", opts({ desc = 'Buffer pick' }))
-map.set({ 'n' }, '<leader>1', '1gt', opts({ desc = 'Go to tab 1' }))
-map.set({ 'n' }, '<leader>2', '2gt', opts({ desc = 'Go to tab 2' }))
-map.set({ 'n' }, '<leader>3', '3gt', opts({ desc = 'Go to tab 3' }))
-map.set({ 'n' }, '<leader>4', '4gt', opts({ desc = 'Go to tab 4' }))
-map.set({ 'n' }, '<leader>5', '5gt', opts({ desc = 'Go to tab 5' }))
-map.set({ 'n' }, '<leader>6', '6gt', opts({ desc = 'Go to tab 6' }))
-map.set({ 'n' }, '<leader>7', '7gt', opts({ desc = 'Go to tab 7' }))
-map.set({ 'n' }, '<leader>8', '8gt', opts({ desc = 'Go to tab 8' }))
-map.set({ 'n' }, '<leader>9', '9gt', opts({ desc = 'Go to tab 9' }))
 
 map.set({ 'n' }, '<up>', '<cmd>lua CalculateNewSize(5)<cr><cmd>res +5<cr>', opts())
 map.set({ 'n' }, '<down>', '<cmd>lua CalculateNewSize(-5)<cr><cmd>res -5<cr>', opts())
@@ -360,26 +370,25 @@ map.set({ 'n' }, '<left>', '<cmd>vertical resize -5<cr>', opts())
 map.set({ 'n' }, '<right>', '<cmd>vertical resize +5<cr>', opts())
 
 -- TODO relative line number does not work well
-function MoveSelectedLines(count, direction)
-    if count == nil or count == 0 then
-        count = 1
-    end
-    if direction == 'down' then
-        vim.cmd(string.format(":'<,'>move '>+%d", count))
-        vim.api.nvim_command('normal! gv')
-    elseif direction == 'up' then
-        vim.cmd(string.format(":'<,'>move '<-%d", count + 1))
-        vim.api.nvim_command('normal! gv')
-    end
-end
-
+-- function MoveSelectedLines(count, direction)
+--     if count == nil or count == 0 then
+--         count = 1
+--     end
+--     if direction == 'down' then
+--         vim.cmd(string.format(":'<,'>move '>+%d", count))
+--         vim.api.nvim_command('normal! gv')
+--     elseif direction == 'up' then
+--         vim.cmd(string.format(":'<,'>move '<-%d", count + 1))
+--         vim.api.nvim_command('normal! gv')
+--     end
+-- end
 -- map.set({ 'v' }, 'J', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'down')<CR>",
 --     opts({ desc = 'Selected up' }))
 -- map.set({ 'v' }, 'K', ":<C-u>lua MoveSelectedLines(vim.v.count1, 'up')<CR>",
 --     opts({ desc = 'Selected down' }))
 
-map.set({ 'n' }, '[g', require 'gitsigns'.prev_hunk, opts({ desc = 'Previous git hunk' }))
-map.set({ 'n' }, ']g', require 'gitsigns'.next_hunk, opts({ desc = 'Next git hunk' }))
+map.set({ 'n' }, '[g', function() require 'gitsigns'.nav_hunk('prev') end, opts({ desc = 'Previous git hunk' }))
+map.set({ 'n' }, ']g', function() require 'gitsigns'.nav_hunk('next') end, opts({ desc = 'Next git hunk' }))
 map.set({ 'n' }, '[c', '<cmd>GitConflictPrevConflict<cr>', opts({ desc = 'Previous git conflict' }))
 map.set({ 'n' }, ']c', '<cmd>GitConflictNextConflict<cr>', opts({ desc = 'Next git conflict' }))
 map.del({ 'x', 'n' }, 'gc')
@@ -390,58 +399,37 @@ map.set({ 'n' }, 'gcn', '<cmd>GitConflictChooseNone<cr>', opts({ desc = 'Git kee
 map.set({ 'n' }, 'gcu', require 'gitsigns'.reset_hunk, opts({ desc = 'Git reset current hunk' }))
 map.set({ 'n' }, 'gcd', require 'gitsigns'.preview_hunk, opts({ desc = 'Git diff current hunk' }))
 
-map.set({ 'n' }, 'gy', function()
-    require 'telescope'.extensions.yank_history.yank_history({
-        layout_strategy = "vertical",
-        layout_config = {
-            vertical = {
-                anchor = 'S',
-                height = 0.5,
-                preview_height = 0.3,
-                width = { padding = 0 },
-                prompt_position = 'bottom',
-            },
-        },
-        initial_mode = 'normal',
-    })
-end, opts())
-map.set({ 'n' }, '[d', '<cmd>Lspsaga diagnostic_jump_prev<cr>',
-    opts({ desc = 'Previous diagnostic' }))
+map.set({ 'n' }, '[d', '<cmd>Lspsaga diagnostic_jump_prev<cr>', opts({ desc = 'Previous diagnostic' }))
 map.set({ 'n' }, ']d', '<cmd>Lspsaga diagnostic_jump_next<cr>', opts({ desc = 'Next diagnostic' }))
 map.set({ 'n' }, 'gr', '<cmd>Telescope lsp_references<cr>', opts({ desc = 'Go references' }))
--- optional implementation of goto definitions
--- map.set({ 'n' }, 'gd', '<cmd>Telescope lsp_definitions<cr>', DefaultOpt())
--- map.set({ 'n' }, 'gd', vim.lsp.tagfunc, DefaultOpt())
 map.set({ 'n' }, 'gd', '<cmd>Lspsaga goto_definition<cr>', opts({ desc = 'Go to definition' }))
 map.set({ 'n' }, '<leader>d', '<cmd>Lspsaga hover_doc<cr>', opts({ desc = 'Hover document' }))
 map.set({ 'n' }, '<leader>R', "<cmd>Lspsaga rename mode=n<cr>", opts({ desc = 'Rename' }))
 map.set({ 'n' }, '<leader>i', function()
-    ---@diagnostic disable-next-line: missing-parameter
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, opts({ desc = 'Toggle inlay hints' }))
-map.set({ 'n', 'x' }, 'ga', "<cmd>Lspsaga code_action<cr>", opts({ desc = 'Code action' }))
 map.set({ 'n' }, 'gi', "<cmd>Lspsaga finder imp<cr>", opts({ desc = 'Go to implementations' }))
+map.set({ 'n', 'x' }, 'ga', "<cmd>Lspsaga code_action<cr>", opts({ desc = 'Code action' }))
 -- TODO without implementation
 -- map.set({ 'n' }, 'gh', '<cmd>CocCommand clangd.switchSourceHeader<CR>', DefaultOpt())
 
-map.set({ 'n' }, 'gpt', '<cmd>CopilotChatToggle<cr>', opts({ desc = 'Toggle copilot-chat' }))
-map.set({ 'v' }, 'gpt', ':CopilotChat', opts({ silent = false, desc = 'Copilot chat' }))
+-- map.set({ 'n' }, 'gpt', '<cmd>CopilotChatToggle<cr>', opts({ desc = 'Toggle copilot-chat' }))
+-- map.set({ 'v' }, 'gpt', ':CopilotChat', opts({ silent = false, desc = 'Copilot chat' }))
 -- Custom buffer for CopilotChat
-vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = "copilot-*",
-    callback = function()
-        vim.opt_local.relativenumber = true
-        vim.opt_local.number = true
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--     pattern = "copilot-*",
+--     callback = function()
+--         vim.opt_local.relativenumber = true
+--         vim.opt_local.number = true
+--
+--         -- insert at the end to chat with Copilot
+--         map.set({ 'n' }, 'i', 'Gi', { silent = true, noremap = true, buffer = true })
+--         -- q for stop the chat
+--         map.set({ 'n' }, 'q', '<cmd>CopilotChatStop<cr>', { silent = true, noremap = true, buffer = true })
+--     end,
+-- })
 
-        -- insert at the end to chat with Copilot
-        map.set({ 'n' }, 'i', 'Gi', { silent = true, noremap = true, buffer = true })
-        -- q for stop the chat
-        map.set({ 'n' }, 'q', '<cmd>CopilotChatStop<cr>', { silent = true, noremap = true, buffer = true })
-    end,
-})
-
-
-function GetRootDirectory()
+function get_root_directory()
     local rootDir = vim.fn.finddir(".root", ";")
     if rootDir ~= "" then
         if string.sub(rootDir, -1) == "/" then
@@ -474,12 +462,17 @@ function HasRootDirectory()
 end
 
 function NvimTreeToggleOnRootDirectory()
-    require('nvim-tree.api').tree.toggle({
-        path = GetRootDirectory(),
+    local api = require('nvim-tree.api')
+    api.tree.toggle({
+        path = get_root_directory(),
         update_root = false,
         find_file = false,
         focus = true,
     })
+    local mode = vim.api.nvim_get_mode().mode;
+    if api.tree.is_tree_buf() and (mode == 'i' or mode == 'I') then
+        feedkeys('<esc>', 'n')
+    end
 end
 
 local function OpenNvimTreeOnStart(data)
@@ -508,7 +501,7 @@ local function OpenNvimTreeOnStart(data)
     -- with no parameter or a file, then open nvim-tree on root directory, but do not focus
     if HasRootDirectory() and (nameFile or noName) then
         require('nvim-tree.api').tree.toggle({
-            path = GetRootDirectory(),
+            path = get_root_directory(),
             update_root = false,
             find_file = false,
             focus = false,
@@ -516,7 +509,7 @@ local function OpenNvimTreeOnStart(data)
         -- must be a non-exist named file
     elseif not directory and #vim.v.argv == 3 then
         require('nvim-tree.api').tree.toggle({
-            path = GetRootDirectory(),
+            path = get_root_directory(),
             update_root = false,
             find_file = false,
             focus = false,
@@ -612,10 +605,10 @@ map.set({ 'n' }, '<leader>r', '<cmd>lua CompileRun()<cr>', opts({ desc = 'Compil
 map.del({ 'n' }, '<c-w>d')
 map.del({ 'n' }, '<c-w><c-d>')
 map.set({ 'n' }, '<c-w>', '<cmd>Lspsaga outline<cr>', opts())
+-- we must exit insert mode first, otherwise when entering outloot it will be insert mode
 map.set({ 'i' }, '<c-w>', '<esc><cmd>Lspsaga outline<cr>', opts())
 
-map.set({ 'n' }, '<c-e>', NvimTreeToggleOnRootDirectory, opts())
-map.set({ 'i' }, '<c-e>', NvimTreeToggleOnRootDirectory, opts())
+map.set({ 'n', 'i' }, '<c-e>', NvimTreeToggleOnRootDirectory, opts())
 
 -- vim.cmd [[
 -- " This function is copied from vimwiki
@@ -631,7 +624,7 @@ map.set({ 'i' }, '<c-e>', NvimTreeToggleOnRootDirectory, opts())
 -- autocmd FileType vimwiki,git*,markdown,copilot-chat inoremap <silent><buffer> <S-CR>
 --     \ <Esc>:call COPY_CR(2, 2)<CR>
 -- ]]
-map.set({ 'n' }, '<leader>wh', '<cmd>VimwikiAll2HTML<cr>', opts({ desc = 'Vimwiki all to HTML' }))
+-- map.set({ 'n' }, '<leader>wh', '<cmd>VimwikiAll2HTML<cr>', opts({ desc = 'Vimwiki all to HTML' }))
 
 local cmp = require 'cmp'
 function CmpSelected()
@@ -642,26 +635,26 @@ local copilot = require 'copilot.suggestion'
 local _, fittencode = pcall(require, 'fittencode')
 map.set({ 'c' }, '<c-j>', cmp.select_next_item, opts())
 map.set({ 'c' }, '<c-k>', cmp.select_prev_item, opts())
+-- map.set({ 'i' }, '<c-z>', function()
+--     if not DisableCopilot then
+--         if copilot.is_visible() then
+--             vim.b.copilot_suggestion_auto_trigger = false
+--             copilot.dismiss()
+--         else
+--             vim.b.copilot_suggestion_auto_trigger = true
+--             copilot.next()
+--         end
+--     else
+--         if fittencode.has_suggestions() then
+--             fittencode.enable_completions({ enable = false })
+--             fittencode.dismiss()
+--         else
+--             fittencode.enable_completions({ enable = true })
+--             fittencode.triggering_completion()
+--         end
+--     end
+-- end, opts())
 -- TEST: the mapping for fittencode is not tested yet
-map.set({ 'i' }, '<c-z>', function()
-    if not DisableCopilot then
-        if copilot.is_visible() then
-            vim.b.copilot_suggestion_auto_trigger = false
-            copilot.dismiss()
-        else
-            vim.b.copilot_suggestion_auto_trigger = true
-            copilot.next()
-        end
-    else
-        if fittencode.has_suggestions() then
-            fittencode.enable_completions({ enable = false })
-            fittencode.dismiss()
-        else
-            fittencode.enable_completions({ enable = true })
-            fittencode.triggering_completion()
-        end
-    end
-end, opts())
 map.set({ 'i' }, '<m-f>', copilot.accept_word, opts())
 map.set({ 'i' }, '<c-f>', function()
     if not DisableCopilot and copilot.is_visible() then
@@ -711,7 +704,7 @@ map.set({ 'i' }, '<c-c>', function()
 end, opts({ silent = false }))
 
 if not DisableCopilot then
-    map.set({ 'i' }, '<m-cr>', function ()
+    map.set({ 'i' }, '<m-cr>', function()
         if copilot.is_visible() then
             copilot.accept()
         else
@@ -732,7 +725,7 @@ if not DisableCopilot then
     "     \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
     ]]
 else
-    map.set({ 'i' }, '<c-cr>', function ()
+    map.set({ 'i' }, '<m-cr>', function()
         if fittencode.has_suggestions() then
             fittencode.accept_all_suggestions()
         else
@@ -759,11 +752,11 @@ end
 
 local telescope = require 'telescope.builtin'
 function FindFilesOnRootDirectory()
-    telescope.find_files({ search_dirs = { GetRootDirectory() }, hidden = true, no_ignore = true })
+    telescope.find_files({ search_dirs = { get_root_directory() }, hidden = true, no_ignore = true })
 end
 
 function LiveGrepOnRootDirectory()
-    telescope.live_grep({ search_dirs = { GetRootDirectory() }, additional_args = { '--hidden', } })
+    telescope.live_grep({ search_dirs = { get_root_directory() }, additional_args = { '--hidden', } })
 end
 
 map.set({ 'n', 'i' }, '<c-p>', FindFilesOnRootDirectory, opts())
@@ -781,7 +774,7 @@ function DapUIToggle()
     elseif not DapUIVisible and Nvim_tree_visible then
         Nvim_tree_visible = false
         require('nvim-tree.api').tree.toggle({
-            path = GetRootDirectory(),
+            path = get_root_directory(),
             update_root = false,
             find_file = false,
             focus = false,
