@@ -323,7 +323,8 @@ right, the latter will not.
 | Shortcut | Mode | Description |
 | -        | -    | - |
 | C-F      | I    | Select one line when `copilot` suggestions are shown |
-| \<ESC>f  | I    | Select one word when `copilot` suggestions are shown. In 7-bit terminal press `<M-F>` will trigger `<ESC>f` |
+| A-F      | I    | Select one word when `copilot` suggestions are shown |
+| A-Enter  | I    | Select all when `copilot` suggestions are shown |
 | \<ENTER> | I    | Select current suggestion when one `cmp` suggestion is selected |
 | \<ENTER> | I    | Select first suggestion when `cmp` is not shown and `copilot` is shown |
 | \<C-C>   | I    | Close all completion when no selection in `cmp`; close `cmp` completion when there is a selection of `cmp`; close copilot completion when `cmp` invisible and copilit visible; back to normal |

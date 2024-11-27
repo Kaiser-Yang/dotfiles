@@ -153,5 +153,5 @@ require("which-key").setup({
     debug = false, -- enable wk.log in the current directory
 })
 require'which-key'.add({
-    { '<esc>f', mode = { 'i' }, hidden = true }
+    { '<m-f>', mode = { 'i' }, hidden = true }
 })

@@ -662,7 +662,7 @@ map.set({ 'i' }, '<c-z>', function()
         end
     end
 end, opts())
-map.set({ 'i' }, '<esc>f', copilot.accept_word, opts())
+map.set({ 'i' }, '<m-f>', copilot.accept_word, opts())
 map.set({ 'i' }, '<c-f>', function()
     if not DisableCopilot and copilot.is_visible() then
         copilot.accept_line()
@@ -701,11 +701,6 @@ map.set({ 'i' }, '<c-c>', function()
         cmp.abort()
     elseif cmp.visible() then
         cmp.abort()
-        if not DisableCopilot then
-            copilot.dismiss()
-        else
-            fittencode.dismiss()
-        end
     elseif not DisableCopilot and copilot.is_visible() then
         copilot.dismiss()
     elseif DisableCopilot and fittencode.has_suggestions() then
@@ -714,13 +709,19 @@ map.set({ 'i' }, '<c-c>', function()
         feedkeys("<c-\\><c-n>", 'i')
     end
 end, opts({ silent = false }))
+
 if not DisableCopilot then
+    map.set({ 'i' }, '<m-cr>', function ()
+        if copilot.is_visible() then
+            copilot.accept()
+        else
+            feedkeys("<esc><cr>", 'i')
+        end
+    end, opts())
     vim.cmd [[
     inoremap <silent><expr> <CR>
         \ luaeval('CmpSelected()') ?
         \ '<cmd>lua require"cmp".confirm()<cr>' :
-        \ luaeval('require"copilot.suggestion".is_visible()') ?
-        \ '<cmd>lua require"copilot.suggestion".accept()<cr>' :
         \ '<C-g>u<CR><C-r>=AutoPairsReturn()<CR>'
     " autocmd FileType vimwiki,git*,markdown,copilot-chat
     "     \ inoremap <silent><script><buffer><expr> <CR>
@@ -731,12 +732,17 @@ if not DisableCopilot then
     "     \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
     ]]
 else
+    map.set({ 'i' }, '<c-cr>', function ()
+        if fittencode.has_suggestions() then
+            fittencode.accept_all_suggestions()
+        else
+            feedkeys("<esc><cr>", 'i')
+        end
+    end, opts())
     vim.cmd [[
     inoremap <silent><expr> <CR>
         \ luaeval('CmpSelected()') ?
         \ '<cmd>lua require"cmp".confirm()<cr>' :
-        \ luaeval('require("fittencode").has_suggestions()') ?
-        \ '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' :
         \ '\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>'
     " autocmd FileType vimwiki,git*,markdown,copilot-chat
     "     \ inoremap <silent><script><buffer><expr> <CR>

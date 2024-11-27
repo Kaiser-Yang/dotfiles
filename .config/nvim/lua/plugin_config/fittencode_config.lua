@@ -115,7 +115,7 @@ require('fittencode').setup({
     keymaps = {
         inline = {
             ['<C-Down>'] = 'accept_line',
-            ['<esc>f'] = 'accept_word',
+            ['<m-f>'] = 'accept_word',
             ['<C-Right>'] = 'accept_word',
             ['<C-Up>'] = 'revoke_line',
             ['<C-Left>'] = 'revoke_word',
