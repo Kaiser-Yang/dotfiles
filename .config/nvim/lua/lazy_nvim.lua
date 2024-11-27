@@ -49,7 +49,6 @@ require('lazy').setup({
                 'hrsh7th/cmp-cmdline',
                 'hrsh7th/cmp-nvim-lua',
                 'hrsh7th/cmp-calc',
-                'chrisgrieser/cmp_yanky',
                 'onsails/lspkind-nvim',
                 'uga-rosa/cmp-dictionary',
                 'f3fora/cmp-spell',
@@ -82,6 +81,7 @@ require('lazy').setup({
                 -- input method of Chinese
                 -- 'yehuohan/cmp-im',
                 -- 'yehuohan/cmp-im-zh',
+                -- 'chrisgrieser/cmp_yanky',
 
                 -- 'roobert/tailwindcss-colorizer-cmp.nvim', -- INFO: uncomment this for css color
             },
@@ -273,7 +273,11 @@ require('lazy').setup({
         },
         {
             "Pocco81/auto-save.nvim",
-            opts = {},
+            opts = {
+                execution_message = {
+                    message = ""
+                }
+            },
         },
         {
             'folke/which-key.nvim',

@@ -25,7 +25,6 @@ cmp.setup({
         { name = "dictionary", keyword_length = 2, max_item_count = 5 },
         { name = 'nvim_lua' },
         { name = 'lazydev', group_index = 0 }, -- for nvim config
-        { name = "cmp_yanky", max_item_count = 3 },
         {
             name = "spell",
             option = {
@@ -41,6 +40,7 @@ cmp.setup({
         { name = "git", max_item_count = 5 },
         { name = "rg", max_item_count = 5, keyword_length = 4 },
         { name = "vimtex", },
+        -- { name = "cmp_yanky", max_item_count = 3 },
         -- { name = "emoji", max_item_count = 3 },
     },
 
@@ -131,9 +131,10 @@ cmp.setup({
                     vim_item.kind = "Search"
                 end
 
-                if entry.source.name == "cmp_yanky" then
-                    vim_item.kind = "Clipboard"
-                end
+                -- if entry.source.name == "cmp_yanky" then
+                --     vim_item.kind = "Clipboard"
+                -- end
+
                 -- if entry.source.name == "copilot" then
                 --     vim_item.kind = "Copilot"
                 -- end
