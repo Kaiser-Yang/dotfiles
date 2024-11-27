@@ -26,7 +26,7 @@ require('lspsaga').setup({
     rename = {
         in_select = false,
         keys = {
-            quit = { 'Q', 'q' }
+            quit = { '<esc>' }
         }
     },
     lightbulb = {
