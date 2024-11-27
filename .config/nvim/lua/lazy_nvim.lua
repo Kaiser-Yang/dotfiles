@@ -33,6 +33,7 @@ require('lazy').setup({
             },
             config = function() require'plugin_config/nvimlspconfig_config' end,
         },
+        -- TODO: remove those two plugins when configurations are stable
         -- lazydev is for nvim configuration function completion
         {
             "folke/lazydev.nvim",
@@ -40,6 +41,7 @@ require('lazy').setup({
             opts = { require'plugin_config/lazydev_config' },
         },
         { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+
         {
             'hrsh7th/nvim-cmp',
             dependencies = {
@@ -47,15 +49,7 @@ require('lazy').setup({
                 'hrsh7th/cmp-buffer',
                 'hrsh7th/cmp-path',
                 'hrsh7th/cmp-cmdline',
-                'hrsh7th/cmp-nvim-lua',
-                'hrsh7th/cmp-calc',
                 'onsails/lspkind-nvim',
-                'uga-rosa/cmp-dictionary',
-                'f3fora/cmp-spell',
-                {
-                    "petertriho/cmp-git",
-                    config = function () require'cmp_git'.setup() end,
-                },
                 'lukas-reineke/cmp-rg',
                 'saadparwaiz1/cmp_luasnip',
                 {
@@ -67,9 +61,19 @@ require('lazy').setup({
                     },
                     config = function() require'plugin_config/luasnip_config' end,
                 },
+                'uga-rosa/cmp-dictionary',
+                {
+                    "petertriho/cmp-git",
+                    config = function () require'cmp_git'.setup() end,
+                },
                 -- comparators making underlines lower priority
                 'lukas-reineke/cmp-under-comparator',
                 "micangl/cmp-vimtex",
+                -- TODO: remove this plugin when configurations are stable
+                'hrsh7th/cmp-nvim-lua',
+
+                -- 'f3fora/cmp-spell',
+                -- 'hrsh7th/cmp-calc',
 
                 -- {
                 --     "zbirenbaum/copilot-cmp",
@@ -78,9 +82,6 @@ require('lazy').setup({
                 --     end
                 -- },
 
-                -- input method of Chinese
-                -- 'yehuohan/cmp-im',
-                -- 'yehuohan/cmp-im-zh',
                 -- 'chrisgrieser/cmp_yanky',
 
                 -- 'roobert/tailwindcss-colorizer-cmp.nvim', -- INFO: uncomment this for css color
@@ -140,7 +141,6 @@ require('lazy').setup({
             event = 'InsertEnter',
             config = function() require'plugin_config/copilotlua_config' end,
         },
-        { import = 'plugin_config/copilotchat_config' },
 
         {
             'gbprod/yanky.nvim',
@@ -163,6 +163,7 @@ require('lazy').setup({
             event = "VeryLazy",
             opts = {},
         },
+
         {
             "iamcco/markdown-preview.nvim",
             cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
@@ -172,14 +173,16 @@ require('lazy').setup({
             dependencies = { 'iamcco/mathjax-support-for-mkdp' }
         },
         {
-            'mzlogin/vim-markdown-toc',
-            ft = { "markdown", "vimwiki" },
-        },
-        {
             'vimwiki/vimwiki',
             lazy = false,
             init = function() require('plugin_config/vimwiki_config') end
         },
+        -- TODO: used not often
+        {
+            'mzlogin/vim-markdown-toc',
+            ft = { "markdown", "vimwiki" },
+        },
+
         {
             "christoomey/vim-tmux-navigator",
             cmd = {
@@ -203,15 +206,22 @@ require('lazy').setup({
             dependencies = { "nvim-lua/plenary.nvim" },
             config = function() require'plugin_config/todocomments_config' end,
         },
+        -- formatter
         {
             require'plugin_config/conform_config'
         },
+
         {
             'nvim-treesitter/nvim-treesitter',
             build = function() require('nvim-treesitter.install').update({ with_sync = true })() end,
             config = function() require'plugin_config/nvimtreesitter_config' end,
             dependencies = {
-                'nvim-treesitter/nvim-treesitter-context',
+                {
+                    'nvim-treesitter/nvim-treesitter-context',
+                    opts = {
+                        max_lines = 3, -- How many lines the window should span. Values <= 0 mean no limit.
+                    }
+                }
                 -- FIX: this will cause problems
                 -- 'p00f/nvim-ts-rainbow',
             },
@@ -228,6 +238,7 @@ require('lazy').setup({
             'windwp/nvim-ts-autotag',
             config = function() require'plugin_config/nvimtsautotag_config' end,
         },
+
         -- NOTE: if you want to open session when next time use nvim, you should use :qa to quit
         {
             'rmagatti/auto-session',
@@ -288,14 +299,6 @@ require('lazy').setup({
             'RRethy/vim-illuminate',
             config = function() require'plugin_config/vimilluminate_config' end,
         },
-        {
-            "folke/zen-mode.nvim",
-            opts = function() require'plugin_config/zenmode_config' end,
-        },
-        {
-            "folke/twilight.nvim",
-            opts = function() require'plugin_config/twilight_config' end,
-        },
 
         {
             "rcarriga/nvim-dap-ui",
@@ -309,14 +312,23 @@ require('lazy').setup({
         {
             'nvim-java/nvim-java',
         },
-        { 'dstein64/vim-startuptime' },
 
-        {
-            "lervag/vimtex",
-            lazy = false,     -- we don't want to lazy load VimTeX
-            init = function() require'plugin_config/vimtex_config' end,
-        },
-        -- INFO: this plugin is used very few times
+        -- INFO: Those four plugins are used very few times
+        -- {
+        --     "lervag/vimtex",
+        --     lazy = false,     -- we don't want to lazy load VimTeX
+        --     init = function() require'plugin_config/vimtex_config' end,
+        -- },
+        -- {
+        --     "folke/zen-mode.nvim",
+        --     opts = function() require'plugin_config/zenmode_config' end,
+        -- },
+        -- { 'dstein64/vim-startuptime' },
+        -- {
+        --     "folke/twilight.nvim",
+        --     opts = function() require'plugin_config/twilight_config' end,
+        -- },
+
         -- {
         --     'dgagn/diagflow.nvim',
         --     event = 'LspAttach',
@@ -397,5 +409,7 @@ require('lazy').setup({
         --     lazy = false,
         --     init = function() require'plugin_config/copilot_config' end,
         -- },
+        -- INFO: rarely used
+        -- { import = 'plugin_config/copilotchat_config' },
     }
 })
