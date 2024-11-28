@@ -475,8 +475,6 @@ function CmpSelected()
     return cmp.get_active_entry() ~= nil
 end
 
-local copilot = require 'copilot.suggestion'
-local _, fittencode = pcall(require, 'fittencode')
 map.set({ 'c' }, '<c-j>', cmp.select_next_item, opts())
 map.set({ 'c' }, '<c-k>', cmp.select_prev_item, opts())
 -- map.set({ 'i' }, '<c-z>', function()
@@ -499,7 +497,8 @@ map.set({ 'c' }, '<c-k>', cmp.select_prev_item, opts())
 --     end
 -- end, opts())
 -- TEST: the mapping for fittencode is not tested yet
-map.set({ 'i' }, '<m-f>', copilot.accept_word, opts())
+local _, copilot = pcall(require, 'copilot.suggestion')
+local _, fittencode = pcall(require, 'fittencode')
 map.set({ 'i' }, '<c-f>', function()
     if not DisableCopilot and copilot.is_visible() then
         copilot.accept_line()
@@ -548,7 +547,16 @@ map.set({ 'i' }, '<c-c>', function()
 end, opts({ silent = false }))
 
 if not DisableCopilot then
+    map.set({ 'i' }, '<m-f>', copilot.accept_word, opts())
+    map.set({ 'i' }, '<esc>f', copilot.accept_word, opts())
     map.set({ 'i' }, '<m-cr>', function()
+        if copilot.is_visible() then
+            copilot.accept()
+        else
+            feedkeys("<esc><cr>", 'n')
+        end
+    end, opts())
+    map.set({ 'i' }, '<esc><cr>', function()
         if copilot.is_visible() then
             copilot.accept()
         else
@@ -570,6 +578,13 @@ if not DisableCopilot then
     ]]
 else
     map.set({ 'i' }, '<m-cr>', function()
+        if fittencode.has_suggestions() then
+            fittencode.accept_all_suggestions()
+        else
+            feedkeys("<esc><cr>", 'n')
+        end
+    end, opts())
+    map.set({ 'i' }, '<esc><cr>', function()
         if fittencode.has_suggestions() then
             fittencode.accept_all_suggestions()
         else

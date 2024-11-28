@@ -114,6 +114,7 @@ require('fittencode').setup({
     -- Default keymaps
     keymaps = {
         inline = {
+            ['<esc>f'] = 'accept_word',
             ['<C-Down>'] = 'accept_line',
             ['<m-f>'] = 'accept_word',
             ['<C-Right>'] = 'accept_word',
