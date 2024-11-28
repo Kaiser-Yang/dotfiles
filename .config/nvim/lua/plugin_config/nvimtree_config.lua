@@ -102,5 +102,3 @@ require("nvim-tree").setup({
 })
 -- Use the parser of markdown to parse the vimwiki files
 vim.treesitter.language.register('markdown', 'vimwiki')
-
--- local map = require'archvim/mappings'

@@ -71,20 +71,6 @@ require('lazy').setup({
                 "micangl/cmp-vimtex",
                 -- TODO: remove this plugin when configurations are stable
                 'hrsh7th/cmp-nvim-lua',
-
-                -- 'f3fora/cmp-spell',
-                -- 'hrsh7th/cmp-calc',
-
-                -- {
-                --     "zbirenbaum/copilot-cmp",
-                --     config = function ()
-                --         require("copilot_cmp").setup()
-                --     end
-                -- },
-
-                -- 'chrisgrieser/cmp_yanky',
-
-                -- 'roobert/tailwindcss-colorizer-cmp.nvim', -- INFO: uncomment this for css color
             },
             config = function() require'plugin_config/nvimcmp_config' end,
         },
@@ -177,7 +163,6 @@ require('lazy').setup({
             lazy = false,
             init = function() require('plugin_config/vimwiki_config') end
         },
-        -- TODO: used not often
         {
             'mzlogin/vim-markdown-toc',
             ft = { "markdown", "vimwiki" },
@@ -274,11 +259,7 @@ require('lazy').setup({
             event = "VeryLazy",
             config = function () require'plugin_config/noice_config' end,
             dependencies = {
-                -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
                 "MunifTanjim/nui.nvim",
-                -- OPTIONAL:
-                --   `nvim-notify` is only needed, if you want to use the notification view.
-                --   If not available, we use `mini` as the fallback
                 "rcarriga/nvim-notify",
               }
         },
@@ -312,8 +293,12 @@ require('lazy').setup({
         {
             'nvim-java/nvim-java',
         },
+        {
+            'akinsho/toggleterm.nvim',
+            config = function() require'plugin_config/toggleterm_config' end,
+        },
 
-        -- INFO: Those four plugins are used very few times
+        -- INFO: Those three plugins are used very few times
         -- {
         --     "lervag/vimtex",
         --     lazy = false,     -- we don't want to lazy load VimTeX
@@ -322,22 +307,19 @@ require('lazy').setup({
         -- {
         --     "folke/zen-mode.nvim",
         --     opts = function() require'plugin_config/zenmode_config' end,
+        --     dependencies = {
+        --         {
+        --             "folke/twilight.nvim",
+        --             opts = function() require'plugin_config/twilight_config' end,
+        --         }
+        --     }
         -- },
         -- { 'dstein64/vim-startuptime' },
-        -- {
-        --     "folke/twilight.nvim",
-        --     opts = function() require'plugin_config/twilight_config' end,
-        -- },
 
         -- {
         --     'dgagn/diagflow.nvim',
         --     event = 'LspAttach',
         --     config = function() require'plugin_config/diagflow_config' end,
-        -- },
-        -- TODO: using this to substitute my own configured terminal may be better
-        -- {
-        --     'akinsho/toggleterm.nvim',
-        --     config = function() require'archvim/config/toggleterm' end,
         -- },
         -- INFO: now use nvim-java which is easy to configure
         -- {

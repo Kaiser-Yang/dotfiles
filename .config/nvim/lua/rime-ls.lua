@@ -1,10 +1,10 @@
 local M = {}
-local rime_ls_filetypes = { 'markdown', 'vimwiki', 'copilot-chat' }
+local rime_ls_filetypes = { '*' }
 local cmp = require("cmp")
 
 function M.setup_rime()
     -- global status
-    vim.g.rime_enabled = true
+    vim.g.rime_enabled = false
 
     -- update lualine
     local function rime_status()
@@ -45,7 +45,7 @@ A language server for librime
     end
 
     local rime_on_attach = function(client, _)
-        local toggle_rime = function()
+        vim.api.nvim_create_user_command('RimeToggle', function ()
             client.request('workspace/executeCommand',
                 { command = "rime-ls.toggle-rime" },
                 function(_, result, ctx, _)
@@ -60,9 +60,8 @@ A language server for librime
                     end
                 end
             )
-        end
+        end, { nargs = 0 })
         -- keymaps for executing command
-        vim.keymap.set({ 'n', 'i' }, '<c-space>', toggle_rime)
         -- vim.keymap.set('n', '<leader>rs', function() vim.lsp.buf.execute_command({ command = "rime-ls.sync-user-data" }) end)
     end
 
@@ -84,43 +83,6 @@ A language server for librime
         capabilities = capabilities,
     }
 end
-
-local function is_rime_entry(entry)
-    return entry ~= nil and entry.source.name == "nvim_lsp"
-        and entry.source.source.client.name == "rime_ls"
-end
-local function auto_upload_rime()
-    if not cmp.visible() then
-        return
-    end
-    local entries = cmp.core.view:get_entries()
-    if entries == nil or #entries == 0 then
-        return
-    end
-    local first_entry = cmp.get_selected_entry()
-    if first_entry == nil then
-        first_entry = cmp.core.view:get_first_entry()
-    end
-    if first_entry ~= nil and is_rime_entry(first_entry) then
-        local rime_ls_entry_occur = false
-        for _, entry in ipairs(entries) do
-            if is_rime_entry(entry) then
-                if rime_ls_entry_occur then
-                    return
-                end
-                rime_ls_entry_occur = true
-            end
-        end
-        if rime_ls_entry_occur then
-            cmp.confirm {
-                behavior = cmp.ConfirmBehavior.Insert,
-                select = true,
-            }
-        end
-    end
-end
-local punc_en = { ',', '.', ':', ';', '?', '\\' }
-local punc_zh = { '，', '。', '：', '；', '？', '、' }
 vim.api.nvim_create_autocmd('FileType', {
     pattern = rime_ls_filetypes,
     callback = function(env)
@@ -133,54 +95,6 @@ vim.api.nvim_create_autocmd('FileType', {
         if #rime_ls_client > 0 then
             vim.lsp.buf_attach_client(env.buf, rime_ls_client[1].id)
         end
-        for numkey = 1, 9 do
-            local numkey_str = tostring(numkey)
-            vim.keymap.set({ 'i', 's' }, numkey_str, function()
-                local visible = cmp.visible()
-                vim.fn.feedkeys(numkey_str, 'n')
-                if visible then
-                    vim.schedule(auto_upload_rime)
-                end
-            end, {
-                noremap = true,
-                silent = true,
-                buffer = true,
-            })
-        end
-        for i = 1, #punc_en do
-            local src = punc_en[i] .. '<space>'
-            local dst = 'rime_enabled ? "' .. punc_zh[i] .. '" : "' .. punc_en[i] .. ' "'
-            vim.keymap.set({ 'i', 's' }, src, dst, {
-                noremap = true,
-                silent = false,
-                expr = true,
-                buffer = true,
-            })
-        end
-        vim.keymap.set({ 'i', 's' }, '<space>', function()
-            if not vim.g.rime_enabled then
-                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', false)
-            else
-                local entry = cmp.get_selected_entry()
-                if entry ~= nil then
-                    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', false)
-                    return
-                end
-                entry = cmp.core.view:get_first_entry()
-                if is_rime_entry(entry) then
-                    cmp.confirm({
-                        behavior = cmp.ConfirmBehavior.Replace,
-                        select = true,
-                    })
-                else
-                    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<f30>', true, true, true), 'm', false)
-                end
-            end
-        end, {
-            noremap = true,
-            silent = true,
-            buffer = true
-        })
     end
 })
 return M

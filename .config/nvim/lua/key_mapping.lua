@@ -38,7 +38,7 @@ map.set({ 'n', 'v' }, '<leader>f', function()
         local mode = vim.api.nvim_get_mode().mode
         if mode == 'v' or mode == 'V' then
             -- go back to normal mode
-            feedkeys('<esc>', 'v')
+            feedkeys('<esc>', 'n')
         end
     end)
 end, opts({ desc = 'Format current buffer' }))
@@ -95,164 +95,28 @@ map.set({ 'n' }, '<leader>sc', '<cmd>set spell!<cr>', opts({ desc = 'Toggle spel
 map.set({ 'n' }, '<leader><cr>', '<cmd>nohlsearch<cr>', opts({ desc = 'No hlsearch' }))
 
 -- map.set({ 'n' }, 'gz', '<cmd>ZenMode<cr>', opts({ desc = 'Toggle ZenMode' }))
-local term_buf = -1
-local term_win_height = -1
-local term_visible = false
-function CalculateNewSize(delta)
-    term_win_height = math.max(1, term_win_height + delta)
-end
 
-local function validTerminalBuf(buf)
-    return vim.api.nvim_buf_is_valid(buf) and
-        vim.api.nvim_buf_get_option(buf, 'buftype') == 'terminal'
-end
-local function bufVisible(buf)
+local lazygit = require('toggleterm.terminal').Terminal:new({ cmd = "lazygit", hidden = true })
+map.set({ 'i', 'n', 't' }, "<c-g>", function() lazygit:toggle() end, opts('Toggle lazygit'))
+map.set({ 'i', 'n', 't' }, '<c-t>', '<cmd>ToggleTerm<cr>', opts({ desc = 'Toggle terminal' }))
+
+local function is_visible_buffer(buf)
     return vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_get_option(buf, "buflisted")
 end
-local function getTermWinCurrentTab()
-    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-        if vim.api.nvim_win_get_buf(win) == term_buf and validTerminalBuf(term_buf) then
-            return win
-        end
-    end
-    return -1
-end
-local function hideWin(win)
-    local current_win = vim.api.nvim_get_current_win()
-    vim.api.nvim_set_current_win(win)
-    vim.cmd('hide')
-    if win ~= current_win then
-        vim.api.nvim_set_current_win(current_win)
-    end
-end
-local function recordTermSize()
-    local term_win = getTermWinCurrentTab()
-    if term_win == -1 then
-        return
-    end
-    term_win_height = vim.api.nvim_win_get_height(term_win)
-end
-local function adjustTermSize()
-    local term_win = getTermWinCurrentTab()
-    if term_win == -1 then
-        return
-    end
-    vim.api.nvim_win_set_height(term_win, term_win_height)
-end
-local function setBufHiddenUnlisted(buf)
-    vim.api.nvim_buf_set_option(buf, 'bufhidden', 'hide')
-    vim.api.nvim_buf_set_option(buf, 'buflisted', false)
-end
-local function openTerminal()
-    local current_bufnr = vim.api.nvim_get_current_buf()
-    if not bufVisible(current_bufnr) then
-        -- Find a visible buffer and go to the first one
-        for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-            local buf = vim.api.nvim_win_get_buf(win)
-            if bufVisible(buf) then
-                vim.api.nvim_set_current_win(win)
-                break
-            end
-        end
-    end
-    if term_win_height == -1 then
-        term_win_height = math.floor(vim.api.nvim_win_get_height(0) / 4) + 1
-    end
-    if validTerminalBuf(term_buf) then
-        vim.cmd('belowright split | buffer ' .. term_buf)
-    else
-        vim.cmd('belowright split | term')
-    end
-end
-function ToggleTerm()
-    -- Visible, hide it
-    if term_visible then
-        local term_win = getTermWinCurrentTab()
-        if term_win == -1 then
-            term_visible = false
-            goto create_term_win
-        end
-        hideWin(term_win)
-        term_visible = false
-        return
-    end
-    ::create_term_win::
-    -- Exists but hidden, show it
-    if validTerminalBuf(term_buf) then
-        openTerminal()
-        adjustTermSize()
-        vim.cmd 'setlocal syntax=off'
-        -- Not exist or invalid buffer
-    else
-        openTerminal()
-        term_buf = vim.api.nvim_get_current_buf()
-        adjustTermSize()
-        recordTermSize()
-        setBufHiddenUnlisted(term_buf)
-        vim.cmd 'setlocal syntax=off'
-    end
-    term_visible = true
-end
-
-map.set({ 'i', 'n', 't' }, '<c-t>', '<cmd>lua ToggleTerm()<cr>',
-    opts({ desc = 'Toggle terminal' }))
-function ToggleTermOnTabEnter()
-    local term_win = getTermWinCurrentTab()
-    -- create a new one
-    if term_win == -1 and term_visible then
-        local current_win = vim.api.nvim_get_current_win()
-        vim.cmd('belowright split | buffer ' .. term_buf)
-        adjustTermSize()
-        -- set the cursor back to the original window
-        vim.api.nvim_set_current_win(current_win)
-        -- close the opened one
-    elseif term_win ~= -1 and not term_visible then
-        hideWin(term_win)
-        -- resize the opened one
-    else
-        adjustTermSize()
-    end
-end
-
-vim.api.nvim_create_augroup('TabEnterToggleTerm', { clear = true })
-local newestTab = -1
-vim.api.nvim_create_autocmd({ 'TabNew' }, {
-    group = 'TabEnterToggleTerm',
-    callback = function()
-        newestTab = vim.api.nvim_get_current_tabpage()
-    end,
-})
-vim.api.nvim_create_autocmd({ 'TabEnter' }, {
-    group = 'TabEnterToggleTerm',
-    callback = function()
-        if vim.api.nvim_get_current_tabpage() ~= newestTab then
-            ToggleTermOnTabEnter()
-        end
-    end,
-})
-vim.api.nvim_create_autocmd('WinResized', {
-    group = 'TabEnterToggleTerm',
-    callback = function() adjustTermSize() end,
-})
-local function emptyBuf(buf)
+local function is_empty_buffer(buf)
     local num_lines = vim.api.nvim_buf_line_count(buf)
     return num_lines == 1 and vim.api.nvim_buf_get_lines(buf, 0, -1, true)[1] == ""
 end
-local function autoClose()
+local function auto_close_empty_buffer()
     local windowsInCurrentTab = vim.api.nvim_tabpage_list_wins(0)
-    local terminalBuf = -1
-    local terminalWin = -1
     local hiddenBuf = 0
     local emptyBuffer = {}
     for _, win in ipairs(windowsInCurrentTab) do
         local buf = vim.api.nvim_win_get_buf(win)
-        if validTerminalBuf(buf) then
-            terminalBuf = buf
-            terminalWin = win
-        elseif bufVisible(buf) then
+        if is_visible_buffer(buf) then
             local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
             if filetype == nil or filetype == "" then
-                if emptyBuf(buf) then
+                if is_empty_buffer(buf) then
                     emptyBuffer[#emptyBuffer + 1] = buf
                 else
                     return
@@ -263,10 +127,6 @@ local function autoClose()
         else
             hiddenBuf = hiddenBuf + 1
         end
-    end
-    -- hide the terminal of current tab to avoid unloading
-    if terminalBuf ~= -1 then
-        hideWin(terminalWin)
     end
     -- unload all empty buffers
     if #emptyBuffer > 0 then
@@ -284,15 +144,9 @@ local function autoClose()
         vim.cmd('qa!')
     end
 end
-function QuitNotSaveOnBuffer()
-    local terminal = validTerminalBuf(vim.api.nvim_get_current_buf())
-    if terminal then
-        term_visible = false
-    end
-    if terminal then
-        vim.cmd('silent! bd!')
-        return
-    elseif not bufVisible(vim.api.nvim_get_current_buf()) then
+
+local function quit_not_save_on_buffer()
+    if not is_visible_buffer(vim.api.nvim_get_current_buf()) then
         vim.cmd('silent! q!')
         return
     end
@@ -301,14 +155,14 @@ function QuitNotSaveOnBuffer()
     local visibleBufCntCurrentTab = 0
     for _, win in ipairs(windows) do
         local buf = vim.api.nvim_win_get_buf(win)
-        if bufVisible(buf) then
+        if is_visible_buffer(buf) then
             visibleBufCntCurrentTab = visibleBufCntCurrentTab + 1
         end
     end
     local buffer = vim.api.nvim_list_bufs()
     local bufferCnt = 0
     for _, buf in ipairs(buffer) do
-        if bufVisible(buf) then
+        if is_visible_buffer(buf) then
             bufferCnt = bufferCnt + 1
         end
     end
@@ -317,24 +171,19 @@ function QuitNotSaveOnBuffer()
     else
         if tabCnt == 1 and bufferCnt > 1 then
             pcall(require("bufdelete").bufdelete, 0, true)
-            autoClose()
+            auto_close_empty_buffer()
         elseif tabCnt > 1 then
             vim.cmd('silent! q!')
-            autoClose()
+            auto_close_empty_buffer()
         elseif bufferCnt == 1 then
             vim.cmd('qa!')
         end
     end
 end
 
--- function QuitSaveOnBuffer()
---     vim.cmd('w')
---     QuitNotSaveOnBuffer()
--- end
--- map.set({ 'n' }, 'S', QuitSaveOnBuffer, opts())
-
 -- map.set({ "i" }, "<c-s>", require('cmp_vimtex.search').search_menu, opts())
-map.set({ 'n' }, 'Q', QuitNotSaveOnBuffer, opts())
+map.set({ 'n' }, 'Q', quit_not_save_on_buffer, opts())
+map.set({ 'n' }, 'S', quit_not_save_on_buffer, opts())
 
 map.set({ 'n' }, '<leader>h', '<cmd>set nosplitright<cr><cmd>vsplit<cr><cmd>set splitright<cr>',
     opts({ desc = 'Split right' }))
@@ -364,8 +213,8 @@ map.set({ 'n' }, '<leader>b', '<cmd>BufferLineCyclePrev<cr>', opts({ desc = 'Buf
 map.set({ 'n' }, '<leader>n', '<cmd>BufferLineCycleNext<cr>', opts({ desc = 'Buffer switch right' }))
 map.set({ 'n' }, "gb", "<cmd>BufferLinePick<CR>", opts({ desc = 'Buffer pick' }))
 
-map.set({ 'n' }, '<up>', '<cmd>lua CalculateNewSize(5)<cr><cmd>res +5<cr>', opts())
-map.set({ 'n' }, '<down>', '<cmd>lua CalculateNewSize(-5)<cr><cmd>res -5<cr>', opts())
+map.set({ 'n' }, '<up>', '<cmd>res +5<cr>', opts())
+map.set({ 'n' }, '<down>', '<cmd>res -5<cr>', opts())
 map.set({ 'n' }, '<left>', '<cmd>vertical resize -5<cr>', opts())
 map.set({ 'n' }, '<right>', '<cmd>vertical resize +5<cr>', opts())
 
@@ -429,7 +278,7 @@ map.set({ 'n', 'x' }, 'ga', "<cmd>Lspsaga code_action<cr>", opts({ desc = 'Code 
 --     end,
 -- })
 
-function get_root_directory()
+local function get_root_directory()
     local rootDir = vim.fn.finddir(".root", ";")
     if rootDir ~= "" then
         if string.sub(rootDir, -1) == "/" then
@@ -458,20 +307,6 @@ function HasRootDirectory()
         else
             return false
         end
-    end
-end
-
-function NvimTreeToggleOnRootDirectory()
-    local api = require('nvim-tree.api')
-    api.tree.toggle({
-        path = get_root_directory(),
-        update_root = false,
-        find_file = false,
-        focus = true,
-    })
-    local mode = vim.api.nvim_get_mode().mode;
-    if api.tree.is_tree_buf() and (mode == 'i' or mode == 'I') then
-        feedkeys('<esc>', 'n')
     end
 end
 
@@ -542,10 +377,7 @@ end
 vim.api.nvim_create_user_command("VimtexToggleCursorFollow", toggleVimtexCursorFollow,
     { range = false, nargs = 0 })
 
-function CompileRun()
-    -- ignore the error
-    -- this usually happens on readonly file
-    pcall(vim.cmd, 'silent w')
+local function compile_and_run()
     local fullpath = vim.fn.expand('%:p')
     local directory = vim.fn.fnamemodify(fullpath, ':h')
     local filename = vim.fn.fnamemodify(fullpath, ':t')
@@ -553,62 +385,74 @@ function CompileRun()
     local command = ""
     if vim.bo.filetype == 'c' then
         command = string.format(
-            "cd '%s' && gcc -g -Wall '%s' -I include -o '%s.out' && echo RUNNING && time './%s.out'",
-            directory, filename, filename_noext, filename_noext)
+            'gcc -g -Wall "%s" -I include -o "%s.out" && echo RUNNING && time "./%s.out"',
+            filename, filename_noext, filename_noext)
     elseif vim.bo.filetype == 'cpp' then
         command = string.format(
-            "cd '%s' && g++ -g -Wall -std=c++17 -I include '%s' -o '%s.out' && echo RUNNING && time './%s.out'",
-            directory, filename, filename_noext, filename_noext)
+            'g++ -g -Wall -std=c++17 -I include "%s" -o "%s.out" && echo RUNNING && time "./%s.out"',
+            filename, filename_noext, filename_noext)
     elseif vim.bo.filetype == 'java' then
         command = string.format(
-            "cd '%s' && javac '%s' && echo RUNNING && time java '%s'",
-            directory, filename, filename_noext)
+            'javac "%s" && echo RUNNING && time java "%s"',
+            filename, filename_noext)
     elseif vim.bo.filetype == 'sh' then
-        command = string.format("cd '%s' && time './%s'", directory, filename)
+        command = string.format('time "./%s"', filename)
     elseif vim.bo.filetype == 'python' then
-        command = string.format("cd '%s' && time python3 '%s'", directory, filename)
+        command = string.format('time python3 "%s"', filename)
     elseif vim.bo.filetype == 'html' then
-        command = string.format("cd '%s' && wslview '%s' &", directory, filename)
+        command = string.format('wslview "%s" &', filename)
     elseif vim.bo.filetype == 'lua' then
-        command = string.format("cd '%s' && lua '%s'", directory, filename)
-    elseif vim.bo.filetype == 'tex' then
-        toggleVimtexCursorFollow()
-        if autoFollow then
-            vim.api.nvim_command('VimtexView')
-        end
-        return
+        command = string.format('lua "%s"', filename)
+        -- elseif vim.bo.filetype == 'tex' then
+        --     toggleVimtexCursorFollow()
+        --     if autoFollow then
+        --         vim.api.nvim_command('VimtexView')
+        --     end
+        --     return
     elseif vim.bo.filetype == 'markdown' then
-        vim.api.nvim_command('MarkdownPreviewToggle')
+        vim.api.nvim_command('MarkdownPreview')
         return
     elseif vim.bo.filetype == 'vimwiki' then
-        vim.api.nvim_command('MarkdownPreviewToggle')
+        vim.api.nvim_command('MarkdownPreview')
         return
     elseif vim.bo.filetype == 'gitcommit' then
-        vim.api.nvim_command('MarkdownPreviewToggle')
+        vim.api.nvim_command('MarkdownPreview')
         return
     end
     if command == "" then
         vim.cmd 'echo "Unsupported filetype"'
         return
     end
-    if not term_visible then
-        ToggleTerm()
-    end
-    vim.api.nvim_set_current_win(getTermWinCurrentTab())
-    feedkeys('G', 'n')
-    local chan_id = vim.api.nvim_buf_get_var(term_buf, "terminal_job_id")
-    vim.fn.chansend(chan_id, command .. "\n")
+    command = string.format("TermExec cmd='cd \"%s\" && %s' dir='%s'", directory, command, directory)
+    vim.cmd(command)
 end
 
-map.set({ 'n' }, '<leader>r', '<cmd>lua CompileRun()<cr>', opts({ desc = 'Compile run' }))
+map.set({ 'n' }, '<leader>r', compile_and_run, opts({ desc = 'Compile run' }))
 
 map.del({ 'n' }, '<c-w>d')
 map.del({ 'n' }, '<c-w><c-d>')
-map.set({ 'n' }, '<c-w>', '<cmd>Lspsaga outline<cr>', opts())
--- we must exit insert mode first, otherwise when entering outloot it will be insert mode
-map.set({ 'i' }, '<c-w>', '<esc><cmd>Lspsaga outline<cr>', opts())
+map.set({ 'n', 'i' }, '<c-w>', function()
+    vim.cmd('Lspsaga outline')
+    local mode = vim.api.nvim_get_mode().mode;
+    local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+    if filetype == 'sagaoutline' and (mode == 'i' or mode == 'I') then
+        feedkeys('<esc>', 'n')
+    end
+end, opts())
 
-map.set({ 'n', 'i' }, '<c-e>', NvimTreeToggleOnRootDirectory, opts())
+map.set({ 'n', 'i' }, '<c-e>', function()
+    local api = require('nvim-tree.api')
+    api.tree.toggle({
+        path = get_root_directory(),
+        update_root = false,
+        find_file = false,
+        focus = true,
+    })
+    local mode = vim.api.nvim_get_mode().mode;
+    if api.tree.is_tree_buf() and (mode == 'i' or mode == 'I') then
+        feedkeys('<esc>', 'n')
+    end
+end, opts())
 
 -- vim.cmd [[
 -- " This function is copied from vimwiki
@@ -699,7 +543,7 @@ map.set({ 'i' }, '<c-c>', function()
     elseif DisableCopilot and fittencode.has_suggestions() then
         fittencode.dismiss()
     else
-        feedkeys("<c-\\><c-n>", 'i')
+        feedkeys("<c-\\><c-n>", 'n')
     end
 end, opts({ silent = false }))
 
@@ -708,7 +552,7 @@ if not DisableCopilot then
         if copilot.is_visible() then
             copilot.accept()
         else
-            feedkeys("<esc><cr>", 'i')
+            feedkeys("<esc><cr>", 'n')
         end
     end, opts())
     vim.cmd [[
@@ -729,7 +573,7 @@ else
         if fittencode.has_suggestions() then
             fittencode.accept_all_suggestions()
         else
-            feedkeys("<esc><cr>", 'i')
+            feedkeys("<esc><cr>", 'n')
         end
     end, opts())
     vim.cmd [[
@@ -794,9 +638,97 @@ map.set({ 'n' }, '<f10>', dap.step_over, opts({ desc = 'Debug next' }))
 map.set({ 'n' }, '<f11>', dap.step_into, opts({ desc = 'Debug step into' }))
 map.set({ 'n' }, '<f12>', dap.step_out, opts({ desc = 'Debug step out' }))
 
+local function contain_chinese_character(content)
+    for i = 1, #content do
+        local byte = string.byte(content, i)
+        if byte >= 0xE4 and byte <= 0xE9 then
+            return true
+        end
+    end
+    return false
+end
+local function is_rime_entry(entry)
+    return entry ~= nil and entry.source.name == "nvim_lsp"
+        and entry.source.source.client.name == "rime_ls"
+        and (entry.word:match("%d%d%d%d%-%d%d%-%d%d %d%d:%d%d:%d%d%+%d%d%d%d") or contain_chinese_character(entry.word))
+end
+local function auto_upload_rime()
+    if not cmp.visible() then
+        return
+    end
+    local entries = cmp.core.view:get_entries()
+    if entries == nil or #entries == 0 then
+        return
+    end
+    local first_entry = cmp.get_selected_entry()
+    if first_entry == nil then
+        first_entry = cmp.core.view:get_first_entry()
+    end
+    if first_entry ~= nil and is_rime_entry(first_entry) then
+        local rime_ls_entry_occur = false
+        for _, entry in ipairs(entries) do
+            if is_rime_entry(entry) then
+                if rime_ls_entry_occur then
+                    return
+                end
+                rime_ls_entry_occur = true
+            end
+        end
+        if rime_ls_entry_occur then
+            cmp.confirm {
+                behavior = cmp.ConfirmBehavior.Insert,
+                select = true,
+            }
+        end
+    end
+end
+local punc_en = { ',', '.', ':', ';', '?', '\\' }
+local punc_zh = { '，', '。', '：', '；', '？', '、' }
+map.set({ 'n', 'i', 's' }, '<c-space>', function()
+    -- RimeToggle is async, so we must check the status before the toggle
+    if vim.g.rime_enabled then
+        for i = 1, #punc_en do
+            map.del({ 'i', 's' }, punc_en[i] .. '<space>')
+        end
+    else
+        for i = 1, #punc_en do
+            map.set({ 'i', 's' }, punc_en[i] .. '<space>', punc_zh[i], opts())
+        end
+    end
+    vim.cmd('RimeToggle')
+end, opts())
+for numkey = 1, 9 do
+    local numkey_str = tostring(numkey)
+    map.set({ 'i', 's' }, numkey_str, function()
+        local visible = cmp.visible()
+        vim.fn.feedkeys(numkey_str, 'n')
+        if visible then
+            vim.schedule(auto_upload_rime)
+        end
+    end, opts())
+end
 -- <f30> not used
 map.set({ 'i' }, '<f30>', '<c-]><c-r>=AutoPairsSpace()<cr>', opts())
-map.set({ 'i' }, '<space>', '<f30>', opts({ remap = true }))
+map.set({ 'i', 's' }, '<space>', function()
+    if not vim.g.rime_enabled then
+        feedkeys('<f30>', 'm')
+    else
+        local entry = cmp.get_selected_entry()
+        if entry ~= nil then
+            feedkeys('<f30>', 'm')
+            return
+        end
+        entry = cmp.core.view:get_first_entry()
+        if is_rime_entry(entry) then
+            cmp.confirm({
+                behavior = cmp.ConfirmBehavior.Replace,
+                select = true,
+            })
+        else
+            feedkeys('<f30>', 'm')
+        end
+    end
+end, opts())
 
 vim.cmd [[
 " undo the last ,

@@ -1,5 +1,4 @@
----@diagnostic disable: assign-type-mismatch, missing-fields
-local lspkind = require('lspkind')
+local lspkind = require'lspkind'
 local cmp = require'cmp'
 cmp.setup({
     preselect = cmp.PreselectMode.None,
@@ -62,8 +61,6 @@ cmp.setup({
         ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
         ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
         -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-        ['<C-y>'] = cmp.config.disable,
-        ['<C-Space>'] = cmp.config.disable,
         ['<c-x>'] = cmp.mapping.complete(),
         -- cmp.mapping.complete(): trigger completion
 
