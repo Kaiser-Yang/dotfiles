@@ -94,7 +94,7 @@ map.set({ 'n' }, 'Y', 'y$', opts())
 map.set({ 'n' }, '<leader>sc', '<cmd>set spell!<cr>', opts({ desc = 'Toggle spell check' }))
 map.set({ 'n' }, '<leader><cr>', '<cmd>nohlsearch<cr>', opts({ desc = 'No hlsearch' }))
 
--- map.set({ 'n' }, 'gz', '<cmd>ZenMode<cr>', opts({ desc = 'Toggle ZenMode' }))
+map.set({ 'n' }, 'gz', '<cmd>ZenMode<cr>', opts({ desc = 'Toggle ZenMode' }))
 
 local lazygit = require('toggleterm.terminal').Terminal:new({ cmd = "lazygit", hidden = true })
 map.set({ 'i', 'n', 't' }, "<c-g>", function() lazygit:toggle() end, opts('Toggle lazygit'))

@@ -298,21 +298,22 @@ require('lazy').setup({
             config = function() require'plugin_config/toggleterm_config' end,
         },
 
-        -- INFO: Those three plugins are used very few times
+        {
+            "folke/zen-mode.nvim",
+            opts = function() require'plugin_config/zenmode_config' end,
+            dependencies = {
+                {
+                    "folke/twilight.nvim",
+                    opts = function() require'plugin_config/twilight_config' end,
+                }
+            }
+        },
+
+        -- INFO: Those two plugins are used very few times
         -- {
         --     "lervag/vimtex",
         --     lazy = false,     -- we don't want to lazy load VimTeX
         --     init = function() require'plugin_config/vimtex_config' end,
-        -- },
-        -- {
-        --     "folke/zen-mode.nvim",
-        --     opts = function() require'plugin_config/zenmode_config' end,
-        --     dependencies = {
-        --         {
-        --             "folke/twilight.nvim",
-        --             opts = function() require'plugin_config/twilight_config' end,
-        --         }
-        --     }
         -- },
         -- { 'dstein64/vim-startuptime' },
 
