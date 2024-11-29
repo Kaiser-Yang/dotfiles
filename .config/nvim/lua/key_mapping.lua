@@ -699,16 +699,40 @@ local function auto_upload_rime()
 end
 local punc_en = { ',', '.', ':', ';', '?', '\\' }
 local punc_zh = { '，', '。', '：', '；', '？', '、' }
+-- <f30> not used
+map.set({ 'i' }, '<f30>', '<c-]><c-r>=AutoPairsSpace()<cr>', opts())
+map.set({ 'i', 's' }, '<space>', '<c-]><c-r>=AutoPairsSpace()<cr>', opts())
 map.set({ 'n', 'i', 's' }, '<c-space>', function()
     -- RimeToggle is async, so we must check the status before the toggle
     if vim.g.rime_enabled then
         for i = 1, #punc_en do
             map.del({ 'i', 's' }, punc_en[i] .. '<space>')
         end
+        map.set({ 'i', 's' }, '<space>', '<c-]><c-r>=AutoPairsSpace()<cr>', opts())
     else
         for i = 1, #punc_en do
             map.set({ 'i', 's' }, punc_en[i] .. '<space>', punc_zh[i], opts())
         end
+        map.set({ 'i', 's' }, '<space>', function()
+            if not vim.g.rime_enabled then
+                feedkeys('<f30>', 'm')
+            else
+                local entry = cmp.get_selected_entry()
+                if entry ~= nil then
+                    feedkeys('<f30>', 'm')
+                    return
+                end
+                entry = cmp.core.view:get_first_entry()
+                if is_rime_entry(entry) then
+                    cmp.confirm({
+                        behavior = cmp.ConfirmBehavior.Replace,
+                        select = true,
+                    })
+                else
+                    feedkeys('<f30>', 'm')
+                end
+            end
+        end, opts())
     end
     vim.cmd('RimeToggle')
 end, opts())
@@ -722,28 +746,6 @@ for numkey = 1, 9 do
         end
     end, opts())
 end
--- <f30> not used
-map.set({ 'i' }, '<f30>', '<c-]><c-r>=AutoPairsSpace()<cr>', opts())
-map.set({ 'i', 's' }, '<space>', function()
-    if not vim.g.rime_enabled then
-        feedkeys('<f30>', 'm')
-    else
-        local entry = cmp.get_selected_entry()
-        if entry ~= nil then
-            feedkeys('<f30>', 'm')
-            return
-        end
-        entry = cmp.core.view:get_first_entry()
-        if is_rime_entry(entry) then
-            cmp.confirm({
-                behavior = cmp.ConfirmBehavior.Replace,
-                select = true,
-            })
-        else
-            feedkeys('<f30>', 'm')
-        end
-    end
-end, opts())
 
 vim.cmd [[
 " undo the last ,
