@@ -193,7 +193,7 @@ map.set({ 't' }, '<c-h>', '<c-\\><c-n><cmd>TmuxNavigateLeft<cr>', opts({ desc = 
 map.set({ 't' }, '<c-j>', '<c-\\><c-n><cmd>TmuxNavigateDown<cr>', opts({ desc = 'Cursor down' }))
 map.set({ 't' }, '<c-k>', '<c-\\><c-n><cmd>TmuxNavigateUp<cr>', opts({ desc = 'Curor up' }))
 map.set({ 't' }, '<c-l>', '<c-\\><c-n><cmd>TmuxNavigateRight<cr>', opts({ desc = 'Cursor right' }))
-map.set({ 't', 'i', 'c', 'x', 'v', 'n' }, '<c-n>', '<c-\\><c-n>', opts())
+map.set({'i', 'c', 'x', 'v', 'n' }, '<c-n>', '<c-\\><c-n>', opts())
 map.set({ 'n' }, '<leader>J', '<c-w>J', opts({ desc = 'Reopen window down' }))
 map.set({ 'n' }, '<leader>K', '<c-w>K', opts({ desc = 'Reopen window up' }))
 map.set({ 'n' }, '<leader>H', '<c-w>H', opts({ desc = 'Reopen window left' }))

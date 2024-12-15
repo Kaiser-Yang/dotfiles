@@ -126,7 +126,7 @@ sudo systemctl restart docker || exit 1
 # sudo apt install -y zathura texlive-full || exit 1
 
 # rime
-sudo apt-get install -y ibus-rime librime-data-double-pinyin clang librime-dev
+sudo apt-get install -y ibus-rime clang librime-dev
 cd || exit 1
 git clone https://github.com/wlh320/rime-ls.git
 cd - || exit 1
