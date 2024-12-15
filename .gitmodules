@@ -1,0 +1,3 @@
+[submodule ".local/share/rime-ls"]
+	path = .local/share/rime-ls
+	url = https://gitee.com/kaiser-yang/rime-config.git

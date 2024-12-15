@@ -130,6 +130,9 @@ def recover_dot_files(home_current_dir, current_dir):
 def install_useful_softwares():
     os.system("cd installer && bash installer.sh")
 
+def init_submodule():
+    os.system("git submodule update --init --recursive")
+
 def operate_dot_files(home_current_dir : str, current_dir : str,
                       opcode : str):
     if opcode == "update":
@@ -138,6 +141,7 @@ def operate_dot_files(home_current_dir : str, current_dir : str,
     elif opcode == "recover":
         recover_dot_files(home_current_dir, current_dir)
     elif opcode == "init":
+        init_submodule();
         recover_dot_files(home_current_dir, current_dir)
         backup_files(home_current_dir, current_dir)
         update_dot_files(home_current_dir, current_dir)
