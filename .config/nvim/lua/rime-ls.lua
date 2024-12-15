@@ -77,7 +77,9 @@ A language server for librime
             log_dir = vim.fn.expand "~/.local/share/rime-ls",
             paging_characters = { "-", "=", ',', '.' },
             trigger_characters = {},
-            schema_trigger_character = "&"
+            schema_trigger_character = "&",
+            max_token = 4,
+            always_incomplete = true
         },
         on_attach = rime_on_attach,
         capabilities = capabilities,
