@@ -141,7 +141,10 @@ require('lazy').setup({
             event = {'InsertEnter'},
             init = function() require'plugin_config/autopairs_config' end,
             -- lazy.nvim fails to load, we must initialize auto-pairs manually
-            config = function() vim.cmd[[call AutoPairsInit()]] end,
+            config = function()
+                vim.cmd[[call AutoPairsTryInit()]]
+                vim.keymap.del({ 'i' }, "'", { buffer = true })
+            end,
         },
         {
             "kylechui/nvim-surround",
@@ -308,13 +311,13 @@ require('lazy').setup({
                 }
             }
         },
+        {
+            "lervag/vimtex",
+            lazy = false,     -- we don't want to lazy load VimTeX
+            init = function() require'plugin_config/vimtex_config' end,
+        },
 
-        -- INFO: Those two plugins are used very few times
-        -- {
-        --     "lervag/vimtex",
-        --     lazy = false,     -- we don't want to lazy load VimTeX
-        --     init = function() require'plugin_config/vimtex_config' end,
-        -- },
+        -- INFO: This plugin is used very few times
         -- { 'dstein64/vim-startuptime' },
 
         -- {
