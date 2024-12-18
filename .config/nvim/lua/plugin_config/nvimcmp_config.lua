@@ -3,6 +3,10 @@ local cmp = require'cmp'
 cmp.setup({
     preselect = cmp.PreselectMode.None,
 
+    performance = {
+        max_view_entries = 15
+    },
+
     snippet = {
         expand = function(args)
             -- For `luasnip` users.
@@ -183,6 +187,7 @@ cmp.setup.cmdline(':', {
         { name = 'path' },
         {
             name = 'cmdline',
+            max_item_count = 20,
             option = {
                 ignore_cmds = { 'Man', '!' }
             }

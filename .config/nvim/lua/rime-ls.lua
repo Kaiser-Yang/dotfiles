@@ -52,12 +52,6 @@ A language server for librime
                     if ctx.client_id == client.id then
                         vim.g.rime_enabled = result
                     end
-                    if cmp.visible() then
-                        if not vim.g.rime_enabled then
-                            cmp.close()
-                        end
-                        cmp.complete()
-                    end
                 end
             )
         end, { nargs = 0 })
@@ -75,7 +69,7 @@ A language server for librime
             shared_data_dir = "/usr/share/rime-data",
             user_data_dir = vim.fn.expand "~/.local/share/rime-ls",
             log_dir = vim.fn.expand "~/.local/share/rime-ls",
-            paging_characters = { "-", "=", ',', '.' },
+            paging_characters = {},
             trigger_characters = {},
             schema_trigger_character = "&",
             max_token = 4,
