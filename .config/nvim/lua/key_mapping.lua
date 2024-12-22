@@ -610,7 +610,6 @@ local mapped_punc = {
     -- FIX: can not work now
     -- [';'] = '；',
 }
-map.set({ 'i' }, '<cr>', '<c-g>u<cr><c-r>=AutoPairsReturn()<cr>', opts())
 map.set({ 'n', 'i' }, '<c-space>', function()
     -- We must check the status before the toggle
     if vim.g.rime_enabled then

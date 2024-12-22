@@ -109,13 +109,7 @@ require('lazy').setup({
             'numToStr/Comment.nvim',
             config = function() require 'plugin_config/comment_config' end,
         },
-        {
-            'jiangmiao/auto-pairs',
-            event = { 'BufEnter' },
-            init = function()
-                require 'plugin_config.autopairs_config'
-            end,
-        },
+        { require('plugin_config/ultimate-autopairs_config') },
         {
             "kylechui/nvim-surround",
             version = "*", -- Use for stability; omit to use `main` branch for the latest features
