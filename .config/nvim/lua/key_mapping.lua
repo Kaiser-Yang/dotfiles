@@ -1,25 +1,6 @@
 local map = vim.keymap
-
-local function opts(opts_var)
-    local desc = ""
-    local silent = true
-    local remap = false
-    if opts_var and opts_var.desc ~= nil then
-        desc = opts_var.desc
-    end
-    if opts_var and opts_var.silent ~= nil then
-        silent = opts_var.silent
-    end
-    if opts_var and opts_var.remap ~= nil then
-        remap = opts_var.remap
-    end
-    return { silent = silent, desc = desc, remap = remap }
-end
-
-local function feedkeys(keys, mode)
-    local termcodes = vim.api.nvim_replace_termcodes(keys, true, true, true)
-    vim.api.nvim_feedkeys(termcodes, mode, false)
-end
+local feedkeys = require('utils').feedkeys
+local opts = require('utils').keymap_opts
 
 map.set({ 'c' }, '<c-h>', '<left>', opts({ silent = false }))
 map.set({ 'c' }, '<c-l>', '<right>', opts({ silent = false }))
@@ -97,7 +78,7 @@ map.set({ 'n' }, '<leader><cr>', '<cmd>nohlsearch<cr>', opts({ desc = 'No hlsear
 map.set({ 'n' }, 'gz', '<cmd>ZenMode<cr>', opts({ desc = 'Toggle ZenMode' }))
 
 local lazygit = require('toggleterm.terminal').Terminal:new({ cmd = "lazygit", hidden = true })
-map.set({ 'i', 'n', 't' }, "<c-g>", function() lazygit:toggle() end, opts('Toggle lazygit'))
+map.set({ 'i', 'n', 't' }, '<c-g>', function() lazygit:toggle() end, opts())
 map.set({ 'i', 'n', 't' }, '<c-t>', '<cmd>ToggleTerm<cr>', opts({ desc = 'Toggle terminal' }))
 
 local function is_visible_buffer(buf)
@@ -181,7 +162,6 @@ local function quit_not_save_on_buffer()
     end
 end
 
--- map.set({ "i" }, "<c-s>", require('cmp_vimtex.search').search_menu, opts())
 map.set({ 'n' }, 'Q', quit_not_save_on_buffer, opts())
 map.set({ 'n' }, 'S', quit_not_save_on_buffer, opts())
 
@@ -470,13 +450,7 @@ end, opts())
 -- ]]
 -- map.set({ 'n' }, '<leader>wh', '<cmd>VimwikiAll2HTML<cr>', opts({ desc = 'Vimwiki all to HTML' }))
 
-local cmp = require 'cmp'
-function CmpSelected()
-    return cmp.get_active_entry() ~= nil
-end
-
-map.set({ 'c' }, '<c-j>', cmp.select_next_item, opts())
-map.set({ 'c' }, '<c-k>', cmp.select_prev_item, opts())
+-- map.set({ "i" }, "<c-s>", require('cmp_vimtex.search').search_menu, opts())
 -- map.set({ 'i' }, '<c-z>', function()
 --     if not DisableCopilot then
 --         if copilot.is_visible() then
@@ -509,9 +483,7 @@ map.set({ 'i' }, '<c-f>', function()
     end
 end, opts())
 map.set({ 'i' }, '<c-j>', function()
-    if cmp.visible() then
-        cmp.select_next_item()
-    elseif not DisableCopilot and copilot.is_visible() then
+    if not DisableCopilot and copilot.is_visible() then
         copilot.next()
     elseif DisableCopilot and fittencode.has_suggestions() then
         fittencode.next()
@@ -520,9 +492,7 @@ map.set({ 'i' }, '<c-j>', function()
     end
 end, opts())
 map.set({ 'i' }, '<c-k>', function()
-    if cmp.visible() then
-        cmp.select_prev_item()
-    elseif not DisableCopilot and copilot.is_visible() then
+    if not DisableCopilot and copilot.is_visible() then
         copilot.prev()
     elseif DisableCopilot and fittencode.has_suggestions() then
         fittencode.prev()
@@ -533,16 +503,10 @@ end, opts())
 map.set({ 'i' }, '<c-h>', '<left>', opts())
 map.set({ 'i' }, '<c-l>', '<right>', opts())
 map.set({ 'i' }, '<c-c>', function()
-    if CmpSelected() then
-        cmp.abort()
-    elseif cmp.visible() then
-        cmp.abort()
-    elseif not DisableCopilot and copilot.is_visible() then
+    if not DisableCopilot and copilot.is_visible() then
         copilot.dismiss()
     elseif DisableCopilot and fittencode.has_suggestions() then
         fittencode.dismiss()
-    else
-        feedkeys("<c-\\><c-n>", 'n')
     end
 end, opts({ silent = false }))
 
@@ -564,16 +528,8 @@ if not DisableCopilot then
         end
     end, opts())
     vim.cmd [[
-    inoremap <silent><expr> <CR>
-        \ luaeval('CmpSelected()') ?
-        \ '<cmd>lua require"cmp".confirm()<cr>' :
-        \ '<C-g>u<CR><C-r>=AutoPairsReturn()<CR>'
     " autocmd FileType vimwiki,git*,markdown,copilot-chat
     "     \ inoremap <silent><script><buffer><expr> <CR>
-    "     \ luaeval('CmpSelected()') ?
-    "     \ '<cmd>lua require"cmp".confirm()<cr>' :
-    "     \ luaeval('require"copilot.suggestion".is_visible()') ?
-    "     \ '<cmd>lua require"copilot.suggestion".accept()<cr>' :
     "     \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
     ]]
 else
@@ -591,19 +547,11 @@ else
             feedkeys("<esc><cr>", 'n')
         end
     end, opts())
-    vim.cmd [[
-    inoremap <silent><expr> <CR>
-        \ luaeval('CmpSelected()') ?
-        \ '<cmd>lua require"cmp".confirm()<cr>' :
-        \ '\<C-g>u\<CR><C-r>=AutoPairsReturn()\<cr>'
-    " autocmd FileType vimwiki,git*,markdown,copilot-chat
-    "     \ inoremap <silent><script><buffer><expr> <CR>
-    "     \ luaeval('CmpSelected()') ?
-    "     \ '<cmd>lua require"cmp".confirm()<cr>' :
-    "     \ luaeval('require("fittencode").has_suggestions()') ?
-    "     \ '<cmd>lua require("fittencode").accept_all_suggestions()<cr>' :
-    "     \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
-    ]]
+    -- vim.cmd [[
+    -- " autocmd FileType vimwiki,git*,markdown,copilot-chat
+    -- "     \ inoremap <silent><script><buffer><expr> <CR>
+    -- "     \ '<C-]><Esc>:call COPY_CR(3, 5)<CR>'
+    -- ]]
 end
 
 -- TODO: update this with nvim-cmp
@@ -653,219 +601,26 @@ map.set({ 'n' }, '<f10>', dap.step_over, opts({ desc = 'Debug next' }))
 map.set({ 'n' }, '<f11>', dap.step_into, opts({ desc = 'Debug step into' }))
 map.set({ 'n' }, '<f12>', dap.step_out, opts({ desc = 'Debug step out' }))
 
--- RIME-ls configuration part
--- WARNING:
--- For ticking a key this works well but when you hold a key, it may be lag
-local mapped_key = {
-    ['<space>'] = '<f30>',
-    [';'] = ';',
-    ["'"] = '<f31>',
-    ['1'] = '1',
-    ['2'] = '2',
-    ['3'] = '3',
-    ['4'] = '4',
-    ['5'] = '5',
-    ['6'] = '6',
-    ['7'] = '7',
-    ['8'] = '8',
-    ['9'] = '9',
-}
 local mapped_punc = {
     [','] = '，',
     ['.'] = '。',
     [':'] = '：',
-    [';'] = '；',
     ['?'] = '？',
     ['\\'] = '、'
+    -- FIX: can not work now
+    -- [';'] = '；',
 }
--- NOTE: there is no 'z' in the alphabet
-local alphabet = "abcdefghijklmnopqrstuvwxy"
-local max_code = 4
-map.set({ 'i' }, '<f30>', '<c-]><c-r>=AutoPairsSpace()<cr>', opts())
-map.set({ 'i' }, '<space>', '<c-]><c-r>=AutoPairsSpace()<cr>', opts())
-map.set({ 'i' }, '<f31>', "<c-]><c-r>=AutoPairsInsert('''')<cr>", opts())
-map.set({ 'i' }, "'", "<c-]><c-r>=AutoPairsInsert('''')<cr>", opts())
-local function feed_key_helper(k, v)
-    if v == nil or k == v then
-        feedkeys(k, 'n')
-    else
-        feedkeys(v, 'm')
-    end
-end
-local function contain_chinese_character(content)
-    for i = 1, #content do
-        local byte = string.byte(content, i)
-        if byte >= 0xE4 and byte <= 0xE9 then
-            return true
-        end
-    end
-    return false
-end
-local function rime_entry_acceptable(entry)
-    return entry ~= nil and entry.source.name == "nvim_lsp"
-        and entry.source.source.client.name == "rime_ls"
-        and (entry.word:match("%d%d%d%d%-%d%d%-%d%d %d%d:%d%d:%d%d%") or contain_chinese_character(entry.word))
-end
-local function get_n_rime_ls_entries(n)
-    if not cmp.visible() then
-        return {}
-    end
-    local entries = cmp.get_entries()
-    local result = {}
-    if entries == nil or #entries == 0 then
-        return result
-    end
-    for _, entry in ipairs(entries) do
-        if rime_entry_acceptable(entry) then
-            result[#result + 1] = entry
-            if #result == n then
-                break;
-            end
-        end
-    end
-    return result
-end
--- use set line rather than cmp.complete which is slow and depending on events loop
-local function confirm_rime_ls_entry(entry)
-    local line = vim.api.nvim_get_current_line()
-    local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
-    local start = entry.source_insert_range.start.character
-    local new_line =
-        string.sub(line, 1, start) ..
-        entry.word ..
-        string.sub(line, cursor_column + 1)
-    vim.api.nvim_set_current_line(new_line)
-    vim.api.nvim_win_set_cursor(0, { vim.api.nvim_win_get_cursor(0)[1], start + #entry.word })
-end
-local function match_alphabet(txt, allowed)
-    return string.match(txt, '^[' .. allowed .. ']+$') ~= nil
-end
-local function last_character_in_alphabet()
-    local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
-    if cursor_column == 0 then
-        return false;
-    end
-    local trigger_alphabet = alphabet
-    -- INFO:
-    -- If you bind number with select_or_confirm_rime(x, false)
-    -- uncomment this line to select more than once
-    -- trigger_alphabet = trigger_alphabet .. "1234567890"
-
-    return match_alphabet(string.sub(vim.api.nvim_get_current_line(),
-            cursor_column,
-            cursor_column),
-        trigger_alphabet)
-end
-local function select_or_confirm_rime(index, select_with_no_num)
-    if not last_character_in_alphabet() then
-        return false
-    end
-    local rime_ls_entries = get_n_rime_ls_entries(index)
-    if #rime_ls_entries < index then
-        return false
-    end
-    if select_with_no_num then
-        confirm_rime_ls_entry(rime_ls_entries[index])
-        return true
-    end
-
-    local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
-    local line = vim.api.nvim_get_current_line()
-    local new_line = string.sub(line, 1, cursor_column) .. tostring(index) .. string.sub(line, cursor_column + 1)
-    vim.api.nvim_set_current_line(new_line)
-    vim.api.nvim_win_set_cursor(0, { vim.api.nvim_win_get_cursor(0)[1], cursor_column + 1 })
-    cmp.complete({ config = { sources = { { name = 'nvim_lsp' } } } })
-    local first_rime_ls_entry = get_n_rime_ls_entries(2)
-    if #first_rime_ls_entry ~= 1 then
-        return true
-    end
-    confirm_rime_ls_entry(first_rime_ls_entry[1])
-    return true;
-end
-local function auto_upload_on_max_code(k)
-    local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
-    if cursor_column >= max_code then
-        local content_before_cursor = string.sub(vim.api.nvim_get_current_line(), 1, cursor_column)
-        local code = string.sub(content_before_cursor, cursor_column - max_code + 1, cursor_column)
-        if match_alphabet(code, alphabet) then
-            -- This is for wubi users using 'z' as reverse look up
-            if not string.match(content_before_cursor, 'z[' .. alphabet .. ']*$') then
-                local first_rime_ls_entry = get_n_rime_ls_entries(1)
-                if #first_rime_ls_entry ~= 1 then
-                    -- clear the wrong code
-                    vim.api.nvim_win_set_cursor(0, { vim.api.nvim_win_get_cursor(0)[1], cursor_column - max_code })
-                    vim.api.nvim_set_current_line(string.sub(content_before_cursor, 1, cursor_column - max_code) ..
-                        string.sub(content_before_cursor, cursor_column + 1))
-                else
-                    confirm_rime_ls_entry(first_rime_ls_entry[1])
-                    -- update the new cursor column
-                    cursor_column = vim.api.nvim_win_get_cursor(0)[2]
-                end
-            end
-        end
-    end
-    local line = vim.api.nvim_get_current_line()
-    local new_line = string.sub(line, 1, cursor_column) .. k .. string.sub(line, cursor_column + 1)
-    vim.api.nvim_set_current_line(new_line)
-    vim.api.nvim_win_set_cursor(0, { vim.api.nvim_win_get_cursor(0)[1], cursor_column + 1 })
-end
+map.set({ 'i' }, '<cr>', '<c-g>u<cr><c-r>=AutoPairsReturn()<cr>', opts())
 map.set({ 'n', 'i' }, '<c-space>', function()
     -- We must check the status before the toggle
     if vim.g.rime_enabled then
         for k, _ in pairs(mapped_punc) do
             map.del({ 'i' }, k .. '<space>')
         end
-        for k, v in pairs(mapped_key) do
-            if k == v then
-                map.set({ 'i' }, k, v, opts())
-            else
-                map.set({ 'i' }, k, v, opts({ remap = true }))
-            end
-        end
-        for i = 1, #alphabet do
-            map.del({ 'i' }, alphabet:sub(i, i))
-        end
     else
         -- Chinese punctuations
         for k, v in pairs(mapped_punc) do
-            map.set({ 'i' }, k .. '<space>', function()
-                -- when typing comma or period with space,
-                -- upload the first rime_ls entry and make comma and period in Chinese edition
-                -- if you don't want this just comment those lines
-                if k == ',' or k == '.' then
-                    select_or_confirm_rime(1, true)
-                end
-
-                feed_key_helper(v, v)
-            end, opts())
-        end
-        -- <space> for the first one
-        -- ; for the second one
-        -- ' for the third one
-        -- numkey for the rest
-        for k, v in pairs(mapped_key) do
-            map.set({ 'i' }, k, function()
-                -- when having selected an entry we do not upload
-                -- if you want to upload, comment those lines
-                if cmp.visible() and cmp.get_selected_entry() ~= nil then
-                    feed_key_helper(k, v)
-                    return
-                end
-
-                -- NOTE: if you want to use a key to select more than once change true to false
-                if k == '<space>' and not select_or_confirm_rime(1, true) or
-                    k == ';' and not select_or_confirm_rime(2, true) or
-                    k == "'" and not select_or_confirm_rime(3, true) or
-                    k:match('[0-9]') and not select_or_confirm_rime(tonumber(k), true) then
-                    feed_key_helper(k, v);
-                end
-            end, opts())
-        end
-        -- NOTE: comment this if you don't need max_code
-        -- Select first entry when typing more than max_code
-        for i = 1, #alphabet do
-            local k = alphabet:sub(i, i)
-            map.set({ 'i' }, k, function() auto_upload_on_max_code(k) end, opts())
+            map.set({ 'i' }, k .. '<space>', v, opts())
         end
     end
     vim.cmd('RimeToggle')

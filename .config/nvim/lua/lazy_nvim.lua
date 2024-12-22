@@ -17,66 +17,39 @@ require('lazy').setup({
         {
             "williamboman/mason.nvim",
             -- do not update this with config, nvim-java requires this be loaded with opts
-            opts = function () require'plugin_config/mason_config' end,
+            opts = function() require 'plugin_config/mason_config' end,
         },
         {
             'williamboman/mason-lspconfig.nvim',
             dependencies = {
                 "williamboman/mason.nvim",
             },
-            config = function () require'plugin_config/masonlspconfig_config' end,
+            config = function() require 'plugin_config/masonlspconfig_config' end,
         },
         {
             'neovim/nvim-lspconfig',
             dependencies = {
                 'williamboman/mason-lspconfig.nvim',
+                'saghen/blink.cmp'
             },
-            config = function() require'plugin_config/nvimlspconfig_config' end,
+            config = function() require 'plugin_config/nvimlspconfig_config' end,
         },
         -- TODO: remove those two plugins when configurations are stable
         -- lazydev is for nvim configuration function completion
         {
             "folke/lazydev.nvim",
             ft = "lua", -- only load on lua files
-            opts = { require'plugin_config/lazydev_config' },
+            opts = { require 'plugin_config/lazydev_config' },
         },
-        { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
-
+        -- optional `vim.uv` typings, this is for lazydev
         {
-            'hrsh7th/nvim-cmp',
-            dependencies = {
-                'hrsh7th/cmp-nvim-lsp',
-                'hrsh7th/cmp-buffer',
-                'hrsh7th/cmp-path',
-                'hrsh7th/cmp-cmdline',
-                'onsails/lspkind-nvim',
-                'lukas-reineke/cmp-rg',
-                'saadparwaiz1/cmp_luasnip',
-                {
-                    'L3MON4D3/LuaSnip',
-                    version = "v2.*",
-                    build = 'make install_jsregexp',
-                    dependencies = {
-                        'rafamadriz/friendly-snippets',
-                    },
-                    config = function() require'plugin_config/luasnip_config' end,
-                },
-                'uga-rosa/cmp-dictionary',
-                {
-                    "petertriho/cmp-git",
-                    config = function () require'cmp_git'.setup() end,
-                },
-                -- comparators making underlines lower priority
-                'lukas-reineke/cmp-under-comparator',
-                "micangl/cmp-vimtex",
-                -- TODO: remove this plugin when configurations are stable
-                'hrsh7th/cmp-nvim-lua',
-            },
-            config = function() require'plugin_config/nvimcmp_config' end,
+            "Bilal2453/luvit-meta",
+            lazy = true
         },
+        { require('plugin_config/blinkcmp_config') },
         {
             'nvimdev/lspsaga.nvim',
-            config = function() require'plugin_config/lspsaga_config' end,
+            config = function() require 'plugin_config/lspsaga_config' end,
             event = 'LspAttach',
             dependencies = {
                 'nvim-treesitter/nvim-treesitter', -- optional
@@ -87,11 +60,11 @@ require('lazy').setup({
         {
             'akinsho/git-conflict.nvim',
             version = "*",
-            config = function() require'plugin_config/gitconflict_config' end,
+            config = function() require 'plugin_config/gitconflict_config' end,
         },
         {
             'lewis6991/gitsigns.nvim',
-            config = function() require'plugin_config/gitsigns_config' end,
+            config = function() require 'plugin_config/gitsigns_config' end,
         },
 
         {
@@ -102,15 +75,15 @@ require('lazy').setup({
         {
             'nvim-lualine/lualine.nvim',
             dependencies = { 'nvim-tree/nvim-web-devicons' },
-            config = function() require'plugin_config/lualine_config' end,
+            config = function() require 'plugin_config/lualine_config' end,
         },
         { 'AndreM222/copilot-lualine' },
         {
             "folke/tokyonight.nvim",
             lazy = false,
             priority = 1000,
-            config = function ()
-                require'tokyonight'.setup()
+            config = function()
+                require 'tokyonight'.setup()
                 vim.cmd [[colorscheme tokyonight-night]]
             end,
         },
@@ -118,32 +91,29 @@ require('lazy').setup({
             'akinsho/bufferline.nvim',
             version = '*',
             dependencies = { 'famiu/bufdelete.nvim' },
-            config = function() require'plugin_config/bufferline_config' end,
+            config = function() require 'plugin_config/bufferline_config' end,
         },
 
         {
             'zbirenbaum/copilot.lua',
             cmd = 'Copilot',
             event = 'InsertEnter',
-            config = function() require'plugin_config/copilotlua_config' end,
+            config = function() require 'plugin_config/copilotlua_config' end,
         },
 
         {
             'gbprod/yanky.nvim',
-            config = function() require'plugin_config/yanky_config' end,
+            config = function() require 'plugin_config/yanky_config' end,
         },
         {
             'numToStr/Comment.nvim',
-            config = function() require'plugin_config/comment_config' end,
+            config = function() require 'plugin_config/comment_config' end,
         },
         {
             'jiangmiao/auto-pairs',
-            event = {'InsertEnter'},
-            init = function() require'plugin_config/autopairs_config' end,
-            -- lazy.nvim fails to load, we must initialize auto-pairs manually
-            config = function()
-                vim.cmd[[call AutoPairsTryInit()]]
-                vim.keymap.del({ 'i' }, "'", { buffer = true })
+            event = { 'BufEnter' },
+            init = function()
+                require 'plugin_config.autopairs_config'
             end,
         },
         {
@@ -187,22 +157,20 @@ require('lazy').setup({
                 { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
                 -- { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
             },
-            init = function() require'plugin_config/vimtmuxnavigator_config' end
+            init = function() require 'plugin_config/vimtmuxnavigator_config' end
         },
         {
             "folke/todo-comments.nvim",
             dependencies = { "nvim-lua/plenary.nvim" },
-            config = function() require'plugin_config/todocomments_config' end,
+            config = function() require 'plugin_config/todocomments_config' end,
         },
         -- formatter
-        {
-            require'plugin_config/conform_config'
-        },
+        { require 'plugin_config/conform_config' },
 
         {
             'nvim-treesitter/nvim-treesitter',
             build = function() require('nvim-treesitter.install').update({ with_sync = true })() end,
-            config = function() require'plugin_config/nvimtreesitter_config' end,
+            config = function() require 'plugin_config/nvimtreesitter_config' end,
             dependencies = {
                 {
                     'nvim-treesitter/nvim-treesitter-context',
@@ -216,15 +184,15 @@ require('lazy').setup({
         },
         {
             'JoosepAlviste/nvim-ts-context-commentstring',
-            config = function() require'plugin_config/nvimtscontextcommentstring_config' end,
+            config = function() require 'plugin_config/nvimtscontextcommentstring_config' end,
         },
         {
             'andymass/vim-matchup',
-            config = function() require'plugin_config/vimmatchup_config' end,
+            config = function() require 'plugin_config/vimmatchup_config' end,
         },
         {
             'windwp/nvim-ts-autotag',
-            config = function() require'plugin_config/nvimtsautotag_config' end,
+            config = function() require 'plugin_config/nvimtsautotag_config' end,
         },
 
         -- NOTE: if you want to open session when next time use nvim, you should use :qa to quit
@@ -233,7 +201,7 @@ require('lazy').setup({
             dependencies = {
                 'nvim-telescope/telescope.nvim', -- Only needed if you want to use sesssion lens
             },
-            config = function() require'plugin_config/autosession_config' end,
+            config = function() require 'plugin_config/autosession_config' end,
         },
         {
             "nvim-tree/nvim-tree.lua",
@@ -243,28 +211,30 @@ require('lazy').setup({
             config = function() require("plugin_config/nvimtree_config") end,
         },
         {
-            'nvim-telescope/telescope.nvim', tag = '0.1.8',
+            'nvim-telescope/telescope.nvim',
+            tag = '0.1.8',
             dependencies = {
                 'nvim-lua/plenary.nvim',
                 {
                     'nvim-telescope/telescope-fzf-native.nvim',
-                    build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+                    build =
+                    'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
                 },
             },
-            config = function() require'plugin_config/telescope_config' end,
+            config = function() require 'plugin_config/telescope_config' end,
         },
         {
             "rcarriga/nvim-notify",
-            config = function () require'plugin_config/nvimnotify_config' end,
+            config = function() require 'plugin_config/nvimnotify_config' end,
         },
         {
             "folke/noice.nvim",
             event = "VeryLazy",
-            config = function () require'plugin_config/noice_config' end,
+            config = function() require 'plugin_config/noice_config' end,
             dependencies = {
                 "MunifTanjim/nui.nvim",
                 "rcarriga/nvim-notify",
-              }
+            }
         },
         {
             "Pocco81/auto-save.nvim",
@@ -277,11 +247,11 @@ require('lazy').setup({
         {
             'folke/which-key.nvim',
             event = 'VeryLazy',
-            config = function() require'plugin_config/whichkey_config' end,
+            config = function() require 'plugin_config/whichkey_config' end,
         },
         {
             'RRethy/vim-illuminate',
-            config = function() require'plugin_config/vimilluminate_config' end,
+            config = function() require 'plugin_config/vimilluminate_config' end,
         },
 
         {
@@ -291,30 +261,30 @@ require('lazy').setup({
                 "nvim-neotest/nvim-nio",
                 'theHamsta/nvim-dap-virtual-text',
             },
-            config = function () require 'plugin_config/nvimdap_config' end,
+            config = function() require 'plugin_config/nvimdap_config' end,
         },
         {
             'nvim-java/nvim-java',
         },
         {
             'akinsho/toggleterm.nvim',
-            config = function() require'plugin_config/toggleterm_config' end,
+            config = function() require 'plugin_config/toggleterm_config' end,
         },
 
         {
             "folke/zen-mode.nvim",
-            opts = function() require'plugin_config/zenmode_config' end,
+            opts = function() require 'plugin_config/zenmode_config' end,
             dependencies = {
                 {
                     "folke/twilight.nvim",
-                    opts = function() require'plugin_config/twilight_config' end,
+                    opts = function() require 'plugin_config/twilight_config' end,
                 }
             }
         },
         {
             "lervag/vimtex",
-            lazy = false,     -- we don't want to lazy load VimTeX
-            init = function() require'plugin_config/vimtex_config' end,
+            lazy = false, -- we don't want to lazy load VimTeX
+            init = function() require 'plugin_config/vimtex_config' end,
         },
 
         -- INFO: This plugin is used very few times
@@ -397,5 +367,38 @@ require('lazy').setup({
         -- },
         -- INFO: rarely used
         -- { import = 'plugin_config/copilotchat_config' },
+        -- INFO: now we use cmp-blink
+        -- {
+        --     'hrsh7th/nvim-cmp',
+        --     dependencies = {
+        --         'hrsh7th/cmp-nvim-lsp',
+        --         'hrsh7th/cmp-buffer',
+        --         'hrsh7th/cmp-path',
+        --         'hrsh7th/cmp-cmdline',
+        --         'onsails/lspkind-nvim',
+        --         'lukas-reineke/cmp-rg',
+        --         'saadparwaiz1/cmp_luasnip',
+        --         {
+        --             'L3MON4D3/LuaSnip',
+        --             version = "v2.*",
+        --             build = 'make install_jsregexp',
+        --             dependencies = {
+        --                 'rafamadriz/friendly-snippets',
+        --             },
+        --             config = function() require'plugin_config/luasnip_config' end,
+        --         },
+        --         'uga-rosa/cmp-dictionary',
+        --         {
+        --             "petertriho/cmp-git",
+        --             config = function () require'cmp_git'.setup() end,
+        --         },
+        --         -- comparators making underlines lower priority
+        --         'lukas-reineke/cmp-under-comparator',
+        --         "micangl/cmp-vimtex",
+        --         -- TODO: remove this plugin when configurations are stable
+        --         'hrsh7th/cmp-nvim-lua',
+        --     },
+        --     config = function() require'plugin_config/nvimcmp_config' end,
+        -- },
     }
 })

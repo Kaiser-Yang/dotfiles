@@ -74,7 +74,8 @@ autocmd FileType * setlocal formatoptions-=cro
 augroup end
 ]]
 
-vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+-- remove localoptions to make auto-pairs work properly
+vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
 
 -- disable mouse when open telescope
 -- we do this because mouse events in telescope will close the window

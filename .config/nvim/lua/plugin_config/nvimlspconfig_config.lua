@@ -1,4 +1,5 @@
-local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+lsp_capabilities = require 'blink.cmp'.get_lsp_capabilities(lsp_capabilities)
 require('java').setup({
     capabilities = lsp_capabilities,
     root_markers = {
@@ -17,7 +18,7 @@ require('java').setup({
         auto_install = false,
     },
 })
-require'lspconfig'.jdtls.setup{
+require 'lspconfig'.jdtls.setup {
     capabilities = lsp_capabilities,
     handlers = {
         -- By assigning an empty function, you can remove the notifications
@@ -25,10 +26,10 @@ require'lspconfig'.jdtls.setup{
         ["$/progress"] = function(_, _, _) end,
     },
 }
-require'lspconfig'.pyright.setup{
+require 'lspconfig'.pyright.setup {
     capabilities = lsp_capabilities
 }
-require'lspconfig'.lua_ls.setup{
+require 'lspconfig'.lua_ls.setup {
     capabilities = lsp_capabilities,
     handlers = {
         -- By assigning an empty function, you can remove the notifications
@@ -36,28 +37,28 @@ require'lspconfig'.lua_ls.setup{
         ["$/progress"] = function(_, _, _) end,
     },
 }
-require'lspconfig'.cmake.setup{
+require 'lspconfig'.cmake.setup {
     capabilities = lsp_capabilities
 }
-require'lspconfig'.ts_ls.setup{
+require 'lspconfig'.ts_ls.setup {
     capabilities = lsp_capabilities
 }
-require'lspconfig'.clangd.setup{
+require 'lspconfig'.clangd.setup {
     capabilities = lsp_capabilities
 }
-require'lspconfig'.jsonls.setup{
+require 'lspconfig'.jsonls.setup {
     capabilities = lsp_capabilities
 }
-require'lspconfig'.lemminx.setup{
+require 'lspconfig'.lemminx.setup {
     capabilities = lsp_capabilities
 }
-require'lspconfig'.bashls.setup{
+require 'lspconfig'.bashls.setup {
     capabilities = lsp_capabilities
 }
-require'lspconfig'.markdown_oxide.setup{
+require 'lspconfig'.markdown_oxide.setup {
     capabilities = lsp_capabilities
 }
-require'rime-ls'.setup_rime()
+require 'rime-ls'.setup_rime()
 vim.diagnostic.config({
     update_in_insert = true,
     virtual_text = false,
