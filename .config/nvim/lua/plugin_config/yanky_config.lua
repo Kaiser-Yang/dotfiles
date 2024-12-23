@@ -25,4 +25,3 @@ require'yanky'.setup({
         }
     }
 })
-

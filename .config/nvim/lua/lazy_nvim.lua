@@ -70,7 +70,11 @@ require('lazy').setup({
         {
             "lukas-reineke/indent-blankline.nvim",
             main = "ibl",
-            opts = {},
+            --- @module 'ibl'
+            --- @type ibl.config
+            opts = {
+                indent = { char = '┃' }
+            },
         },
         {
             'nvim-lualine/lualine.nvim',
@@ -281,9 +285,6 @@ require('lazy').setup({
             init = function() require 'plugin_config/vimtex_config' end,
         },
 
-        -- INFO: This plugin is used very few times
-        -- { 'dstein64/vim-startuptime' },
-
         -- {
         --     'dgagn/diagflow.nvim',
         --     event = 'LspAttach',
@@ -297,13 +298,6 @@ require('lazy').setup({
         --         "mfussenegger/nvim-dap",
         --     }
         -- },
-        -- INFO: now use cmp + lsp + mason
-        -- {
-        --         'neoclide/coc.nvim',
-        --         branch = 'master',
-        --         build = 'npm ci',
-        --         init = function() require('plugin_config/coc_config') end
-        -- },
         -- INFO: now use copilot + copilot-chat
         -- the key mappings for fittencode is not finished yet
         -- {
@@ -311,20 +305,6 @@ require('lazy').setup({
         --     config = function()
         --         require'plugin_config/fittencode_config'
         --     end,
-        -- },
-        -- INFO: now use lspsaga outline
-        -- {
-        --     'stevearc/aerial.nvim',
-        --     config = function() require'plugin_config/aerial_config' end,
-        --     dependencies = {
-        --         "nvim-treesitter/nvim-treesitter",
-        --         "nvim-tree/nvim-web-devicons"
-        --     },
-        -- },
-        -- NOTE: now use comment.nvim
-        -- {
-        --     'preservim/nerdcommenter',
-        --     init = function() require'plugin_config/nerdcommenter_config' end,
         -- },
         -- INFO: for signature, uncomment those lines to use
         -- {
@@ -352,12 +332,6 @@ require('lazy').setup({
         -- {
         --     "nvim-telescope/telescope-ui-select.nvim",
         --     build = function() require("telescope").load_extension("ui-select") end,
-        -- },
-        -- INFO: now we use copilot.lua
-        -- {
-        --     'github/copilot.vim',
-        --     lazy = false,
-        --     init = function() require'plugin_config/copilot_config' end,
         -- },
         -- INFO: rarely used
         -- { import = 'plugin_config/copilotchat_config' },
