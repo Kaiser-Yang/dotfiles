@@ -67,15 +67,7 @@ require('lazy').setup({
             config = function() require 'plugin_config/gitsigns_config' end,
         },
 
-        {
-            "lukas-reineke/indent-blankline.nvim",
-            main = "ibl",
-            --- @module 'ibl'
-            --- @type ibl.config
-            opts = {
-                indent = { char = '┃' }
-            },
-        },
+        { require('plugin_config.indent_blankline') },
         {
             'nvim-lualine/lualine.nvim',
             dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -283,6 +275,15 @@ require('lazy').setup({
             "lervag/vimtex",
             lazy = false, -- we don't want to lazy load VimTeX
             init = function() require 'plugin_config/vimtex_config' end,
+        },
+        {
+            'L3MON4D3/LuaSnip',
+            version = "v2.*",
+            build = 'make install_jsregexp',
+            dependencies = {
+                'rafamadriz/friendly-snippets',
+            },
+            config = function() require 'plugin_config/luasnip_config' end,
         },
 
         -- {
