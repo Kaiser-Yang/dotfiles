@@ -17,6 +17,21 @@
 --     Wording = "Please improve the grammar and wording of the following text.",
 --     Concise = "Please rewrite the following text to make it more concise.",
 -- }
+-- Custom buffer for CopilotChat
+-- vim.api.nvim_create_autocmd('BufEnter', {
+--     pattern = 'copilot-*',
+--     callback = function()
+--         vim.opt_local.relativenumber = true
+--         vim.opt_local.number = true
+--
+--         -- insert at the end to chat with Copilot
+--         map_set({ 'n' }, 'i', 'Gi', { silent = true, noremap = true, buffer = true })
+--         -- q for stop the chat
+--         map_set({ 'n' }, 'q', '<cmd>CopilotChatStop<cr>', { silent = true, noremap = true, buffer = true })
+--     end,
+-- })
+-- map_set({ 'n' }, 'gpt', '<cmd>CopilotChatToggle<cr>', opts({ desc = 'Toggle copilot-chat' }))
+-- map_set({ 'v' }, 'gpt', ':CopilotChat', opts({ silent = false, desc = 'Copilot chat' }))
 return {
     {
         "CopilotC-Nvim/CopilotChat.nvim",

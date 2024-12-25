@@ -1,5 +1,5 @@
-local lspkind = require'lspkind'
-local cmp = require'cmp'
+local lspkind = require 'lspkind'
+local cmp = require 'cmp'
 cmp.setup({
     preselect = cmp.PreselectMode.None,
 
@@ -27,7 +27,7 @@ cmp.setup({
         { name = "path" },
         { name = "dictionary", keyword_length = 2, max_item_count = 5 },
         { name = 'nvim_lua' },
-        { name = 'lazydev', group_index = 0 }, -- for nvim config
+        { name = 'lazydev',    group_index = 0 }, -- for nvim config
         {
             name = "spell",
             option = {
@@ -39,9 +39,9 @@ cmp.setup({
             },
             max_item_count = 5
         },
-        { name = "calc", max_item_count = 3 },
-        { name = "git", max_item_count = 5 },
-        { name = "rg", max_item_count = 5, keyword_length = 4 },
+        { name = "calc",   max_item_count = 3 },
+        { name = "git",    max_item_count = 5 },
+        { name = "rg",     max_item_count = 5, keyword_length = 4 },
         { name = "vimtex", },
         -- { name = "cmp_yanky", max_item_count = 3 },
         -- { name = "emoji", max_item_count = 3 },
@@ -117,7 +117,7 @@ cmp.setup({
             },
             before = function(entry, vim_item)
                 if entry.source.name ~= 'vimtex' then
-                    vim_item.menu = "["..string.upper(entry.source.name).."]"
+                    vim_item.menu = "[" .. string.upper(entry.source.name) .. "]"
                 end
 
                 if entry.source.name == "calc" then
@@ -167,10 +167,10 @@ cmp.setup({
 })
 
 -- Use buffer source for `/`, `?`.
-cmp.setup.cmdline({'/', '?'}, {
+cmp.setup.cmdline({ '/', '?' }, {
     mapping = cmp.mapping.preset.cmdline({
-        ['<c-n>'] = ({c = false}),
-        ['<c-p>'] = ({c = false}),
+        ['<c-n>'] = ({ c = false }),
+        ['<c-p>'] = ({ c = false }),
     }),
     sources = {
         { name = 'buffer' },
@@ -180,8 +180,8 @@ cmp.setup.cmdline({'/', '?'}, {
 -- Use cmdline & path source for ':'
 cmp.setup.cmdline(':', {
     mapping = cmp.mapping.preset.cmdline({
-        ['<c-n>'] = ({c = false}),
-        ['<c-p>'] = ({c = false}),
+        ['<c-n>'] = ({ c = false }),
+        ['<c-p>'] = ({ c = false }),
     }),
     sources = cmp.config.sources {
         { name = 'path' },

@@ -36,10 +36,13 @@
 <!-- vim-markdown-toc -->
 
 # dotfiles
+
 My own configure files for UNIX/Linux tools.
 
 ## Some Known Bugs
+
 ### Unfixed
+
 * When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line.
 * `<C-N>` can not back to normal when in replacing mode (after pressing `r`). This seems impossible
 to fix, because when press `r<C-N>`, your key sequence is `r<C-N>` (pressing `r` will still waiting
@@ -51,6 +54,7 @@ to do with the `novim-notify`.
 * Quit with `qa` may be slow.
 
 ### Fixed
+
 * `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file,
 `auto-pairs` will be loaded.
 * When you use `:q` to quit the terminal, the terminal cannot be opened again. This is because we
@@ -68,19 +72,21 @@ parent directory of `.root`.
 * When quit a help file which is editable, this may cause problem.
 
 ## Quick Start
+
 1. Use the command `git clone https://github.com/Kaiser-Yang/dotfiles.git` to clone this repository.
 2. Use the command `cd dotfiles` to enter the directory. Run `./dot_files.py init` to install `tmux`
 , `fish`, `vim` and `nvim`.
 3. Use the command `./dot_files.py` to only copy the configuration files to your `$HOME` directory.
 4. You need to install `nodejs` and `yarn` first (If you use `./dot_files.py init` this has been
 done).
-5. Run `vim` or `nvim` to install plugins. 
+5. Run `vim` or `nvim` to install plugins.
 
 NOTE: Before copying the configuration files to your `$HOME` directory, the original files will be
 backed up to the `backup` directory in this repository. You can use `./dot_files.py recover` to
 recover the original files.
 
 ## More Information
+
 In `dot_files.py`, there are two variables:
 
 ```python
@@ -100,11 +106,12 @@ If you only want to install the configurations of `nvim`, you just need to add `
 If you only want to install the configurations of `tmux`, you just need to add `./.tmux.conf` to
 `copy_file`, and add all other directory to `ignore_file`. Then run `./dot_files.py`.
 
-If you only want to install the configurations of `fish`, you just need to add `./proxy.fish` to 
+If you only want to install the configurations of `fish`, you just need to add `./proxy.fish` to
 `copy_file`, and add all other directory, except for `.config/fish`, to `ignore_file`. Then run
 `./dot_files.py`.
 
 Besides, there are other types parameters you can pass to `dot_files.py`:
+
 * `update`: only update the configurations depending on the `ignore_file` and `copy_file`. This will
 backup the original files to `backup` directory first.
 * `recover`: recover all files from backup directory to `$HOME` directory.
@@ -116,30 +123,39 @@ Indeed, if you run `./dot_files.py` with no parameters, it is same with
 `./dot_files.py` to update the configurations.
 
 # Screenshots
+
 This part will only show the screenshots of `nvim`.
 
 ## Terminal
+
 ![](README.assets/20240627185327.png)
 
 ## Telescope
+
 ![](README.assets/20240627185429.png)
 
 ## Completion of nvim-cmp
+
 ![](README.assets/20240712151138.png)
 
 ## Inlay Hints from Copilot
+
 ![](README.assets/20240627185713.png)
 
 ## Copilot Chat
+
 ![](README.assets/20240627185857.png)
 
 ## Nvim Tree
+
 ![](README.assets/20240627190204.png)
 
 ## Markdown Preview
+
 ![](README.assets/20240627190051.png)
 
 ## Auto Download and Replace Images in Markdown
+
 There is a file called `replace_md_image.py`, this file receive a directory as a parameter, and it
 will download all the images in the markdown files (recursively) in the directory and replace the
 image links with the local links. This will backup your markdown files first:
@@ -147,12 +163,14 @@ image links with the local links. This will backup your markdown files first:
 ![](README.assets/20240627190253.png)
 
 # Shortcuts
+
 Note that my leader key is `Space`.
 
 Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V` means visual mode,
 `T` means terminal mode, `X` means select mode, and `N I` means normal mode and insert mode.
 
 ## Basic Shortcuts
+
 | Shortcut    | Mode      | Description |
 | -           | -         | - |
 | \<C-T>      | N I T     | Toggle a terminal |
@@ -176,6 +194,7 @@ a new tab if there has been one open terminal or auto close when entering a new 
 been closed. There only one terminal buffer, so each terminal has same contents.
 
 ## Window
+
 | Shortcut   | Mode | Description |
 | -          | -    | - |
 | \<LEADER>h | N    | Split window horizontally, and move cursor to the left window |
@@ -205,6 +224,7 @@ NOTE: We can not bind `<C-H>` in insert mode, so in the insert mode, when you pr
 trigger backspace.
 
 ## Copy and Paste
+
 | Shortcut    | Mode | Description |
 | -           | -    | - |
 | Y           | N    | Copy till end of line to unnamed register |
@@ -219,6 +239,7 @@ some time when you press `<LEADER>y` (make sure that there is `"+y` at the right
 can press `a`.
 
 ## Cursor Movement
+
 | Shortcut | Mode | Description |
 | -        | -    | - |
 | \<C-J>   |      | When there is a selection list and `j` will input letter j, `<C-J>` will move the cursor to the next selection |
@@ -240,6 +261,7 @@ will input letter j and letter k, so you can use `<C-J>` and `<C-K>` to move the
 or previous selection.
 
 ## Markdown Helper
+
 These settings only work in a markdown file.
 
 Some of the settings below will insert `<++>` as a placeholder symbol, and you can use `,f` to move
@@ -256,12 +278,14 @@ the cursor out of the current block and remove the placeholder symbol.
 | ,n       | I    | Insert a new line symbol of html |
 
 ## Useful Plugins' Shortcuts
+
 This part has a lot of shortcuts, and I'll only list some common ones. All the shortcuts started
 with `<LEADER>`, `[` or `]` can be seen in `vimwhichkey` plugin, which means you just need press
 `<LEADER>`, `[` or `]` and wait for a while, there will be pop up window to show all the shortcuts
 started with the key you press.
 
 ### Commenting
+
 | Shortcut                   | Mode | Description |
 | -                          | -    | - |
 | [count]\<LEADER>c\<LEADER> | N    | Toggle comments (line style) |
@@ -272,6 +296,7 @@ started with the key you press.
 | \<LEADER>cs                | V    | Toggle comments (block style) of the selected line |
 
 ### Surrounding
+
 | Shortcut              | Mode | Description |
 | -                     | -    | - |
 | ys\<motion>\<bracket> | N    | Surround something |
@@ -283,6 +308,7 @@ started with the key you press.
 | \<C-B>                | I    | Back insert a surrounding, when a surrounding does not match, you press the close surrounding, the cursor may jump to the next close surrounding rather than inserting a new close surrounding. In this case, you can use `<C-B>` to back insert a close surrounding |
 
 Some examples of surrounding:
+
 * `ysf;{`: surround the character from the cursor to next `;` with `{}`.
 * `yst;{`: surround the character from the cursor till next `;` with `{}`, this will leave the `;`
 out of the surrounding.
@@ -306,6 +332,7 @@ right, the latter will not.
 | \<LEADER>d | N    | Show document symbols, this can also be used to show variables' types |
 
 ### Git Related
+
 | Shortcut | Mode | Description |
 | -        | -    | - |
 | ]g       | N    | Go to next git hunk |
@@ -320,6 +347,7 @@ right, the latter will not.
 | gcn      | N    | When there is a conflict, this will keep none change |
 
 ### Automatic Completion
+
 | Shortcut | Mode | Description |
 | -        | -    | - |
 | C-F      | I    | Select one line when `copilot` suggestions are shown |
@@ -359,6 +387,7 @@ right, the latter will not.
 | \<C-S>            | I    | Search the selected bib in cmp selection |
 
 ### Debugger
+
 | Shortcut   | Mode | Description |
 | -          | -    | - |
 | \<LEADER>D | N    | Toggle the `dap-ui`. |
@@ -372,4 +401,5 @@ right, the latter will not.
 | \<F12>     | N    | Finish (step out). |
 
 # Contribution
+
 If you have any suggestion or find any bug, please feel free to open an issue or pull request.

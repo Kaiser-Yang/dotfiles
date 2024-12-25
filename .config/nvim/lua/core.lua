@@ -1,125 +1,71 @@
-vim.cmd [[
-set spelllang=en_us,en
-set pumheight=15
-set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
-set nofoldenable
-set foldtext='+--'
+-- INFO: Those variables do not support wildcards
+vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text' }
+vim.g.root_markers = { '.git', '.root', 'pom.xml' }
 
-set timeoutlen=300
-set ttimeoutlen=0
+vim.g.mapleader = ' '
 
-set mouse=a
-set mousemoveevent
+-- These two lines are required by the nvim-tree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
-set number
-set relativenumber
-set laststatus=2
-set showtabline=2
-set display=lastline
-set scrolloff=5
-set colorcolumn=100
-set signcolumn=yes
-set cursorline
-set showcmd
-set wildmenu
-set wildmode=longest:full,full
-
-set list
-set listchars=tab:»·,trail:·,lead:·
-
-autocmd BufReadPost *
-  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-  \ |   exe "normal! g`\""
-  \ | endif
-
-set ignorecase
-set smartcase
-set incsearch
-set hlsearch
-
-exec "nohlsearch"
-
-set expandtab
-set tabstop=4
-set softtabstop=0
-set shiftwidth=4
-
-set cinwords=if,else,switch,case,for,while,do
-set cinoptions=j1,(0,ws,Ws,g0,:0,=0,l1
-
-set showbreak=↪
-
-set switchbuf=useopen
-
-set wrap
-set breakindent
-set tw=0
-
-set termguicolors
-
-set encoding=utf-8
-
-set updatetime=100
-]]
-
--- hi Normal guibg=none
--- set clipboard+=unnamedplus
--- set exrc
-
-vim.cmd [[
-augroup disable_formatoptions_cro
-autocmd!
-autocmd FileType * setlocal formatoptions-=cro
-augroup end
-]]
-
--- remove localoptions to make auto-pairs work properly
-vim.o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
-
--- disable mouse when open telescope
--- we do this because mouse events in telescope will close the window
-vim.cmd([[autocmd! FileType TelescopePrompt setlocal mouse=]])
-vim.cmd([[autocmd! BufEnter * if &filetype !~ 'TelescopePrompt' | set mouse=a | endif]])
--- whether or not to disable swap file warning
--- vim.cmd [[
--- augroup disable_swap_exists_warning
--- autocmd!
--- autocmd SwapExists * let v:swapchoice = "e"
--- augroup end
--- ]]
-
--- vim.cmd [[
--- augroup neogit_setlocal
--- autocmd!
--- autocmd FileType NeogitStatus set foldtext='+--'
--- augroup END
--- ]]
-
--- vim.cmd [[
--- augroup quickfix_setlocal
--- autocmd!
--- autocmd FileType qf setlocal wrap
--- autocmd FileType qf vnoremap <buffer> <F6> <cmd>cclose<CR>
--- autocmd FileType qf nnoremap <buffer> <F6> <cmd>cclose<CR>
--- autocmd FileType qf vnoremap <buffer> <F18> <cmd>cclose<CR>
--- autocmd FileType qf nnoremap <buffer> <F18> <cmd>cclose<CR>
--- augroup END
--- ]]
-
--- vim.cmd [[
--- colorscheme gruvbox
--- " hi NormalFloat guifg=#928374 guibg=#282828
--- " hi WinSeparator guibg=none
--- " hi TreesitterContext gui=NONE guibg=#282828
--- " hi TreesitterContextBottom gui=underline guisp=Grey
--- ]]
-
--- vim.g_printed = ''
--- vim.g_print = function(msg)
---     vim.g_printed = vim.g_printed .. tostring(msg) .. '\n'
--- end
--- vim.g_dump = function()
---     print(vim.g_printed)
--- end
-
+vim.o.termguicolors = true
+vim.o.spelllang = 'en_us,en'
+vim.o.timeoutlen = 300
+vim.o.ttimeoutlen = 0
+vim.o.mouse = 'a'
+vim.o.mousemoveevent = true
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.scrolloff = 5
+vim.o.colorcolumn = '100'
+vim.o.cursorline = true
+vim.o.list = true
+vim.o.listchars = 'tab:»-,trail:·,lead:·'
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.incsearch = true
+vim.o.hlsearch = true
+-- user spaces to substitute tabs
+vim.o.expandtab = true
+-- one tab is shown as 4 spaces
+vim.o.tabstop = 4
+-- >> and << will shift lines by 4
+vim.o.shiftwidth = 4
+-- every <tab> will go right by 4 spaces, every <bs> will go left by 4 spaces
+vim.o.softtabstop = 4
+vim.o.showbreak = '↪'
+vim.o.encoding = 'utf-8'
+vim.o.switchbuf = 'useopen'
+vim.o.foldenable = false
+-- set nofoldenable
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.api.nvim_create_augroup('UserDIY', {})
+-- When leaving normal mode, disable hlsearch
+vim.api.nvim_create_autocmd('ModeChanged', {
+    group = 'UserDIY',
+    pattern = 'n:[^n]',
+    callback = function()
+        vim.o.hlsearch = false
+    end
+})
+-- When entering normal mode, enable hlsearch
+vim.api.nvim_create_autocmd('ModeChanged', {
+    group = 'UserDIY',
+    pattern = '[^n]:n',
+    callback = function()
+        vim.o.hlsearch = true
+    end
+})
+vim.api.nvim_create_autocmd('FileType', {
+    group = 'UserDIY',
+    pattern = 'gitcommit',
+    callback = function()
+        vim.wo.colorcolumn = '50,72'
+    end
+})
+vim.api.nvim_create_autocmd('SwapExists', {
+    pattern = '*',
+    callback = function()
+        vim.v.swapchoice = 'e'
+    end
+})

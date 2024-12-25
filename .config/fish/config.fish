@@ -146,3 +146,8 @@ function fish_mode_prompt
     end
     set_color normal
 end
+
+# required by markdown-preview.nvim
+if test -e /mnt/c/Windows/System32/cmd.exe -a ! -e /usr/bin/cmd.exe
+    sudo ln -s /mnt/c/Windows/System32/cmd.exe /usr/bin/cmd.exe
+end

@@ -1,7 +1,6 @@
 local M = {}
 local rime_ls_filetypes = { '*' }
 local feedkeys = require('utils').feedkeys
-local opts = require('utils').keymap_opts
 
 function M.setup_rime()
     -- global status
@@ -73,9 +72,6 @@ A language server for librime
             paging_characters = {},
             trigger_characters = {},
             schema_trigger_character = "&",
-            -- TODO: check this configuration
-            -- this seems no need for blink
-            -- max_token = 4,
             always_incomplete = true,
             long_filter_text = true
         },
@@ -170,9 +166,10 @@ require('blink.cmp.completion.list').show_emitter:on(function(event)
 end)
 
 -- Select first entry when typing more than max_code
+local map_set = require('utils').map_set
 for i = 1, #alphabet do
     local k = alphabet:sub(i, i)
-    vim.keymap.set({ 'i' }, k, function()
+    map_set({ 'i' }, k, function()
         local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
         local confirmed = false
         if vim.g.rime_enabled and cursor_column >= max_code then
@@ -199,6 +196,6 @@ for i = 1, #alphabet do
         else
             feedkeys(k, 'n')
         end
-    end, opts())
+    end)
 end
 return M

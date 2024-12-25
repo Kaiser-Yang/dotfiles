@@ -62,6 +62,13 @@ if ! command -v fish; then
     fi
 fi
 
+if !command -v yarn; then
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - || exit 1
+    sudo sh -c 'echo "deb https://dl.yarnpkg.com/debian/ stable main" >> /etc/apt/sources.list.d/yarn.list' || exit 1
+    sudo apt update || exit 1
+    sudo apt install -y yarn || exit 1
+fi
+
 # universal-ctags are used for the outlooks of markdown files
 sudo apt install -y universal-ctags 
 
@@ -72,9 +79,6 @@ sudo apt install -y openjdk-17-source openjdk-17-jdk shellcheck build-essential 
 # cmake lsp
 # NOTE: if your conda is activated, this will use conda-pip
 pip install cmake-language-server || exit 1
-
-# pynvim for coc-actions
-pip install pynvim || exit 1
 
 # clang family
 sudo apt install -y clangd clang-format clang-tidy || exit 1

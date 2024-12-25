@@ -22,7 +22,7 @@
 #       your conda environment is where you install pandoc,
 #       if you never convert vimwiki to html files, you can ignore this.
 # NOTE: make sure you conda environments are all deactived before runnint with init
-ignore_file = set(["./.git", "./LICENSE", "./README.md",
+ignore_file = set(["./.git", "./LICENSE", "./README.md", './.gitmodules'
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py",
                    "./installer", "./vscode-setting", "./README.assets", "./markdownBackup"])
 
