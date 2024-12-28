@@ -180,8 +180,13 @@ vim.api.nvim_create_autocmd('FileType', {
                 elseif content_before_cursor:match('^ *$') and feed_list_item_by_context() then
                     -- pass
                 else
-                    -- noraml <cr>
-                    feedkeys('<plug>(ultimate-auto-pairs-cr)', 'n')
+                    if content_before_cursor:match(':$') or content_before_cursor:match('：$') then
+                        -- auto add new paragraph after a colon
+                        feedkeys('<cr><cr>', 'n')
+                    else
+                        -- noraml <cr>
+                        feedkeys('<plug>(ultimate-auto-pairs-cr)', 'n')
+                    end
                 end
             end
         end, { buffer = true, expr = true })
