@@ -39,7 +39,7 @@ return {
     require('plugins.auto_session'),
     require('plugins.comment'),
     require('plugins.surround'),
-    require('plugins.ultimate_auto_pairs'),
+    require('plugins.auto_pairs'),
     require('plugins.which_key'),
     require('plugins.tmux_navigator'),
     require('plugins.todo_comments'),
