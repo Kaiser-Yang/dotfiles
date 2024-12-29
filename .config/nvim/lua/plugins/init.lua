@@ -12,6 +12,7 @@ return {
     require('plugins.lsp_config'),
     require('plugins.lsp_saga'),
     require('plugins.lazy_dev'),
+    require('plugins.lsp_lens'),
 
     -- Completion
     require('plugins.blink_cmp'),

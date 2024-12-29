@@ -35,6 +35,3 @@ map_set({ 'i' }, '<c-h>', '<left>')
 map_set({ 'i' }, '<c-j>', '<down>')
 map_set({ 'i' }, '<c-k>', '<up>')
 map_set({ 'i' }, '<c-l>', '<right>')
-
--- TODO: update this with nvim-cmp
--- map_set('n', 'gcl', '<plug>(coc-codelens-action)', opts)
