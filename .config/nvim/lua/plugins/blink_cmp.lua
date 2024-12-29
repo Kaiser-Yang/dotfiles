@@ -3,7 +3,7 @@ return {
         'saghen/blink.cmp',
         dependencies = {
             'L3MON4D3/LuaSnip',
-            "mikavilpas/blink-ripgrep.nvim",
+            'mikavilpas/blink-ripgrep.nvim',
         },
         version = '*',
 
@@ -18,6 +18,7 @@ return {
                 },
                 keyword = {
                     -- BUG: set to '' will lead to an error when completion
+                    ---@diagnostic disable-next-line: assign-type-mismatch
                     exclude_from_prefix_regex = nil
                 },
                 list = {
@@ -31,9 +32,9 @@ return {
                         align_to_component = 'kind_icon',
                         padding = 0,
                         columns = {
-                            { "kind_icon", },
-                            { "label",      "label_description", gap = 1 },
-                            { "source_name" }
+                            { 'kind_icon', },
+                            { 'label',      'label_description', gap = 1 },
+                            { 'source_name' }
                         },
                         components = {
                             source_name = {
@@ -59,7 +60,11 @@ return {
                                     local code_end = #ctx.label_detail - 4
                                     return ctx.label ..
                                         ' <' ..
-                                        string.gsub(string.sub(ctx.label_detail, code_start, code_end), '  ·  ', ' ') ..
+                                        string.gsub(string.sub(ctx.label_detail,
+                                                code_start,
+                                                code_end),
+                                            '  ·  ',
+                                            ' ') ..
                                         '>'
                                 end
                             },
@@ -89,7 +94,7 @@ return {
                 ['<space>'] = {
                     function(cmp)
                         if not vim.g.rime_enabled then return false end
-                        local rime_item_index = get_n_rime_item_index(1)
+                        local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(1)
                         if #rime_item_index ~= 1 then return false end
                         return cmp.accept({ index = rime_item_index[1] })
                     end,
@@ -98,14 +103,14 @@ return {
                     -- FIX: can not work when binding ;<space> to other key
                     function(cmp)
                         if not vim.g.rime_enabled then return false end
-                        local rime_item_index = get_n_rime_item_index(2)
+                        local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(2)
                         if #rime_item_index ~= 2 then return false end
                         return cmp.accept({ index = rime_item_index[2] })
                     end, 'fallback' },
                 ['\''] = {
                     function(cmp)
                         if not vim.g.rime_enabled then return false end
-                        local rime_item_index = get_n_rime_item_index(3)
+                        local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(3)
                         if #rime_item_index ~= 3 then return false end
                         return cmp.accept({ index = rime_item_index[3] })
                     end, 'fallback' }
@@ -138,7 +143,8 @@ return {
                             end
                             -- filter non-acceptable rime items
                             return vim.tbl_filter(function(item)
-                                return not is_rime_item(item) or rime_item_acceptable(item)
+                                local rime_ls = require('plugins.rime_ls')
+                                return not rime_ls.is_rime_item(item) or rime_ls.rime_item_acceptable(item)
                             end, items)
                         end
                     },
@@ -150,17 +156,17 @@ return {
                         score_offset = 100
                     },
                     ripgrep = {
-                        module = "blink-ripgrep",
-                        name = "RG",
+                        module = 'blink-ripgrep',
+                        name = 'RG',
                         max_items = 5,
-                        ---@module "blink-ripgrep"
+                        ---@module 'blink-ripgrep'
                         ---@type blink-ripgrep.Options
                         opts = {
                             prefix_min_len = 4,
                             context_size = 5,
-                            max_filesize = "1M",
+                            max_filesize = '1M',
                             project_root_marker = vim.g.root_markers,
-                            search_casing = "--smart-case",
+                            search_casing = '--smart-case',
                             -- (advanced) Any additional options you want to give to ripgrep.
                             -- See `rg -h` for a list of all available options. Might be
                             -- helpful in adjusting performance in specific situations.
@@ -177,7 +183,7 @@ return {
                 }
             },
         },
-        opts_extend = { "sources.default" }
+        opts_extend = { 'sources.default' }
         -- TODO: add those below:
 
         -- { name = "dictionary", keyword_length = 2, max_item_count = 5 },

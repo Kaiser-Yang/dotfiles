@@ -3,8 +3,6 @@ return {
     branch = '0.1.x',
     dependencies = {
         'nvim-lua/plenary.nvim',
-        'rcarriga/nvim-notify',
-        'gbprod/yanky.nvim',
         {
             'nvim-telescope/telescope-fzf-native.nvim',
             build = 'make'
@@ -14,7 +12,6 @@ return {
         local actions = require('telescope.actions')
         local telescope = require('telescope')
         local builtin = require('telescope.builtin')
-        local extensions = require('telescope').extensions
         local feedkeys = require('utils').feedkeys
         local map_set = require('utils').map_set
         telescope.setup({
@@ -117,11 +114,6 @@ return {
             },
         })
         require('telescope').load_extension('fzf')
-        require('telescope').load_extension('yank_history')
-        require('telescope').load_extension('notify')
-        map_set({ 'n' }, 'gy', function()
-            extensions.yank_history.yank_history({ initial_mode = 'normal' })
-        end)
         map_set({ 'n', 'i' }, '<c-p>', function()
             builtin.find_files({
                 cwd = require('utils').get_root_directory(),

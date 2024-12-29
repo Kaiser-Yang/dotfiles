@@ -37,8 +37,13 @@ vim.o.showbreak = '↪'
 vim.o.encoding = 'utf-8'
 vim.o.switchbuf = 'useopen'
 vim.o.foldenable = false
--- set nofoldenable
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.diagnostic.config({
+    update_in_insert = true,
+    virtual_text = false,
+    signs = true,
+    underline = true,
+})
 vim.api.nvim_create_augroup('UserDIY', {})
 -- When leaving normal mode, disable hlsearch
 vim.api.nvim_create_autocmd('ModeChanged', {

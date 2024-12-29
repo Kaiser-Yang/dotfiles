@@ -1,5 +1,8 @@
 return {
     'gbprod/yanky.nvim',
+    dependencies = {
+        'nvim-telescope/telescope.nvim',
+    },
     config = function()
         local map_set = require('utils').map_set
         require('yanky').setup({
@@ -21,6 +24,10 @@ return {
             { desc = 'Put yanked text after cursor and leave the cursor after pasted text' })
         map_set({ 'n', 'x' }, 'gP', '<plug>(YankyGPutBefore)',
             { desc = 'Put yanked text before cursor and leave the cursor after pasted text' })
+        require('telescope').load_extension('yank_history')
+        map_set({ 'n' }, 'gy', function()
+            require('telescope').extensions.yank_history.yank_history({ initial_mode = 'normal' })
+        end)
         -- TODO:
         -- map_set({ 'n' }, ']p', '<plug>(YankyPutIndentAfterLinewise)')
         -- map_set({ 'n' }, ']P', '<plug>(YankyPutIndentAfterLinewise)')
