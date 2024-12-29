@@ -43,15 +43,12 @@ My own configure files for UNIX/Linux tools.
 
 ### Unfixed
 
-* When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line.
 * `<C-N>` can not back to normal when in replacing mode (after pressing `r`). This seems impossible
 to fix, because when press `r<C-N>`, your key sequence is `r<C-N>` (pressing `r` will still waiting
 your input, you can see that through the status line). But `R` is OK, because pressing `R` will let
 you enter `REPLACE` mode, you can use `<C-N>` to go back to normal mode.
 * When there are more than `3` notifications, the cursor will be flickering. This may have something
 to do with the `novim-notify`.
-* In `cmd` search, when you remove the last character, the removed character is still visible.
-* Quit with `qa` may be slow.
 
 ### Fixed
 
@@ -70,6 +67,13 @@ parent directory of `.root`.
 * Python `gd` does not work.
 * No hover highlight.
 * When quit a help file which is editable, this may cause problem.
+* When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line. I
+fixed this by updating the signature of `blank-indentline`.
+* In `cmd` search, when you remove the last character, the removed character is still visible. This
+was fixed by the plugin author.
+* Quit with `qa` may be slow. This is mainly caused by the `auto-pairs` plugin, which create many
+buffer level key bindings, and when you use `qa` to quit, `auto-session` will consume a lot of time
+to save the session.
 
 ## Quick Start
 
@@ -124,7 +128,7 @@ Indeed, if you run `./dot_files.py` with no parameters, it is same with
 
 # Screenshots
 
-This part will only show the screenshots of `nvim`.
+Those screenshots is out of date.
 
 ## Terminal
 
@@ -171,14 +175,14 @@ Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V
 
 ## Basic Shortcuts
 
-| Shortcut    | Mode      | Description |
-| -           | -         | - |
-| \<C-T>      | N I T     | Toggle a terminal |
-| Q           | N         | Quit a window, quit a tab or unload a buffer, not save |
-| S           | N         | Similar with `Q`, but this will execute 'write' first |
-| \<C-N>      | T I V X N | Back to normal mode by `<C-\><C-N>` |
+| Shortcut    | Mode      | Description                                                                                 |
+| -           | -         | -                                                                                           |
+| \<C-T>      | N I T     | Toggle a terminal                                                                           |
+| Q           | N         | Quit a window, quit a tab or unload a buffer, not save                                      |
+| S           | N         | Similar with `Q`, but this will execute 'write' first                                       |
+| \<C-N>      | T I V X N | Back to normal mode by `<C-\><C-N>`                                                         |
 | \<LEADER>r  | N         | Run the current file depends on its filetype, this will onpen a terminal for some filetypes |
-| \<LEADER>ay | N         | Copy all lines of current buffer to plus register |
+| \<LEADER>ay | N         | Copy all lines of current buffer to plus register                                           |
 
 NOTE: The `Q`'s behavior depending on the status. If current buffer is a terminal, `nvimtree`,
 `aerial`, or `help`, this will use `bd!` to unload the buffer. If current tab has more than one
@@ -195,44 +199,44 @@ been closed. There only one terminal buffer, so each terminal has same contents.
 
 ## Window
 
-| Shortcut   | Mode | Description |
-| -          | -    | - |
-| \<LEADER>h | N    | Split window horizontally, and move cursor to the left window |
+| Shortcut   | Mode | Description                                                    |
+| -          | -    | -                                                              |
+| \<LEADER>h | N    | Split window horizontally, and move cursor to the left window  |
 | \<LEADER>l | N    | Split window horizontally, and move cursor to the right window |
-| \<LEADER>t | N    | Create a new tab |
-| \<C-H>     | N T  | Move the cursor to the left window, this can jump over tmux |
-| \<C-J>     | N T  | Move the cursor to the bottom window, this can jump over tmux |
-| \<C-K>     | N T  | Move the cursor to the top window, this can jump over tmux |
-| \<C-L>     | N T  | Move the cursor to the right window, this can jump over tmux |
-| \<LEADER>H | N    | Close the current window, and reopen it at left |
-| \<LEADER>J | N    | Close the current window, and reopen it at bottom |
-| \<LEADER>K | N    | Close the current window, and reopen it at top |
-| \<LEADER>L | N    | Close the current window, and reopen it at right |
-| \<LEADER>n | N    | Go to next tab |
-| \<LEADER>b | N    | Go to previous tab |
-| \<LEADER>1 | N    | Go to the first tab |
-| \<LEADER>2 | N    | Go to the second tab |
-| ...        | ...  | ... |
-| \<LEADER>8 | N    | Go to the eighth tab |
-| \<LEADER>9 | N    | Go to the ninth tab |
-| Up         | N    | Resize +5 for the current window |
-| Down       | N    | Resize -5 for the current window |
-| Left       | N    | Resize -5 vertically for current window |
-| Right      | N    | Resize +5 vertically for current window |
+| \<LEADER>t | N    | Create a new tab                                               |
+| \<C-H>     | N T  | Move the cursor to the left window, this can jump over tmux    |
+| \<C-J>     | N T  | Move the cursor to the bottom window, this can jump over tmux  |
+| \<C-K>     | N T  | Move the cursor to the top window, this can jump over tmux     |
+| \<C-L>     | N T  | Move the cursor to the right window, this can jump over tmux   |
+| \<LEADER>H | N    | Close the current window, and reopen it at left                |
+| \<LEADER>J | N    | Close the current window, and reopen it at bottom              |
+| \<LEADER>K | N    | Close the current window, and reopen it at top                 |
+| \<LEADER>L | N    | Close the current window, and reopen it at right               |
+| \<LEADER>n | N    | Go to next tab                                                 |
+| \<LEADER>b | N    | Go to previous tab                                             |
+| \<LEADER>1 | N    | Go to the first tab                                            |
+| \<LEADER>2 | N    | Go to the second tab                                           |
+| ...        | ...  | ...                                                            |
+| \<LEADER>8 | N    | Go to the eighth tab                                           |
+| \<LEADER>9 | N    | Go to the ninth tab                                            |
+| Up         | N    | Resize +5 for the current window                               |
+| Down       | N    | Resize -5 for the current window                               |
+| Left       | N    | Resize -5 vertically for current window                        |
+| Right      | N    | Resize +5 vertically for current window                        |
 
 NOTE: We can not bind `<C-H>` in insert mode, so in the insert mode, when you press `<C-H>`, it will
 trigger backspace.
 
 ## Copy and Paste
 
-| Shortcut    | Mode | Description |
-| -           | -    | - |
-| Y           | N    | Copy till end of line to unnamed register |
+| Shortcut    | Mode | Description                                                                                      |
+| -           | -    | -                                                                                                |
+| Y           | N    | Copy till end of line to unnamed register                                                        |
 | \<LEADER>y  | N V  | Copy to system clipboard, this is like `y`, for example, you can use `<leader>yw` to copy a word |
-| \<LEADER>ya | N    | Copy all contents in the current buffer to system clipboard |
-| \<LEADER>Y  | N    | Copy till end of line to system clipboard |
-| \<LEADER>p  | N    | Paste from system clipboard |
-| \<LEADER>P  | N    | Paste from system clipboard before cursor |
+| \<LEADER>ya | N    | Copy all contents in the current buffer to system clipboard                                      |
+| \<LEADER>Y  | N    | Copy till end of line to system clipboard                                                        |
+| \<LEADER>p  | N    | Paste from system clipboard                                                                      |
+| \<LEADER>P  | N    | Paste from system clipboard before cursor                                                        |
 
 NOTE: if you want to copy around a bracket, you can use `<LEADER>ya`, too. But you need to  wait
 some time when you press `<LEADER>y` (make sure that there is `"+y` at the right bottom), then you
@@ -240,16 +244,16 @@ can press `a`.
 
 ## Cursor Movement
 
-| Shortcut | Mode | Description |
-| -        | -    | - |
-| \<C-J>   |      | When there is a selection list and `j` will input letter j, `<C-J>` will move the cursor to the next selection |
+| Shortcut | Mode | Description                                                                                                        |
+| -        | -    | -                                                                                                                  |
+| \<C-J>   |      | When there is a selection list and `j` will input letter j, `<C-J>` will move the cursor to the next selection     |
 | \<C-K>   |      | When there is a selection list and `k` will input letter k, `<C-K>` will move the cursor to the previous selection |
-| j        |      | When there is a selection list and you can not input with `j`, `j` will move the cursor to the next selection |
-| k        |      | When there is a selection list and you can not input with `k`, `k` will move the cursor to the previous selection |
-| \<C-J>   | I    | When there is no selection list, `<C-J>` will move the cursor to the next line |
-| \<C-K>   | I    | When there is no selection list, `<C-K>` will move the cursor to the previous line |
-| J        | V    | Move the selected lines down |
-| K        | V    | Move the selected lines up |
+| j        |      | When there is a selection list and you can not input with `j`, `j` will move the cursor to the next selection      |
+| k        |      | When there is a selection list and you can not input with `k`, `k` will move the cursor to the previous selection  |
+| \<C-J>   | I    | When there is no selection list, `<C-J>` will move the cursor to the next line                                     |
+| \<C-K>   | I    | When there is no selection list, `<C-K>` will move the cursor to the previous line                                 |
+| J        | V    | Move the selected lines down                                                                                       |
+| K        | V    | Move the selected lines up                                                                                         |
 
 Note that when `cmp` suggestion list is not shown but `copilot` is shown, it is possible to use
 `<C-J>` and `<C-K>` to move the cursor to the next or previous selection of `copilot`.
@@ -267,15 +271,15 @@ These settings only work in a markdown file.
 Some of the settings below will insert `<++>` as a placeholder symbol, and you can use `,f` to move
 the cursor out of the current block and remove the placeholder symbol.
 
-| Shortcut | Mode | Description |
-| -        | -    | - |
-| ,f       | I    | Move the cursor out of the current block and remove next placeholder symbol |
-| ,t       | I    | Insert command line block and leave the cursor where you can input the command |
+| Shortcut | Mode | Description                                                                      |
+| -        | -    | -                                                                                |
+| ,f       | I    | Move the cursor out of the current block and remove next placeholder symbol      |
+| ,t       | I    | Insert command line block and leave the cursor where you can input the command   |
 | ,b       | I    | Insert bold line block and leave the cursor where you can input the bold content |
-| ,m       | I    | Insert math line block and leave the cursor where you can input the math |
-| ,M       | I    | Insert math block and leave the cursor where you can input the math |
+| ,m       | I    | Insert math line block and leave the cursor where you can input the math         |
+| ,M       | I    | Insert math block and leave the cursor where you can input the math              |
 | ,c       | I    | Insert code block, and leave the cursor where you should input the code language |
-| ,n       | I    | Insert a new line symbol of html |
+| ,n       | I    | Insert a new line symbol of html                                                 |
 
 ## Useful Plugins' Shortcuts
 
@@ -286,26 +290,25 @@ started with the key you press.
 
 ### Commenting
 
-| Shortcut                   | Mode | Description |
-| -                          | -    | - |
-| [count]\<LEADER>c\<LEADER> | N    | Toggle comments (line style) |
-| [count]\<LEADER>cs         | N    | Toggle comments (block style) |
-| \<LEADER>c[count][motion]  | N    | Toggle comments (line style) with motion |
-| \<LEADER>s[count][motion]  | N    | Toggle comments (block style) with motion |
-| \<LEADER>c\<LEADER>        | V    | Toggle comments (line style) of the selected line |
+| Shortcut                   | Mode | Description                                        |
+| -                          | -    | -                                                  |
+| [count]\<LEADER>c\<LEADER> | N    | Toggle comments (line style)                       |
+| [count]\<LEADER>cs         | N    | Toggle comments (block style)                      |
+| \<LEADER>c[count][motion]  | N    | Toggle comments (line style) with motion           |
+| \<LEADER>s[count][motion]  | N    | Toggle comments (block style) with motion          |
+| \<LEADER>c\<LEADER>        | V    | Toggle comments (line style) of the selected line  |
 | \<LEADER>cs                | V    | Toggle comments (block style) of the selected line |
 
 ### Surrounding
 
-| Shortcut              | Mode | Description |
-| -                     | -    | - |
-| ys\<motion>\<bracket> | N    | Surround something |
-| yss\<bracket>         | N    | Surround the whole line with the character you input, this one will put the surrounding in the current line |
-| ySS\<bracket>         | N    | Surround the whole line with the character you input, this one will put the surrounding in new lines |
-| ds\<bracket>          | N    | Delete the surrounding you input |
-| cs\<old>\<new>        | N    | Change the surround with a new one |
-| S\<bracket>           | V    | Surround the selected characters |
-| \<C-B>                | I    | Back insert a surrounding, when a surrounding does not match, you press the close surrounding, the cursor may jump to the next close surrounding rather than inserting a new close surrounding. In this case, you can use `<C-B>` to back insert a close surrounding |
+| Shortcut              | Mode | Description                                          |
+| -                     | -    | -                                                    |
+| ys\<motion>\<bracket> | N    | Surround something                                   |
+| yss\<bracket>         | N    | Surround the whole line with the character you input |
+| ySS\<bracket>         | N    | Surround the whole line with the character you input |
+| ds\<bracket>          | N    | Delete the surrounding you input                     |
+| cs\<old>\<new>        | N    | Change the surround with a new one                   |
+| S\<bracket>           | V    | Surround the selected characters                     |
 
 Some examples of surrounding:
 
@@ -321,84 +324,83 @@ right, the latter will not.
 ### Code Related
 <!--| gh         | N    | Go to the header file |-->
 <!--| H          | N    | Quick fix |-->
-| Shortcut   | Mode | Description |
-| -          | -    | - |
-| gd         | N    | Go to definition |
-| gr         | N    | Go to references |
-| \<LEADER>R | N    | Rename the current symbol |
-| \<LEADER>r | N    | Run the single file depending on its filetype |
-| ]d         | N    | Go to next diagnostic |
-| [d         | N    | Go to previous diagnostic |
+| Shortcut   | Mode | Description                                                           |
+| -          | -    | -                                                                     |
+| gd         | N    | Go to definition                                                      |
+| gr         | N    | Go to references                                                      |
+| \<LEADER>R | N    | Rename the current symbol                                             |
+| \<LEADER>r | N    | Run the single file depending on its filetype                         |
+| ]d         | N    | Go to next diagnostic                                                 |
+| [d         | N    | Go to previous diagnostic                                             |
 | \<LEADER>d | N    | Show document symbols, this can also be used to show variables' types |
 
 ### Git Related
 
-| Shortcut | Mode | Description |
-| -        | -    | - |
-| ]g       | N    | Go to next git hunk |
-| [g       | N    | Go to previous git hunk |
-| ]c       | N    | Go to next git conflict |
-| [c       | N    | Go to previous git conflict |
-| gcu      | N    | Undo (reset) current git hunk |
-| gcd      | N    | Show difference of current git hunk |
-| gcc      | N    | When there is a conflict, this will keep current change |
+| Shortcut | Mode | Description                                              |
+| -        | -    | -                                                        |
+| ]g       | N    | Go to next git hunk                                      |
+| [g       | N    | Go to previous git hunk                                  |
+| ]c       | N    | Go to next git conflict                                  |
+| [c       | N    | Go to previous git conflict                              |
+| gcu      | N    | Undo (reset) current git hunk                            |
+| gcd      | N    | Show difference of current git hunk                      |
+| gcc      | N    | When there is a conflict, this will keep current change  |
 | gci      | N    | When there is a conflict, this will keep incoming change |
-| gcb      | N    | When there is a conflict, this will keep both changes |
-| gcn      | N    | When there is a conflict, this will keep none change |
+| gcb      | N    | When there is a conflict, this will keep both changes    |
+| gcn      | N    | When there is a conflict, this will keep none change     |
 
 ### Automatic Completion
 
-| Shortcut | Mode | Description |
-| -        | -    | - |
-| C-F      | I    | Select one line when `copilot` suggestions are shown |
-| A-F      | I    | Select one word when `copilot` suggestions are shown |
-| A-Enter  | I    | Select all when `copilot` suggestions are shown |
-| \<ENTER> | I    | Select current suggestion when one `cmp` suggestion is selected |
+| Shortcut | Mode | Description                                                            |
+| -        | -    | -                                                                      |
+| C-F      | I    | Select one line when `copilot` suggestions are shown                   |
+| A-F      | I    | Select one word when `copilot` suggestions are shown                   |
+| A-Enter  | I    | Select all when `copilot` suggestions are shown                        |
+| \<ENTER> | I    | Select current suggestion when one `cmp` suggestion is selected        |
 | \<ENTER> | I    | Select first suggestion when `cmp` is not shown and `copilot` is shown |
-| \<C-C>   | I    | Close all completion when no selection in `cmp`; close `cmp` completion when there is a selection of `cmp`; close copilot completion when `cmp` invisible and copilit visible; back to normal |
 
 ### Others
 <!--| \<C-Q>     | N I  | Open undo history |-->
 <!--| \<LEADER>a | N    | Align a block, `:`, `=` and `\|` are supported, for example, you can use `<LEADER>a=` to align a block of assignments |-->
-| Shortcut          | Mode | Description |
-| -                 | -    | - |
-| \<C-W>            | N I  | Toggle code outline |
-| \<C-E>            | N I  | Toggle explorer |
-| \<C-P>            | N I  | Find files in the current directory or a git root directory |
-| \<C-F>            | N I  | Find contents in the current directory or a git root directory |
-| ys{motion}f{name} | N    | Surround the part with a function call |
-| dsf               | N    | Delete a function call, only parameters will be left |
-| csf{name}         | N    | Change a function call with a new one |
-| \<CR>             | N    | In file explorer, this will enter a directory or open a file |
+| Shortcut          | Mode | Description                                                                                                  |
+| -                 | -    | -                                                                                                            |
+| \<C-W>            | N I  | Toggle code outline                                                                                          |
+| \<C-E>            | N I  | Toggle explorer                                                                                              |
+| \<C-P>            | N I  | Find files in the current directory or a git root directory                                                  |
+| \<C-F>            | N I  | Find contents in the current directory or a git root directory                                               |
+| ys{motion}f{name} | N    | Surround the part with a function call                                                                       |
+| dsf               | N    | Delete a function call, only parameters will be left                                                         |
+| csf{name}         | N    | Change a function call with a new one                                                                        |
+| \<CR>             | N    | In file explorer, this will enter a directory or open a file                                                 |
 | \<BS>             | N    | In file explorer, this will go to the `..` directory. You can use `?` to see more mappings in file explorer. |
-| gy                | N    | List all the yanked contents |
-| \<LEADER>ay       | N    | Yank all contents |
-| \<ESC>            | I    | When use `telescope` to search, `<ESC>` will let you back to normal mode |
-| \<ESC>            | N    | When use `telescope` to search and you are in normal mode, `<ESC>` will quit `telescope` |
-| \<C-C>            | I    | When use `telescope` to search and you are in insert mode, `<C-C>` will quit `telescope` |
-| gpt               | N    | Toggle `copilot-chat` window |
-| gpt               | V    | Input `:CopilotChat`, you can use `<TAB>` to trigger menu list of all commands |
-| gb                | N    | Buffer pick |
-| \<LEADER>n        | N    | Go to the right buffer shown in `bufline` |
-| \<LEADER>b        | N    | Go to the left buffer shown in `bufline` |
-| \<C-D>            | I    | Scroll down the completion preview window, if there is one |
-| \<C-U>            | I    | Scroll up the completion preview window, if there is one |
-| gz                | N    | Toggle Zen Mode |
-| \<C-S>            | I    | Search the selected bib in cmp selection |
+| gy                | N    | List all the yanked contents                                                                                 |
+| \<LEADER>ay       | N    | Yank all contents                                                                                            |
+| \<ESC>            | I    | When use `telescope` to search, `<ESC>` will let you back to normal mode                                     |
+| \<ESC>            | N    | When use `telescope` to search and you are in normal mode, `<ESC>` will quit `telescope`                     |
+| \<C-C>            | I    | When use `telescope` to search and you are in insert mode, `<C-C>` will quit `telescope`                     |
+| gpt               | N    | Toggle `copilot-chat` window                                                                                 |
+| gpt               | V    | Input `:CopilotChat`, you can use `<TAB>` to trigger menu list of all commands                               |
+| gb                | N    | Buffer pick                                                                                                  |
+| \<LEADER>n        | N    | Go to the right buffer shown in `bufline`                                                                    |
+| \<LEADER>b        | N    | Go to the left buffer shown in `bufline`                                                                     |
+| \<C-D>            | I    | Scroll down the completion preview window, if there is one                                                   |
+| \<C-U>            | I    | Scroll up the completion preview window, if there is one                                                     |
+| gz                | N    | Toggle Zen Mode                                                                                              |
+| \<C-S>            | I    | Search the selected bib in cmp selection                                                                     |
 
 ### Debugger
 
-| Shortcut   | Mode | Description |
-| -          | -    | - |
-| \<LEADER>D | N    | Toggle the `dap-ui`. |
+| Shortcut   | Mode | Description                             |
+| -          | -    | -                                       |
+| \<LEADER>D | N    | Toggle the `dap-ui`.                    |
 | \<c-b>     | N    | Toggle the break point at current line. |
-| \<F4>      | N    | Terminate current process. |
-| \<F5>      | N    | Continue. |
-| \<F6>      | N    | Restart current process. |
-| \<F9>      | N    | Back. |
-| \<F10>     | N    | Next (step over). |
-| \<F11>     | N    | Step in. |
-| \<F12>     | N    | Finish (step out). |
+| \<F4>      | N    | Terminate current process.              |
+| \<F5>      | N    | Continue.                               |
+| \<F6>      | N    | Restart current process.                |
+| \<F9>      | N    | Back.                                   |
+| \<F10>     | N    | Next (step over).                       |
+| \<F11>     | N    | Step in.                                |
+| \<F12>     | N    | Finish (step out).                      |
 
 # Contribution
 
