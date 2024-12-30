@@ -144,7 +144,11 @@ return {
                             -- filter non-acceptable rime items
                             return vim.tbl_filter(function(item)
                                 local rime_ls = require('plugins.rime_ls')
-                                return not rime_ls.is_rime_item(item) or rime_ls.rime_item_acceptable(item)
+                                if not rime_ls.is_rime_item(item) then
+                                    return true
+                                end
+                                item.detail = nil
+                                return rime_ls.rime_item_acceptable(item)
                             end, items)
                         end
                     },
