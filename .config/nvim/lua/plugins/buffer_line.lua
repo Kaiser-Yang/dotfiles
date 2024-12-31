@@ -143,6 +143,8 @@ return {
             { desc = 'Go to the 10th buffer' })
         map_set({ 'n' }, '<leader>b', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Buffer switch left' })
         map_set({ 'n' }, '<leader>n', '<cmd>BufferLineCycleNext<cr>', { desc = 'Buffer switch right' })
+        map_set({ 'n' }, 'H', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Buffer switch left' })
+        map_set({ 'n' }, 'L', '<cmd>BufferLineCycleNext<cr>', { desc = 'Buffer switch right' })
         map_set({ 'n' }, "gb", "<cmd>BufferLinePick<CR>", { desc = 'Buffer pick' })
     end
 }
