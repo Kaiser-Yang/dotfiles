@@ -325,7 +325,7 @@ return {
                             {
                                 'symlink_target',
                                 highlight = 'NeoTreeSymbolicLinkTarget',
-                                zindex = 10
+                                zindex = 40
                             },
                             {
                                 'file_size',
@@ -356,7 +356,7 @@ return {
                             {
                                 'symlink_target',
                                 highlight = 'NeoTreeSymbolicLinkTarget',
-                                zindex = 10
+                                zindex = 40
                             },
                             {
                                 'file_size',
@@ -387,26 +387,29 @@ return {
             end
         end
         map_set({ 'n', 'i' }, '<c-q>', function()
+            local root_dir = get_root_directory()
             move_cursor_when_visible()
             require('neo-tree.command').execute({
                 source = 'git_status',
                 reveal = true,
-                dir = get_root_directory(),
+                dir = root_dir,
             })
         end)
         map_set({ 'n', 'i' }, '<c-e>', function()
+            local root_dir = get_root_directory()
             move_cursor_when_visible()
             require('neo-tree.command').execute({
                 source = 'filesystem',
                 reveal = true,
-                dir = get_root_directory(),
+                dir = root_dir,
             })
         end)
         map_set({ 'n', 'i' }, '<c-w>', function()
+            local root_dir = get_root_directory()
             move_cursor_when_visible()
             require('neo-tree.command').execute({
                 source = 'document_symbols',
-                dir = get_root_directory(),
+                dir = root_dir,
             })
         end)
         -- TODO:
