@@ -4,7 +4,7 @@ vim.g.root_markers = { '.git', '.root', 'pom.xml' }
 
 vim.g.mapleader = ' '
 
--- These two lines are required by the nvim-tree
+-- Disable netrw
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
@@ -37,7 +37,7 @@ vim.o.showbreak = '↪'
 vim.o.encoding = 'utf-8'
 vim.o.switchbuf = 'useopen'
 vim.o.foldenable = false
-vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.o.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.diagnostic.config({
     update_in_insert = true,
     virtual_text = false,

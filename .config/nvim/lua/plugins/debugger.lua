@@ -91,24 +91,24 @@ return {
         vim.fn.sign_define('DapLogPoint', { text = '📔', texthl = '', linehl = '', numhl = '' })
         vim.fn.sign_define('DapStopped', { text = '👉', texthl = '', linehl = '', numhl = '' })
         local dap_ui_visible = false
-        local nvim_tree_visible = false
-        local nvim_tree_api = require('nvim-tree.api')
+        local need_restore_explorer = false
         local function dap_ui_toggle()
             dap_ui_visible = not dap_ui_visible
             dap_ui.toggle()
             if dap_ui_visible then
-                if nvim_tree_api.tree.is_visible() then
-                    nvim_tree_visible = true
-                    nvim_tree_api.tree.close()
-                end
-            else
-                if nvim_tree_visible then
-                    nvim_tree_visible = false
-                    nvim_tree_api.tree.toggle({
-                        cwd = require('utils').get_root_directory(),
-                        focus = false,
+                if vim.g.explorer_visible then
+                    need_restore_explorer = true
+                    require('neo-tree.command').execute({
+                        action = 'close'
                     })
                 end
+            elseif need_restore_explorer then
+                need_restore_explorer = false
+                require('neo-tree.command').execute({
+                    action = 'show',
+                    source = 'last',
+                    dir = require('utils').get_root_directory(),
+                })
             end
         end
         local map_set = require('utils').map_set

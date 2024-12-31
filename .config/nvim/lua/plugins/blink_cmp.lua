@@ -132,19 +132,22 @@ return {
                 default = { 'lsp', 'path', 'luasnip', 'buffer', 'ripgrep', 'lazydev' },
                 providers = {
                     lsp = {
-                        fallbacks = { 'ripgrep', 'buffer' },
+                        fallbacks = nil,
                         --- @param items blink.cmp.CompletionItem[]
                         transform_items = function(_, items)
+                            local TYPE_ALIAS = require('blink.cmp.types').CompletionItemKind
                             -- demote snippets
                             for _, item in ipairs(items) do
-                                if item.kind == require('blink.cmp.types').CompletionItemKind.Snippet then
+                                if item.kind == TYPE_ALIAS.Snippet then
                                     item.score_offset = item.score_offset - 3
                                 end
                             end
                             -- filter non-acceptable rime items
+                            --- @param item blink.cmp.CompletionItem
                             return vim.tbl_filter(function(item)
                                 local rime_ls = require('plugins.rime_ls')
-                                if not rime_ls.is_rime_item(item) then
+                                if not rime_ls.is_rime_item(item) and
+                                    item.kind ~= TYPE_ALIAS.Text then
                                     return true
                                 end
                                 item.detail = nil
@@ -152,7 +155,7 @@ return {
                             end, items)
                         end
                     },
-                    buffer = { max_items = 5 },
+                    buffer = { max_items = 5, fallbacks = { 'ripgrep' } },
                     luasnip = { name = 'Snip' },
                     lazydev = {
                         name = 'LazyDev',

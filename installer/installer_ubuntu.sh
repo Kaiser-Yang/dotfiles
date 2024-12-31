@@ -62,11 +62,16 @@ if ! command -v fish; then
     fi
 fi
 
-if !command -v yarn; then
+if ! command -v yarn; then
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - || exit 1
     sudo sh -c 'echo "deb https://dl.yarnpkg.com/debian/ stable main" >> /etc/apt/sources.list.d/yarn.list' || exit 1
     sudo apt update || exit 1
     sudo apt install -y yarn || exit 1
+fi
+
+if ! command -v fdfind; then
+    sudo apt install -y fd-find || exit 1
+    sudo ln -s "$(command -v fdfind)" /usr/bin/fdfind || exit 1
 fi
 
 # universal-ctags are used for the outlooks of markdown files

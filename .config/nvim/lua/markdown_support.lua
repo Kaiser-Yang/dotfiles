@@ -89,7 +89,7 @@ local function toggle_check_box_once(line_number)
         context = vim.api.nvim_buf_get_lines(0, line_number - 1, line_number, true)[1]
         item = context:match(item_regex.todo_list)
         if item then
-            local new_line = string.gsub(context,
+            local new_line = context:match('^ *') .. string.gsub(context,
                 item_regex.todo_list,
                 item:match('x') and '- [ ] ' or '- [x] ')
             vim.api.nvim_buf_set_lines(0, line_number - 1, line_number, true,

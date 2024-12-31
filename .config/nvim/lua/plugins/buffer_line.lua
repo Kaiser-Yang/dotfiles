@@ -11,7 +11,7 @@ return {
             highlights = require('catppuccin.groups.integrations.bufferline').get(),
             options = {
                 numbers = function(opts)
-                    local state = require("bufferline.state")
+                    local state = require('bufferline.state')
                     for i, buf in ipairs(state.components) do
                         if buf.id == opts.id then return tostring(i) end
                     end
@@ -19,10 +19,10 @@ return {
                 end,
                 offsets = {
                     {
-                        filetype = "NvimTree",
-                        text = "File Explorer",
-                        highlight = "Directory",
-                        text_align = "left",
+                        filetype = 'neo-tree',
+                        text = 'NeoTree',
+                        highlight = 'Directory',
+                        text_align = 'left',
                     },
                 },
                 close_command = function(bufnum)
@@ -71,11 +71,11 @@ return {
             end
             -- unload all empty buffers
             for _, buf in ipairs(current_tab_empty_buffers) do
-                vim.cmd('silent! bd! ' .. buf)
+                vim.cmd('silent bd! ' .. buf)
             end
             if #vim.api.nvim_list_tabpages() > 1 then
                 if current_tab_hiddent_buf_cnt > 0 then
-                    vim.cmd 'silent! tabclose!'
+                    vim.cmd('silent tabclose!')
                 end
             else
                 vim.cmd('qa!')
@@ -84,7 +84,7 @@ return {
 
         local function quit_not_save_on_buffer()
             if not utils.is_visible_buffer(vim.api.nvim_get_current_buf()) then
-                vim.cmd('silent! q!')
+                vim.cmd('silent q!')
                 return
             end
             local current_tab_visible_buf_cnt = 0
@@ -94,7 +94,7 @@ return {
                 end
             end
             if current_tab_visible_buf_cnt > 1 then
-                vim.cmd('silent! q')
+                vim.cmd('silent q')
                 return
             end
             local visible_buf_cnt = 0
@@ -108,10 +108,10 @@ return {
                 pcall(require("bufdelete").bufdelete, 0, true)
                 auto_close_empty_buffer()
             elseif tab_cnt > 1 then
-                vim.cmd('silent! q!')
+                vim.cmd('silent q!')
                 auto_close_empty_buffer()
             elseif visible_buf_cnt == 1 then
-                vim.cmd('silent! qa!')
+                vim.cmd('silent qa!')
             end
         end
 

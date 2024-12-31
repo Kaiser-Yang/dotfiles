@@ -12,7 +12,7 @@ return {
                 'dirbuf',
                 'dirvish',
                 'fugitive',
-                'NvimTree',
+                'neo-tree',
             },
             under_cursor = true,
             min_count_to_highlight = 1,
