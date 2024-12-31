@@ -59,11 +59,32 @@ return {
                         end,
                     }
                 },
+                layout_strategy = 'flex',
                 layout_config = {
                     horizontal = {
                         height = 0.75,
                         width = 0.75,
                         prompt_position = 'top'
+                    },
+                    vertical = {
+                        height = 0.75,
+                        width = 0.75,
+                        prompt_position = 'top',
+                    },
+                    flex = {
+                        flip_columns = 170,
+                        horizontal = {
+                            height = 0.75,
+                            width = 0.75,
+                            prompt_position = 'top',
+                            preview_width = 0.6,
+                        },
+                        vertical = {
+                            height = 0.75,
+                            width = 0.75,
+                            prompt_position = 'top',
+                            preview_height = 0.6,
+                        },
                     }
                 },
                 sorting_strategy = 'ascending',
@@ -119,7 +140,7 @@ return {
                 cwd = require('utils').get_root_directory(),
                 hidden = true,
                 no_ignore = true,
-                no_ignore_parent = true
+                no_ignore_parent = true,
             })
         end)
         map_set({ 'n', 'i' }, '<c-f>', function()
