@@ -131,7 +131,9 @@ return {
                 }
             },
             window                    = {
-                width = '15%',
+                width = function()
+                    return math.ceil(math.max(40, 0.15 * vim.o.columns))
+                end,
                 mappings = {
                     ['e'] = 'toggle_auto_expand_width',
                     ['<2-LeftMouse>'] = {
@@ -388,28 +390,31 @@ return {
         end
         map_set({ 'n', 'i' }, '<c-q>', function()
             local root_dir = get_root_directory()
+            local current_file = vim.fn.expand('%:p')
             move_cursor_when_visible()
             require('neo-tree.command').execute({
                 source = 'git_status',
                 reveal = true,
+                reveal_file = current_file,
                 dir = root_dir,
             })
         end)
+        -- BUG: the first time use will not set the cursor correctly
         map_set({ 'n', 'i' }, '<c-e>', function()
             local root_dir = get_root_directory()
+            local current_file = vim.fn.expand('%:p')
             move_cursor_when_visible()
             require('neo-tree.command').execute({
                 source = 'filesystem',
                 reveal = true,
+                reveal_file = current_file,
                 dir = root_dir,
             })
         end)
         map_set({ 'n', 'i' }, '<c-w>', function()
-            local root_dir = get_root_directory()
             move_cursor_when_visible()
             require('neo-tree.command').execute({
                 source = 'document_symbols',
-                dir = root_dir,
             })
         end)
         -- TODO:
