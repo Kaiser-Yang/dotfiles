@@ -5,6 +5,8 @@ return {
     require('plugins.lua_line'),
     require('plugins.indent_blank_line'),
     require('plugins.explorer'),
+    require('plugins.smooth_scroll'),
+    require('plugins.smooth_cursor'),
 
     -- LSP
     require('plugins.mason'),
