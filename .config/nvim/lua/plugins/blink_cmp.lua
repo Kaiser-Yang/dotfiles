@@ -4,6 +4,7 @@ return {
         dependencies = {
             'L3MON4D3/LuaSnip',
             'mikavilpas/blink-ripgrep.nvim',
+            'Kaiser-Yang/blink-cmp-dictionary',
         },
         version = '*',
 
@@ -129,8 +130,38 @@ return {
                 jump = function(direction) require('luasnip').jump(direction) end,
             },
             sources = {
-                default = { 'lsp', 'path', 'luasnip', 'buffer', 'ripgrep', 'lazydev' },
+                default = { 'lsp', 'path', 'luasnip', 'buffer', 'ripgrep', 'lazydev', 'dictionary' },
                 providers = {
+                    dictionary = {
+                        module = 'blink-cmp-dictionary',
+                        name = 'Dict',
+                        max_items = 5,
+                        score_offset = -3,
+                        --- @module 'blink-cmp-dictionary'
+                        --- @type blink-cmp-dictionary.Options
+                        opts = {
+                            prefix_min_len = 3,
+                            get_command = {
+                                'rg',
+                                '--color=never',
+                                '--no-line-number',
+                                '--no-messages',
+                                '--no-filename',
+                                '--ignore-case',
+                                '--',
+                                '${prefix}',
+                                vim.fn.expand('~/.config/nvim/dict/en_dict.txt'),
+                            },
+                            documentation = {
+                                enable = true,
+                                get_command = {
+                                    'wn',
+                                    '${word}',
+                                    '-over'
+                                }
+                            },
+                        },
+                    },
                     lsp = {
                         fallbacks = nil,
                         --- @param items blink.cmp.CompletionItem[]
