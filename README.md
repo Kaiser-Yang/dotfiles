@@ -213,8 +213,6 @@ been closed. There only one terminal buffer, so each terminal has same contents.
 | \<LEADER>K | N    | Close the current window, and reopen it at top                 |
 | \<LEADER>L | N    | Close the current window, and reopen it at right               |
 | \<LEADER>n | N    | Go to next tab                                                 |
-| \<LEADER>b | N    | Go to previous tab                                             |
-| \<LEADER>1 | N    | Go to the first tab                                            |
 | \<LEADER>2 | N    | Go to the second tab                                           |
 | ...        | ...  | ...                                                            |
 | \<LEADER>8 | N    | Go to the eighth tab                                           |
@@ -381,8 +379,8 @@ right, the latter will not.
 | gpt               | N    | Toggle `copilot-chat` window                                                                                 |
 | gpt               | V    | Input `:CopilotChat`, you can use `<TAB>` to trigger menu list of all commands                               |
 | gb                | N    | Buffer pick                                                                                                  |
-| \<LEADER>n        | N    | Go to the right buffer shown in `bufline`                                                                    |
-| \<LEADER>b        | N    | Go to the left buffer shown in `bufline`                                                                     |
+| L                 | N    | Go to the right buffer shown in `bufline`                                                                    |
+| H                 | N    | Go to the left buffer shown in `bufline`                                                                     |
 | \<C-D>            | I    | Scroll down the completion preview window, if there is one                                                   |
 | \<C-U>            | I    | Scroll up the completion preview window, if there is one                                                     |
 | gz                | N    | Toggle Zen Mode                                                                                              |
