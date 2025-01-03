@@ -112,12 +112,14 @@ return {
             filetype = vim.g.rime_ls_support_filetype,
         })
         local lspconfig = require('lspconfig')
-        lspconfig.pyright.setup({ capabilities = lsp_capabilities })
-        lspconfig.cmake.setup({ capabilities = lsp_capabilities })
-        lspconfig.ts_ls.setup({ capabilities = lsp_capabilities })
         lspconfig.clangd.setup({ capabilities = lsp_capabilities })
+        lspconfig.cmake.setup({ capabilities = lsp_capabilities })
+        lspconfig.pyright.setup({ capabilities = lsp_capabilities })
+        lspconfig.ts_ls.setup({ capabilities = lsp_capabilities })
         lspconfig.jsonls.setup({ capabilities = lsp_capabilities })
         lspconfig.lemminx.setup({ capabilities = lsp_capabilities })
+        lspconfig.yamlls.setup({ capabilities = lsp_capabilities })
+        lspconfig.volar.setup({ capabilities = lsp_capabilities })
         lspconfig.bashls.setup({ capabilities = lsp_capabilities })
         lspconfig.lua_ls.setup({
             capabilities = lsp_capabilities,
