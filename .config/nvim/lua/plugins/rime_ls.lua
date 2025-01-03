@@ -29,7 +29,7 @@ function M.rime_item_acceptable(item)
     return
         not contains_unacceptable_character(item.label)
         or
-        item.label:match("%d%d%d%d%-%d%d%-%d%d %d%d:%d%d:%d%d%")
+        item.label:match("%d%d%d%d%-%d%d%-%d%d %d%d:%d%d:%d%d")
 end
 
 function M.rime_status_icon()
@@ -60,13 +60,17 @@ end
 
 --- @param opts RimeSetupOpts
 function M.setup(opts)
+    opts.filetype = opts and opts.filetype or { '*' }
+    if type(opts.filetype) == 'string' then
+        opts.filetype = { opts.filetype }
+    end
     local configs = require('lspconfig.configs')
     vim.g.rime_enabled = false
     configs.rime_ls = {
         default_config = {
             name = "rime_ls",
             cmd = { vim.fn.expand '~/rime-ls/target/release/rime_ls' },
-            filetypes = opts and opts.filetype or { '*' },
+            filetypes = opts.filetype,
             single_file_support = true,
         },
         settings = {},

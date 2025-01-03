@@ -9,7 +9,9 @@ vim.g.disable_rime_ls_pattern = {
     -- disable in ''
     '\'(.*)\'',
     -- disable in ""
-    '"(.*)"'
+    '"(.*)"',
+    -- disable in []
+    '%[.*%]',
 }
 
 vim.g.mapleader = ' '
