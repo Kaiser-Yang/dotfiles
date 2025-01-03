@@ -10,8 +10,6 @@ local function rime_on_attach(client, _)
         )
     end, { nargs = 0 })
 
-    local max_code = 4
-    local alphabet = 'abcdefghijklmnopqrstuvwxy'
     local mapped_punc = {
         [','] = '，',
         ['.'] = '。',
@@ -21,12 +19,6 @@ local function rime_on_attach(client, _)
         -- FIX: can not work now
         -- [';'] = '；',
     }
-
-    local feedkeys = require('utils').feedkeys
-
-    local function match_alphabet(txt)
-        return string.match(txt, '^[' .. alphabet .. ']+$') ~= nil
-    end
 
     -- auto accept when there is only one rime item after inputting a number
     require('blink.cmp.completion.list').show_emitter:on(function(event)
@@ -55,39 +47,6 @@ local function rime_on_attach(client, _)
         end
         vim.cmd('RimeToggle')
     end)
-
-    -- Select first entry when typing more than max_code
-    for i = 1, #alphabet do
-        local k = alphabet:sub(i, i)
-        map_set({ 'i' }, k, function()
-            local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
-            local confirmed = false
-            if vim.g.rime_enabled and cursor_column >= max_code then
-                local content_before_cursor = string.sub(vim.api.nvim_get_current_line(), 1, cursor_column)
-                local code = string.sub(content_before_cursor, cursor_column - max_code + 1, cursor_column)
-                if match_alphabet(code) then
-                    -- This is for wubi users using 'z' as reverse look up
-                    if not string.match(content_before_cursor, 'z[' .. alphabet .. ']*$') then
-                        local first_rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(1)
-                        if #first_rime_item_index ~= 1 then
-                            -- clear the wrong code
-                            for _ = 1, max_code do
-                                feedkeys('<bs>', 'n')
-                            end
-                        else
-                            require('blink.cmp').accept({ index = first_rime_item_index[1] })
-                            confirmed = true
-                        end
-                    end
-                end
-            end
-            if confirmed then
-                vim.schedule(function() feedkeys(k, 'n') end)
-            else
-                feedkeys(k, 'n')
-            end
-        end)
-    end
 end
 return {
     'neovim/nvim-lspconfig',
