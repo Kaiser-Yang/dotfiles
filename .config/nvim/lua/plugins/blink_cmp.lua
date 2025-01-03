@@ -164,8 +164,9 @@ return {
                     },
                     lsp = {
                         fallbacks = nil,
+                        --- @param context blink.cmp.Context
                         --- @param items blink.cmp.CompletionItem[]
-                        transform_items = function(_, items)
+                        transform_items = function(context, items)
                             local TYPE_ALIAS = require('blink.cmp.types').CompletionItemKind
                             -- demote snippets
                             for _, item in ipairs(items) do
@@ -180,6 +181,9 @@ return {
                                 if not rime_ls.is_rime_item(item) and
                                     item.kind ~= TYPE_ALIAS.Text then
                                     return true
+                                end
+                                if require('utils').rime_ls_disabled(context) then
+                                    return false
                                 end
                                 item.detail = nil
                                 return rime_ls.rime_item_acceptable(item)

@@ -39,6 +39,7 @@ local function rime_on_attach(client, _)
 
     local map_set = require('utils').map_set
     local map_del = require('utils').map_del
+    local utils = require('utils')
     -- Toggle rime
     -- This will toggle Chinese punctuations too
     map_set({ 'n', 'i' }, '<c-space>', function()
@@ -49,7 +50,14 @@ local function rime_on_attach(client, _)
             end
         else
             for k, v in pairs(mapped_punc) do
-                map_set({ 'i' }, k .. '<space>', v)
+                map_set({ 'i' }, k .. '<space>', function()
+                    if utils.rime_ls_disabled({ line = vim.api.nvim_get_current_line(),
+                            cursor = vim.api.nvim_win_get_cursor(0) }) then
+                        feedkeys(k .. '<space>', 'n')
+                    else
+                        feedkeys(v, 'n')
+                    end
+                end)
             end
         end
         vim.cmd('RimeToggle')
@@ -61,7 +69,10 @@ local function rime_on_attach(client, _)
         map_set({ 'i' }, k, function()
             local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
             local confirmed = false
-            if vim.g.rime_enabled and cursor_column >= max_code and vim.bo.buftype ~= 'prompt' then
+            if vim.g.rime_enabled and cursor_column >= max_code and vim.bo.buftype ~= 'prompt'
+                and
+                not utils.rime_ls_disabled({ line = vim.api.nvim_get_current_line(),
+                    cursor = vim.api.nvim_win_get_cursor(0) }) then
                 local content_before_cursor = string.sub(vim.api.nvim_get_current_line(),
                     1, cursor_column)
                 local code = string.sub(content_before_cursor,

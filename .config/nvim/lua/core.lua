@@ -2,6 +2,16 @@
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text' }
 vim.g.root_markers = { '.git', '.root', 'pom.xml' }
 
+-- When input method is enabled, disable the following patterns
+vim.g.disable_rime_ls_pattern = {
+    -- disable in ``
+    '`(.*)`',
+    -- disable in ''
+    '\'(.*)\'',
+    -- disable in ""
+    '"(.*)"'
+}
+
 vim.g.mapleader = ' '
 
 -- Disable netrw

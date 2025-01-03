@@ -2,6 +2,26 @@ local M = {}
 
 local map = vim.keymap
 
+--- Return if rime_ls should be disabled in current context
+function M.rime_ls_disabled(context)
+    local line = context.line
+    local cursor_column = context.cursor[2]
+    for _, pattern in ipairs(vim.g.disable_rime_ls_pattern) do
+        local start_pos = 1
+        while true do
+            local match_start, match_end = string.find(line, pattern, start_pos)
+            if not match_start then
+                break
+            end
+            if cursor_column >= match_start and cursor_column < match_end then
+                return true
+            end
+            start_pos = match_end + 1
+        end
+    end
+    return false
+end
+
 --- @param keys string
 --- @param mode string
 function M.feedkeys(keys, mode)
