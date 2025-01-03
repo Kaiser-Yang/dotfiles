@@ -139,8 +139,6 @@ return {
             builtin.find_files({
                 cwd = require('utils').get_root_directory(),
                 hidden = true,
-                no_ignore = true,
-                no_ignore_parent = true,
             })
         end)
         map_set({ 'n', 'i' }, '<c-f>', function()
