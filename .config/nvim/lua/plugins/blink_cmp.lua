@@ -33,7 +33,7 @@ return {
                     max_height = 15,
                     scrolloff = 0,
                     draw = {
-                        align_to_component = 'kind_icon',
+                        align_to = 'kind_icon',
                         padding = 0,
                         columns = {
                             { 'kind_icon', },
