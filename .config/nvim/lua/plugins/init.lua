@@ -52,6 +52,7 @@ return {
     require('plugins.terminal'),
     require('plugins.zen_mode'),
     require('plugins.auto_tag'),
+    require('plugins.big_file'),
 
     require('plugins.latex'),
 

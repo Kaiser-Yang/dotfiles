@@ -27,16 +27,6 @@ local function rime_on_attach(client, _)
         return string.match(txt, '^[' .. alphabet .. ']+$') ~= nil
     end
 
-    -- auto accept when there is only one rime item after inputting a number
-    require('blink.cmp.completion.list').show_emitter:on(function(event)
-        if not vim.g.rime_enabled then return end
-        local col = vim.fn.col('.') - 1
-        if event.context.line:sub(col, col):match('%d') == nil then return end
-        local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(2, event.items)
-        if #rime_item_index ~= 1 then return end
-        require('blink.cmp').accept({ index = rime_item_index[1] })
-    end)
-
     local map_set = require('utils').map_set
     local map_del = require('utils').map_del
     local utils = require('utils')
