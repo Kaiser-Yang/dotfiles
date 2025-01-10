@@ -142,45 +142,26 @@ return {
                     git = {
                         -- Because we use filetype to enable the source,
                         -- we can make the score higher
-                        -- async = true,
-                        timeout_ms = 30,
                         score_offset = 100,
                         module = 'blink-cmp-git',
                         name = 'Git',
                         enabled = function()
                             return vim.o.filetype == 'gitcommit' or vim.o.filetype == 'markdown'
                         end,
+                        --- @module 'blink-cmp-git'
+                        --- @type blink-cmp-git.Options
                         opts = {
                         }
                     },
                     dictionary = {
                         module = 'blink-cmp-dictionary',
                         name = 'Dict',
+                        min_keyword_length = 3,
                         max_items = 5,
                         score_offset = -3,
                         --- @module 'blink-cmp-dictionary'
                         --- @type blink-cmp-dictionary.Options
                         opts = {
-                            prefix_min_len = 3,
-                            get_command = {
-                                'rg',
-                                '--color=never',
-                                '--no-line-number',
-                                '--no-messages',
-                                '--no-filename',
-                                '--ignore-case',
-                                '--',
-                                '${prefix}',
-                                vim.fn.expand('~/.config/nvim/dict/en_dict.txt'),
-                            },
-                            documentation = {
-                                enable = true,
-                                get_command = {
-                                    'wn',
-                                    '${word}',
-                                    '-over'
-                                }
-                            },
                         },
                     },
                     lsp = {
