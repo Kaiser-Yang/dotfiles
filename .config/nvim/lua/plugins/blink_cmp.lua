@@ -5,6 +5,10 @@ return {
             'L3MON4D3/LuaSnip',
             'mikavilpas/blink-ripgrep.nvim',
             'Kaiser-Yang/blink-cmp-dictionary',
+            {
+                'Kaiser-Yang/blink-cmp-git',
+                dependencies = { 'nvim-lua/plenary.nvim' }
+            }
         },
         version = '*',
 
@@ -124,8 +128,31 @@ return {
             },
             snippets = { preset = 'luasnip' },
             sources = {
-                default = { 'lsp', 'path', 'snippets', 'buffer', 'ripgrep', 'lazydev', 'dictionary' },
+                default = {
+                    'lsp',
+                    'path',
+                    'snippets',
+                    'buffer',
+                    'ripgrep',
+                    'lazydev',
+                    'dictionary',
+                    'git',
+                },
                 providers = {
+                    git = {
+                        -- Because we use filetype to enable the source,
+                        -- we can make the score higher
+                        -- async = true,
+                        timeout_ms = 30,
+                        score_offset = 100,
+                        module = 'blink-cmp-git',
+                        name = 'Git',
+                        enabled = function()
+                            return vim.o.filetype == 'gitcommit' or vim.o.filetype == 'markdown'
+                        end,
+                        opts = {
+                        }
+                    },
                     dictionary = {
                         module = 'blink-cmp-dictionary',
                         name = 'Dict',
