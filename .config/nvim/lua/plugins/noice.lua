@@ -7,6 +7,19 @@ return {
     },
     config = function()
         require('noice').setup {
+            -- FIX: copilot gives this all the time
+            -- see: https://github.com/zbirenbaum/copilot.lua/issues/321
+            routes = {
+                {
+                    filter = {
+                        event = 'msg_show',
+                        any = {
+                            { find = 'Agent service not initialized' },
+                        },
+                    },
+                    opts = { skip = true },
+                },
+            },
             lsp = {
                 override = {
                     ['vim.lsp.util.convert_input_to_markdown_lines'] = true,

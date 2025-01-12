@@ -3,7 +3,7 @@ return {
     dependencies = {
         'nvim-telescope/telescope.nvim',
     },
-    lazy = false,
+    event = 'InsertEnter',
     config = function()
         local copilot = require('copilot')
         local suggestion = require('copilot.suggestion')
