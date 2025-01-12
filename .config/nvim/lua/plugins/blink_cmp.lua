@@ -145,13 +145,16 @@ return {
                         score_offset = 100,
                         module = 'blink-cmp-git',
                         name = 'Git',
-                        enabled = function()
+                        -- enabled this source at the beginning to make it possible to pre-cache
+                        -- at very beginning
+                        enabled = true,
+                        -- only show this source when filetype is gitcommit or markdown
+                        should_show_items = function()
                             return vim.o.filetype == 'gitcommit' or vim.o.filetype == 'markdown'
                         end,
                         --- @module 'blink-cmp-git'
                         --- @type blink-cmp-git.Options
-                        opts = {
-                        }
+                        opts = {}
                     },
                     dictionary = {
                         module = 'blink-cmp-dictionary',
@@ -162,6 +165,7 @@ return {
                         --- @module 'blink-cmp-dictionary'
                         --- @type blink-cmp-dictionary.Options
                         opts = {
+                            dictionary_files = { vim.fn.expand('~/.config/nvim/dict/en_dict.txt') },
                         },
                     },
                     lsp = {
