@@ -97,6 +97,9 @@ pip install tldr
 # dictionary
 sudo apt install -y wordnet aspell
 
+# fzf
+sudo apt install -y fzf
+
 cd ~ || exit 1
 mkdir -p .virtualenvs || exit 1
 cd - || exit 1
