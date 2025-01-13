@@ -81,16 +81,18 @@ abbr -a vi nvim
 #     end
 # end
 
-# node for coc
-set PATH $PATH ~/node-v20.13.0-linux-x64/bin
+# use nvim as the default editor
+set --export EDITOR nvim
+# node
+set --export PATH $PATH ~/node-v20.13.0-linux-x64/bin
 # the directory where user lib pip will install
-set PATH $PATH ~/.local/bin
+set --export PATH $PATH ~/.local/bin
 # the directory where user cargo will install
-set PATH $PATH ~/.cargo/bin
+set --export PATH $PATH ~/.cargo/bin
 # the yarn bin
-set PATH $PATH ~/.yarn/bin
+set --export PATH $PATH ~/.yarn/bin
 # neovim path
-set PATH $PATH /opt/nvim-linux64/bin
+set --export PATH $PATH /opt/nvim-linux64/bin
 
 # this enable .. be cd ../, ... be cd ../../
 # .... be cd ../../../
@@ -150,4 +152,14 @@ end
 # required by markdown-preview.nvim
 if test -e /mnt/c/Windows/System32/cmd.exe -a ! -e /usr/bin/cmd.exe
     sudo ln -s /mnt/c/Windows/System32/cmd.exe /usr/bin/cmd.exe
+end
+
+# y for yazi
+function y
+    set tmp (mktemp -t "yazi-cwd.XXXXXX")
+    yazi $argv --cwd-file="$tmp"
+    if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+        builtin cd -- "$cwd"
+    end
+    rm -f -- "$tmp"
 end

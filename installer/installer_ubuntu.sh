@@ -35,7 +35,7 @@ if ! command -v sudo; then
 fi
 
 # basic tools
-sudo apt install -y curl unzip wget tar ripgrep || exit 1
+sudo apt install -y curl unzip wget tar ripgrep fzf wordnet || exit 1
 
 # formater for python3
 sudo apt install -y python3-autopep8
@@ -74,16 +74,9 @@ if ! command -v fdfind; then
     sudo ln -s "$(command -v fdfind)" /usr/bin/fdfind || exit 1
 fi
 
-# universal-ctags are used for the outlooks of markdown files
-sudo apt install -y universal-ctags 
-
 # some tools for development
 sudo apt install -y openjdk-17-source openjdk-17-jdk shellcheck build-essential net-tools cmake gdb \
     python3-dev pip pandoc || exit 1
-
-# cmake lsp
-# NOTE: if your conda is activated, this will use conda-pip
-pip install cmake-language-server || exit 1
 
 # clang family
 sudo apt install -y clangd clang-format clang-tidy || exit 1
@@ -94,12 +87,7 @@ sudo apt install -y sshfs || exit 1
 # tldr for manual docs
 pip install tldr
 
-# dictionary
-sudo apt install -y wordnet aspell
-
-# fzf
-sudo apt install -y fzf
-
+# debugpy
 cd ~ || exit 1
 mkdir -p .virtualenvs || exit 1
 cd - || exit 1
@@ -124,12 +112,6 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin \
     docker-compose-plugin || exit 1
 
-# change source for docker, this may be the wrong method
-# sudo apt-get install -y ca-certificates gnupg-agent software-properties-common lsb-release || exit 1
-# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo \
-#     gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg || exit 1
-# echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null || exit 1
-
 # restart docker
 sudo systemctl restart docker || exit 1
 
@@ -137,19 +119,41 @@ sudo systemctl restart docker || exit 1
 # installation of these is time-consuming, uncomment this if you need this one
 # sudo apt install -y zathura texlive-full || exit 1
 
+# rust
+curl --proto '=https' --tlsv1.2 -sSf "https://sh.rustup.rs" | sh
+
+# neovide
+sudo apt install -y curl \
+    gnupg ca-certificates git \
+    gcc-multilib g++-multilib cmake libssl-dev pkg-config \
+    libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
+    libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libfontconfig1-dev \
+    libxcursor-dev
+cargo install --git https://github.com/neovide/neovide
+
+# yazi
+sudo apt install -y ffmpeg 7zip jq poppler-utils zoxide imagemagick || exit 1
+git clone https://github.com/sxyazi/yazi.git ~/yazi || exit 1
+cd ~/yazi || exit 1
+cargo build --release --locked || exit 1
+sudo mv target/release/yazi target/release/ya /usr/local/bin/ || exit 1
+ya pack -a yazi-rs/plugins:smart-enter || exit 1
+
 # rime
-sudo apt-get install -y ibus-rime clang librime-dev cargo
+sudo apt-get install -y ibus-rime clang librime-dev
 cd || exit 1
 git clone https://github.com/wlh320/rime-ls.git
 cd - || exit 1
 cd ~/rime-ls || exit 1
 cargo build --release || exit 1
 cd - || exit 1
+ibus-daemon -drx
 
 # ruby and jekyll
 sudo apt install -y ruby-full
 sudo gem install jekyll bundler
 
+# gh
 sudo apt install -y gh
 
 log "Installation finished, but you may need restart your shell"
