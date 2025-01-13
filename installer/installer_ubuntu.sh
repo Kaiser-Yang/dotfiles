@@ -138,6 +138,8 @@ cd ~/yazi || exit 1
 cargo build --release --locked || exit 1
 sudo mv target/release/yazi target/release/ya /usr/local/bin/ || exit 1
 ya pack -a yazi-rs/plugins:smart-enter || exit 1
+ya pack -a yazi-rs/plugins:full-border || exit 1
+ya pack -a yazi-rs/plugins:max-preview || exit 1
 
 # rime
 sudo apt-get install -y ibus-rime clang librime-dev

@@ -387,7 +387,7 @@ return {
                 end
             end
         end
-        map_set({ 'n', 'i' }, '<c-q>', function()
+        map_set({ 'n' }, '<c-q>', function()
             local root_dir = get_root_directory()
             local current_file = vim.fn.expand('%:p')
             move_cursor_when_visible()
@@ -399,7 +399,7 @@ return {
             })
         end)
         -- BUG: the first time use will not set the cursor correctly
-        map_set({ 'n', 'i' }, '<c-e>', function()
+        map_set({ 'n' }, '<c-e>', function()
             local root_dir = get_root_directory()
             local current_file = vim.fn.expand('%:p')
             move_cursor_when_visible()
@@ -410,7 +410,7 @@ return {
                 dir = root_dir,
             })
         end)
-        map_set({ 'n', 'i' }, '<c-w>', function()
+        map_set({ 'n' }, '<c-w>', function()
             move_cursor_when_visible()
             require('neo-tree.command').execute({
                 source = 'document_symbols',
