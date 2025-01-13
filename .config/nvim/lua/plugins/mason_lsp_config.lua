@@ -16,6 +16,7 @@ return {
             'yamlls',
             'volar', -- vue language server
             'bashls',
+            'marksman'
         },
         automatic_installation = true
     }

@@ -123,6 +123,7 @@ return {
         lspconfig.yamlls.setup({ capabilities = lsp_capabilities })
         lspconfig.volar.setup({ capabilities = lsp_capabilities })
         lspconfig.bashls.setup({ capabilities = lsp_capabilities })
+        lspconfig.marksman.setup({ capabilities = lsp_capabilities })
         lspconfig.lua_ls.setup({
             capabilities = lsp_capabilities,
             handlers = {

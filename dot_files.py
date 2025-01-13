@@ -24,7 +24,8 @@
 # NOTE: make sure you conda environments are all deactived before runnint with init
 ignore_file = set(["./.git", "./LICENSE", "./README.md", './.gitmodules'
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py",
-                   "./installer", "./vscode-setting", "./README.assets", "./markdownBackup"])
+                   "./installer", "./vscode-setting", "./README.assets", "./markdownBackup"
+                   ,"./.local/share/rime-ls/.git"])
 
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,
