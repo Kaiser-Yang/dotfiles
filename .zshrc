@@ -18,7 +18,22 @@ plugins=(
     zsh-syntax-highlighting
 )
 
+ZVM_INIT_MODE=sourcing
+
+zvm_config() {
+    ZVM_VI_ESCAPE_BINDKEY=^N
+    ZVM_VI_INSERT_ESCAPE_BINDKEY=^N
+    ZVM_VI_VISUAL_ESCAPE_BINDKEY=^N
+    ZVM_VI_OPPEND_ESCAPE_BINDKEY=^N
+}
+
+fpath+=$ZSH/custom/plugins/zsh-completions/src
+
 source $ZSH/oh-my-zsh.sh
+
+bindkey f forward-word
+bindkey ^J down-line-or-beginning-search
+bindkey ^K up-line-or-beginning-search
 
 alias ll='ls -lFh'
 
@@ -82,11 +97,7 @@ function y() {
     rm -f -- "$tmp"
 }
 
-# TODO: multi dots
-# TODO: vi mode
-# TODO: cursor shape
-# TODO: mode_prompt
-#
+# TODO: multi dots expand
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
