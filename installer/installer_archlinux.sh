@@ -29,7 +29,7 @@ mkdir -p ~/opt || exit 1
 git clone https://github.com/wlh320/rime-ls.git ~/opt/rime-ls || exit 1
 cd ~/opt/rime-ls || exit 1
 cargo build --release || exit 1
-sudo ln -s ~/opt/rime-ls/target/release/rime-ls /usr/bin/rime-ls || exit 1
+sudo ln -s ~/opt/rime-ls/target/release/rime_ls /usr/bin/rime_ls || exit 1
 cd - || exit 1
 
 mkdir -p ~/opt/miniconda3 || exit 1

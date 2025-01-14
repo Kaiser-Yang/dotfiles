@@ -115,7 +115,7 @@ return {
         })
         local lspconfig = require('lspconfig')
         lspconfig.clangd.setup({ capabilities = lsp_capabilities })
-        lspconfig.cmake.setup({ capabilities = lsp_capabilities })
+        lspconfig.neocmake.setup({ capabilities = lsp_capabilities })
         lspconfig.pyright.setup({ capabilities = lsp_capabilities })
         lspconfig.ts_ls.setup({ capabilities = lsp_capabilities })
         lspconfig.jsonls.setup({ capabilities = lsp_capabilities })
