@@ -43,3 +43,5 @@ rm -rf ~/miniconda3/miniconda.sh || exit 1
 
 echo 'dict "$1" 2>/dev/null | tail -n +3' | sudo tee /usr/bin/wn || exit 1
 sudo chmod +x /usr/bin/wn || exit 1
+
+curl -s https://ohmyposh.dev/install.sh | bash -s

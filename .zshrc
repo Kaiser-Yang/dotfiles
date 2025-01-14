@@ -67,4 +67,4 @@ function y() {
 # TODO: cursor shape
 # TODO: mode_prompt
 #
-eval "$(starship init zsh)"
+eval "$(oh-my-posh init zsh --config ~/.config/posh.omp.json)"
