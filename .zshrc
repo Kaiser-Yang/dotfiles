@@ -66,3 +66,5 @@ function y() {
 # TODO: vi mode
 # TODO: cursor shape
 # TODO: mode_prompt
+#
+eval "$(starship init zsh)"

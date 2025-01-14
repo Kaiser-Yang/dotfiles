@@ -19,6 +19,8 @@ sudo pacman -Sy less lazygit git fd fzf ripgrep sshfs ibus-rime fire-fox noto-fo
 
 yay -Sy dict-wn codelldb-bin
 
+sudo pacman -S starship
+
 sudo pacman -Sy yazi ffmpeg 7zip jq poppler zoxide imagemagick
 ya pack -a yazi-rs/plugins:smart-enter || exit 1
 ya pack -a yazi-rs/plugins:full-border || exit 1
