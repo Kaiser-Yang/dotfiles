@@ -6,7 +6,7 @@ return {
     opts = {
         ensure_installed = {
             'clangd',
-            'cmake',
+            'neocmake',
             'pyright',
             'lua_ls',
             'ts_ls',

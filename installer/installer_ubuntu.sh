@@ -132,6 +132,7 @@ git clone https://github.com/wlh320/rime-ls.git
 cd - || exit 1
 cd ~/rime-ls || exit 1
 cargo build --release || exit 1
+sudo ln -s ~/rime-ls/target/release/rime-ls /usr/bin/rime-ls || exit 1
 cd - || exit 1
 ibus-daemon -drx
 

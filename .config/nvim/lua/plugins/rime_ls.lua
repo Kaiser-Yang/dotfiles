@@ -69,7 +69,7 @@ function M.setup(opts)
     configs.rime_ls = {
         default_config = {
             name = "rime_ls",
-            cmd = { vim.fn.expand '~/rime-ls/target/release/rime_ls' },
+            cmd = { 'rime_ls' },
             filetypes = opts.filetype,
             single_file_support = true,
         },
