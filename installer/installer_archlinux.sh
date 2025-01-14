@@ -11,22 +11,29 @@
 # ruby jekyll
 # unzip
 
-sudo pacman -S less lazygit git fd fzf ripgrep sshfs \
+sudo pacman -Sy less lazygit git fd fzf ripgrep sshfs ibus-rime fire-fox noto-fonts-cjk \
     github-cli \
     zsh \
     nodejs yarn \
     docker
 
-yay -S dict-wn anaconda codelldb
+yay -Sy dict-wn codelldb-bin
 
-sudo pacman -S yazi ffmpeg p7zip jq poppler zoxide imagemagick
+sudo pacman -Sy yazi ffmpeg 7zip jq poppler zoxide imagemagick
 ya pack -a yazi-rs/plugins:smart-enter || exit 1
 ya pack -a yazi-rs/plugins:full-border || exit 1
 ya pack -a yazi-rs/plugins:max-preview || exit 1
 
-sudo pacman -S librime
+sudo pacman -Sy librime
 mkdir -p ~/opt || exit 1
 git clone https://github.com/wlh320/rime-ls.git ~/opt/rime-ls || exit 1
 cd ~/opt/rime-ls || exit 1
 cargo build --release || exit 1
 cd - || exit 1
+
+mkdir -p ~/opt/miniconda3 || exit 1
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    -O ~/opt/miniconda3/miniconda.sh || exit 1
+bash ~/opt/miniconda3/miniconda.sh -b -u -p ~/opt/miniconda3 || exit 1
+rm -rf ~/miniconda3/miniconda.sh || exit 1
+~/opt/miniconda3/bin/conda init zsh || exit 1
