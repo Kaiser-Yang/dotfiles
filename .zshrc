@@ -28,6 +28,8 @@ zvm_config() {
     ZVM_VI_OPPEND_ESCAPE_BINDKEY=^N
 }
 
+ZPWR_CORRECT=false
+
 fpath+=$ZSH/custom/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
