@@ -1,19 +1,5 @@
 #!/usr/bin/zsh
 
-# not found wn, create a wn function for dict
-if ! alias wn &>/dev/null && ! command -v wn &>/dev/null && command -v dict &>/dev/null; then
-    # make this compatible with blink-cmp-dictionary
-    # only use the last argument
-    wn() {
-        if [ $# -eq 0 ]; then
-            echo "Usage: wn <word>"
-        else
-            dict "${@: -1}" 2>/dev/null | tail -n +3
-        fi
-    }
-fi
-
-
 alias ll='ls -lFh'
 
 alias nv='nvim'

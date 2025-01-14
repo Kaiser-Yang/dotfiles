@@ -38,3 +38,6 @@ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
 bash ~/opt/miniconda3/miniconda.sh -b -u -p ~/opt/miniconda3 || exit 1
 rm -rf ~/miniconda3/miniconda.sh || exit 1
 ~/opt/miniconda3/bin/conda init zsh || exit 1
+
+echo 'dict "$1" 2>/dev/null | tail -n +3' | sudo tee /usr/bin/wn || exit 1
+sudo chmod +x /usr/bin/wn || exit 1
