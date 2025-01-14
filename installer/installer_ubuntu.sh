@@ -13,29 +13,23 @@ fi
 # change the apt source
 # this only works for Ubuntu 22.04 and Ubuntu 20.04
 # the original source.list will be renamed with source.list.bak
-sudo_cmd=$(command -v sudo)
 # we must install ca-certificates first in docker
-${sudo_cmd} apt update || exit 1
-${sudo_cmd} apt install -y ca-certificates || exit 1
+sudo apt update || exit 1
+sudo apt install -y ca-certificates || exit 1
 if grep 'VERSION="22.04' /etc/os-release; then
-    ${sudo_cmd} cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    ${sudo_cmd} cat ./sources/ubuntu/tuna_22.04 | ${sudo_cmd} tee /etc/apt/sources.list || exit 1
-    ${sudo_cmd} apt update || exit 1
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    sudo cat ./sources/ubuntu/tuna_22.04 | sudo tee /etc/apt/sources.list || exit 1
+    sudo apt update || exit 1
 elif grep 'VERSION="20.04' /etc/os-release; then
-    ${sudo_cmd} cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    ${sudo_cmd} cat ./sources/ubuntu/tuna_20.04 | ${sudo_cmd} tee /etc/apt/sources.list || exit 1
-    ${sudo_cmd} apt update || exit 1
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    sudo cat ./sources/ubuntu/tuna_20.04 | sudo tee /etc/apt/sources.list || exit 1
+    sudo apt update || exit 1
 else
     log "only support ubuntu-22.04 and ubuntu-20.04, change the source by yourself"
 fi
 
-# install sudo
-if ! command -v sudo; then
-    apt-get install -y sudo
-fi
-
 # basic tools
-sudo apt install -y curl unzip wget tar ripgrep fzf wordnet || exit 1
+sudo apt install -y unzip ripgrep fzf wordnet || exit 1
 
 # formater for python3
 sudo apt install -y python3-autopep8
@@ -62,16 +56,9 @@ if ! command -v fish; then
     fi
 fi
 
-if ! command -v yarn; then
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - || exit 1
-    sudo sh -c 'echo "deb https://dl.yarnpkg.com/debian/ stable main" >> /etc/apt/sources.list.d/yarn.list' || exit 1
-    sudo apt update || exit 1
-    sudo apt install -y yarn || exit 1
-fi
-
-if ! command -v fdfind; then
+if ! command -v fdfind && ! command -v fd; then
     sudo apt install -y fd-find || exit 1
-    sudo ln -s "$(command -v fdfind)" /usr/bin/fdfind || exit 1
+    sudo ln -s "$(command -v fdfind)" /usr/bin/fd || exit 1
 fi
 
 # some tools for development
@@ -111,9 +98,6 @@ echo \
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin \
     docker-compose-plugin || exit 1
-
-# restart docker
-sudo systemctl restart docker || exit 1
 
 # latex
 # installation of these is time-consuming, uncomment this if you need this one

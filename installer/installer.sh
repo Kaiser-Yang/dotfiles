@@ -10,6 +10,8 @@ if grep -i ubuntu /etc/os-release; then
     bash installer_ubuntu.sh
 elif grep -i centos /etc/os-release; then
     bash installer_centos.sh
+elif grep -i archlinux /etc/os-release; then
+    bash installer_archlinux.sh
 else
     log "Now only support ubuntu"
 fi

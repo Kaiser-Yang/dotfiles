@@ -19,7 +19,7 @@ abbr -a gdf git diff
 abbr -a ga git add
 abbr -a gps git push
 abbr -a gpl git pull
-abbr -a grbs git rebase -i
+abbr -a grbs git rebase
 abbr -a gdag git log --graph --abbrev-commit --decorate --format=format:"'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'" --all
 abbr -a gdagol git log --all --decorate --oneline --graph
 abbr -a gbrc git branch
@@ -60,26 +60,6 @@ abbr -a tmrnwd tmux rename-window -t
 
 # nv for nvim
 abbr -a nv nvim
-abbr -a vim nvim
-abbr -a vi nvim
-
-# function for proxy setting
-# function proxy
-#     if ! test -e ~/proxy.fish
-#         echo "Can not find file: ~/proxy.fish" 1>&2
-#     else if test (count $argv) -gt 1
-#         echo "Usage: proxy [set|unset|debug]" 1>&2
-#     else if test (count $argv) -eq 0
-#         source ~/proxy.fish set
-#     else
-#         switch $argv[1]
-#             case 'set' 'unset' 'debug'
-#                 source ~/proxy.fish $argv[1]
-#             case '*'
-#                 echo "Usage: proxy [set|unset|debug]" 1>&2
-#         end
-#     end
-# end
 
 # use nvim as the default editor
 set --export EDITOR nvim

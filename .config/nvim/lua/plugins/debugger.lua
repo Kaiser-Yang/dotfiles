@@ -15,7 +15,7 @@ return {
             type = 'server',
             port = '${port}',
             executable = {
-                command = vim.fn.expand('~') .. '/codelldb/extension/adapter/codelldb',
+                command = 'codelldb',
                 args = { '--port', '${port}' },
             }
         }
