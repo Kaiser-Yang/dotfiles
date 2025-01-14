@@ -14,6 +14,7 @@ ENABLE_CORRECTION="true"
 plugins=(
     git
     zsh-vi-mode
+    zsh-expand
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
@@ -31,9 +32,9 @@ fpath+=$ZSH/custom/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
 
-bindkey f forward-word
-bindkey ^J down-line-or-beginning-search
-bindkey ^K up-line-or-beginning-search
+bindkey 'f' forward-word
+bindkey '^J' down-line-or-beginning-search
+bindkey '^K' up-line-or-beginning-search
 
 alias ll='ls -lFh'
 
@@ -41,7 +42,7 @@ alias nv='nvim'
 
 alias lzg='lazygit'
 
-alias g='g'
+alias g='git'
 alias gst='git status'
 alias gps='git push'
 alias gpl='git pull'
@@ -96,8 +97,6 @@ function y() {
     fi
     rm -f -- "$tmp"
 }
-
-# TODO: multi dots expand
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
