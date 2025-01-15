@@ -26,7 +26,7 @@ return {
                 }
             },
             hover = {
-                open_cmd = '!wslview'
+                -- open_cmd = '!wslview'
             },
             rename = {
                 in_select = false,

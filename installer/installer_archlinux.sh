@@ -11,7 +11,14 @@
 # ruby jekyll
 # unzip
 
-sudo pacman -Sy less lazygit git fd fzf ripgrep sshfs ibus-rime fire-fox noto-fonts-cjk unzip \
+sudo pacman -Sy \
+    tmux less \
+    lazygit git \
+    fd fzf ripgrep sshfs \
+    fcitx5-im fcitx5-rime \
+    fire-fox \
+    noto-fonts-cjk \
+    unzip \
     github-cli \
     zsh \
     nodejs yarn \
