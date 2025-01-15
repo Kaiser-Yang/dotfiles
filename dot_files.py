@@ -25,15 +25,13 @@
 ignore_file = set(["./.git", "./LICENSE", "./README.md", './.gitmodules',
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py",
                    "./installer", "./vscode-setting", "./README.assets", "./markdownBackup",
-                   "./.local/share/rime-ls/.git", "./.bashrc", "./.gitconfig",
+                   "./.local/share/rime-ls/.git", "./.bashrc",
                    "./.config/fish", "./.config/nvim/lua/plugin_config"])
 
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,
 # Add it to the variable.
-copy_file = set(["./.tmux.conf", "./proxy.sh", "./proxy.fish", "./.config/nvim", "./.local",
-                 "./.config/yazi", "./.zshrc", "./.config/fish/config.fish",
-                 "./.config/posh.omp.json"])
+copy_file = set(["./.tmux.conf", "./.config", "./.local", "./.zshrc",])
 # Update the string to specify where you want to store the backed-up files
 # or where you want to recover from
 backup_dir = "./backup"

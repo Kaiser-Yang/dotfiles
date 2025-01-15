@@ -9,7 +9,7 @@ export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-ENABLE_CORRECTION="true"
+ENABLE_CORRECTION=false
 
 plugins=(
     git
@@ -19,8 +19,8 @@ plugins=(
     zsh-syntax-highlighting
 )
 
+# zsh-vi-mode
 ZVM_INIT_MODE=sourcing
-
 zvm_config() {
     ZVM_VI_ESCAPE_BINDKEY=^N
     ZVM_VI_INSERT_ESCAPE_BINDKEY=^N
@@ -28,15 +28,17 @@ zvm_config() {
     ZVM_VI_OPPEND_ESCAPE_BINDKEY=^N
 }
 
+# zsh-expand
+ZPWR_EXPAND_BLACKLIST=(grep)
 ZPWR_CORRECT=false
 
+# zsh-completions
 fpath+=$ZSH/custom/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
 
 bindkey 'f' forward-word
-bindkey '^J' down-line-or-beginning-search
-bindkey '^K' up-line-or-beginning-search
+bindkey 'd' delete-word
 
 alias ll='ls -lFh'
 
