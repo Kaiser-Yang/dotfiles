@@ -6,7 +6,8 @@ return {
         'rcarriga/nvim-notify',
     },
     config = function()
-        require('noice').setup {
+        ---@diagnostic disable-next-line: missing-fields
+        require('noice').setup({
             -- FIX: copilot gives this all the time
             -- see: https://github.com/zbirenbaum/copilot.lua/issues/321
             routes = {
@@ -25,6 +26,9 @@ return {
                     ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
                     ['vim.lsp.util.stylize_markdown'] = true,
                 },
+                signature = {
+                    enabled = false,
+                }
             },
             presets = {
                 bottom_search = false,
@@ -45,7 +49,7 @@ return {
                     help = { pattern = '^:%s*he?l?p?%s+', icon = '󰋗' },
                 },
             },
-        }
+        })
         vim.api.nvim_create_autocmd('RecordingEnter', {
             group = 'UserDIY',
             callback = function()
