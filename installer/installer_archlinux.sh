@@ -24,7 +24,7 @@ sudo pacman -Sy \
     nodejs yarn \
     docker
 
-yay -Sy codelldb-bin wordnet-common
+yay -Sy codelldb-bin wordnet-common input-remapper-git
 
 sudo pacman -S starship
 
