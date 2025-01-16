@@ -30,7 +30,6 @@ map_set({ 'n' }, '<right>', '<cmd>vertical resize +5<cr>')
 map_set({ 'n' }, '<leader>i', function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, { desc = 'Toggle inlay hints' })
-map_set({ 'i' }, '<m-cr>', '<esc><cr>')
 
 map_set({ 'i' }, '<c-u>', function()
     local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
