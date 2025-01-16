@@ -12,7 +12,7 @@
 # unzip
 
 sudo pacman -Sy \
-    tmux less \
+    tmux less wl-clipboard \
     lazygit git \
     fd fzf ripgrep sshfs \
     fcitx5-im fcitx5-rime \
@@ -32,6 +32,8 @@ sudo pacman -Sy yazi ffmpeg 7zip jq poppler zoxide imagemagick
 ya pack -a yazi-rs/plugins:smart-enter || exit 1
 ya pack -a yazi-rs/plugins:full-border || exit 1
 ya pack -a yazi-rs/plugins:max-preview || exit 1
+
+cargo install tree-sitter-cli
 
 sudo pacman -Sy librime
 mkdir -p ~/opt || exit 1

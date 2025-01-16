@@ -115,6 +115,9 @@ sudo apt install -y curl \
     libxcursor-dev
 cargo install --git https://github.com/neovide/neovide
 
+# tree-sitter-cli
+cargo install tree-sitter-cli
+
 # yazi
 sudo apt install -y ffmpeg 7zip jq poppler-utils zoxide imagemagick || exit 1
 git clone https://github.com/sxyazi/yazi.git ~/yazi || exit 1
