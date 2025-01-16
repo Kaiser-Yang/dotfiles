@@ -31,6 +31,7 @@ return {
 
     require('plugins.copilot'),
 
+    require('plugins.img_clip'),
     require('plugins.table_mode'),
     require('plugins.markdown_toc'),
     require('plugins.markdown_render'),

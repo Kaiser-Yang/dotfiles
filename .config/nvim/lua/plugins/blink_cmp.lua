@@ -34,6 +34,7 @@ return {
                     max_items = 20,
                 },
                 menu = {
+                    border = 'rounded',
                     max_height = 15,
                     scrolloff = 0,
                     draw = {
@@ -82,11 +83,16 @@ return {
                 documentation = {
                     auto_show = true,
                     auto_show_delay_ms = 0,
+                    window = {
+                        border = 'rounded',
+                    },
                 },
             },
             signature = {
-                enabled = false,
-                window = { border = 'rounded' }
+                enabled = true,
+                window = {
+                    border = 'rounded',
+                }
             },
             keymap = {
                 preset = 'none',
