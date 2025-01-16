@@ -137,8 +137,14 @@ return {
                     'lazydev',
                     'dictionary',
                     'git',
+                    'markdown',
                 },
                 providers = {
+                    markdown = {
+                        name = 'Render',
+                        module = 'render-markdown.integ.blink',
+                        fallbacks = { 'lsp' }
+                    },
                     git = {
                         -- Because we use filetype to enable the source,
                         -- we can make the score higher

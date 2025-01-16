@@ -33,6 +33,7 @@ return {
 
     require('plugins.table_mode'),
     require('plugins.markdown_toc'),
+    require('plugins.markdown_render'),
     require('plugins.markdown_preview'),
 
     require('plugins.tree_sitter'),
