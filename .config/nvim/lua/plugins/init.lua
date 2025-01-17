@@ -39,6 +39,7 @@ return {
 
     require('plugins.tree_sitter'),
 
+    require('plugins.win_resizer'),
     require('plugins.yanky'),
     require('plugins.auto_save'),
     require('plugins.auto_session'),

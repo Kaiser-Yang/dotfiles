@@ -23,10 +23,6 @@ map_set({ 'n' }, '<leader>h', '<cmd>set nosplitright<cr><cmd>vsplit<cr><cmd>set 
 map_set({ 'n' }, '<leader>l', '<cmd>set splitright<cr><cmd>vsplit<cr>',
     { desc = 'Split left' })
 map_set({ 'i', 'c', 'x', 'v', 'n' }, '<c-n>', '<esc>', { remap = true })
-map_set({ 'n' }, '<up>', '<cmd>res +5<cr>')
-map_set({ 'n' }, '<down>', '<cmd>res -5<cr>')
-map_set({ 'n' }, '<left>', '<cmd>vertical resize -5<cr>')
-map_set({ 'n' }, '<right>', '<cmd>vertical resize +5<cr>')
 map_set({ 'n' }, '<leader>i', function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, { desc = 'Toggle inlay hints' })
