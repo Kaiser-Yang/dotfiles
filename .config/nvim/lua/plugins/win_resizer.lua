@@ -11,57 +11,54 @@ return {
         })
         local resize = require('win.resizer').resize
         local map_set = require('utils').map_set
-        local delta = 3
-        map_set({ 'n' }, '<up>', function()
-            local _ = resize(0, 'top', delta, true) or
-                resize(0, 'bottom', -delta, true) or
-                resize(0, 'top', delta, false) or
-                resize(0, 'bottom', -delta, false)
-        end, { desc = 'Smart resize up' })
-        map_set({ 'n' }, '<down>', function()
-            local _ = resize(0, 'top', -delta, true) or
-                resize(0, 'bottom', delta, true) or
-                resize(0, 'top', -delta, false) or
-                resize(0, 'bottom', delta, false)
-        end, { desc = 'Smart resize down' })
-        map_set({ 'n' }, '<left>', function()
-            local _ = resize(0, 'right', -delta, true) or
-                resize(0, 'left', delta, true) or
-                resize(0, 'right', -delta, false) or
-                resize(0, 'left', delta, false)
-        end, { desc = 'Smart resize left' })
-        map_set({ 'n' }, '<right>', function()
-            local _ = resize(0, 'right', delta, true) or
-                resize(0, 'left', -delta, true) or
-                resize(0, 'right', delta, false) or
-                resize(0, 'left', -delta, false)
-        end, { desc = 'Smart resize right' })
+        local first_left_or_right = 'right'
+        local first_top_or_bottom = 'top'
+        local second_left_or_right = first_left_or_right == 'right' and 'left' or 'right'
+        local second_top_or_bottom = first_top_or_bottom == 'bottom' and 'top' or 'bottom'
+        local abs_delta = 3
+        local border_to_key = {
+            top = '<up>',
+            bottom = '<down>',
+            left = '<left>',
+            right = '<right>',
+        }
+        local border_to_reverse_key = {
+            top = '<s-up>',
+            bottom = '<s-down>',
+            left = '<s-left>',
+            right = '<s-right>',
+        }
+        for _, border in pairs({ 'top', 'bottom', 'left', 'right' }) do
+            local delta = (border == first_left_or_right or border == first_top_or_bottom) and abs_delta or -abs_delta
+            local first = (border == first_left_or_right or border == second_left_or_right) and first_left_or_right or
+                first_top_or_bottom
+            local second = first == first_left_or_right and second_left_or_right or second_top_or_bottom
+            local desc = 'Smart resize ' .. first .. ' ' .. border
+            local desc_reverse = 'Smart resize ' .. second .. ' ' .. border
+            map_set({ 'n' }, border_to_key[border], function()
+                local _ = resize(0, first, delta, true) or
+                    resize(0, second, -delta, true) or
+                    resize(0, first, delta, false) or
+                    resize(0, second, -delta, false)
+            end, { desc = desc })
+            map_set({ 'n' }, border_to_reverse_key[border], function()
+                local _ = resize(0, second, -delta, true) or
+                    resize(0, first, delta, true) or
+                    resize(0, second, -delta, false) or
+                    resize(0, first, delta, false)
+            end, { desc = desc_reverse })
 
-        -- or use this below
+            -- or use this below
 
-        -- map_set({ 'n' }, '<up>', function()
-        --     resize(0, 'top', delta, true)
-        -- end, { desc = 'Increase top border' })
-        -- map_set({ 'n' }, '<s-up>', function()
-        --     resize(0, 'top', -delta, true)
-        -- end, { desc = 'Decrease top border' })
-        -- map_set({ 'n' }, '<right>', function()
-        --     resize(0, 'right', delta, true)
-        -- end, { desc = 'Increase right border' })
-        -- map_set({ 'n' }, '<s-right>', function()
-        --     resize(0, 'right', -delta, true)
-        -- end, { desc = 'Decrease right border' })
-        -- map_set({ 'n' }, '<down>', function()
-        --     resize(0, 'bottom', delta, true)
-        -- end, { desc = 'Increase bottom border' })
-        -- map_set({ 'n' }, '<s-down>', function()
-        --     resize(0, 'bottom', -delta, true)
-        -- end, { desc = 'Decrease bottom border' })
-        -- map_set({ 'n' }, '<left>', function()
-        --     resize(0, 'left', delta, true)
-        -- end, { desc = 'Increase left border' })
-        -- map_set({ 'n' }, '<s-left>', function()
-        --     resize(0, 'left', -delta, true)
-        -- end, { desc = 'Decrease left border' })
+            -- local delta = abs_delta
+            -- local desc = 'Increase ' .. border .. ' border'
+            -- local desc_reverse = 'Decrease ' .. border .. ' border'
+            -- map_set({ 'n' }, border_to_key[border], function()
+            --     resize(0, border, delta, true)
+            -- end, { desc = desc })
+            -- map_set({ 'n' }, border_to_reverse_key[border], function()
+            --     resize(0, border, -delta, true)
+            -- end, { desc = desc_reverse })
+        end
     end
 }
