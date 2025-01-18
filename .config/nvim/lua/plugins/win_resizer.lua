@@ -29,9 +29,12 @@ return {
             right = '<s-right>',
         }
         for _, border in pairs({ 'top', 'bottom', 'left', 'right' }) do
-            local delta = (border == first_left_or_right or border == first_top_or_bottom) and abs_delta or -abs_delta
-            local first = (border == first_left_or_right or border == second_left_or_right) and first_left_or_right or
-                first_top_or_bottom
+            local delta = (border == first_left_or_right or border == first_top_or_bottom)
+                and abs_delta
+                or -abs_delta
+            local first = (border == first_left_or_right or border == second_left_or_right)
+                and first_left_or_right
+                or first_top_or_bottom
             local second = first == first_left_or_right and second_left_or_right or second_top_or_bottom
             local desc = 'Smart resize ' .. first .. ' ' .. border
             local desc_reverse = 'Smart resize ' .. second .. ' ' .. border
