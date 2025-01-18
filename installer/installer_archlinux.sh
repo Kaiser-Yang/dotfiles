@@ -22,7 +22,8 @@ sudo pacman -Sy \
     github-cli \
     zsh \
     nodejs yarn \
-    docker
+    docker \
+    ttf-cascadia-mono-nerd
 
 yay -Sy codelldb-bin wordnet-common input-remapper-git
 
@@ -57,3 +58,5 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~
 git clone https://github.com/jeffreytse/zsh-vi-mode ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-vi-mode
 git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
 git clone https://github.com/MenkeTechnologies/zsh-expand.git ~/.oh-my-zsh/custom/plugins/zsh-expand
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
