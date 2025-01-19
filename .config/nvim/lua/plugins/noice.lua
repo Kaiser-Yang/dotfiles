@@ -8,15 +8,24 @@ return {
     config = function()
         ---@diagnostic disable-next-line: missing-fields
         require('noice').setup({
-            -- FIX: copilot gives this all the time
-            -- see: https://github.com/zbirenbaum/copilot.lua/issues/321
             routes = {
+                -- FIX: copilot gives this all the time
+                -- see: https://github.com/zbirenbaum/copilot.lua/issues/321
                 {
                     filter = {
                         event = 'msg_show',
                         any = {
                             { find = 'Agent service not initialized' },
                         },
+                    },
+                    opts = { skip = true },
+                },
+                -- NOTE: ignore the written message
+                {
+                    filter = {
+                        event = "msg_show",
+                        kind = "",
+                        find = "written",
                     },
                     opts = { skip = true },
                 },
@@ -28,26 +37,17 @@ return {
                 },
                 signature = {
                     enabled = false,
-                }
+                },
+                hover = {
+                    enabled = false,
+                },
+                documentation = {
+                    enabled = false,
+                },
             },
             presets = {
-                bottom_search = false,
-                command_palette = true,
                 long_message_to_split = true,
-                inc_rename = false,
-                lsp_doc_border = false,
-            },
-            cmdline = {
-                enabled = true,
-                view = 'cmdline_popup',
-                format = {
-                    cmdline = { pattern = '^:', icon = '', lang = 'vim' },
-                    search_down = { kind = 'search', pattern = '^/', icon = ' ', lang = 'regex' },
-                    search_up = { kind = 'search', pattern = '^%?', icon = ' ', lang = 'regex' },
-                    filter = { pattern = '^:%s*!', icon = '', lang = 'bash' },
-                    lua = { pattern = { '^:%s*lua%s+', '^:%s*lua%s*=%s*', '^:%s*=%s*' }, icon = '', lang = 'lua' },
-                    help = { pattern = '^:%s*he?l?p?%s+', icon = '󰋗' },
-                },
+                lsp_doc_border = true,
             },
         })
         vim.api.nvim_create_autocmd('RecordingEnter', {
