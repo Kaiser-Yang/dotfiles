@@ -240,29 +240,22 @@ return {
                             fallback_to_regex_highlighting = true,
                         },
                     },
+                    path = {
+                        fallbacks = { 'buffer', 'ripgrep' },
+                        opts = {
+                            trailing_slash = false,
+                            show_hidden_files_by_default = true,
+                        }
+
+                    }
                 }
             },
         },
         opts_extend = { 'sources.default' }
         -- TODO: add those below:
-
-        -- { name = "dictionary", keyword_length = 2, max_item_count = 5 },
         -- { name = 'nvim_lua' },
-        -- {
-        --     name = "spell",
-        --     option = {
-        --         keep_all_entries = false,
-        --         enable_in_context = function()
-        --             return true
-        --         end,
-        --         preselect_correct_word = true,
-        --     },
-        --     max_item_count = 5
-        -- },
         -- { name = "calc",   max_item_count = 3 },
-        -- { name = "git",    max_item_count = 5 },
         -- { name = "vimtex", },
         -- { name = "cmp_yanky", max_item_count = 3 },
-        -- { name = "emoji", max_item_count = 3 },
     }
 }
