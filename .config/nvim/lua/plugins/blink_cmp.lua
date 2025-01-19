@@ -121,9 +121,12 @@ return {
                         if #rime_item_index ~= 2 then return false end
                         return cmp.accept({ index = rime_item_index[2] })
                     end, 'fallback' },
-                ['\''] = {
+                ['z'] = {
                     function(cmp)
                         if not vim.g.rime_enabled then return false end
+                        local content_before_cursor = string.sub(vim.api.nvim_get_current_line(),
+                            1, vim.api.nvim_win_get_cursor(0)[2])
+                        if content_before_cursor:match('z%w*$') then return false end
                         local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(3)
                         if #rime_item_index ~= 3 then return false end
                         return cmp.accept({ index = rime_item_index[3] })

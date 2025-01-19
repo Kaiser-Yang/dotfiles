@@ -51,6 +51,13 @@ local function rime_on_attach(client, _)
             end
         end
         vim.cmd('RimeToggle')
+        if vim.api.nvim_get_mode().mode == 'i' then
+            require('blink.cmp').hide()
+            require('blink.cmp').reload('lsp')
+            vim.schedule(function()
+                require('blink.cmp').show()
+            end)
+        end
     end)
 
     -- Select first entry when typing more than max_code
