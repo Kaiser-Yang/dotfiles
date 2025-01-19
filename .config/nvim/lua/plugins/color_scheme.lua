@@ -5,12 +5,8 @@ return {
     config = function()
         require('catppuccin').setup({
             flavour = 'mocha',
-            term_colors = true,
             integrations = {
                 blink_cmp        = true,
-                indent_blankline = {
-                    enabled = true,
-                },
                 lsp_saga         = true,
                 mason            = true,
                 noice            = true,

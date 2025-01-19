@@ -29,6 +29,16 @@ return {
                     },
                     opts = { skip = true },
                 },
+                -- NOTE: ignore clipboard error message
+                {
+                    filter = {
+                        event = "msg_show",
+                        any = {
+                            { find = "clipboard: error: no buffers" },
+                        }
+                    },
+                    opts = { skip = true },
+                },
             },
             lsp = {
                 override = {
