@@ -211,7 +211,7 @@ return {
                             end, items)
                         end
                     },
-                    buffer = { max_items = 5, fallbacks = { 'ripgrep' } },
+                    buffer = { max_items = 5 },
                     snippets = { name = 'Snip' },
                     lazydev = {
                         name = 'LazyDev',
@@ -225,11 +225,12 @@ return {
                         ---@module 'blink-ripgrep'
                         ---@type blink-ripgrep.Options
                         opts = {
-                            prefix_min_len = 4,
+                            prefix_min_len = 3,
                             context_size = 5,
                             max_filesize = '1M',
                             project_root_marker = vim.g.root_markers,
                             search_casing = '--smart-case',
+                            project_root_fallback = false,
                             -- (advanced) Any additional options you want to give to ripgrep.
                             -- See `rg -h` for a list of all available options. Might be
                             -- helpful in adjusting performance in specific situations.
