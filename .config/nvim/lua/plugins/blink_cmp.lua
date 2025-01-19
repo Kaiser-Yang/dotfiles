@@ -24,11 +24,6 @@ return {
                         enabled = false,
                     },
                 },
-                keyword = {
-                    -- BUG: set to '' will lead to an error when completion
-                    ---@diagnostic disable-next-line: assign-type-mismatch
-                    exclude_from_prefix_regex = nil
-                },
                 list = {
                     selection = { preselect = false, auto_insert = true },
                     max_items = 20,

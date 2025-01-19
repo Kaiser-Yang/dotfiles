@@ -7,13 +7,15 @@ vim.g.big_file_limit = 1 * 1024 * 1024 -- 1 MB
 -- When input method is enabled, disable the following patterns
 vim.g.disable_rime_ls_pattern = {
     -- disable in ``
-    '`(.*)`',
+    '`([%w%s%p]*)`',
     -- disable in ''
-    '\'(.*)\'',
+    '\'([%w%s%p]*)\'',
     -- disable in ""
-    '"(.*)"',
-    -- disable in []
-    '%[.*%]',
+    '"([%w%s%p]*)"',
+    -- disable after ```
+    '```[%w%s%p]*',
+    -- disable in $$
+    '%$[%w%s%p]*%$',
 }
 
 vim.g.mapleader = ' '
