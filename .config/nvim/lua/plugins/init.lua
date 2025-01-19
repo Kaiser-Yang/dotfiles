@@ -30,6 +30,7 @@ return {
     require('plugins.git_conflict'),
 
     require('plugins.copilot'),
+    require('plugins.avante'),
 
     require('plugins.img_clip'),
     require('plugins.table_mode'),

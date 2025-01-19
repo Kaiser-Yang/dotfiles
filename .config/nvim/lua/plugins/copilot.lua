@@ -45,7 +45,7 @@ return {
             if suggestion.is_visible() then
                 suggestion.accept()
             else
-                feedkeys('<esc><cr>', 'm')
+                feedkeys('<esc><cr>', 'n')
             end
         end)
     end

@@ -1,3 +1,6 @@
+local lua_line_ignore_ft = {
+    'neo-tree', 'Avante', 'AvanteInput', 'help'
+}
 return {
     'nvim-lualine/lualine.nvim',
     dependencies = {
@@ -11,10 +14,10 @@ return {
             component_separators = { left = '', right = '' },
             section_separators = { left = '', right = '' },
             disabled_filetypes = {
-                statusline = { 'neo-tree' },
-                winbar = { 'neo-tree' },
+                statusline = lua_line_ignore_ft,
+                winbar = lua_line_ignore_ft,
             },
-            ignore_focus = {},
+            ignore_focus = lua_line_ignore_ft,
             always_divide_middle = true,
             globalstatus = false,
             refresh = {
