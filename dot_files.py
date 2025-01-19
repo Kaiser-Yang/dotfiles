@@ -25,8 +25,7 @@
 ignore_file = set(["./.git", "./LICENSE", "./README.md", './.gitmodules',
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py",
                    "./installer", "./vscode-setting", "./README.assets", "./markdownBackup",
-                   "./.local/share/rime-ls/.git", "./.bashrc",
-                   "./.config/fish", "./.config/nvim/lua/plugin_config"])
+                   "./.bashrc", "./.config/fish", "./.config/nvim/lua/plugin_config"])
 
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,
@@ -59,8 +58,6 @@ def backup_files(home_current_dir : str, current_dir):
         if current_dir + fileOrDir in ignore_file:
             continue
         if os.path.isfile(home_current_dir + fileOrDir):
-            print(f"backup {home_current_dir + fileOrDir} to "
-                  f"{backup_dir + fileOrDir}")
             shutil.copy(home_current_dir + fileOrDir,
                         backup_dir + fileOrDir)
         else:
@@ -81,23 +78,14 @@ def update_dot_files(home_current_dir : str, current_dir : str):
             continue
         if os.path.isfile(current_dir + fileOrDir):
             if current_dir + fileOrDir in copy_file:
-                print(f"copy "
-                        f"{current_dir + fileOrDir} "
-                        f"to {home_current_dir + fileOrDir}")
                 shutil.copy(current_dir + fileOrDir,
                             home_current_dir + fileOrDir)
             else:
-                print(f"append contents of "
-                        f"{os.getcwd() + '/' + current_dir + fileOrDir} "
-                        f"to {home_current_dir + fileOrDir}")
                 os.system(f"cat {os.getcwd() + '/' + current_dir + fileOrDir} "
                             f">> {home_current_dir + fileOrDir}")
         elif current_dir + fileOrDir in copy_file:
             if not os.path.exists(home_current_dir + fileOrDir):
                 os.mkdir(home_current_dir + fileOrDir)
-            print("cp -r " 
-                  f"{os.getcwd() + '/' + current_dir + fileOrDir + '/*'} " 
-                  f"{home_current_dir + fileOrDir}")
             os.system("cp -r " 
                       f"{os.getcwd() + '/' + current_dir + fileOrDir + '/*'} " 
                       f"{home_current_dir + fileOrDir}")
@@ -120,8 +108,6 @@ def recover_dot_files(home_current_dir, current_dir):
         if current_dir + recover_file in ignore_file:
             continue
         if os.path.isfile(backup_dir + current_dir + recover_file):
-            print(f"recover {backup_dir + current_dir + recover_file} to "
-                  f"{home_current_dir}")
             shutil.copy(backup_dir + current_dir + recover_file,
                         home_current_dir)
         else:

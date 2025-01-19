@@ -6,6 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 export ZSH="$HOME/.oh-my-zsh"
+ZSH_CUSTOM="$HOME/.config/zsh"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
@@ -33,7 +34,7 @@ ZPWR_EXPAND_BLACKLIST=(grep)
 ZPWR_CORRECT=false
 
 # zsh-completions
-fpath+=$ZSH/custom/plugins/zsh-completions/src
+fpath+=$ZSH_CUSTOM/plugins/zsh-completions/src
 
 source $ZSH/oh-my-zsh.sh
 
