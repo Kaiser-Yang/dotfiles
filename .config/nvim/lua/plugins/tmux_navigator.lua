@@ -1,11 +1,12 @@
 return {
     'christoomey/vim-tmux-navigator',
     cmd = {
-        'TmuxNavigateLeft',
-        'TmuxNavigateDown',
-        'TmuxNavigateUp',
-        'TmuxNavigateRight',
-        'TmuxNavigatePrevious',
+        "TmuxNavigateLeft",
+        "TmuxNavigateDown",
+        "TmuxNavigateUp",
+        "TmuxNavigateRight",
+        "TmuxNavigatePrevious",
+        "TmuxNavigatorProcessList",
     },
     keys = {
         {
@@ -39,6 +40,5 @@ return {
     },
     init = function()
         vim.g.tmux_navigator_preserve_zoom = 1
-        vim.g.tmux_navigator_disable_when_zoomed = 0
     end
 }
