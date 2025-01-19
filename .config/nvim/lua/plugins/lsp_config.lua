@@ -52,11 +52,15 @@ local function rime_on_attach(client, _)
         end
         vim.cmd('RimeToggle')
         if vim.api.nvim_get_mode().mode == 'i' then
-            require('blink.cmp').hide()
-            require('blink.cmp').reload('lsp')
-            vim.schedule(function()
-                require('blink.cmp').show()
-            end)
+            local content_before_cursor = string.sub(vim.api.nvim_get_current_line(),
+                1, vim.api.nvim_win_get_cursor(0)[2])
+            if content_before_cursor:match('[' .. alphabet .. ']+$') then
+                require('blink.cmp').hide()
+                require('blink.cmp').reload('lsp')
+                vim.schedule(function()
+                    require('blink.cmp').show()
+                end)
+            end
         end
     end)
 
