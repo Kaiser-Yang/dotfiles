@@ -31,3 +31,6 @@
 [submodule ".config/zsh/themes/powerlevel10k"]
 	path = .config/zsh/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
+[submodule ".local/share/fcitx5/rime"]
+	path = .local/share/fcitx5/rime
+	url = https://github.com/Kaiser-Yang/rime-wubi86.git
