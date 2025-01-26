@@ -139,7 +139,7 @@ return {
                         function(state)
                             local node = state.tree:get_node()
                             if node.type ~= 'directory' and not node:has_children() then
-                                require('neo-tree.sources.common.commands').open_with_window_picker(state)
+                                state.commands.open_with_window_picker(state)
                             else
                                 state.commands.toggle_node(state)
                             end
@@ -149,23 +149,49 @@ return {
                     ['<c-c>'] = 'cancel',
                     ['<leader>j'] = 'split_with_window_picker',
                     ['<leader>l'] = 'vsplit_with_window_picker',
-                    ['H'] = 'close_all_nodes',
+                    ['H'] = {
+                        function(state)
+                            local function collapse(u)
+                                if u == nil then return end
+                                if u:is_expanded() then u:collapse() end
+                                for _, v in pairs(state.tree:get_nodes(u:get_id())) do
+                                    collapse(v)
+                                end
+                            end
+                            local node_under_cursor = state.tree:get_node()
+                            if node_under_cursor:is_expanded() then
+                                collapse(node_under_cursor)
+                            else
+                                local parent_id = node_under_cursor:get_parent_id()
+                                require('neo-tree.ui.renderer').focus_node(state, parent_id)
+                                for _, child in pairs(state.tree:get_nodes(parent_id)) do
+                                    collapse(child)
+                                end
+                            end
+                            require('neo-tree.ui.renderer').redraw(state)
+                        end,
+                        desc = 'collapse_all_under_cursor',
+                    },
                     ['L'] = {
                         function(state)
+                            local node_under_cursor = state.tree:get_node()
+                            if node_under_cursor.type == 'directory' then
+                                state.commands.expand_all_nodes(state, node_under_cursor)
+                                return
+                            end
                             local function expand(u)
                                 if u == nil then return end
-                                if not u:is_expanded() then u:expand() end
-                                for _, v in ipairs(state.tree:get_nodes(u:get_id())) do
+                                if u:has_children() and not u:is_expanded() then
+                                    u:expand()
+                                end
+                                for _, v in pairs(state.tree:get_nodes(u:get_id())) do
                                     expand(v)
                                 end
                             end
-                            require('plenary.async').run(function()
-                                expand(state.tree:get_nodes()[1])
-                            end, function()
-                                require('neo-tree.ui.renderer').redraw(state)
-                            end)
+                            expand(node_under_cursor)
+                            require('neo-tree.ui.renderer').redraw(state)
                         end,
-                        desc = 'expand_all_nodes',
+                        desc = 'expand_all_under_cursor',
                     },
                     [','] = 'prev_source',
                     ['.'] = 'next_source',
@@ -201,7 +227,6 @@ return {
             filesystem                = {
                 window = {
                     mappings = {
-                        ['L'] = 'expand_all_nodes',
                         ['a'] = {
                             'add',
                             config = {
@@ -379,7 +404,7 @@ return {
         local get_root_directory = require('utils').get_root_directory
         local function move_cursor_when_visible()
             if vim.g.explorer_visible then
-                for _, win in ipairs(vim.api.nvim_list_wins()) do
+                for _, win in pairs(vim.api.nvim_list_wins()) do
                     if vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(win), 'filetype') == 'neo-tree' then
                         vim.api.nvim_set_current_win(win)
                         break
