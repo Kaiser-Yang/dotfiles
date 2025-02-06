@@ -91,7 +91,7 @@ return {
                 file_ignore_patterns = { '%.git', '%.root',
                     '%.o', '%.out', '%.exe', '%.png', '%.gif',
                     '%.jpg', '%.so', '%.a', '%.dll', '%.dylib', '%.class', '%.jar', '%.zip',
-                    '%.tar.gz', },
+                    '%.tar.gz', '3rdparty', },
                 prompt_prefix = '🔍 ',
             },
             extensions = {
