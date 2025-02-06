@@ -10,7 +10,7 @@ local function rime_on_attach(client, _)
         )
     end, { nargs = 0 })
 
-    local max_code = 4
+    local max_code = 1000
     local alphabet = 'abcdefghijklmnopqrstuvwxy'
     local mapped_punc = {
         [','] = '，',
