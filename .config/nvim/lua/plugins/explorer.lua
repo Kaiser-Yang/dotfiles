@@ -193,6 +193,19 @@ return {
                         end,
                         desc = 'expand_all_under_cursor',
                     },
+                    ['<cr>'] = {
+                        function(state)
+                            local node = state.tree:get_node()
+                            if node.type == 'directory' then
+                                if node.commands.set_root then
+                                    state.commands.set_root(state)
+                                end
+                            else
+                                state.commands.open_with_window_picker(state)
+                            end
+                        end,
+                        desc = 'Enter Dir or Open File'
+                    },
                     [','] = 'prev_source',
                     ['.'] = 'next_source',
                     ['<f5>'] = 'refresh',
@@ -246,17 +259,6 @@ return {
                             config = {
                                 show_path = 'absolute'
                             }
-                        },
-                        ['<cr>'] = {
-                            function(state)
-                                local node = state.tree:get_node()
-                                if node.type == 'directory' then
-                                    state.commands.set_root(state)
-                                else
-                                    require('neo-tree.sources.common.commands').open_with_window_picker(state)
-                                end
-                            end,
-                            desc = 'Enter Dir or Open File'
                         },
                         ['<bs>'] = 'navigate_up',
                         [']g'] = {
@@ -317,14 +319,6 @@ return {
                 }
             },
             document_symbols          = {
-                window = {
-                    mappings = {
-                        ['<cr>'] = {
-                            require('neo-tree.sources.common.commands').open_with_window_picker,
-                            desc = 'Enter Dir or Open File'
-                        },
-                    }
-                },
                 renderers = {
                     root = {
                         { 'name' },
