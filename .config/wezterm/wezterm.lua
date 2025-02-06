@@ -49,9 +49,10 @@ return {
         'JetBrains Mono'
     }),
     keys = {
-        { key = '=', mods = 'CTRL', action = act.IncreaseFontSize },
-        { key = '-', mods = 'CTRL', action = act.DecreaseFontSize },
-        { key = '0', mods = 'CTRL', action = act.ResetFontSize },
+        { key = "z", mods = "CTRL|ALT", action = "Nop" },
+        { key = '=', mods = 'CTRL',   action = act.IncreaseFontSize },
+        { key = '-', mods = 'CTRL',   action = act.DecreaseFontSize },
+        { key = '0', mods = 'CTRL',   action = act.ResetFontSize },
     },
     mouse_bindings = {
         {
