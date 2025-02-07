@@ -197,7 +197,7 @@ return {
                         function(state)
                             local node = state.tree:get_node()
                             if node.type == 'directory' then
-                                if node.commands.set_root then
+                                if state.commands.set_root then
                                     state.commands.set_root(state)
                                 end
                             else
