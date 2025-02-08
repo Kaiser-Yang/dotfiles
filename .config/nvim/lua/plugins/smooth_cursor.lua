@@ -5,7 +5,7 @@ return {
             smear_to_cmd = false,
         })
         vim.api.nvim_create_autocmd('FileType', {
-            pattern = 'bigfile*,toggleterm',
+            pattern = 'toggleterm',
             group = 'UserDIY',
             callback = function()
                 require('smear_cursor').enabled = false
