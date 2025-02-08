@@ -106,20 +106,24 @@ return {
                 live_grep = {
                     mappings = {
                         i = {
-                            ['<c-f>'] = actions.close
+                            ['<c-f>'] = actions.close,
+                            ['<c-c>'] = actions.close
                         },
                         n = {
-                            ['<c-f>'] = actions.close
+                            ['<c-f>'] = actions.close,
+                            ['<c-c>'] = actions.close
                         }
                     },
                 },
                 find_files = {
                     mappings = {
                         i = {
-                            ['<c-p>'] = actions.close
+                            ['<c-p>'] = actions.close,
+                            ['<c-c>'] = actions.close
                         },
                         n = {
-                            ['<c-p>'] = actions.close
+                            ['<c-p>'] = actions.close,
+                            ['<c-c>'] = actions.close
                         }
                     },
                 },
