@@ -34,6 +34,14 @@ local function github_pr_or_issue_configure_score_offset(items)
         end
     end
 end
+
+vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'Commit', { default = false, fg = '#a6e3a1' })
+vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'Mention', { default = false, fg = '#a6e3a1' })
+vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'OPENPR', { default = false, fg = '#a6e3a1' })
+vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'OPENIssue', { default = false, fg = '#a6e3a1' })
+vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'CLOSEDPR', { default = false, fg = '#f38ba8' })
+vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'MERGEDPR', { default = false, fg = '#cba6f7' })
+vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'CLOSEDIssue', { default = false, fg = '#cba6f7' })
 return {
     {
         'saghen/blink.cmp',
