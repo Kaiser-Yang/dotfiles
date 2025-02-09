@@ -20,6 +20,7 @@ sudo pacman -Sy \
     noto-fonts-cjk \
     unzip \
     github-cli \
+    glab \
     zsh \
     nodejs yarn \
     docker \

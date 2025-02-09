@@ -1,27 +1,3 @@
-local function github_pr_or_issue_separate_output(output, is_pr)
-    --- @type blink-cmp-git.CompletionItem[]
-    local items = {}
-    local json_res = vim.json.decode(output)
-    for i = 1, #json_res do
-        items[i] = {
-            label = '#' .. tostring(json_res[i].number) ..
-                ' ' .. tostring(json_res[i].title),
-            insert_text = '#' .. tostring(json_res[i].number),
-            kind_name = tostring(json_res[i].state) .. (is_pr and 'PR' or 'Issue'),
-            documentation =
-                '#' .. tostring(json_res[i].number) ..
-                ' ' .. tostring(json_res[i].title) .. '\n' ..
-                'State: ' .. tostring(json_res[i].state) .. '\n' ..
-                'Author: ' .. tostring(json_res[i].author.login) .. '\n' ..
-                'Created at: ' .. tostring(json_res[i].createdAt) .. '\n' ..
-                'Updated at: ' .. tostring(json_res[i].updatedAt) .. '\n' ..
-                'Closed at: ' .. tostring(json_res[i].closedAt) .. '\n' ..
-                tostring(json_res[i].body)
-        }
-    end
-    return items
-end
-
 local function github_pr_or_issue_configure_score_offset(items)
     -- Bonus to make sure items sorted as below:
     -- open issue
@@ -138,6 +114,7 @@ return {
                 documentation = {
                     auto_show = true,
                     auto_show_delay_ms = 0,
+                    update_delay_ms = 100,
                     window = {
                         border = 'rounded',
                     },
@@ -235,14 +212,14 @@ return {
                             git_centers = {
                                 github = {
                                     pull_request = {
-                                        separate_output = function(output)
-                                            return github_pr_or_issue_separate_output(output, true)
+                                        get_kind_name = function(item)
+                                            return item.state .. 'PR'
                                         end,
                                         configure_score_offset = github_pr_or_issue_configure_score_offset,
                                     },
                                     issue = {
-                                        separate_output = function(output)
-                                            return github_pr_or_issue_separate_output(output, false)
+                                        get_kind_name = function(item)
+                                            return item.state .. 'Issue'
                                         end,
                                         configure_score_offset = github_pr_or_issue_configure_score_offset,
                                     },
