@@ -41,7 +41,8 @@ local blink_cmp_kind_name_highlight = {
     CLOSEDPR = { default = false, fg = '#f38ba8' },
     MERGEDPR = { default = false, fg = '#cba6f7' },
     COMPLETEDIssue = { default = false, fg = '#cba6f7' },
-    DRAFTPR = { default = false, fg = '#9399b2' },
+    NOT_PLANNEDIssue = { default = false, fg = '#626972' },
+    DRAFTPR = { default = false, fg = '#626972' },
 
     Dict = { default = false, fg = '#a6e3a1' },
 }
@@ -224,7 +225,7 @@ return {
                                 OPENIssue = '',
                                 REOPENEDIssue = '',
                                 COMPLETEDIssue = '',
-                                NOT_PLANNEDIssue = '',
+                                NOT_PLANNEDIssue = '',
                             },
                             git_centers = {
                                 github = {
