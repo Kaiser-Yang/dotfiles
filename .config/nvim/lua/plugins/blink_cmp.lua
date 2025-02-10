@@ -35,7 +35,7 @@ local function github_pr_or_issue_configure_score_offset(items)
     end
 end
 
-local blink_cmp_git_highlight = {
+local blink_cmp_kind_name_highlight = {
     Commit = { default = false, fg = '#a6e3a1' },
     Mention = { default = false, fg = '#a6e3a1' },
     OPENPR = { default = false, fg = '#a6e3a1' },
@@ -43,8 +43,10 @@ local blink_cmp_git_highlight = {
     CLOSEDPR = { default = false, fg = '#f38ba8' },
     MERGEDPR = { default = false, fg = '#cba6f7' },
     CLOSEDIssue = { default = false, fg = '#cba6f7' },
+
+    Dict = { default = false, fg = '#a6e3a1' },
 }
-for kind_name, hl in pairs(blink_cmp_git_highlight) do
+for kind_name, hl in pairs(blink_cmp_kind_name_highlight) do
     vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. kind_name, hl)
 end
 
