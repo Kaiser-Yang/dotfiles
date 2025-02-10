@@ -35,13 +35,19 @@ local function github_pr_or_issue_configure_score_offset(items)
     end
 end
 
-vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'Commit', { default = false, fg = '#a6e3a1' })
-vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'Mention', { default = false, fg = '#a6e3a1' })
-vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'OPENPR', { default = false, fg = '#a6e3a1' })
-vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'OPENIssue', { default = false, fg = '#a6e3a1' })
-vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'CLOSEDPR', { default = false, fg = '#f38ba8' })
-vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'MERGEDPR', { default = false, fg = '#cba6f7' })
-vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. 'CLOSEDIssue', { default = false, fg = '#cba6f7' })
+local blink_cmp_git_highlight = {
+    Commit = { default = false, fg = '#a6e3a1' },
+    Mention = { default = false, fg = '#a6e3a1' },
+    OPENPR = { default = false, fg = '#a6e3a1' },
+    OPENIssue = { default = false, fg = '#a6e3a1' },
+    CLOSEDPR = { default = false, fg = '#f38ba8' },
+    MERGEDPR = { default = false, fg = '#cba6f7' },
+    CLOSEDIssue = { default = false, fg = '#cba6f7' },
+}
+for kind_name, hl in pairs(blink_cmp_git_highlight) do
+    vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. kind_name, hl)
+end
+
 return {
     {
         'saghen/blink.cmp',
@@ -70,7 +76,6 @@ return {
                 },
                 list = {
                     selection = { preselect = false, auto_insert = true },
-                    max_items = 20,
                 },
                 menu = {
                     border = 'rounded',
