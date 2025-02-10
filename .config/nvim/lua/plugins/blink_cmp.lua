@@ -1,23 +1,20 @@
 local function github_pr_or_issue_configure_score_offset(items)
     -- Bonus to make sure items sorted as below:
-    -- open issue
-    -- open pr
-    -- closed issue
-    -- merged pr
-    -- closed pr
     local keys = {
         -- place `kind_name` here
-        'OPENIssue',
-        'OPENPR',
-        'CLOSEDIssue',
-        'MERGEDPR',
-        'CLOSEDPR'
+        { 'OPENIssue', 'REOPENEDIssue' },
+        { 'OPENPR' },
+        { 'COMPLETEDIssue' },
+        { 'DRAFTPR' },
+        { 'MERGEDPR' },
+        { 'CLOSEDPR',  'NOT_PLANNEDIssue' },
     }
     local bonus = 999999
-    local bonus_score = {
-    }
+    local bonus_score = {}
     for i = 1, #keys do
-        bonus_score[keys[i]] = bonus * (#keys - i)
+        for _, key in ipairs(keys[i]) do
+            bonus_score[key] = bonus * (#keys - i)
+        end
     end
     for i = 1, #items do
         local bonus_key = items[i].kind_name
@@ -40,9 +37,11 @@ local blink_cmp_kind_name_highlight = {
     Mention = { default = false, fg = '#a6e3a1' },
     OPENPR = { default = false, fg = '#a6e3a1' },
     OPENIssue = { default = false, fg = '#a6e3a1' },
+    REOPENEDIssue = { default = false, fg = '#a6e3a1' },
     CLOSEDPR = { default = false, fg = '#f38ba8' },
     MERGEDPR = { default = false, fg = '#cba6f7' },
-    CLOSEDIssue = { default = false, fg = '#cba6f7' },
+    COMPLETEDIssue = { default = false, fg = '#cba6f7' },
+    DRAFTPR = { default = false, fg = '#9399b2' },
 
     Dict = { default = false, fg = '#a6e3a1' },
 }
@@ -221,20 +220,23 @@ return {
                                 OPENPR = '',
                                 CLOSEDPR = '',
                                 MERGEDPR = '',
-                                OPENIssue = '',
-                                CLOSEDIssue = '',
+                                DRAFTPR = '',
+                                OPENIssue = '',
+                                REOPENEDIssue = '',
+                                COMPLETEDIssue = '',
+                                NOT_PLANNEDIssue = '',
                             },
                             git_centers = {
                                 github = {
                                     pull_request = {
                                         get_kind_name = function(item)
-                                            return item.state .. 'PR'
+                                            return item.isDraft and 'DRAFTPR' or item.state .. 'PR'
                                         end,
                                         configure_score_offset = github_pr_or_issue_configure_score_offset,
                                     },
                                     issue = {
                                         get_kind_name = function(item)
-                                            return item.state .. 'Issue'
+                                            return (item.stateReason or item.state) .. 'Issue'
                                         end,
                                         configure_score_offset = github_pr_or_issue_configure_score_offset,
                                     },
