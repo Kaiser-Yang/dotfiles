@@ -1,13 +1,14 @@
-local function github_pr_or_issue_configure_score_offset(items)
+local function pr_or_issue_configure_score_offset(items)
     -- Bonus to make sure items sorted as below:
     local keys = {
         -- place `kind_name` here
-        { 'OPENIssue', 'REOPENEDIssue' },
-        { 'OPENPR' },
-        { 'COMPLETEDIssue' },
-        { 'DRAFTPR' },
-        { 'MERGEDPR' },
-        { 'CLOSEDPR',  'NOT_PLANNEDIssue' },
+        { 'openIssue',     'openedIssue', 'reopenedIssue' },
+        { 'openPR',        'openedPR' },
+        { 'lockedIssue',   'lockedPR' },
+        { 'completedIssue' },
+        { 'draftPR' },
+        { 'mergedPR' },
+        { 'closedPR',      'closedIssue', 'not_plannedIssue', 'duplicateIssue' },
     }
     local bonus = 999999
     local bonus_score = {}
@@ -22,7 +23,7 @@ local function github_pr_or_issue_configure_score_offset(items)
             items[i].score_offset = bonus_score[bonus_key]
         end
         -- sort by number when having the same bonus score
-        local number = items[i].label:match('#(%d+)')
+        local number = items[i].label:match('[#!](d+)')
         if number then
             if items[i].score_offset == nil then
                 items[i].score_offset = 0
@@ -35,14 +36,20 @@ end
 local blink_cmp_kind_name_highlight = {
     Commit = { default = false, fg = '#a6e3a1' },
     Mention = { default = false, fg = '#a6e3a1' },
-    OPENPR = { default = false, fg = '#a6e3a1' },
-    OPENIssue = { default = false, fg = '#a6e3a1' },
-    REOPENEDIssue = { default = false, fg = '#a6e3a1' },
-    CLOSEDPR = { default = false, fg = '#f38ba8' },
-    MERGEDPR = { default = false, fg = '#cba6f7' },
-    COMPLETEDIssue = { default = false, fg = '#cba6f7' },
-    NOT_PLANNEDIssue = { default = false, fg = '#626972' },
-    DRAFTPR = { default = false, fg = '#626972' },
+    openPR = { default = false, fg = '#a6e3a1' },
+    openedPR = { default = false, fg = '#a6e3a1' },
+    closedPR = { default = false, fg = '#f38ba8' },
+    mergedPR = { default = false, fg = '#cba6f7' },
+    draftPR = { default = false, fg = '#9399b2' },
+    lockedPR = { default = false, fg = '#f5c2e7' },
+    openIssue = { default = false, fg = '#a6e3a1' },
+    openedIssue = { default = false, fg = '#a6e3a1' },
+    reopenedIssue = { default = false, fg = '#a6e3a1' },
+    completedIssue = { default = false, fg = '#cba6f7' },
+    closedIssue = { default = false, fg = '#cba6f7' },
+    not_plannedIssue = { default = false, fg = '#9399b2' },
+    duplicateIssue = { default = false, fg = '#9399b2' },
+    lockedIssue = { default = false, fg = '#f5c2e7' },
 
     Dict = { default = false, fg = '#a6e3a1' },
 }
@@ -218,28 +225,55 @@ return {
                         --- @type blink-cmp-git.Options
                         opts = {
                             kind_icons = {
-                                OPENPR = '',
-                                CLOSEDPR = '',
-                                MERGEDPR = '',
-                                DRAFTPR = '',
-                                OPENIssue = '',
-                                REOPENEDIssue = '',
-                                COMPLETEDIssue = '',
-                                NOT_PLANNEDIssue = '',
+                                openPR = '',
+                                openedPR = '',
+                                closedPR = '',
+                                mergedPR = '',
+                                draftPR = '',
+                                lockedPR = '',
+                                openIssue = '',
+                                openedIssue = '',
+                                reopenedIssue = '',
+                                completedIssue = '',
+                                closedIssue = '',
+                                not_plannedIssue = '',
+                                duplicateIssue = '',
+                                lockedIssue = '',
                             },
                             git_centers = {
                                 github = {
                                     pull_request = {
                                         get_kind_name = function(item)
-                                            return item.isDraft and 'DRAFTPR' or item.state .. 'PR'
+                                            return item.locked and 'lockedPR' or
+                                                item.draft and 'draftPR' or
+                                                item.merged_at and 'mergedPR' or
+                                                item.state .. 'PR'
                                         end,
-                                        configure_score_offset = github_pr_or_issue_configure_score_offset,
+                                        configure_score_offset = pr_or_issue_configure_score_offset,
                                     },
                                     issue = {
                                         get_kind_name = function(item)
-                                            return (item.stateReason or item.state) .. 'Issue'
+                                            return item.locked and 'lockedIssue' or
+                                                (item.state_reason or item.state) .. 'Issue'
                                         end,
-                                        configure_score_offset = github_pr_or_issue_configure_score_offset,
+                                        configure_score_offset = pr_or_issue_configure_score_offset,
+                                    },
+                                },
+                                gitlab = {
+                                    pull_request = {
+                                        get_kind_name = function(item)
+                                            return item.discussion_locked and 'lockedPR' or
+                                                item.draft and 'draftPR' or
+                                                item.state .. 'PR'
+                                        end,
+                                        configure_score_offset = pr_or_issue_configure_score_offset,
+                                    },
+                                    issue = {
+                                        get_kind_name = function(item)
+                                            return item.discussion_locked and 'lockedIssue' or
+                                                item.state .. 'Issue'
+                                        end,
+                                        configure_score_offset = pr_or_issue_configure_score_offset,
                                     },
                                 }
                             }
