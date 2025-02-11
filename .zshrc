@@ -115,3 +115,8 @@ export FZF_DEFAULT_OPTS=" \
 --multi"
 
 export PATH=$PATH:/opt/nvim-linux64/bin
+
+if [[ -n "$TMUX" ]] then
+  export flavor='conda'
+  source $HOME/.config/tmux/plugins/conda_inherit.sh
+fi
