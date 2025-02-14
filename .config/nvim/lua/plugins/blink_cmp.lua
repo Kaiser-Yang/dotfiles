@@ -216,11 +216,12 @@ return {
                         name = 'Git',
                         -- enabled this source at the beginning to make it possible to pre-cache
                         -- at very beginning
-                        enabled = true,
-                        -- only show this source when filetype is gitcommit or markdown
-                        should_show_items = function()
-                            return vim.o.filetype == 'gitcommit' or vim.o.filetype == 'markdown'
+                        enabled = function()
+                            return vim.tbl_contains({ 'gitcommit', 'markdown', 'octo' }, vim.o.filetype)
                         end,
+                        -- only show this source when filetype is gitcommit or markdown
+                        -- should_show_items = function()
+                        -- end,
                         --- @module 'blink-cmp-git'
                         --- @type blink-cmp-git.Options
                         opts = {
@@ -243,6 +244,13 @@ return {
                             git_centers = {
                                 github = {
                                     pull_request = {
+                                        get_command_args = function(command, token)
+                                            local args = require('blink-cmp-git.default.github')
+                                                .pull_request
+                                                .get_command_args(command, token)
+                                            args[#args] = args[#args] .. '?state=all'
+                                            return args
+                                        end,
                                         get_kind_name = function(item)
                                             return item.locked and 'lockedPR' or
                                                 item.draft and 'draftPR' or
@@ -252,6 +260,13 @@ return {
                                         configure_score_offset = pr_or_issue_configure_score_offset,
                                     },
                                     issue = {
+                                        get_command_args = function(command, token)
+                                            local args = require('blink-cmp-git.default.github')
+                                                .issue
+                                                .get_command_args(command, token)
+                                            args[#args] = args[#args] .. '?state=all'
+                                            return args
+                                        end,
                                         get_kind_name = function(item)
                                             return item.locked and 'lockedIssue' or
                                                 (item.state_reason or item.state) .. 'Issue'
@@ -261,6 +276,13 @@ return {
                                 },
                                 gitlab = {
                                     pull_request = {
+                                        get_command_args = function(command, token)
+                                            local args = require('blink-cmp-git.default.gitlab')
+                                                .pull_request
+                                                .get_command_args(command, token)
+                                            args[#args] = args[#args] .. '?state=all'
+                                            return args
+                                        end,
                                         get_kind_name = function(item)
                                             return item.discussion_locked and 'lockedPR' or
                                                 item.draft and 'draftPR' or
@@ -269,6 +291,13 @@ return {
                                         configure_score_offset = pr_or_issue_configure_score_offset,
                                     },
                                     issue = {
+                                        get_command_args = function(command, token)
+                                            local args = require('blink-cmp-git.default.gitlab')
+                                                .issue
+                                                .get_command_args(command, token)
+                                            args[#args] = args[#args] .. '?state=all'
+                                            return args
+                                        end,
                                         get_kind_name = function(item)
                                             return item.discussion_locked and 'lockedIssue' or
                                                 item.state .. 'Issue'

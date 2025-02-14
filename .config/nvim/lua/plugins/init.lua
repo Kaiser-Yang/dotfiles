@@ -60,6 +60,8 @@ return {
 
     require('plugins.latex'),
 
+    require('plugins.octo'),
+
     -- require('plugins.rainbow_delimiter'),
 
     -- {
