@@ -68,15 +68,7 @@ vim.api.nvim_create_autocmd('ModeChanged', {
     group = 'UserDIY',
     pattern = 'n:[^n]',
     callback = function()
-        vim.o.hlsearch = false
-    end
-})
--- When entering normal mode, enable hlsearch
-vim.api.nvim_create_autocmd('ModeChanged', {
-    group = 'UserDIY',
-    pattern = '[^n]:n',
-    callback = function()
-        vim.o.hlsearch = true
+        vim.schedule(function() vim.cmd('nohlsearch') end)
     end
 })
 vim.api.nvim_create_autocmd('FileType', {

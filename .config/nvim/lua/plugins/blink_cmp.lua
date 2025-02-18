@@ -34,23 +34,6 @@ local function pr_or_issue_configure_score_offset(items)
 end
 
 local blink_cmp_kind_name_highlight = {
-    Commit = { default = false, fg = '#a6e3a1' },
-    Mention = { default = false, fg = '#a6e3a1' },
-    openPR = { default = false, fg = '#a6e3a1' },
-    openedPR = { default = false, fg = '#a6e3a1' },
-    closedPR = { default = false, fg = '#f38ba8' },
-    mergedPR = { default = false, fg = '#cba6f7' },
-    draftPR = { default = false, fg = '#9399b2' },
-    lockedPR = { default = false, fg = '#f5c2e7' },
-    openIssue = { default = false, fg = '#a6e3a1' },
-    openedIssue = { default = false, fg = '#a6e3a1' },
-    reopenedIssue = { default = false, fg = '#a6e3a1' },
-    completedIssue = { default = false, fg = '#cba6f7' },
-    closedIssue = { default = false, fg = '#cba6f7' },
-    not_plannedIssue = { default = false, fg = '#9399b2' },
-    duplicateIssue = { default = false, fg = '#9399b2' },
-    lockedIssue = { default = false, fg = '#f5c2e7' },
-
     Dict = { default = false, fg = '#a6e3a1' },
 }
 for kind_name, hl in pairs(blink_cmp_kind_name_highlight) do
@@ -75,7 +58,8 @@ local blink_cmp_git_label_name_highlight = {
     lockedIssue = { default = false, fg = '#f5c2e7' },
 }
 for kind_name, hl in pairs(blink_cmp_git_label_name_highlight) do
-    vim.api.nvim_set_hl(0, 'BlinkCmpGitLabel' .. kind_name, hl)
+    vim.api.nvim_set_hl(0, 'BlinkCmpGitKindIcon' .. kind_name, hl)
+    vim.api.nvim_set_hl(0, 'BlinkCmpGitLabel' .. kind_name .. 'Id', hl)
 end
 
 return {
@@ -88,7 +72,8 @@ return {
             {
                 'Kaiser-Yang/blink-cmp-git',
                 dependencies = { 'nvim-lua/plenary.nvim' }
-            }
+            },
+            'Kaiser-Yang/blink-cmp-avante',
         },
         version = '*',
 
@@ -151,37 +136,6 @@ return {
                                     end
                                     return ctx.label .. code
                                 end,
-                                highlight = function(ctx, text)
-                                    if ctx.source_name == 'Git' then
-                                        local id_len = #(ctx.label:match('^[^%s]+'))
-                                        -- Find id like #123, !123 or hash,
-                                        -- but not for commit and mention
-                                        if id_len > 0 and id_len ~= #ctx.label then
-                                            local highlights = {
-                                                {
-                                                    0,
-                                                    id_len,
-                                                    group = 'BlinkCmpGitLabel' .. ctx.kind
-                                                },
-                                                {
-                                                    id_len,
-                                                    #ctx.label - id_len,
-                                                    require('blink.cmp.config.completion.menu')
-                                                        .default.draw.components.label
-                                                        .highlight(ctx, text)
-                                                }
-                                            }
-                                            -- characters matched on the label by the fuzzy matcher
-                                            for _, idx in ipairs(ctx.label_matched_indices) do
-                                                table.insert(highlights,
-                                                    { idx, idx + 1, group = 'BlinkCmpLabelMatch' })
-                                            end
-                                            return highlights
-                                        end
-                                    end
-                                    return require('blink.cmp.config.completion.menu')
-                                        .default.draw.components.label.highlight(ctx, text)
-                                end
                             },
                         }
                     }
@@ -255,8 +209,13 @@ return {
                     'dictionary',
                     'git',
                     'markdown',
+                    'avante',
                 },
                 providers = {
+                    avante = {
+                        module = 'blink-cmp-avante',
+                        name = 'Avante',
+                    },
                     markdown = {
                         name = 'Render',
                         module = 'render-markdown.integ.blink',
@@ -375,21 +334,27 @@ return {
                         },
                     },
                     lsp = {
-                        fallbacks = nil,
+                        fallbacks = {},
                         --- @param context blink.cmp.Context
                         --- @param items blink.cmp.CompletionItem[]
                         transform_items = function(context, items)
                             local TYPE_ALIAS = require('blink.cmp.types').CompletionItemKind
+                            local rime_ls = require('plugins.rime_ls')
                             -- demote snippets
                             for _, item in ipairs(items) do
                                 if item.kind == TYPE_ALIAS.Snippet then
                                     item.score_offset = item.score_offset - 3
+                                elseif rime_ls.is_rime_item(item) then
+                                    local idx = item.label:match('^(%d+)')
+                                    if idx then
+                                        -- make sure this is not affected by frecency
+                                        item.score_offset = (#items - tonumber(idx)) * 9999
+                                    end
                                 end
                             end
                             -- filter non-acceptable rime items
                             --- @param item blink.cmp.CompletionItem
                             return vim.tbl_filter(function(item)
-                                local rime_ls = require('plugins.rime_ls')
                                 if not rime_ls.is_rime_item(item) and
                                     item.kind ~= TYPE_ALIAS.Text then
                                     return true
