@@ -367,7 +367,10 @@ return {
                             end, items)
                         end
                     },
-                    buffer = { max_items = 5 },
+                    buffer = {
+                        max_items = 5,
+                        score_offset = -200,
+                    },
                     snippets = { name = 'Snip' },
                     lazydev = {
                         name = 'LazyDev',
@@ -377,6 +380,7 @@ return {
                     ripgrep = {
                         module = 'blink-ripgrep',
                         name = 'RG',
+                        score_offset = -100,
                         max_items = 5,
                         fallbacks = { 'buffer' },
                         ---@module 'blink-ripgrep'
