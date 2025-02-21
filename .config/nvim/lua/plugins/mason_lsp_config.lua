@@ -9,12 +9,14 @@ return {
             'neocmake',
             'pyright',
             'lua_ls',
-            'ts_ls',
             'jdtls',
             'jsonls',
             'lemminx', -- xml lsp
             'yamlls',
-            'volar', -- vue language server
+            'volar', -- vue
+            'ts_ls', -- typescript
+            'eslint', -- javascript
+            'tailwindcss', -- css
             'bashls',
         },
         automatic_installation = true

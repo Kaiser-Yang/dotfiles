@@ -1,6 +1,7 @@
 -- INFO: Those variables do not support wildcards
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 vim.g.root_markers = { '.git', '.root', 'pom.xml' }
+vim.g.frontend_filetype = { 'typescript', 'javascript', 'vue', 'html', 'css' }
 
 vim.g.big_file_limit = 1 * 1024 * 1024 -- 1 MB
 
@@ -82,5 +83,13 @@ vim.api.nvim_create_autocmd('SwapExists', {
     pattern = '*',
     callback = function()
         vim.v.swapchoice = 'e'
+    end
+})
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = vim.g.frontend_filetype,
+    callback = function()
+        vim.bo.tabstop = 2
+        vim.bo.shiftwidth = 2
+        vim.bo.softtabstop = 2
     end
 })

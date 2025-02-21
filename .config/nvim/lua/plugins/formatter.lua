@@ -27,6 +27,10 @@ return {
             java = { 'google-java-format' },
             markdown = { 'markdownlint-cli2' },
             lua = { 'stylua' },
+            vue = { 'prettier' },
+            typescript = { 'prettier' },
+            javascript = { 'prettier' },
+            css = { 'prettier' },
         },
         formatters = {
             autopep8 = {

@@ -111,7 +111,6 @@ return {
         'nvim-java/nvim-java',
     },
     config = function()
-        -- TODO: refactor those code below
         local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
         lsp_capabilities = require('blink.cmp').get_lsp_capabilities(lsp_capabilities)
         require('java').setup({
@@ -124,43 +123,62 @@ return {
         require('plugins.rime_ls').setup({
             filetype = vim.g.rime_ls_support_filetype,
         })
+        local vue_language_server_path =
+            require('mason-registry').get_package('vue-language-server'):get_install_path() ..
+            '/node_modules/@vue/language-server'
+
         local lspconfig = require('lspconfig')
-        lspconfig.clangd.setup({ capabilities = lsp_capabilities })
-        lspconfig.neocmake.setup({ capabilities = lsp_capabilities })
-        lspconfig.pyright.setup({ capabilities = lsp_capabilities })
-        lspconfig.ts_ls.setup({ capabilities = lsp_capabilities })
-        lspconfig.jsonls.setup({ capabilities = lsp_capabilities })
-        lspconfig.lemminx.setup({ capabilities = lsp_capabilities })
-        lspconfig.yamlls.setup({ capabilities = lsp_capabilities })
-        lspconfig.volar.setup({ capabilities = lsp_capabilities })
-        lspconfig.bashls.setup({ capabilities = lsp_capabilities })
-        lspconfig.lua_ls.setup({
+        local lsp_default_options = {
             capabilities = lsp_capabilities,
-            handlers = {
-                -- By assigning an empty function, you can remove the notifications
-                -- printed to the cmd
-                ['$/progress'] = function(_, _, _) end,
+        }
+        local lsp_extra_options = {
+            clangd = {},
+            neocmake = {},
+            pyright = {},
+            jsonls = {},
+            lemminx = {},
+            yamlls = {},
+            bashls = {},
+            lua_ls = {
+                handlers = {
+                    ['$/progress'] = function(_, _, _) end,
+                },
             },
-        })
-        lspconfig.jdtls.setup({
-            capabilities = lsp_capabilities,
-            handlers = {
-                -- By assigning an empty function, you can remove the notifications
-                -- printed to the cmd
-                ['$/progress'] = function(_, _, _) end,
+            jdtls = {
+                handlers = {
+                    ['$/progress'] = function(_, _, _) end,
+                },
             },
-        })
-        lspconfig.rime_ls.setup({
-            init_options = {
-                enabled = vim.g.rime_enabled,
-                shared_data_dir = '/usr/share/rime-data',
-                user_data_dir = vim.fn.expand('~/.local/share/rime-ls'),
-                log_dir = vim.fn.expand('~/.local/share/rime-ls'),
-                always_incomplete = true,
-                long_filter_text = true
+            rime_ls = {
+                init_options = {
+                    enabled = vim.g.rime_enabled,
+                    shared_data_dir = '/usr/share/rime-data',
+                    user_data_dir = vim.fn.expand('~/.local/share/rime-ls'),
+                    log_dir = vim.fn.expand('~/.local/share/rime-ls'),
+                    always_incomplete = true,
+                    long_filter_text = true
+                },
+                capabilities = lsp_capabilities,
+                on_attach = rime_on_attach
             },
-            capabilities = lsp_capabilities,
-            on_attach = rime_on_attach
-        })
+            volar = {},
+            ts_ls = {
+                init_options = {
+                    plugins = {
+                        {
+                            name = '@vue/typescript-plugin',
+                            location = vue_language_server_path,
+                            languages = { 'vue' },
+                        },
+                    },
+                },
+                filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+            },
+            eslint = {},
+            tailwindcss = {},
+        }
+        for server, options in pairs(lsp_extra_options) do
+            lspconfig[server].setup(vim.tbl_extend('force', lsp_default_options, options))
+        end
     end,
 }
