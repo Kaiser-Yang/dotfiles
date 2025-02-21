@@ -382,7 +382,6 @@ return {
                         name = 'RG',
                         score_offset = -100,
                         max_items = 5,
-                        fallbacks = { 'buffer' },
                         ---@module 'blink-ripgrep'
                         ---@type blink-ripgrep.Options
                         opts = {

@@ -25,7 +25,8 @@
 ignore_file = set(["./.git", "./LICENSE", "./README.md", './.gitmodules',
                    "./dot_files.py", "./.gitignore", "./replace_md_image.py",
                    "./installer", "./vscode-setting", "./README.assets", "./markdownBackup",
-                   "./.bashrc", "./.config/fish", "./.config/nvim/lua/plugin_config"])
+                   "./.bashrc", "./.config/fish", "./.config/nvim/lua/plugin_config",
+                   "./.repro", "./repro.lua"])
 
 # Update the list to let those files to be copied to $HOME
 # In short, if your $HOME has no the file or directory,

@@ -6,3 +6,8 @@ markdownBackup
 
 # log files
 *.log
+
+# reproducibility files
+
+.repro/
+repro.lua
