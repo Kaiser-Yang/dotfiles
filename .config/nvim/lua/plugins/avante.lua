@@ -36,6 +36,8 @@ return {
                 sidebar = {
                     apply_all = "A",
                     apply_cursor = "a",
+                      switch_windows = "<f-32>",
+                      reverse_switch_windows = "<f-33>",
                 },
                 submit = {
                     insert = '<M-CR>',
