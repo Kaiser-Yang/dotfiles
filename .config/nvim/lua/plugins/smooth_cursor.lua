@@ -3,22 +3,10 @@ return {
     config = function()
         require('smear_cursor').setup({
             smear_to_cmd = false,
-        })
-        vim.api.nvim_create_autocmd('FileType', {
-            pattern = 'toggleterm',
-            group = 'UserDIY',
-            callback = function()
-                require('smear_cursor').enabled = false
-                -- when leaving the buffer, enable smear_cursor
-                vim.api.nvim_create_autocmd('BufLeave', {
-                    pattern = '<buffer>',
-                    group = 'UserDIY',
-                    callback = function()
-                        require('smear_cursor').enabled = true
-                    end,
-                    once = true
-                })
-            end
+            filetypes_disabled = {
+                'toggleterm',
+            },
+            smear_insert_mode = false,
         })
     end
 }

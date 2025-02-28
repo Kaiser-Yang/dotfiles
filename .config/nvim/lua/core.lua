@@ -1,3 +1,4 @@
+local utils = require('utils')
 -- INFO: Those variables do not support wildcards
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 vim.g.root_markers = { '.git', '.root', 'pom.xml' }
@@ -98,7 +99,20 @@ vim.api.nvim_create_autocmd('BufEnter', {
     group = 'UserDIY',
     callback = function()
         if not vim.bo.modifiable and vim.api.nvim_get_mode().mode == 'i' then
-            require('utils').feedkeys('<esc>', 'n')
+            utils.feedkeys('<esc>', 'n')
+        end
+    end
+})
+vim.api.nvim_create_autocmd('VimLeavePre', {
+    callback = function()
+        local keep_buffer_file_type = { 'neo-tree', 'AvanteSelectedFiles', 'Avante' }
+        -- get all the buffers, and delete all non-modifiable buffers
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if not vim.bo[buf].modifiable
+                and not vim.tbl_contains(keep_buffer_file_type, vim.bo[buf].filetype)
+            then
+                vim.api.nvim_buf_delete(buf, { force = true })
+            end
         end
     end
 })

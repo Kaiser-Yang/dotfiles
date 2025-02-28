@@ -100,7 +100,8 @@ for kind_name, hl in pairs(blink_cmp_git_label_name_highlight) do
     vim.api.nvim_set_hl(0, 'BlinkCmpGitLabel' .. kind_name .. 'Id', hl)
 end
 
-local function inside_comment_block()
+--- @param types string[]
+local function inside_block(types)
     if vim.api.nvim_get_mode().mode ~= 'i' then
         return false
     end
@@ -113,23 +114,25 @@ local function inside_comment_block()
     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
     row = row - 1
     for id, node, _ in query:iter_captures(node_under_cursor, 0, row, row + 1) do
-        if query.captures[id]:find('comment') then
-            local start_row, start_col, end_row, end_col = node:range()
-            if start_row <= row and row <= end_row then
-                if start_row == row and end_row == row then
-                    if start_col <= col and col <= end_col then
+        for _, t in ipairs(types) do
+            if query.captures[id]:find(t) then
+                local start_row, start_col, end_row, end_col = node:range()
+                if start_row <= row and row <= end_row then
+                    if start_row == row and end_row == row then
+                        if start_col <= col and col <= end_col then
+                            return true
+                        end
+                    elseif start_row == row then
+                        if start_col <= col then
+                            return true
+                        end
+                    elseif end_row == row then
+                        if col <= end_col then
+                            return true
+                        end
+                    else
                         return true
                     end
-                elseif start_row == row then
-                    if start_col <= col then
-                        return true
-                    end
-                elseif end_row == row then
-                    if col <= end_col then
-                        return true
-                    end
-                else
-                    return true
                 end
             end
         end
@@ -259,7 +262,7 @@ return {
                         'lazydev',
                     }
                     if vim.tbl_contains(vim.g.non_lsp_filetype, vim.bo.filetype) or
-                        inside_comment_block()
+                        inside_block({ 'comment', 'string' })
                     then
                         vim.list_extend(result, {
                             'buffer',
