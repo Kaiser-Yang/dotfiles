@@ -1,3 +1,41 @@
+local completion_keymap = {
+    preset = 'none',
+    ['<cr>'] = { 'accept', 'fallback' },
+    ['<tab>'] = { 'snippet_forward', 'fallback' },
+    ['<s-tab>'] = { 'snippet_backward', 'fallback' },
+    ['<c-u>'] = { 'scroll_documentation_up', 'fallback' },
+    ['<c-d>'] = { 'scroll_documentation_down', 'fallback' },
+    ['<c-j>'] = { 'select_next', 'fallback' },
+    ['<c-k>'] = { 'select_prev', 'fallback' },
+    ['<c-x>'] = { 'show', 'fallback' },
+    ['<c-c>'] = { 'cancel', 'fallback' },
+    ['<space>'] = {
+        function(cmp)
+            if not vim.g.rime_enabled then return false end
+            local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(1)
+            if #rime_item_index ~= 1 then return false end
+            return cmp.accept({ index = rime_item_index[1] })
+        end,
+        'fallback' },
+    [';'] = {
+        -- FIX: can not work when binding ;<space> to other key
+        function(cmp)
+            if not vim.g.rime_enabled then return false end
+            local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(2)
+            if #rime_item_index ~= 2 then return false end
+            return cmp.accept({ index = rime_item_index[2] })
+        end, 'fallback' },
+    ['z'] = {
+        function(cmp)
+            if not vim.g.rime_enabled then return false end
+            local content_before_cursor = string.sub(vim.api.nvim_get_current_line(),
+                1, vim.api.nvim_win_get_cursor(0)[2])
+            if content_before_cursor:match('z%w*$') then return false end
+            local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(3)
+            if #rime_item_index ~= 3 then return false end
+            return cmp.accept({ index = rime_item_index[3] })
+        end, 'fallback' }
+}
 local function pr_or_issue_configure_score_offset(items)
     -- Bonus to make sure items sorted as below:
     local keys = {
@@ -75,7 +113,7 @@ local function inside_comment_block()
     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
     row = row - 1
     for id, node, _ in query:iter_captures(node_under_cursor, 0, row, row + 1) do
-        if query.captures[id] == 'comment' then
+        if query.captures[id]:find('comment') then
             local start_row, start_col, end_row, end_col = node:range()
             if start_row <= row and row <= end_row then
                 if start_row == row and end_row == row then
@@ -97,10 +135,6 @@ local function inside_comment_block()
         end
     end
     return false
-end
-
-local function non_lsp_should_show_items()
-    return vim.tbl_contains(vim.g.non_lsp_filetype, vim.bo.filetype) or inside_comment_block()
 end
 
 return {
@@ -197,61 +231,45 @@ return {
                     border = 'rounded',
                 }
             },
-            keymap = {
-                preset = 'none',
-                ['<cr>'] = { 'accept', 'fallback' },
-                ['<tab>'] = { 'snippet_forward', 'fallback' },
-                ['<s-tab>'] = { 'snippet_backward', 'fallback' },
-                ['<c-u>'] = { 'scroll_documentation_up', 'fallback' },
-                ['<c-d>'] = { 'scroll_documentation_down', 'fallback' },
-                ['<c-j>'] = { 'select_next', 'fallback' },
-                ['<c-k>'] = { 'select_prev', 'fallback' },
-                ['<c-x>'] = { 'show', 'fallback' },
-                ['<c-c>'] = { 'cancel', 'fallback' },
-                ['<space>'] = {
-                    function(cmp)
-                        if not vim.g.rime_enabled then return false end
-                        local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(1)
-                        if #rime_item_index ~= 1 then return false end
-                        return cmp.accept({ index = rime_item_index[1] })
-                    end,
-                    'fallback' },
-                [';'] = {
-                    -- FIX: can not work when binding ;<space> to other key
-                    function(cmp)
-                        if not vim.g.rime_enabled then return false end
-                        local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(2)
-                        if #rime_item_index ~= 2 then return false end
-                        return cmp.accept({ index = rime_item_index[2] })
-                    end, 'fallback' },
-                ['z'] = {
-                    function(cmp)
-                        if not vim.g.rime_enabled then return false end
-                        local content_before_cursor = string.sub(vim.api.nvim_get_current_line(),
-                            1, vim.api.nvim_win_get_cursor(0)[2])
-                        if content_before_cursor:match('z%w*$') then return false end
-                        local rime_item_index = require('plugins.rime_ls').get_n_rime_item_index(3)
-                        if #rime_item_index ~= 3 then return false end
-                        return cmp.accept({ index = rime_item_index[3] })
-                    end, 'fallback' }
-            },
+            keymap = completion_keymap,
             appearance = {
                 nerd_font_variant = 'mono'
             },
+            cmdline = {
+                keymap = completion_keymap,
+                completion = {
+                    menu = { auto_show = true },
+                    ghost_text = {
+                        enabled = false,
+                    },
+                    list = {
+                        selection = { preselect = false, auto_insert = true },
+                    },
+                },
+            },
             snippets = { preset = 'luasnip' },
             sources = {
-                default = {
-                    'lsp',
-                    'path',
-                    'snippets',
-                    'buffer',
-                    'ripgrep',
-                    'lazydev',
-                    'dictionary',
-                    'git',
-                    'markdown',
-                    'avante',
-                },
+                default = function()
+                    local result = {
+                        'lsp',
+                        'path',
+                        'snippets',
+                        'git',
+                        'avante',
+                        'lazydev',
+                    }
+                    if vim.tbl_contains(vim.g.non_lsp_filetype, vim.bo.filetype) or
+                        inside_comment_block()
+                    then
+                        vim.list_extend(result, {
+                            'buffer',
+                            'ripgrep',
+                            'markdown',
+                            'dictionary',
+                        })
+                    end
+                    return result;
+                end,
                 providers = {
                     avante = {
                         module = 'blink-cmp-avante',
@@ -362,7 +380,6 @@ return {
                         name = 'Dict',
                         min_keyword_length = 3,
                         max_items = 5,
-                        should_show_items = non_lsp_should_show_items,
                         --- @module 'blink-cmp-dictionary'
                         --- @type blink-cmp-dictionary.Options
                         opts = {
@@ -405,9 +422,14 @@ return {
                     },
                     buffer = {
                         max_items = 5,
-                        should_show_items = non_lsp_should_show_items,
                     },
                     snippets = { name = 'Snip' },
+                    path = {
+                        opts = {
+                            trailing_slash = false,
+                            show_hidden_files_by_default = true,
+                        }
+                    },
                     lazydev = {
                         name = 'LazyDev',
                         module = 'lazydev.integrations.blink',
@@ -417,7 +439,6 @@ return {
                         module = 'blink-ripgrep',
                         name = 'RG',
                         max_items = 5,
-                        should_show_items = non_lsp_should_show_items,
                         ---@module 'blink-ripgrep'
                         ---@type blink-ripgrep.Options
                         opts = {
@@ -440,13 +461,6 @@ return {
                             fallback_to_regex_highlighting = true,
                         },
                     },
-                    path = {
-                        opts = {
-                            trailing_slash = false,
-                            show_hidden_files_by_default = true,
-                        }
-
-                    }
                 }
             },
         },
