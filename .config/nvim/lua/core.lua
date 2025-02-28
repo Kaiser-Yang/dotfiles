@@ -2,6 +2,7 @@
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 vim.g.root_markers = { '.git', '.root', 'pom.xml' }
 vim.g.frontend_filetype = { 'typescript', 'javascript', 'vue', 'html', 'css' }
+vim.g.non_lsp_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 
 vim.g.big_file_limit = 1 * 1024 * 1024 -- 1 MB
 

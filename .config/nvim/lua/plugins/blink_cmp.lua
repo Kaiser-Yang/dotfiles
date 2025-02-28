@@ -62,6 +62,47 @@ for kind_name, hl in pairs(blink_cmp_git_label_name_highlight) do
     vim.api.nvim_set_hl(0, 'BlinkCmpGitLabel' .. kind_name .. 'Id', hl)
 end
 
+local function inside_comment_block()
+    if vim.api.nvim_get_mode().mode ~= 'i' then
+        return false
+    end
+    local node_under_cursor = vim.treesitter.get_node()
+    local parser = vim.treesitter.get_parser(nil, nil, { error = false })
+    local query = vim.treesitter.query.get(vim.bo.filetype, 'highlights')
+    if not parser or not node_under_cursor or not query then
+        return false
+    end
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    row = row - 1
+    for id, node, _ in query:iter_captures(node_under_cursor, 0, row, row + 1) do
+        if query.captures[id] == 'comment' then
+            local start_row, start_col, end_row, end_col = node:range()
+            if start_row <= row and row <= end_row then
+                if start_row == row and end_row == row then
+                    if start_col <= col and col <= end_col then
+                        return true
+                    end
+                elseif start_row == row then
+                    if start_col <= col then
+                        return true
+                    end
+                elseif end_row == row then
+                    if col <= end_col then
+                        return true
+                    end
+                else
+                    return true
+                end
+            end
+        end
+    end
+    return false
+end
+
+local function non_lsp_should_show_items()
+    return vim.tbl_contains(vim.g.non_lsp_filetype, vim.bo.filetype) or inside_comment_block()
+end
+
 return {
     {
         'saghen/blink.cmp',
@@ -227,14 +268,9 @@ return {
                         score_offset = 100,
                         module = 'blink-cmp-git',
                         name = 'Git',
-                        -- enabled this source at the beginning to make it possible to pre-cache
-                        -- at very beginning
                         enabled = function()
-                            return vim.tbl_contains({ 'gitcommit', 'markdown', 'octo' }, vim.o.filetype)
+                            return vim.tbl_contains({ 'gitcommit', 'markdown', 'octo' }, vim.bo.filetype)
                         end,
-                        -- only show this source when filetype is gitcommit or markdown
-                        -- should_show_items = function()
-                        -- end,
                         --- @module 'blink-cmp-git'
                         --- @type blink-cmp-git.Options
                         opts = {
@@ -326,7 +362,7 @@ return {
                         name = 'Dict',
                         min_keyword_length = 3,
                         max_items = 5,
-                        score_offset = -3,
+                        should_show_items = non_lsp_should_show_items,
                         --- @module 'blink-cmp-dictionary'
                         --- @type blink-cmp-dictionary.Options
                         opts = {
@@ -369,7 +405,7 @@ return {
                     },
                     buffer = {
                         max_items = 5,
-                        score_offset = -200,
+                        should_show_items = non_lsp_should_show_items,
                     },
                     snippets = { name = 'Snip' },
                     lazydev = {
@@ -380,8 +416,8 @@ return {
                     ripgrep = {
                         module = 'blink-ripgrep',
                         name = 'RG',
-                        score_offset = -100,
                         max_items = 5,
+                        should_show_items = non_lsp_should_show_items,
                         ---@module 'blink-ripgrep'
                         ---@type blink-ripgrep.Options
                         opts = {
@@ -405,7 +441,6 @@ return {
                         },
                     },
                     path = {
-                        fallbacks = { 'buffer', 'ripgrep' },
                         opts = {
                             trailing_slash = false,
                             show_hidden_files_by_default = true,

@@ -10,24 +10,24 @@ return {
     },
     config = function()
         require('Comment').setup({
-            ---Add a space b/w comment and the line
+            -- Add a space b/w comment and the line
             padding = true,
-            ---Whether the cursor should stay at its position
+            -- Whether the cursor should stay at its position
             sticky = true,
-            ---Lines to be ignored while (un)comment
+            -- Lines to be ignored while (un)comment
             ---@diagnostic disable-next-line: assign-type-mismatch
             ignore = nil,
-            ---LHS of toggle mappings in NORMAL mode
+            -- LHS of toggle mappings in NORMAL mode
             toggler = {
                 line = '<space>c<space>',
                 block = '<space>cs',
             },
-            ---LHS of operator-pending mappings in NORMAL and VISUAL mode
+            -- LHS of operator-pending mappings in NORMAL and VISUAL mode
             opleader = {
                 line = '<space>c<space>',
                 block = '<space>cs',
             },
-            ---LHS of extra mappings
+            -- LHS of extra mappings
             extra = {
                 above = '<leader>cO',
                 below = '<leader>co',
