@@ -94,3 +94,11 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.bo.softtabstop = 2
     end
 })
+vim.api.nvim_create_autocmd('BufEnter', {
+    group = 'UserDIY',
+    callback = function()
+        if not vim.bo.modifiable and vim.api.nvim_get_mode().mode == 'i' then
+            require('utils').feedkeys('<esc>', 'n')
+        end
+    end
+})
