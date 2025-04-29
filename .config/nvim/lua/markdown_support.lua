@@ -3,6 +3,7 @@
 
 local item_regex = {
     list = '^ *(%* )',
+    list_with_minus = '^ *(%- )',
     number_list = '^ *(%d+%. )',
     todo_list = '^ *(%- %[[ x]%] )',
 }
@@ -139,15 +140,15 @@ vim.api.nvim_create_autocmd('FileType', {
         map_set({ 'i' }, ',a', '<c-g>u<c-o>mz[](<++>)<++><esc>F[a', { buffer = true })
         map_set({ 'i' }, ',b', '<c-g>u<c-o>mz****<++><esc>F*hi', { buffer = true })
         map_set({ 'i' }, ',c', '<c-g>u<c-o>mz<cr><cr>```<cr>```<cr><cr><++><esc>3kA', { buffer = true })
-        map_set({ 'i' }, ',d', '<c-g>u<c-o>mz~~~~<++><esc>F~hi', { buffer = true })
-        map_set({ 'i' }, ',i', '<c-g>u<c-o>mz**<++><esc>F*i', { buffer = true })
         map_set({ 'i' }, ',p', '<c-g>u<c-o>mz<cr><cr>![](<++>){: .img-fluid}<cr><cr><++><esc>2k0f[a',
             { buffer = true })
-        map_set({ 'i' }, ',m', '<c-g>u<c-o>mz$$<++><esc>F$i', { buffer = true })
-        map_set({ 'i' }, ',M', '<c-g>u<c-o>mz<cr><cr>$$<cr><cr>$$<cr><cr><++><esc>3kA', { buffer = true })
         map_set({ 'i' }, ',t', '<c-g>u<c-o>mz``<++><esc>F`i', { buffer = true })
         map_set({ 'i' }, ',u', '<esc>u`z:delmarks z<cr>a', { buffer = true })
         map_set({ 'n' }, 'o', 'A<cr>', { buffer = true, remap = true })
+        -- map_set({ 'i' }, ',d', '<c-g>u<c-o>mz~~~~<++><esc>F~hi', { buffer = true })
+        -- map_set({ 'i' }, ',i', '<c-g>u<c-o>mz**<++><esc>F*i', { buffer = true })
+        -- map_set({ 'i' }, ',m', '<c-g>u<c-o>mz$$<++><esc>F$i', { buffer = true })
+        -- map_set({ 'i' }, ',M', '<c-g>u<c-o>mz<cr><cr>$$<cr><cr>$$<cr><cr><++><esc>3kA', { buffer = true })
         -- TODO: make the gx in normal mode can be repeated
         map_set({ 'n' }, 'gx', toggle_check_box_once,
             { buffer = true, desc = 'Toggler current check box' })
@@ -180,13 +181,7 @@ vim.api.nvim_create_autocmd('FileType', {
                 elseif content_before_cursor:match('^ *$') and feed_list_item_by_context() then
                     -- pass
                 else
-                    if content_before_cursor:match(':$') or content_before_cursor:match('：$') then
-                        -- auto add new paragraph after a colon
-                        feedkeys('<cr><cr>', 'n')
-                    else
-                        -- noraml <cr>
-                        feedkeys('<plug>(ultimate-auto-pairs-cr)', 'n')
-                    end
+                    feedkeys('<plug>(ultimate-auto-pairs-cr)', 'n')
                 end
             end
         end, { buffer = true, expr = true })

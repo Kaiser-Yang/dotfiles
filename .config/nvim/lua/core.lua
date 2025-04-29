@@ -3,7 +3,6 @@ local utils = require('utils')
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 vim.g.root_markers = { '.git', '.root', 'pom.xml' }
 vim.g.frontend_filetype = { 'typescript', 'javascript', 'vue', 'html', 'css' }
-vim.g.non_lsp_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 
 vim.g.big_file_limit = 1 * 1024 * 1024 -- 1 MB
 
@@ -12,7 +11,7 @@ vim.g.disable_rime_ls_pattern = {
     -- disable in ``
     '`([%w%s%p]*)`',
     -- disable in ''
-    '\'([%w%s%p]*)\'',
+    "'([%w%s%p]*)'",
     -- disable in ""
     '"([%w%s%p]*)"',
     -- disable after ```
@@ -28,13 +27,12 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 vim.o.signcolumn = 'yes'
-vim.o.jumpoptions = 'stack'
+vim.o.jumpoptions = 'stack,clean'
 vim.o.termguicolors = true
 vim.o.spelllang = 'en_us,en'
 vim.o.timeoutlen = 300
 vim.o.ttimeoutlen = 0
 vim.o.mouse = 'a'
-vim.o.mousemoveevent = true
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.scrolloff = 5
@@ -46,25 +44,19 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.incsearch = true
 vim.o.hlsearch = true
--- user spaces to substitute tabs
+-- Use spaces to substitute tabs
 vim.o.expandtab = true
--- one tab is shown as 4 spaces
+-- One tab is shown as 4 spaces
 vim.o.tabstop = 4
 -- >> and << will shift lines by 4
 vim.o.shiftwidth = 4
--- every <tab> will go right by 4 spaces, every <bs> will go left by 4 spaces
+-- Every <tab> will go right by 4 spaces, every <bs> will go left by 4 spaces
 vim.o.softtabstop = 4
 vim.o.showbreak = '↪'
 vim.o.encoding = 'utf-8'
-vim.o.switchbuf = 'useopen'
-vim.o.foldenable = false
-vim.o.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
-vim.diagnostic.config({
-    update_in_insert = true,
-    virtual_text = false,
-    signs = true,
-    underline = true,
-})
+vim.o.foldlevel = 99
+vim.o.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions'
+
 vim.api.nvim_create_augroup('UserDIY', {})
 -- When leaving normal mode, disable hlsearch
 vim.api.nvim_create_autocmd('ModeChanged', {
@@ -72,47 +64,30 @@ vim.api.nvim_create_autocmd('ModeChanged', {
     pattern = 'n:[^n]',
     callback = function()
         vim.schedule(function() vim.cmd('nohlsearch') end)
-    end
+    end,
 })
 vim.api.nvim_create_autocmd('FileType', {
     group = 'UserDIY',
     pattern = 'gitcommit',
-    callback = function()
-        vim.wo.colorcolumn = '50,72'
-    end
-})
-vim.api.nvim_create_autocmd('SwapExists', {
-    pattern = '*',
-    callback = function()
-        vim.v.swapchoice = 'e'
-    end
+    callback = function() vim.wo.colorcolumn = '50,72' end,
 })
 vim.api.nvim_create_autocmd('FileType', {
+    group = 'UserDIY',
+    pattern = 'java',
+    callback = function()
+        if vim.fn.expand('%:p'):find('gcs%-back%-end') then
+            vim.bo.tabstop = 2
+            vim.bo.shiftwidth = 2
+            vim.bo.softtabstop = 2
+        end
+    end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+    group = 'UserDIY',
     pattern = vim.g.frontend_filetype,
     callback = function()
         vim.bo.tabstop = 2
         vim.bo.shiftwidth = 2
         vim.bo.softtabstop = 2
-    end
-})
-vim.api.nvim_create_autocmd('BufEnter', {
-    group = 'UserDIY',
-    callback = function()
-        if not vim.bo.modifiable and vim.api.nvim_get_mode().mode == 'i' then
-            utils.feedkeys('<esc>', 'n')
-        end
-    end
-})
-vim.api.nvim_create_autocmd('VimLeavePre', {
-    callback = function()
-        local keep_buffer_file_type = { 'neo-tree', 'AvanteSelectedFiles', 'Avante' }
-        -- get all the buffers, and delete all non-modifiable buffers
-        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-            if not vim.bo[buf].modifiable
-                and not vim.tbl_contains(keep_buffer_file_type, vim.bo[buf].filetype)
-            then
-                vim.api.nvim_buf_delete(buf, { force = true })
-            end
-        end
-    end
+    end,
 })

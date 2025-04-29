@@ -1,18 +1,26 @@
+local lsp_lens_enable = true
 return {
     'VidocqH/lsp-lens.nvim',
-    dependencies = {
-        'neovim/nvim-lspconfig',
-    },
+    event = 'LspAttach',
     cmd = { 'LspLenOn', 'LspLenOff', 'LspLensToggle' },
     keys = {
         {
             'gcl',
-            '<cmd>LspLensToggle<cr>',
+            function()
+                if lsp_lens_enable then
+                    vim.notify('LSP lens disabled', nil, { title = 'LSP Lens' })
+                else
+                    vim.notify('LSP lens enabled', nil, { title = 'LSP Lens' })
+                end
+                lsp_lens_enable = not lsp_lens_enable
+                vim.cmd('LspLensToggle')
+            end,
             mode = 'n',
-            silent = true,
             noremap = true,
             desc = 'Toggle LSP lens',
         }
     },
-    config = true,
+    opts = {
+        enable = lsp_lens_enable
+    }
 }

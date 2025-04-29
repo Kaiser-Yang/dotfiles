@@ -6,18 +6,18 @@ return {
     opts = {
         ensure_installed = {
             'clangd',
-            'neocmake',
             'pyright',
-            'lua_ls',
             'jdtls',
-            'jsonls',
-            'lemminx', -- xml lsp
-            'yamlls',
             'volar', -- vue
             'ts_ls', -- typescript
             'eslint', -- javascript
             'tailwindcss', -- css
             'bashls',
+            'lua_ls',
+            'neocmake',
+            'jsonls',
+            'lemminx', -- xml lsp
+            'yamlls',
         },
         automatic_installation = true
     }

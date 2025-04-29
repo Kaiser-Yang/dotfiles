@@ -6,14 +6,14 @@ return {
         require('catppuccin').setup({
             flavour = 'mocha',
             integrations = {
-                blink_cmp        = true,
-                lsp_saga         = true,
-                mason            = true,
-                noice            = true,
-                notify           = true,
-                nvim_surround    = true,
-                illuminate       = true,
-                which_key        = true,
+                blink_cmp     = true,
+                lsp_saga      = true,
+                mason         = true,
+                noice         = true,
+                notify        = true,
+                nvim_surround = true,
+                illuminate    = true,
+                which_key     = true,
             },
             highlight_overrides = {
                 mocha = function(mocha)

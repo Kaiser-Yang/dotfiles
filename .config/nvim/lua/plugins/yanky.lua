@@ -1,8 +1,6 @@
 return {
     'gbprod/yanky.nvim',
-    dependencies = {
-        'nvim-telescope/telescope.nvim',
-    },
+    dependencies = { "folke/snacks.nvim" },
     config = function()
         local map_set = require('utils').map_set
         require('yanky').setup({
@@ -15,18 +13,19 @@ return {
                     on_put = true,
                     timer = 50
                 },
-            }
+            },
+            ring = {
+                permanent_wrapper = require("yanky.wrappers").remove_carriage_return,
+            },
         })
         map_set({ 'n', 'x' }, 'y', '<plug>(YankyYank)')
         map_set({ 'n', 'x' }, 'p', '<plug>(YankyPutAfter)')
         map_set({ 'n', 'x' }, 'P', '<plug>(YankyPutBefore)')
-        map_set({ 'n', 'x' }, 'gp', '<plug>(YankyGPutAfter)',
-            { desc = 'Put yanked text after cursor and leave the cursor after pasted text' })
-        map_set({ 'n', 'x' }, 'gP', '<plug>(YankyGPutBefore)',
-            { desc = 'Put yanked text before cursor and leave the cursor after pasted text' })
-        require('telescope').load_extension('yank_history')
-        map_set({ 'n' }, 'gy', function()
-            require('telescope').extensions.yank_history.yank_history({ initial_mode = 'normal' })
+        map_set({ 'n', 'x' }, 'gp', '<plug>(YankyGPutAfter)')
+        map_set({ 'n', 'x' }, 'gP', '<plug>(YankyGPutBefore)')
+        map_set({ 'n', 'x' }, 'gy', function()
+            ---@diagnostic disable-next-line: undefined-field
+            require('snacks').picker.yanky({ on_show = function() vim.cmd.stopinsert() end })
         end)
         -- TODO:
         -- map_set({ 'n' }, ']p', '<plug>(YankyPutIndentAfterLinewise)')

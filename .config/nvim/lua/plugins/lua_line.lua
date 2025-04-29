@@ -18,20 +18,19 @@ return {
                 winbar = lua_line_ignore_ft,
             },
             ignore_focus = lua_line_ignore_ft,
-            always_divide_middle = true,
             globalstatus = false,
-            refresh = {
-                statusline = 100,
-                tabline = 100,
-                winbar = 100,
-            }
         },
         sections = {
             lualine_a = { 'mode' },
-            lualine_b = { 'branch', 'diff', 'diagnostics' },
+            lualine_b = { 'branch', 'diff' },
             lualine_c = { 'filename' },
-            lualine_x = { require('plugins.rime_ls').rime_status_icon, 'copilot', 'encoding',
-                'fileformat', 'filetype' },
+            lualine_x = {
+                function() return vim.g.rime_enabled and 'ㄓ' or '' end,
+                'copilot',
+                'encoding',
+                'fileformat',
+                'filetype',
+            },
             lualine_y = { 'searchcount', 'quickfix', 'progress' },
             lualine_z = { 'location' },
         },

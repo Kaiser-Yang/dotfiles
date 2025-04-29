@@ -1,6 +1,8 @@
+local map_set = require('utils').map_set
 return {
     'folke/noice.nvim',
     event = 'VeryLazy',
+    -- TODO: remove nvim-notify when snacks.notifier is good enough
     dependencies = {
         'MunifTanjim/nui.nvim',
         'rcarriga/nvim-notify',
@@ -8,38 +10,6 @@ return {
     config = function()
         ---@diagnostic disable-next-line: missing-fields
         require('noice').setup({
-            routes = {
-                -- FIX: copilot gives this all the time
-                -- see: https://github.com/zbirenbaum/copilot.lua/issues/321
-                {
-                    filter = {
-                        event = 'msg_show',
-                        any = {
-                            { find = 'Agent service not initialized' },
-                        },
-                    },
-                    opts = { skip = true },
-                },
-                -- NOTE: ignore the written message
-                {
-                    filter = {
-                        event = "msg_show",
-                        kind = "",
-                        find = "written",
-                    },
-                    opts = { skip = true },
-                },
-                -- NOTE: ignore clipboard error message
-                {
-                    filter = {
-                        event = "msg_show",
-                        any = {
-                            { find = "clipboard: error: no buffers" },
-                        }
-                    },
-                    opts = { skip = true },
-                },
-            },
             lsp = {
                 override = {
                     ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
@@ -48,10 +18,10 @@ return {
                 signature = {
                     enabled = false,
                 },
-                hover = {
+                documentation = {
                     enabled = false,
                 },
-                documentation = {
+                hover = {
                     enabled = false,
                 },
             },
@@ -65,7 +35,7 @@ return {
             callback = function()
                 local msg = string.format('Recording @%s', vim.fn.reg_recording())
                 _MACRO_RECORDING_STATUS = true
-                vim.notify(msg, vim.log.levels.INFO, {
+                vim.notify(msg, nil, {
                     title = 'Macro Recording',
                     keep = function() return _MACRO_RECORDING_STATUS end,
                     timeout = 0
@@ -78,5 +48,12 @@ return {
                 _MACRO_RECORDING_STATUS = false
             end,
         })
+        map_set({ 'n' }, '<leader>n', function()
+            require('noice.integrations.snacks').open({
+                on_show = function()
+                    vim.cmd.stopinsert()
+                end
+            })
+        end, { desc = 'Noice history' })
     end,
 }

@@ -3,5 +3,9 @@ return {
     dependencies = {
         'nvim-treesitter/nvim-treesitter',
     },
-    config = true
+    opts = {
+        opts = {
+            enable_close_on_slash = true,
+        },
+    },
 }
