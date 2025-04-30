@@ -91,3 +91,11 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.bo.softtabstop = 2
     end,
 })
+vim.api.nvim_create_autocmd('VimLeavePre', {
+    callback = function()
+        -- get all the buffers, and delete all non-modifiable buffers
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if not vim.bo[buf].modifiable then vim.api.nvim_buf_delete(buf, { force = true }) end
+        end
+    end,
+})
