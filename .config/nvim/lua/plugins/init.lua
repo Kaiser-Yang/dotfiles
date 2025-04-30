@@ -15,6 +15,7 @@ return {
     require('plugins.lsp_saga'),
     require('plugins.mason'),
     require('plugins.mason_lsp_config'),
+    require('plugins.nvim_java'),
 
     require('plugins.blink_cmp'),
     require('plugins.formatter'),
@@ -37,7 +38,6 @@ return {
     require('plugins.comment'),
     require('plugins.snacks'),
     require('plugins.surround'),
-    require('plugins.tmux_navigator'),
     require('plugins.which_key'),
     require('plugins.win_resizer'),
     require('plugins.yanky'),

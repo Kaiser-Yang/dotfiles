@@ -11,16 +11,7 @@ return {
         lsp_capabilities = require('blink.cmp').get_lsp_capabilities(lsp_capabilities)
         local default = require('lspconfig').util.default_config
         default.capabilities = vim.tbl_deep_extend('force', default.capabilities, lsp_capabilities)
-        vim.lsp.config('*', {
-            root_markers = vim.g.root_markers,
-        })
-        require('java').setup({
-            capabilities = lsp_capabilities,
-            root_markers = vim.g.root_markers,
-            jdk = {
-                auto_install = false,
-            },
-        })
+        vim.lsp.config('*', { root_markers = vim.g.root_markers })
         vim.lsp.enable({
             'bashls',
             'clangd',

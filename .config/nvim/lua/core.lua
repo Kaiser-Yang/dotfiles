@@ -55,7 +55,7 @@ vim.o.softtabstop = 4
 vim.o.showbreak = '↪'
 vim.o.encoding = 'utf-8'
 vim.o.foldlevel = 99
-vim.o.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions'
+vim.o.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions,resize'
 
 vim.api.nvim_create_augroup('UserDIY', {})
 -- When leaving normal mode, disable hlsearch
