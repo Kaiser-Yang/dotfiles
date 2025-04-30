@@ -62,7 +62,9 @@ return {
                     map_set({ 'n' }, key, function()
                         local win = get_win('AvanteInput')
                         if win then vim.api.nvim_set_current_win(win) end
-                        feedkeys(key, 'n')
+                        vim.schedule(function()
+                            if vim.api.nvim_get_mode().mode ~= 'i' then feedkeys(key, 'n') end
+                        end)
                     end, { buffer = true })
                 end
             end,
