@@ -225,7 +225,15 @@ return {
         scope = {
             enabled = false,
         },
-        scroll = { enabled = true },
+        scroll = {
+            enabled = true,
+            filter = function(buf)
+                return vim.g.snacks_scroll ~= false
+                    and vim.b[buf].snacks_scroll ~= false
+                    and vim.bo[buf].buftype ~= 'terminal'
+                    and vim.bo[buf].filetype ~= 'blink-cmp-menu'
+            end,
+        },
         statuscolumn = {
             enabled = true,
             left = { 'mark', 'sign', 'git' },
@@ -265,11 +273,6 @@ return {
         },
         { '<c-t>', function() Snacks.terminal() end, desc = 'Toggle Terminal' },
         { '<c-t>', '<cmd>close<cr>', desc = 'Toggle Terminal', mode = { 't' } },
-        {
-            '<c-r>',
-            function() Snacks.picker.resume() end,
-            desc = 'Resume las picker',
-        },
         {
             '<leader>r',
             function()
