@@ -1,4 +1,3 @@
-local utils = require('utils')
 -- INFO: Those variables do not support wildcards
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 vim.g.root_markers = { '.git', '.root', 'pom.xml' }
@@ -55,7 +54,7 @@ vim.o.softtabstop = 4
 vim.o.showbreak = '↪'
 vim.o.encoding = 'utf-8'
 vim.o.foldlevel = 99
-vim.o.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions,resize'
+vim.o.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions'
 
 vim.api.nvim_create_augroup('UserDIY', {})
 -- When leaving normal mode, disable hlsearch
