@@ -9,6 +9,10 @@ return {
     config = function()
         local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
         lsp_capabilities = require('blink.cmp').get_lsp_capabilities(lsp_capabilities)
+        lsp_capabilities.textDocument.foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true,
+        }
         local default = require('lspconfig').util.default_config
         default.capabilities = vim.tbl_deep_extend('force', default.capabilities, lsp_capabilities)
         vim.lsp.config('*', { root_markers = vim.g.root_markers })
