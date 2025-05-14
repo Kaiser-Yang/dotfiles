@@ -137,10 +137,7 @@ return {
         dependencies = {
             'mikavilpas/blink-ripgrep.nvim',
             'Kaiser-Yang/blink-cmp-dictionary',
-            {
-                'Kaiser-Yang/blink-cmp-git',
-                dependencies = { 'nvim-lua/plenary.nvim' },
-            },
+            'Kaiser-Yang/blink-cmp-git',
             'Kaiser-Yang/blink-cmp-avante',
         },
         version = '*',

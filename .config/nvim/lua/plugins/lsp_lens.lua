@@ -21,6 +21,9 @@ return {
         }
     },
     opts = {
-        enable = lsp_lens_enable
+        enable = lsp_lens_enable,
+        sections = {
+            git_authors = false,
+        }
     }
 }
