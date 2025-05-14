@@ -1,3 +1,4 @@
+local disabled_filetype = { 'snacks_picker_input' }
 return {
     'altermo/ultimate-autopair.nvim',
     event = { 'InsertEnter', 'CmdlineEnter' },
@@ -19,9 +20,12 @@ return {
                 enable = false,
             },
             config_internal_pairs = {
-                { '[', ']', fly = true, dosuround = false, newline = true, space = true },
-                { '(', ')', fly = true, dosuround = false, newline = true, space = true },
-                { '{', '}', fly = true, dosuround = false, newline = true, space = true },
+                { '[', ']', dosuround = false, nft = disabled_filetype },
+                { '(', ')', dosuround = false, nft = disabled_filetype },
+                { '{', '}', dosuround = false, nft = disabled_filetype },
+                { '"', '"', nft = disabled_filetype },
+                { "'", "'", nft = disabled_filetype },
+                { '`', '`', nft = disabled_filetype },
             },
         })
         local map_set = require('utils').map_set
