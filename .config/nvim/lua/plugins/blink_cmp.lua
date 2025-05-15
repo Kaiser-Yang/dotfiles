@@ -235,7 +235,7 @@ return {
                     if vim.fn.expand('%:p'):find('.config/nvim') then
                         result[#result + 1] = 'lazydev'
                     end
-                    if vim.bo.filetype == 'Avante' then
+                    if vim.bo.filetype == 'AvanteInput' then
                         result[#result + 1] = 'avante'
                     elseif
                         vim.tbl_contains({ 'gitcommit', 'markdown', 'octo' }, vim.bo.filetype)

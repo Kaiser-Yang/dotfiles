@@ -39,6 +39,9 @@ return {
                     insert = '<M-CR>',
                 },
             },
+            selector = {
+                provider = 'snacks'
+            }
         })
         local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
         local diff = require('avante.diff')
