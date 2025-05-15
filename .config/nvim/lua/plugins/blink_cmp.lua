@@ -139,6 +139,7 @@ return {
             'Kaiser-Yang/blink-cmp-dictionary',
             'Kaiser-Yang/blink-cmp-git',
             'Kaiser-Yang/blink-cmp-avante',
+            'rafamadriz/friendly-snippets',
         },
         version = '*',
 
