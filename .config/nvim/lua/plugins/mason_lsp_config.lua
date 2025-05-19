@@ -3,6 +3,7 @@ return {
     dependencies = {
         'williamboman/mason.nvim',
     },
+    branch = 'v1.x',
     opts = {
         ensure_installed = {
             'clangd',
