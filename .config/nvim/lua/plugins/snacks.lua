@@ -52,6 +52,12 @@ return {
                     corner_bottom = '╰',
                 },
             },
+            filter = function(buf)
+                return vim.g.snacks_indent ~= false
+                    and vim.b[buf].snacks_indent ~= false
+                    and vim.bo[buf].buftype == ''
+                    and vim.bo[buf].filetype ~= 'markdown'
+            end,
         },
         input = { enabled = false },
         ---@class snacks.picker.Config
@@ -121,7 +127,7 @@ return {
                         ['<a-w>'] = { 'toggle_focus', mode = { 'i', 'n' } },
                         ['<a-m>'] = { 'toggle_maximize', mode = { 'i', 'n' } },
                         ['<a-p>'] = { 'toggle_preview', mode = { 'i', 'n' } },
-                        -- Toggle whether of not follow link file
+                        -- Toggle whether or not follow link file
                         ['<a-f>'] = { 'toggle_follow', mode = { 'i', 'n' } },
                         ['<a-i>'] = { 'toggle_ignored', mode = { 'i', 'n' } },
                         ['<a-d>'] = { 'toggle_hidden', mode = { 'i', 'n' } },
