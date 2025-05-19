@@ -11,7 +11,6 @@ return {
     -- LSP
     require('plugins.lazy_dev'),
     require('plugins.lsp_config'),
-    -- require('plugins.lsp_lens'),
     require('plugins.lsp_saga'),
     require('plugins.mason'),
     require('plugins.mason_lsp_config'),
