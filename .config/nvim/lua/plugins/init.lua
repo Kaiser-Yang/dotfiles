@@ -14,7 +14,6 @@ return {
     require('plugins.lsp_saga'),
     require('plugins.mason'),
     require('plugins.mason_lsp_config'),
-    require('plugins.nvim_java'),
     require('plugins.ufo'),
 
     require('plugins.blink_cmp'),
