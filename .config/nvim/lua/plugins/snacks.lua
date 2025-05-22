@@ -27,6 +27,7 @@ return {
     dependencies = {
         'nvim-treesitter/nvim-treesitter-textobjects',
         'nvim-treesitter/nvim-treesitter',
+        'MeanderingProgrammer/render-markdown.nvim',
     },
     ---@module 'snacks'
     ---@type snacks.Config
@@ -294,7 +295,7 @@ return {
                 local filename_noext = vim.fn.fnamemodify(fullpath, ':t:r')
                 local command = ''
                 if vim.bo.filetype == 'markdown' then
-                    vim.cmd('RenderMarkdown')
+                    vim.cmd('RenderMarkdown buf_toggle')
                     return
                 elseif vim.bo.filetype == 'c' then
                     command = string.format(
