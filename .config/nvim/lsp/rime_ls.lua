@@ -51,6 +51,7 @@ end
 return {
     name = 'rime_ls',
     cmd = { 'rime_ls' },
+    capabilities = require('utils').get_lsp_capabilities(),
     init_options = {
         enabled = vim.g.rime_enabled,
         shared_data_dir = '/usr/share/rime-data',

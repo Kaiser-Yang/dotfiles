@@ -10,6 +10,28 @@ function M.get_visible_bufs()
     return visible_bufs
 end
 
+--- @param override? lsp.ClientCapabilities Overrides blink.cmp's default capabilities
+--- @return lsp.ClientCapabilities
+function M.get_lsp_capabilities(override)
+    override = override or {}
+    local default = {
+        textDocument = {
+            completion = {
+                completionItem = {
+                    -- Disable the snippets of lsp
+                    snippetSupport = false,
+                },
+            },
+            foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true,
+            },
+        },
+    }
+    vim.tbl_deep_extend('force', default, override)
+    return require('blink.cmp').get_lsp_capabilities(default)
+end
+
 --- @param types string[]
 function M.inside_block(types)
     if vim.api.nvim_get_mode().mode ~= 'i' then return false end
