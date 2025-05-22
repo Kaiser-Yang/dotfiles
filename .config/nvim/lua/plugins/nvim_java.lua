@@ -4,9 +4,6 @@ return {
         jdk = {
             auto_install = false,
         },
-        java_debug_adapter = {
-            enable = false
-        },
         notifications = {
             dap = false,
         }

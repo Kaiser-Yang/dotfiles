@@ -4,8 +4,6 @@ return {
         'mfussenegger/nvim-dap',
         'nvim-neotest/nvim-nio',
         'theHamsta/nvim-dap-virtual-text',
-        'nvim-tree/nvim-tree.lua',
-        'nvimdev/lspsaga.nvim',
     },
     config = function()
         require('nvim-dap-virtual-text').setup({})

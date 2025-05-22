@@ -18,6 +18,7 @@ return {
     require('plugins.ufo'),
 
     require('plugins.blink_cmp'),
+    require('plugins.debugger'),
     require('plugins.formatter'),
 
     -- Git
