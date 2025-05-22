@@ -33,7 +33,7 @@ return {
     ---@type snacks.Config
     opts = {
         bigfile = {
-            enalbed = true,
+            enabled = true,
             size = vim.g.big_file_limit,
         },
         dashboard = {
