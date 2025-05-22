@@ -29,6 +29,7 @@ return {
     require('plugins.copilot'),
     require('plugins.avante'),
 
+    require('plugins.markdown_render'),
 
     require('plugins.auto_pairs'),
     require('plugins.auto_save'),

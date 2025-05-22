@@ -12,7 +12,7 @@ local completion_keymap = {
     ['<space>'] = {
         function(cmp)
             if not vim.g.rime_enabled then return false end
-            local rime_item_index = utils.get_n_rime_item_index(1)
+            local rime_item_index = utils.get_n_rime_item_index(1, nil)
             if #rime_item_index ~= 1 then return false end
             return cmp.accept({ index = rime_item_index[1] })
         end,
@@ -22,7 +22,7 @@ local completion_keymap = {
         -- FIX: can not work when binding ;<space> to other key
         function(cmp)
             if not vim.g.rime_enabled then return false end
-            local rime_item_index = utils.get_n_rime_item_index(2)
+            local rime_item_index = utils.get_n_rime_item_index(2, nil)
             if #rime_item_index ~= 2 then return false end
             return cmp.accept({ index = rime_item_index[2] })
         end,
@@ -34,7 +34,7 @@ local completion_keymap = {
             local content_before_cursor =
                 string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
             if content_before_cursor:match('z%w*$') then return false end
-            local rime_item_index = utils.get_n_rime_item_index(3)
+            local rime_item_index = utils.get_n_rime_item_index(3, nil)
             if #rime_item_index ~= 3 then return false end
             return cmp.accept({ index = rime_item_index[3] })
         end,
@@ -99,36 +99,6 @@ local blink_cmp_git_label_name_highlight = {
 for kind_name, hl in pairs(blink_cmp_git_label_name_highlight) do
     vim.api.nvim_set_hl(0, 'BlinkCmpGitKindIcon' .. kind_name, hl)
     vim.api.nvim_set_hl(0, 'BlinkCmpGitLabel' .. kind_name .. 'Id', hl)
-end
-
---- @param types string[]
-local function inside_block(types)
-    if vim.api.nvim_get_mode().mode ~= 'i' then return false end
-    local node_under_cursor = vim.treesitter.get_node()
-    local parser = vim.treesitter.get_parser(nil, nil, { error = false })
-    local query = vim.treesitter.query.get(vim.bo.filetype, 'highlights')
-    if not parser or not node_under_cursor or not query then return false end
-    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-    row = row - 1
-    for id, node, _ in query:iter_captures(node_under_cursor, 0, row, row + 1) do
-        for _, t in ipairs(types) do
-            if query.captures[id]:find(t) then
-                local start_row, start_col, end_row, end_col = node:range()
-                if start_row <= row and row <= end_row then
-                    if start_row == row and end_row == row then
-                        if start_col <= col and col <= end_col then return true end
-                    elseif start_row == row then
-                        if start_col <= col then return true end
-                    elseif end_row == row then
-                        if col <= end_col then return true end
-                    else
-                        return true
-                    end
-                end
-            end
-        end
-    end
-    return false
 end
 
 return {
@@ -218,12 +188,8 @@ return {
                 keymap = completion_keymap,
                 completion = {
                     menu = { auto_show = true },
-                    ghost_text = {
-                        enabled = false,
-                    },
-                    list = {
-                        selection = { preselect = false, auto_insert = true },
-                    },
+                    ghost_text = { enabled = false },
+                    list = { selection = { preselect = false, auto_insert = true } },
                 },
             },
             sources = {
@@ -245,7 +211,7 @@ return {
                     end
                     if
                         vim.tbl_contains({ 'markdown', 'text', 'octo', 'Avante' }, vim.bo.filetype)
-                        or inside_block({ 'comment', 'string' })
+                        or utils.inside_block({ 'comment', 'string' })
                     then
                         vim.list_extend(result, {
                             'buffer',
@@ -257,15 +223,12 @@ return {
                 end,
                 providers = {
                     avante = {
-                        module = 'blink-cmp-avante',
                         name = 'Avante',
+                        module = 'blink-cmp-avante',
                     },
                     git = {
-                        -- Because we use filetype to enable the source,
-                        -- we can make the score higher
-                        score_offset = 100,
-                        module = 'blink-cmp-git',
                         name = 'Git',
+                        module = 'blink-cmp-git',
                         --- @module 'blink-cmp-git'
                         --- @type blink-cmp-git.Options
                         opts = {
@@ -374,8 +337,8 @@ return {
                         },
                     },
                     dictionary = {
-                        module = 'blink-cmp-dictionary',
                         name = 'Dict',
+                        module = 'blink-cmp-dictionary',
                         min_keyword_length = 3,
                         --- @module 'blink-cmp-dictionary'
                         --- @type blink-cmp-dictionary.Options
@@ -391,6 +354,7 @@ return {
                             local TYPE_ALIAS = require('blink.cmp.types').CompletionItemKind
                             items = vim.tbl_filter(
                                 function(item)
+                                    -- Remove Snippets and Text from completion list
                                     return item.kind ~= TYPE_ALIAS.Snippet
                                             and item.kind ~= TYPE_ALIAS.Text
                                         or utils.is_rime_item(item)
@@ -428,8 +392,8 @@ return {
                         score_offset = 100,
                     },
                     ripgrep = {
-                        module = 'blink-ripgrep',
                         name = 'RG',
+                        module = 'blink-ripgrep',
                         ---@module 'blink-ripgrep'
                         ---@type blink-ripgrep.Options
                         opts = {

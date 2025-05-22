@@ -10,6 +10,37 @@ function M.get_visible_bufs()
     return visible_bufs
 end
 
+--- @param types string[]
+function M.inside_block(types)
+    if vim.api.nvim_get_mode().mode ~= 'i' then return false end
+    local node_under_cursor = vim.treesitter.get_node()
+    local parser = vim.treesitter.get_parser(nil, nil, { error = false })
+    if not parser or not node_under_cursor then return false end
+    local query = vim.treesitter.query.get(parser:lang(), 'highlights')
+    if not query then return false end
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    row = row - 1
+    for id, node, _ in query:iter_captures(node_under_cursor, 0, row, row + 1) do
+        for _, t in ipairs(types) do
+            if query.captures[id]:find(t) then
+                local start_row, start_col, end_row, end_col = node:range()
+                if start_row <= row and row <= end_row then
+                    if start_row == row and end_row == row then
+                        if start_col <= col and col <= end_col then return true end
+                    elseif start_row == row then
+                        if start_col <= col then return true end
+                    elseif end_row == row then
+                        if col <= end_col then return true end
+                    else
+                        return true
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
+
 --- @param context { line: string, cursor: number[] }
 --- Return if rime_ls should be disabled in current context
 function M.rime_ls_disabled(context)
@@ -36,7 +67,7 @@ function M.is_rime_item(item)
 end
 
 --- @param n number
---- @param items blink.cmp.CompletionItem[]
+--- @param items? blink.cmp.CompletionItem[]
 function M.get_n_rime_item_index(n, items)
     if items == nil then items = require('blink.cmp.completion.list').items end
     local result = {}

@@ -8,6 +8,8 @@ return {
     },
     config = function()
         local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+        -- Disable the snippets of lsp
+        lsp_capabilities.textDocument.completion.completionItem.snippetSupport = false;
         lsp_capabilities = require('blink.cmp').get_lsp_capabilities(lsp_capabilities)
         lsp_capabilities.textDocument.foldingRange = {
             dynamicRegistration = false,

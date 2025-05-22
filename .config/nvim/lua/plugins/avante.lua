@@ -9,8 +9,8 @@ return {
         'MunifTanjim/nui.nvim',
         'nvim-tree/nvim-web-devicons',
         'zbirenbaum/copilot.lua',
-        -- 'HakonHarnes/img-clip.nvim',
         'MeanderingProgrammer/render-markdown.nvim',
+        -- 'HakonHarnes/img-clip.nvim',
     },
     config = function()
         require('avante').setup({

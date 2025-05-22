@@ -293,7 +293,10 @@ return {
                 local filename = vim.fn.fnamemodify(fullpath, ':t')
                 local filename_noext = vim.fn.fnamemodify(fullpath, ':t:r')
                 local command = ''
-                if vim.bo.filetype == 'c' then
+                if vim.bo.filetype == 'markdown' then
+                    vim.cmd('RenderMarkdown')
+                    return
+                elseif vim.bo.filetype == 'c' then
                     command = string.format(
                         'gcc -g -Wall "%s" -I include -o "%s.out" && echo RUNNING && time "./%s.out"',
                         filename,
