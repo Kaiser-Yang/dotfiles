@@ -9,11 +9,6 @@ return {
     ---@type render.md.UserConfig
     opts = {
         enabled = false,
-        file_types = vim.g.markdown_support_filetype,
-        html = {
-            comment = {
-                conceal = false,
-            }
-        }
+        file_types = vijjjm.g.markdown_support_filetype,
     },
 }
