@@ -15,7 +15,7 @@ end, { desc = 'Paste from + reg', expr = true })
 map_set({ 'n', 'x' }, '<leader>P', function()
     vim.fn.setreg('+', vim.fn.getreg('+'):gsub('\r', ''), vim.fn.getregtype('+'))
     return '"+P'
-end, { desc = 'Paste before from + reg' })
+end, { desc = 'Paste before from + reg', expr = true })
 map_set({ 'n' }, '<leader>ay', function()
     local cur = vim.api.nvim_win_get_cursor(0)
     vim.api.nvim_command('normal! ggVGy')
