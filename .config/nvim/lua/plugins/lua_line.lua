@@ -1,11 +1,14 @@
 local lua_line_ignore_ft = {
-    'neo-tree', 'Avante', 'AvanteInput', 'help'
+    'neo-tree',
+    'Avante',
+    'AvanteInput',
+    'help',
 }
 return {
     'nvim-lualine/lualine.nvim',
     dependencies = {
         'nvim-tree/nvim-web-devicons',
-        'AndreM222/copilot-lualine'
+        'AndreM222/copilot-lualine',
     },
     opts = {
         options = {

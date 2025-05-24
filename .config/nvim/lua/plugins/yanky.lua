@@ -1,21 +1,21 @@
 return {
     'gbprod/yanky.nvim',
-    dependencies = { "folke/snacks.nvim" },
+    dependencies = { 'folke/snacks.nvim' },
     config = function()
         local map_set = require('utils').map_set
         require('yanky').setup({
             system_clipboard = {
-                clipboard_registore = '+'
+                clipboard_registore = '+',
             },
             picker = {
                 highlight = {
                     on_yank = true,
                     on_put = true,
-                    timer = 50
+                    timer = 50,
                 },
             },
             ring = {
-                permanent_wrapper = require("yanky.wrappers").remove_carriage_return,
+                permanent_wrapper = require('yanky.wrappers').remove_carriage_return,
             },
         })
         map_set({ 'n', 'x' }, 'y', '<plug>(YankyYank)')
@@ -40,5 +40,5 @@ return {
         -- map_set({ 'n' }, '=P', '<plug>(YankyPutBeforeFilter)')
         -- map_set('n', '<c-p>', '<plug>(YankyPreviousEntry)')
         -- map_set('n', '<c-n>', '<plug>(YankyNextEntry)')
-    end
+    end,
 }

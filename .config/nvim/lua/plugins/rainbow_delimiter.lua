@@ -9,9 +9,7 @@ return {
                 'RainbowDelimiterOrange',
                 'RainbowDelimiterViolet',
                 'RainbowDelimiterCyan',
-                -- Do not use green which is similar to the string color
-                -- 'RainbowDelimiterGreen',
             },
         }
-    end
+    end,
 }

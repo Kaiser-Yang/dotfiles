@@ -4,21 +4,19 @@ return {
     dependencies = {
         {
             'andymass/vim-matchup',
-            init = function()
-                vim.g.matchup_matchparen_offscreen = { method = 'popup' }
-            end,
+            init = function() vim.g.matchup_matchparen_offscreen = { method = 'popup' } end,
         },
         'nvim-treesitter/nvim-treesitter-textobjects',
         {
             'nvim-treesitter/nvim-treesitter-context',
             opts = {
                 max_lines = 1,
-            }
-        }
+            },
+        },
     },
     config = function()
         ---@diagnostic disable-next-line: missing-fields
-        require('nvim-treesitter.configs').setup {
+        require('nvim-treesitter.configs').setup({
             sync_install = false,
             auto_install = true,
             highlight = {
@@ -35,7 +33,7 @@ return {
                     node_incremental = 'gn',
                     node_decremental = 'gp',
                     scope_incremental = 'gs',
-                }
+                },
             },
             matchup = {
                 enable = true,
@@ -47,59 +45,59 @@ return {
                     keymaps = {
                         ['af'] = {
                             query = '@function.outer',
-                            desc = 'Around function'
+                            desc = 'Around function',
                         },
                         ['if'] = {
                             query = '@function.inner',
-                            desc = 'Inside function'
+                            desc = 'Inside function',
                         },
                         ['ac'] = {
                             query = '@class.outer',
-                            desc = 'Around class'
+                            desc = 'Around class',
                         },
                         ['ic'] = {
                             query = '@class.inner',
-                            desc = 'Inside class'
+                            desc = 'Inside class',
                         },
                         ['al'] = {
                             query = '@loop.outer',
-                            desc = 'Around loop'
+                            desc = 'Around loop',
                         },
                         ['il'] = {
                             query = '@loop.inner',
-                            desc = 'Inside loop'
+                            desc = 'Inside loop',
                         },
                         ['ab'] = {
                             query = '@block.outer',
-                            desc = 'Around block'
+                            desc = 'Around block',
                         },
                         ['ib'] = {
                             query = '@block.inner',
-                            desc = 'Inside block'
+                            desc = 'Inside block',
                         },
                         ['ar'] = {
                             query = '@return.outer',
-                            desc = 'Around return'
+                            desc = 'Around return',
                         },
                         ['ir'] = {
                             query = '@return.inner',
-                            desc = 'Inside return'
+                            desc = 'Inside return',
                         },
                         ['ap'] = {
                             query = '@parameter.outer',
-                            desc = 'Around parameter'
+                            desc = 'Around parameter',
                         },
                         ['ip'] = {
                             query = '@parameter.inner',
-                            desc = 'Inside parameter'
+                            desc = 'Inside parameter',
                         },
                         ['ai'] = {
                             query = '@conditional.outer',
-                            desc = 'Around if'
+                            desc = 'Around if',
                         },
                         ['ii'] = {
                             query = '@conditional.inner',
-                            desc = 'Inside if'
+                            desc = 'Inside if',
                         },
                     },
                 },
@@ -125,7 +123,7 @@ return {
                         },
                         [']r'] = {
                             query = '@return.outer',
-                            desc = 'Next return start'
+                            desc = 'Next return start',
                         },
                         [']p'] = {
                             query = '@parameter.inner',
@@ -134,7 +132,7 @@ return {
                         [']i'] = {
                             query = '@conditional.outer',
                             desc = 'Next if start',
-                        }
+                        },
                     },
                     goto_next_end = {
                         [']F'] = {
@@ -155,7 +153,7 @@ return {
                         },
                         [']R'] = {
                             query = '@return.outer',
-                            desc = 'Next return end'
+                            desc = 'Next return end',
                         },
                         [']P'] = {
                             query = '@parameter.inner',
@@ -164,7 +162,7 @@ return {
                         [']I'] = {
                             query = '@conditional.outer',
                             desc = 'Next if end',
-                        }
+                        },
                     },
                     goto_previous_start = {
                         ['[f'] = {
@@ -185,7 +183,7 @@ return {
                         },
                         ['[r'] = {
                             query = '@return.outer',
-                            desc = 'Previous return start'
+                            desc = 'Previous return start',
                         },
                         ['[p'] = {
                             query = '@parameter.inner',
@@ -194,7 +192,7 @@ return {
                         ['[i'] = {
                             query = '@conditional.outer',
                             desc = 'Previous if start',
-                        }
+                        },
                     },
                     goto_previous_end = {
                         ['[F'] = {
@@ -215,7 +213,7 @@ return {
                         },
                         ['[R'] = {
                             query = '@return.outer',
-                            desc = 'Previous return end'
+                            desc = 'Previous return end',
                         },
                         ['[P'] = {
                             query = '@parameter.inner',
@@ -224,7 +222,7 @@ return {
                         ['[I'] = {
                             query = '@conditional.outer',
                             desc = 'Previous if end',
-                        }
+                        },
                     },
                 },
                 swap = {
@@ -290,8 +288,8 @@ return {
                         },
                     },
                 },
-            }
-        }
+            },
+        })
         local map_set = require('utils').map_set
         local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
         map_set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move)
@@ -301,14 +299,13 @@ return {
         map_set({ 'n', 'x', 'o' }, 't', ts_repeat_move.builtin_t_expr, { expr = true })
         map_set({ 'n', 'x', 'o' }, 'T', ts_repeat_move.builtin_T_expr, { expr = true })
         local feedkeys = require('utils').feedkeys
-        local next_misspell, prev_misspell = ts_repeat_move.make_repeatable_move_pair(function()
-            feedkeys(']s', 'n')
-        end, function()
-            feedkeys('[s', 'n')
-        end)
+        local next_misspell, prev_misspell = ts_repeat_move.make_repeatable_move_pair(
+            function() feedkeys(']s', 'n') end,
+            function() feedkeys('[s', 'n') end
+        )
         map_set('n', ']s', next_misspell, { desc = 'Next misspelled word' })
         map_set('n', '[s', prev_misspell, { desc = 'Previous misspelled word' })
         vim.o.foldmethod = 'expr'
         vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-    end
+    end,
 }

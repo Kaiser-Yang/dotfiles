@@ -38,21 +38,17 @@ return {
                 vim.notify(msg, nil, {
                     title = 'Macro Recording',
                     keep = function() return _MACRO_RECORDING_STATUS end,
-                    timeout = 0
+                    timeout = 0,
                 })
             end,
         })
         vim.api.nvim_create_autocmd('RecordingLeave', {
             group = 'UserDIY',
-            callback = function()
-                _MACRO_RECORDING_STATUS = false
-            end,
+            callback = function() _MACRO_RECORDING_STATUS = false end,
         })
         map_set({ 'n' }, '<leader>sn', function()
             require('noice.integrations.snacks').open({
-                on_show = function()
-                    vim.cmd.stopinsert()
-                end
+                on_show = function() vim.cmd.stopinsert() end,
             })
         end, { desc = 'Noice history' })
     end,

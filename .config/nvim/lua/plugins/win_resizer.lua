@@ -7,7 +7,7 @@ return {
                 'neo-tree',
                 'Avante',
                 'AvanteInput',
-            }
+            },
         })
         local resize = require('win.resizer').resize
         local map_set = require('utils').map_set
@@ -30,38 +30,37 @@ return {
         }
         for _, border in pairs({ 'top', 'bottom', 'left', 'right' }) do
             local delta = (border == first_left_or_right or border == first_top_or_bottom)
-                and abs_delta
+                    and abs_delta
                 or -abs_delta
             local first = (border == first_left_or_right or border == second_left_or_right)
-                and first_left_or_right
+                    and first_left_or_right
                 or first_top_or_bottom
-            local second = first == first_left_or_right and second_left_or_right or second_top_or_bottom
+            local second = first == first_left_or_right and second_left_or_right
+                or second_top_or_bottom
             local desc = 'Smart resize ' .. first .. ' ' .. border
             local desc_reverse = 'Smart resize ' .. second .. ' ' .. border
-            map_set({ 'n' }, border_to_key[border], function()
-                local _ = resize(0, first, delta, true) or
-                    resize(0, second, -delta, true) or
-                    resize(0, first, delta, false) or
-                    resize(0, second, -delta, false)
-            end, { desc = desc })
-            map_set({ 'n' }, border_to_reverse_key[border], function()
-                local _ = resize(0, second, -delta, true) or
-                    resize(0, first, delta, true) or
-                    resize(0, second, -delta, false) or
-                    resize(0, first, delta, false)
-            end, { desc = desc_reverse })
-
-            -- or use this below
-
-            -- local delta = abs_delta
-            -- local desc = 'Increase ' .. border .. ' border'
-            -- local desc_reverse = 'Decrease ' .. border .. ' border'
-            -- map_set({ 'n' }, border_to_key[border], function()
-            --     resize(0, border, delta, true)
-            -- end, { desc = desc })
-            -- map_set({ 'n' }, border_to_reverse_key[border], function()
-            --     resize(0, border, -delta, true)
-            -- end, { desc = desc_reverse })
+            map_set(
+                { 'n' },
+                border_to_key[border],
+                function()
+                    local _ = resize(0, first, delta, true)
+                        or resize(0, second, -delta, true)
+                        or resize(0, first, delta, false)
+                        or resize(0, second, -delta, false)
+                end,
+                { desc = desc }
+            )
+            map_set(
+                { 'n' },
+                border_to_reverse_key[border],
+                function()
+                    local _ = resize(0, second, -delta, true)
+                        or resize(0, first, delta, true)
+                        or resize(0, second, -delta, false)
+                        or resize(0, first, delta, false)
+                end,
+                { desc = desc_reverse }
+            )
         end
-    end
+    end,
 }

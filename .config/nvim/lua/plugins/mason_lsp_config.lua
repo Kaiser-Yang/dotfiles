@@ -19,7 +19,8 @@ return {
             'jsonls',
             'lemminx', -- xml lsp
             'yamlls',
+            'markdown_oxide',
         },
-        automatic_installation = true
-    }
+        automatic_installation = true,
+    },
 }

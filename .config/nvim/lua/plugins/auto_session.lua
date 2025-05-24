@@ -26,7 +26,7 @@ return {
                 delete_session = false,
                 alternate_session = false,
                 copy_session = false,
-            }
-        }
-    }
+            },
+        },
+    },
 }

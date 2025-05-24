@@ -40,8 +40,8 @@ return {
                 },
             },
             selector = {
-                provider = 'snacks'
-            }
+                provider = 'snacks',
+            },
         })
         local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
         local diff = require('avante.diff')

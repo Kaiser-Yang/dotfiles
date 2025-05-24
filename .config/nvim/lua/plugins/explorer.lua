@@ -1,4 +1,3 @@
--- map_set({ 'n' }, 'y', api.fs.copy.filename, opts('Copy Name'))
 local utils = require('utils')
 local map_set = utils.map_set
 local feedkeys = utils.feedkeys
@@ -51,10 +50,6 @@ return {
             require('neo-tree.sources.filesystem.commands').next_git_modified,
             require('neo-tree.sources.filesystem.commands').prev_git_modified
         )
-        -- TODO:
-        -- local next_diagnostic_repeat, prev_diagnostic_repeat = ts_repeat_move.make_repeatable_move_pair(
-        --     api.node.navigate.diagnostics.next,
-        --     api.node.navigate.diagnostics.prev)
         require('neo-tree').setup({
             sources = {
                 'filesystem',
@@ -79,10 +74,6 @@ return {
                         vim.wo.relativenumber = true
                         vim.wo.colorcolumn = ''
                     end,
-                },
-                {
-                    event = events.NEO_TREE_WINDOW_AFTER_OPEN,
-                    handler = function(_) vim.cmd('wincmd =') end,
                 },
                 {
                     event = events.FILE_MOVED,
@@ -227,8 +218,6 @@ return {
                         end,
                         desc = 'Toggle or Open',
                     },
-                    -- TODO: laggy and abrupt
-                    -- ['P'] = { 'toggle_preview', config = { use_float = true, use_image_nvim = false } },
                 },
             },
             filesystem = {
@@ -438,26 +427,5 @@ return {
                 source = 'document_symbols',
             })
         end)
-
-        vim.api.nvim_create_autocmd('FileType', {
-            pattern = 'neo-tree-popup',
-            callback = function()
-                vim.wo.wrap = false
-                -- map_set({ 'n', 'i' }, '<c-n>', function()
-                --     if vim.api.nvim_get_mode().mode == 'i' or vim.api.nvim_get_mode().mode == 'I' then
-                --         feedkeys('<esc>', 'n')
-                --     else
-                --         feedkeys('i<c-c>', 'm')
-                --     end
-                -- end, { buffer = true })
-                -- map_set({ 'n', 'i' }, '<esc>', function()
-                --     if vim.api.nvim_get_mode().mode == 'i' or vim.api.nvim_get_mode().mode == 'I' then
-                --         feedkeys('<esc>', 'n')
-                --     else
-                --         feedkeys('i<c-c>', 'm')
-                --     end
-                -- end, { buffer = true })
-            end,
-        })
     end,
 }
