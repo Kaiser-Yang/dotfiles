@@ -13,6 +13,7 @@ return {
                     source = 'filesystem',
                     dir = utils.get_root_directory(),
                 })
+                vim.cmd('wincmd =')
             end,
         },
         auto_save = utils.has_root_directory,
