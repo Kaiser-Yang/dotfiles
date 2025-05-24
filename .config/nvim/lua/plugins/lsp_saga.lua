@@ -56,7 +56,6 @@ return {
         })
         local map_set = require('utils').map_set
         local feedkeys = require('utils').feedkeys
-        map_set({ 'n', 'x' }, 'ga', '<cmd>Lspsaga code_action<cr>', { desc = 'Code action' })
         map_set({ 'n' }, 'gd', '<cmd>Lspsaga goto_definition<cr>', { desc = 'Go to definition' })
         map_set(
             { 'n' },
@@ -66,7 +65,6 @@ return {
         )
         map_set({ 'n' }, 'gi', '<cmd>Lspsaga finder imp<cr>', { desc = 'Go to implementations' })
         map_set({ 'n' }, 'gr', '<cmd>Lspsaga finder ref<cr>', { desc = 'Go references' })
-        map_set({ 'n' }, '<leader>d', '<cmd>Lspsaga hover_doc<cr>', { desc = 'Hover document' })
         map_set(
             { 'n' },
             '<leader>i',

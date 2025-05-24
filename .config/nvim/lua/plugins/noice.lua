@@ -21,9 +21,6 @@ return {
                 documentation = {
                     enabled = false,
                 },
-                hover = {
-                    enabled = false,
-                },
             },
             presets = {
                 long_message_to_split = true,

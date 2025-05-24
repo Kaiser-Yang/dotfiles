@@ -5,6 +5,7 @@ return {
         'williamboman/mason-lspconfig.nvim',
         'saghen/blink.cmp',
         'nvim-java/nvim-java',
+        'aznhe21/actions-preview.nvim',
     },
     config = function()
         require('java').setup({
@@ -29,8 +30,17 @@ return {
             'rime_ls',
             'tailwindcss',
             'ts_ls',
-            'volar',
+            'vue_ls',
             'yamlls',
+            'markdown_oxide',
         })
+        local map_set = require('utils').map_set
+        map_set(
+            { 'v', 'n' },
+            'ga',
+            require('actions-preview').code_actions,
+            { desc = 'Code action' }
+        )
+        map_set({ 'n' }, '<leader>d', 'K', { desc = 'Hover document', remap = true })
     end,
 }
