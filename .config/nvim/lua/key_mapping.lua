@@ -83,3 +83,27 @@ map_set({ 'n' }, '<c-h>', '<c-w>h', { desc = 'cursor left' })
 map_set({ 'n' }, '<c-j>', '<c-w>j', { desc = 'cursor down' })
 map_set({ 'n' }, '<c-k>', '<c-w>k', { desc = 'cursor up' })
 map_set({ 'n' }, '<c-l>', '<c-w>l', { desc = 'cursor right' })
+map_set({ 'n' }, '<leader>t2', function()
+    vim.o.tabstop = 2
+    vim.o.shiftwidth = 2
+    vim.o.softtabstop = 2
+end, { desc = 'Set tab with 2 spaces' })
+map_set({ 'n' }, '<leader>t4', function()
+    vim.o.tabstop = 4
+    vim.o.shiftwidth = 4
+    vim.o.softtabstop = 4
+end, { desc = 'Set tab with 4 spaces' })
+map_set(
+    { 'n' },
+    '<leader>tt',
+    function()
+        if vim.o.expandtab then
+            vim.o.expandtab = false
+            vim.notify('Expandtab disabled', nil, { title = 'Settings' })
+        else
+            vim.o.expandtab = true
+            vim.notify('Expandtab enabled', nil, { title = 'Settings' })
+        end
+    end,
+    { desc = 'Toggle expandtab' }
+)

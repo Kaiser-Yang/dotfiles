@@ -70,26 +70,6 @@ vim.api.nvim_create_autocmd('FileType', {
     pattern = 'gitcommit',
     callback = function() vim.wo.colorcolumn = '50,72' end,
 })
-vim.api.nvim_create_autocmd('FileType', {
-    group = 'UserDIY',
-    pattern = 'java',
-    callback = function()
-        if vim.fn.expand('%:p'):find('gcs%-back%-end') then
-            vim.bo.tabstop = 2
-            vim.bo.shiftwidth = 2
-            vim.bo.softtabstop = 2
-        end
-    end,
-})
-vim.api.nvim_create_autocmd('FileType', {
-    group = 'UserDIY',
-    pattern = vim.g.frontend_filetype,
-    callback = function()
-        vim.bo.tabstop = 2
-        vim.bo.shiftwidth = 2
-        vim.bo.softtabstop = 2
-    end,
-})
 vim.api.nvim_create_autocmd('VimLeavePre', {
     callback = function()
         -- get all the buffers, and delete all non-modifiable buffers

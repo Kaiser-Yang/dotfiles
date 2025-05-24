@@ -1,4 +1,3 @@
--- map_set({ 'n' }, 'z=', builtin.spell_suggest, { desc = 'Spell suggestions' })
 local map_set = require('utils').map_set
 local file_ignore_patterns = {
     '%.git',
