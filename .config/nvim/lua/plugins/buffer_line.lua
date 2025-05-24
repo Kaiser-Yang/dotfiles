@@ -56,7 +56,7 @@ return {
         local function quit_not_save_on_buffer()
             if
                 not utils.is_visible_buffer(vim.api.nvim_get_current_buf())
-                or vim.buf.filetype == 'qf'
+                or vim.buf and vim.buf.filetype == 'qf'
             then
                 vim.cmd('silent q!')
                 return
