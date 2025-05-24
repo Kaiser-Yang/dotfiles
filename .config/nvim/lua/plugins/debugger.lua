@@ -42,7 +42,6 @@ return {
             -- },
         }
         dap.configurations.c = dap.configurations.cpp
-        dap.configurations.rust = dap.configurations.cpp
 
         dap.adapters.python = function(cb, config)
             if config.request == 'attach' then
@@ -50,8 +49,8 @@ return {
                 local host = (config.connect or config).host or '127.0.0.1'
                 cb({
                     type = 'server',
-                    port = assert(port, '`connect.port` is required for a python `attach` configuration'),
                     host = host,
+                    port = port,
                     options = {
                         source_filetype = 'python',
                     },

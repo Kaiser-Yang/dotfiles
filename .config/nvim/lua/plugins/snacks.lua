@@ -1,4 +1,5 @@
-local map_set = require('utils').map_set
+local utils = require('utils')
+local map_set = utils.map_set
 local file_ignore_patterns = {
     '%.git',
     '%.root',
@@ -18,7 +19,6 @@ local file_ignore_patterns = {
     '%.tar.gz',
     '3rdparty',
 }
-local utils = require('utils')
 return {
     'folke/snacks.nvim',
     priority = 1000,
