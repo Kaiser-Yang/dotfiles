@@ -199,9 +199,6 @@ return {
                         'snippets',
                         'path',
                     }
-                    if vim.fn.expand('%:p'):find('.config/nvim') then
-                        result[#result + 1] = 'lazydev'
-                    end
                     if vim.bo.filetype == 'AvanteInput' then
                         result[#result + 1] = 'avante'
                     elseif
@@ -385,11 +382,6 @@ return {
                             trailing_slash = false,
                             show_hidden_files_by_default = true,
                         },
-                    },
-                    lazydev = {
-                        name = 'LazyDev',
-                        module = 'lazydev.integrations.blink',
-                        score_offset = 100,
                     },
                     ripgrep = {
                         name = 'RG',

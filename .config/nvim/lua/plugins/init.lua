@@ -9,7 +9,6 @@ return {
     require('plugins.tree_sitter'),
 
     -- LSP
-    require('plugins.lazy_dev'),
     require('plugins.lsp_config'),
     require('plugins.lsp_saga'),
     require('plugins.mason'),
