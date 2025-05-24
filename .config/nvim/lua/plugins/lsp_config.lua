@@ -6,6 +6,13 @@ return {
             'williamboman/mason-lspconfig.nvim',
             'saghen/blink.cmp',
             'aznhe21/actions-preview.nvim',
+            {
+
+                'mfussenegger/nvim-jdtls',
+                dependencies = {
+                    'mfussenegger/nvim-dap',
+                },
+            },
         },
         config = function()
             vim.lsp.config('*', { root_markers = vim.g.root_markers })
@@ -13,7 +20,6 @@ return {
                 'bashls',
                 'clangd',
                 'eslint',
-                'jdtls',
                 'jsonls',
                 'lemminx',
                 'lua_ls',
@@ -35,14 +41,5 @@ return {
             )
             map_set({ 'n' }, '<leader>d', 'K', { desc = 'Hover document', remap = true })
         end,
-    },
-    {
-        'nvim-java/nvim-java',
-        ft = { 'java' },
-        opts = {
-            jdk = {
-                auto_install = false,
-            }
-        }
     },
 }
