@@ -1,79 +1,6 @@
-# Table of Contents
-
-<!-- vim-markdown-toc GFM -->
-
-* [dotfiles](#dotfiles)
-    * [Some Known Bugs](#some-known-bugs)
-        * [Unfixed](#unfixed)
-        * [Fixed](#fixed)
-    * [Quick Start](#quick-start)
-    * [More Information](#more-information)
-* [Screenshots](#screenshots)
-    * [Terminal](#terminal)
-    * [Telescope](#telescope)
-    * [Completion of nvim-cmp](#completion-of-nvim-cmp)
-    * [Inlay Hints from Copilot](#inlay-hints-from-copilot)
-    * [Copilot Chat](#copilot-chat)
-    * [Nvim Tree](#nvim-tree)
-    * [Markdown Preview](#markdown-preview)
-    * [Auto Download and Replace Images in Markdown](#auto-download-and-replace-images-in-markdown)
-* [Shortcuts](#shortcuts)
-    * [Basic Shortcuts](#basic-shortcuts)
-    * [Window](#window)
-    * [Copy and Paste](#copy-and-paste)
-    * [Cursor Movement](#cursor-movement)
-    * [Markdown Helper](#markdown-helper)
-    * [Useful Plugins' Shortcuts](#useful-plugins-shortcuts)
-        * [Commenting](#commenting)
-        * [Surrounding](#surrounding)
-        * [Code Related](#code-related)
-        * [Git Related](#git-related)
-        * [Automatic Completion](#automatic-completion)
-        * [Others](#others)
-        * [Debugger](#debugger)
-* [Contribution](#contribution)
-
-<!-- vim-markdown-toc -->
-
 # dotfiles
 
 My own configure files for UNIX/Linux tools.
-
-## Some Known Bugs
-
-### Unfixed
-
-* `<C-N>` can not back to normal when in replacing mode (after pressing `r`). This seems impossible
-to fix, because when press `r<C-N>`, your key sequence is `r<C-N>` (pressing `r` will still waiting
-your input, you can see that through the status line). But `R` is OK, because pressing `R` will let
-you enter `REPLACE` mode, you can use `<C-N>` to go back to normal mode.
-* When there are more than `3` notifications, the cursor will be flickering. This may have something
-to do with the `novim-notify`.
-
-### Fixed
-
-* `auto-pairs` may not be loaded when first use `nvim` to open a file. When opening another file,
-`auto-pairs` will be loaded.
-* When you use `:q` to quit the terminal, the terminal cannot be opened again. This is because we
-will record the terminal's status when you use `Q`, but when you use `:q`, we will not record the
-terminal's status. So next time to open the terminal will think the terminal is visible, and hide
-it, which will trigger a error. The best way to quit the terminal is to use `Q`.
-* When the first time open terminal, it may be wrong highlight. I've disabled the `nvim-treesitter`
-for `fish` and `bash` to solve this.
-* When there is a `.root` directory, the `nvim-tree` will enter the root directory rather than the
-parent directory of `.root`.
-* `<CR>` can not auto indent.
-* `telescope` can not find files and contents if there is a `.root` directory.
-* Python `gd` does not work.
-* No hover highlight.
-* When quit a help file which is editable, this may cause problem.
-* When the cursor is at a indent line in insert mode, the cursor is hidden by the indent line. I
-fixed this by updating the signature of `blank-indentline`.
-* In `cmd` search, when you remove the last character, the removed character is still visible. This
-was fixed by the plugin author.
-* Quit with `qa` may be slow. This is mainly caused by the `auto-pairs` plugin, which create many
-buffer level key bindings, and when you use `qa` to quit, `auto-session` will consume a lot of time
-to save the session.
 
 ## Quick Start
 
@@ -126,45 +53,9 @@ Indeed, if you run `./dot_files.py` with no parameters, it is same with
 `./dot_files.py recover && ./dot_files.py update`. So I strongly recommend you to use
 `./dot_files.py` to update the configurations.
 
-# Screenshots
-
-Those screenshots is out of date.
-
-## Terminal
-
-![](README.assets/20240627185327.png)
-
-## Telescope
-
-![](README.assets/20240627185429.png)
-
-## Completion of nvim-cmp
-
-![](README.assets/20240712151138.png)
-
-## Inlay Hints from Copilot
-
-![](README.assets/20240627185713.png)
-
-## Copilot Chat
-
-![](README.assets/20240627185857.png)
-
-## Nvim Tree
-
-![](README.assets/20240627190204.png)
-
-## Markdown Preview
-
-![](README.assets/20240627190051.png)
-
-## Auto Download and Replace Images in Markdown
-
 There is a file called `replace_md_image.py`, this file receive a directory as a parameter, and it
 will download all the images in the markdown files (recursively) in the directory and replace the
-image links with the local links. This will backup your markdown files first:
-
-![](README.assets/20240627190253.png)
+image links with the local links. This will backup your markdown files first.
 
 # Shortcuts
 
