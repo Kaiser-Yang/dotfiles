@@ -23,7 +23,7 @@ return {
                 },
             },
         })
-        -- NOTE: require gdb 14
+        -- NOTE: require gdb 14 and built with `--with-python`
         dap.adapters.gdb = {
             type = 'executable',
             command = 'gdb',
@@ -91,6 +91,13 @@ return {
                 vim.cmd('wincmd =')
             end
         end
+        local function debug_test_under_cursor()
+            if vim.bo.filetype == 'java' then
+                require('jdtls').test_nearest_method()
+            else
+                vim.notify('Debugging test under cursor is not supported for this filetype')
+            end
+        end
         dap.listeners.before.attach.dapui_config = function()
             if not dap_ui_visible then dap_ui_toggle() end
         end
@@ -100,6 +107,31 @@ return {
         local map_set = require('utils').map_set
         map_set({ 'n' }, '<leader>D', dap_ui_toggle, { desc = 'Toggle debug ui' })
         map_set({ 'n' }, '<leader>b', dap.toggle_breakpoint, { desc = 'Toggle breakpoint' })
+        map_set(
+            { 'n' },
+            '<leader>B',
+            function() dap.set_breakpoint(vim.fn.input('Breakpoint Condition: ')) end,
+            { desc = 'Set condition breakpoint' }
+        )
+        map_set(
+            { 'n' },
+            '<leader>dt',
+            debug_test_under_cursor,
+            { desc = 'Debug test under cursor' }
+        )
+        map_set({ 'n' }, '<leader>dr', dap.repl.open, { desc = 'Open repl' })
+        map_set(
+            { 'n' },
+            '<leader>df',
+            function() dap_ui.float_element() end,
+            { desc = 'Debug floating element' }
+        )
+        map_set(
+            { 'n' },
+            '<leader>de',
+            function() dap_ui.eval(vim.fn.input('Evaluate Expression: ')) end,
+            { desc = 'Debug eval expression' }
+        )
         map_set({ 'n' }, '<f4>', dap.terminate, { desc = 'Debug terminate' })
         map_set({ 'n' }, '<f5>', dap.continue, { desc = 'Debug continue' })
         map_set({ 'n' }, '<f6>', dap.restart, { desc = 'Debug restart' })
