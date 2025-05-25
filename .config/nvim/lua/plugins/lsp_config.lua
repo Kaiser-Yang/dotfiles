@@ -39,7 +39,6 @@ return {
                 require('actions-preview').code_actions,
                 { desc = 'Code action' }
             )
-            map_set({ 'n' }, '<leader>d', 'K', { desc = 'Hover document', remap = true })
         end,
     },
 }

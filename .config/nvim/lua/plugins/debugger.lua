@@ -3,7 +3,7 @@ return {
     dependencies = {
         'mfussenegger/nvim-dap',
         'nvim-neotest/nvim-nio',
-        'theHamsta/nvim-dap-virtual-text',
+        { 'theHamsta/nvim-dap-virtual-text', config = true },
     },
     config = function()
         require('nvim-dap-virtual-text').setup({})
@@ -15,7 +15,7 @@ return {
             executable = {
                 command = 'codelldb',
                 args = { '--port', '${port}' },
-            }
+            },
         }
 
         dap.configurations.cpp = {
@@ -96,8 +96,9 @@ return {
                 if vim.g.explorer_visible then
                     need_restore_explorer = true
                     require('neo-tree.command').execute({
-                        action = 'close'
+                        action = 'close',
                     })
+                    vim.cmd('wincmd =')
                 end
             elseif need_restore_explorer then
                 need_restore_explorer = false
@@ -106,11 +107,12 @@ return {
                     source = 'last',
                     dir = require('utils').get_root_directory(),
                 })
+                vim.cmd('wincmd =')
             end
         end
         local map_set = require('utils').map_set
         map_set({ 'n' }, '<leader>D', dap_ui_toggle, { desc = 'Toggle debug ui' })
-        map_set({ 'n' }, '<c-b>', dap.toggle_breakpoint, { desc = 'Toggle breakpoint' })
+        map_set({ 'n' }, '<leader>b', dap.toggle_breakpoint, { desc = 'Toggle breakpoint' })
         map_set({ 'n' }, '<f4>', dap.terminate, { desc = 'Debug terminate' })
         map_set({ 'n' }, '<f5>', dap.continue, { desc = 'Debug continue' })
         map_set({ 'n' }, '<f6>', dap.restart, { desc = 'Debug restart' })

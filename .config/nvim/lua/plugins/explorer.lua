@@ -83,6 +83,14 @@ return {
                     event = events.FILE_RENAMED,
                     handler = on_move,
                 },
+                {
+                    event = events.NEO_TREE_WINDOW_AFTER_OPEN,
+                    handler = function(_) vim.g.explorer_visible = true end,
+                },
+                {
+                    event = events.NEO_TREE_WINDOW_BEFORE_CLOSE,
+                    handler = function(_) vim.g.explorer_visible = false end,
+                },
             },
             default_component_configs = {
                 git_status = {
