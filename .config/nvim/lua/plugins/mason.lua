@@ -26,7 +26,6 @@ return {
             'yaml-language-server',
             'prettier',
         }
-
         local mason_registry = require('mason-registry')
         for _, plugin in ipairs(mason_plugins) do
             local mason_package = mason_registry.get_package(plugin)
