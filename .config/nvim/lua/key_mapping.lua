@@ -83,7 +83,7 @@ map_set({ 'n' }, '<c-h>', '<c-w>h', { desc = 'Cursor left' })
 map_set({ 'n' }, '<c-j>', '<c-w>j', { desc = 'Cursor down' })
 map_set({ 'n' }, '<c-k>', '<c-w>k', { desc = 'Cursor up' })
 map_set({ 'n' }, '<c-l>', '<c-w>l', { desc = 'Cursor right' })
-map_set({ 'n' }, '<leader>T', '<c-w>T', { desc = 'Move current window to a new tabpage' })
+map_set({ 'n' }, '<leader>T', '<cmd>tabedit %<cr>', { desc = 'Move current window to a new tabpage' })
 map_set({ 'n' }, '<leader>t2', function()
     vim.o.tabstop = 2
     vim.o.shiftwidth = 2
