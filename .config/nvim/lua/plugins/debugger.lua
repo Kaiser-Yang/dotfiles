@@ -110,6 +110,12 @@ return {
                 vim.cmd('wincmd =')
             end
         end
+        dap.listeners.before.attach.dapui_config = function()
+            if not dap_ui_visible then dap_ui_toggle() end
+        end
+        dap.listeners.before.launch.dapui_config = function()
+            if not dap_ui_visible then dap_ui_toggle() end
+        end
         local map_set = require('utils').map_set
         map_set({ 'n' }, '<leader>D', dap_ui_toggle, { desc = 'Toggle debug ui' })
         map_set({ 'n' }, '<leader>b', dap.toggle_breakpoint, { desc = 'Toggle breakpoint' })
