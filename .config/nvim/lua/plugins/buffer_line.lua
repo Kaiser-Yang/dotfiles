@@ -54,6 +54,18 @@ return {
             },
         })
         local function quit_not_save_on_buffer()
+            if #vim.api.nvim_list_tabpages() > 1 then
+                local current_tab_visible_buf = 0
+                for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+                    if utils.is_visible_buffer(vim.api.nvim_win_get_buf(win)) then
+                        current_tab_visible_buf = current_tab_visible_buf + 1
+                    end
+                end
+                if current_tab_visible_buf <= 1 then
+                    vim.cmd('tabclose')
+                    return
+                end
+            end
             if
                 not utils.is_visible_buffer(vim.api.nvim_get_current_buf())
                 or vim.buf and vim.buf.filetype == 'qf'
