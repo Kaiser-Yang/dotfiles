@@ -4,11 +4,12 @@ local workspace_dir = vim.fn.stdpath('data') .. '/jdtls-workspace/' .. project_n
 local jdtls_path = vim.fn.expand('$MASON/packages/jdtls')
 local os_name = vim.fn.has('mac') == 1 and 'mac' or vim.fn.has('windows') == 1 and 'win' or 'linux'
 local bundles =
-    vim.split(vim.fn.glob('$MASON/packages/java-debug-adapter' .. '/extension/server/*.jar'), '\n')
+    vim.split(vim.fn.glob('$MASON/packages/java-debug-adapter/extension/server/*.jar'), '\n')
 vim.list_extend(
     bundles,
-    vim.split(vim.fn.glob('$MASON/packages/java-test' .. '/extension/server/*.jar'), '\n')
+    vim.split(vim.fn.glob('$MASON/packages/java-test/extension/server/*.jar'), '\n')
 )
+vim.notify(vim.inspect(bundles))
 local config = {
     cmd = {
         'java',
