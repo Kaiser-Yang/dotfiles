@@ -28,6 +28,8 @@ return {
     require('plugins.copilot'),
     require('plugins.avante'),
 
+    require('plugins.img_clip'),
+    require('plugins.markdown_toc'),
     require('plugins.markdown_render'),
 
     require('plugins.auto_pairs'),
@@ -41,5 +43,4 @@ return {
     require('plugins.which_key'),
     require('plugins.win_resizer'),
     require('plugins.yanky'),
-
 }
