@@ -8,80 +8,55 @@ return {
     config = function()
         require('nvim-dap-virtual-text').setup({})
         local dap, dap_ui = require('dap'), require('dapui')
-        dap_ui.setup()
-        dap.adapters.codelldb = {
-            type = 'server',
-            port = '${port}',
-            executable = {
-                command = 'codelldb',
-                args = { '--port', '${port}' },
+        dap_ui.setup({
+            mappings = {
+                edit = { 'e' },
+                expand = { '<2-LeftMouse>', 'l', 'h' },
+                open = { '<cr>' },
+                remove = { 'x' },
+                repl = { 'r' },
+                toggle = { 't' },
             },
+            floating = {
+                mappings = {
+                    close = { 'q', '<esc>', '<c-c>', '<c-n>' },
+                },
+            },
+        })
+        -- NOTE: require gdb 14
+        dap.adapters.gdb = {
+            type = 'executable',
+            command = 'gdb',
+            args = { '--interpreter=dap', '--eval-command', 'set print pretty on' },
         }
-
-        dap.configurations.cpp = {
+        dap.configurations.c = {
             {
-                name = 'Launch file',
-                type = 'codelldb',
+                name = 'Launch',
+                type = 'gdb',
                 request = 'launch',
                 program = function()
-                    -- TODO: cmake path?
                     return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
                 end,
                 cwd = '${workspaceFolder}',
-                stopOnEntry = false,
+                stopAtBeginningOfMainSubprogram = false,
             },
-            -- {
-            --   name = 'Attach to process',
-            --   type = 'codelldb',
-            --   request = 'launch',
-            --   program = function()
-            --     return vim.fn.input('Process PID: ', vim.fn.getcwd() .. '/', 'file')
-            --   end,
-            --   cwd = '${workspaceFolder}',
-            --   stopOnEntry = false,
-            -- },
-        }
-        dap.configurations.c = dap.configurations.cpp
-
-        dap.adapters.python = function(cb, config)
-            if config.request == 'attach' then
-                local port = (config.connect or config).port
-                local host = (config.connect or config).host or '127.0.0.1'
-                cb({
-                    type = 'server',
-                    host = host,
-                    port = port,
-                    options = {
-                        source_filetype = 'python',
-                    },
-                })
-            else
-                cb({
-                    type = 'executable',
-                    command = vim.fn.expand('~') .. '/.virtualenvs/debugpy/bin/python',
-                    args = { '-m', 'debugpy.adapter' },
-                    options = {
-                        source_filetype = 'python',
-                    },
-                })
-            end
-        end
-        dap.configurations.python = {
             {
-                type = 'python',
-                request = 'launch',
-                name = 'Launch file',
-                console = 'integratedTerminal',
+                name = 'Select and attach to process',
+                type = 'gdb',
+                request = 'attach',
                 program = function()
                     return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
                 end,
-                pythonPath = function()
-                    local python_path = vim.fn.system('which python')
-                    python_path = python_path:gsub('\n', '')
-                    return python_path
+                pid = function()
+                    local name = vim.fn.input('Executable name (filter): ')
+                    return require('dap.utils').pick_process({ filter = name })
                 end,
+                cwd = '${workspaceFolder}',
             },
         }
+        dap.configurations.cpp = dap.configurations.c
+        dap.configurations.rust = dap.configurations.c
+
         vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
         vim.fn.sign_define('DapBreakpointCondition', { text = '⭕', texthl = '', linehl = '', numhl = '' })
         vim.fn.sign_define('DapBreakpointRejected', { text = '🚫', texthl = '', linehl = '', numhl = '' })
