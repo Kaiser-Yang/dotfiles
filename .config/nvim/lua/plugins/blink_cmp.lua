@@ -245,13 +245,9 @@ return {
                                 duplicateIssue = '',
                                 lockedIssue = '',
                             },
-                            commit = {
-                                insert_text_trailing = '',
-                            },
                             git_centers = {
                                 github = {
                                     pull_request = {
-                                        insert_text_trailing = '',
                                         get_command_args = function(command, token)
                                             local args =
                                                 require('blink-cmp-git.default.github').pull_request.get_command_args(
@@ -270,7 +266,6 @@ return {
                                         configure_score_offset = pr_or_issue_configure_score_offset,
                                     },
                                     issue = {
-                                        insert_text_trailing = '',
                                         get_command_args = function(command, token)
                                             local args =
                                                 require('blink-cmp-git.default.github').issue.get_command_args(
@@ -286,13 +281,9 @@ return {
                                         end,
                                         configure_score_offset = pr_or_issue_configure_score_offset,
                                     },
-                                    mention = {
-                                        insert_text_trailing = '',
-                                    },
                                 },
                                 gitlab = {
                                     pull_request = {
-                                        insert_text_trailing = '',
                                         get_command_args = function(command, token)
                                             local args =
                                                 require('blink-cmp-git.default.gitlab').pull_request.get_command_args(
@@ -310,7 +301,6 @@ return {
                                         configure_score_offset = pr_or_issue_configure_score_offset,
                                     },
                                     issue = {
-                                        insert_text_trailing = '',
                                         get_command_args = function(command, token)
                                             local args =
                                                 require('blink-cmp-git.default.gitlab').issue.get_command_args(
@@ -325,9 +315,6 @@ return {
                                                 or item.state .. 'Issue'
                                         end,
                                         configure_score_offset = pr_or_issue_configure_score_offset,
-                                    },
-                                    mention = {
-                                        insert_text_trailing = '',
                                     },
                                 },
                             },
