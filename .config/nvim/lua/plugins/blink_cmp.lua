@@ -12,6 +12,9 @@ local completion_keymap = {
     ['<space>'] = {
         function(cmp)
             if not vim.g.rime_enabled then return false end
+            local content_before_cursor =
+                string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
+            if content_before_cursor:match('%w+$') == nil then return false end
             local rime_item_index = utils.get_n_rime_item_index(1, nil)
             if #rime_item_index ~= 1 then return false end
             return cmp.accept({ index = rime_item_index[1] })
@@ -22,6 +25,9 @@ local completion_keymap = {
         -- FIX: can not work when binding ;<space> to other key
         function(cmp)
             if not vim.g.rime_enabled then return false end
+            local content_before_cursor =
+                string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
+            if content_before_cursor:match('%w+$') == nil then return false end
             local rime_item_index = utils.get_n_rime_item_index(2, nil)
             if #rime_item_index ~= 2 then return false end
             return cmp.accept({ index = rime_item_index[2] })
@@ -336,15 +342,13 @@ return {
                         --- @param items blink.cmp.CompletionItem[]
                         transform_items = function(context, items)
                             local TYPE_ALIAS = require('blink.cmp.types').CompletionItemKind
-                            items = vim.tbl_filter(
-                                function(item)
-                                    -- Remove Snippets and Text from completion list
-                                    return item.kind ~= TYPE_ALIAS.Snippet
-                                            and item.kind ~= TYPE_ALIAS.Text
-                                        or utils.is_rime_item(item)
-                                end,
-                                items
-                            )
+                            items = vim.tbl_filter(function(item)
+                                -- Remove Snippets and Text from completion list
+                                return item.kind ~= TYPE_ALIAS.Snippet
+                                        and item.kind ~= TYPE_ALIAS.Text
+                                    or utils.is_rime_item(item)
+                                        and item.label:match('^%w*$') == nil
+                            end, items)
                             if utils.rime_ls_disabled(context) then
                                 return vim.tbl_filter(
                                     function(item) return not utils.is_rime_item(item) end,
