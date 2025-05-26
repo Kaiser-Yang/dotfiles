@@ -10,5 +10,7 @@ return {
     opts = {
         enabled = false,
         file_types = vim.g.markdown_support_filetype,
+        anti_conceal = { enabled = false },
+        win_options = { concealcursor = { rendered = 'nvic' } },
     },
 }
