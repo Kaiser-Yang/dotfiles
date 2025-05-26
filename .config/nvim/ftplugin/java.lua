@@ -9,7 +9,6 @@ vim.list_extend(
     bundles,
     vim.split(vim.fn.glob('$MASON/packages/java-test/extension/server/*.jar'), '\n')
 )
-vim.notify(vim.inspect(bundles))
 local config = {
     cmd = {
         'java',
