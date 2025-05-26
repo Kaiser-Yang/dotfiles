@@ -28,7 +28,7 @@ function M.get_lsp_capabilities(override)
             },
         },
     }
-    vim.tbl_deep_extend('force', default, override)
+    default = vim.tbl_deep_extend('force', default, override)
     return require('blink.cmp').get_lsp_capabilities(default)
 end
 
