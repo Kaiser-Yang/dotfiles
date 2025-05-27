@@ -58,12 +58,25 @@ return {
             desc = 'Flash Treesitter',
         },
         {
+            '<c-_>',
+            mode = { 'n', 'x', 'o' },
+            function()
+                local word = vim.fn.histget('/', -1)
+                require('flash').jump({
+                    search = { mode = 'search' },
+                    pattern = word,
+                })
+            end,
+            desc = 'Flash Search Last Searched Word',
+        },
+        {
             '*',
             mode = { 'n', 'x', 'o' },
             function()
                 local word = vim.fn.expand('<cword>')
                 require('flash').jump({
                     search = {
+                        mode = 'search',
                         forward = true,
                         wrap = false,
                         multi_window = false,
@@ -84,6 +97,7 @@ return {
                 local word = vim.fn.expand('<cword>')
                 require('flash').jump({
                     search = {
+                        mode = 'search',
                         forward = false,
                         wrap = false,
                         multi_window = false,
