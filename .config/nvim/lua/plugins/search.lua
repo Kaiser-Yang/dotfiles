@@ -30,7 +30,6 @@ return {
                 },
             },
             search = {
-                enabled = true,
                 highlight = {
                     backdrop = true,
                 },
@@ -59,20 +58,32 @@ return {
             mode = { 'n', 'x' },
             function()
                 local word = vim.fn.expand('<cword>')
-                return '/' .. word
+                require('flash').jump({
+                    search = {
+                        forward = true,
+                        wrap = false,
+                        multi_window = false,
+                    },
+                    pattern = word,
+                })
             end,
             desc = 'Flash Search Current Word',
-            expr = true,
         },
         {
             '#',
             mode = { 'n', 'x' },
             function()
                 local word = vim.fn.expand('<cword>')
-                return '?' .. word
+                require('flash').jump({
+                    search = {
+                        forward = false,
+                        wrap = false,
+                        multi_window = false,
+                    },
+                    pattern = word,
+                })
             end,
             desc = 'Flash Search Current Word Backward',
-            expr = true,
         },
     },
 }
