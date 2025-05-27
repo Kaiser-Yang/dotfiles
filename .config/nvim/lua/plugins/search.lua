@@ -68,6 +68,10 @@ return {
                         wrap = false,
                         multi_window = false,
                     },
+                    jump = {
+                        history = true,
+                        register = true,
+                    },
                     pattern = word,
                 })
             end,
@@ -83,6 +87,10 @@ return {
                         forward = false,
                         wrap = false,
                         multi_window = false,
+                    },
+                    jump = {
+                        history = true,
+                        register = true,
                     },
                     pattern = word,
                 })
