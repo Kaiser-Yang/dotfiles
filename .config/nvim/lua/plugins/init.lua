@@ -38,10 +38,11 @@ return {
     require('plugins.auto_tag'),
     require('plugins.buffer_line'),
     require('plugins.comment'),
-    require('plugins.snacks'),
+    require('plugins.guess_indent'),
+    require('plugins.search'),
+    require('plugins.snacks_config'),
     require('plugins.surround'),
     require('plugins.which_key'),
     require('plugins.win_resizer'),
     require('plugins.yanky'),
-    require('plugins.guess_indent'),
 }
