@@ -59,7 +59,7 @@ return {
         },
         {
             '*',
-            mode = { 'n', 'x' },
+            mode = { 'n', 'x', 'o' },
             function()
                 local word = vim.fn.expand('<cword>')
                 require('flash').jump({
@@ -75,7 +75,7 @@ return {
         },
         {
             '#',
-            mode = { 'n', 'x' },
+            mode = { 'n', 'x', 'o' },
             function()
                 local word = vim.fn.expand('<cword>')
                 require('flash').jump({
@@ -104,7 +104,12 @@ return {
                 end
                 flash.jump({
                     search = { mode = 'search' },
-                    label = { after = false, before = { 0, 0 }, uppercase = false, format = format },
+                    label = {
+                        after = false,
+                        before = { 0, 0 },
+                        uppercase = false,
+                        format = format,
+                    },
                     pattern = [[\<]],
                     action = function(match, state)
                         state:hide()
