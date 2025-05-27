@@ -1,7 +1,17 @@
+local flash_keys = {
+    ['f'] = '<f40>',
+    ['t'] = '<f41>',
+    ['F'] = '<f42>',
+    ['T'] = '<f43>',
+}
+local utils = require('utils')
 return {
     'Kaiser-Yang/flash.nvim',
     event = 'VeryLazy',
     branch = 'kaiser-fix-current',
+    depedencies = {
+        'nvim-treesitter/nvim-treesitter-textobjects',
+    },
     ---@type Flash.Config
     opts = {
         search = {
@@ -32,6 +42,7 @@ return {
                 jump = {
                     do_first_jump = false,
                 },
+                keys = flash_keys,
             },
             search = {
                 highlight = {
@@ -52,12 +63,13 @@ return {
             desc = 'Treesitter Search',
         },
         {
-            '<c-s>',
+            'gn',
             mode = { 'n', 'x', 'o' },
             function() require('flash').treesitter() end,
             desc = 'Flash Treesitter',
         },
         {
+            -- For most terminals, this is the same as <c-/>
             '<c-_>',
             mode = { 'n', 'x', 'o' },
             function()
@@ -165,5 +177,33 @@ return {
             end,
             desc = 'Flash Search Two Characters',
         },
+        {
+            '<c-s>',
+            mode = { 'n', 'x', 'o' },
+            function()
+                if not vim.g.last_motion or not vim.g.last_motion_char then return end
+                utils.feedkeys(flash_keys[vim.g.last_motion] .. vim.g.last_motion_char, 'm')
+            end,
+            desc = 'Flash Search Character',
+        },
     },
+    config = function(_, opts)
+        require('flash').setup(opts)
+        local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+        for key, _ in pairs(flash_keys) do
+            utils.map_set({ 'n', 'x', 'o' }, key, function()
+                ts_repeat_move['builtin_' .. key .. '_expr']()
+                local char = vim.fn.getcharstr()
+                if #char == 1 then
+                    local byte = string.byte(char)
+                    if byte >= 32 and byte <= 126 then
+                        -- Only record printable character
+                        vim.g.last_motion = key
+                        vim.g.last_motion_char = char
+                    end
+                end
+                return key .. char
+            end, { expr = true })
+        end
+    end,
 }
