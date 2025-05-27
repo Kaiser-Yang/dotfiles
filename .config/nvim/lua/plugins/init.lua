@@ -43,4 +43,5 @@ return {
     require('plugins.which_key'),
     require('plugins.win_resizer'),
     require('plugins.yanky'),
+    require('plugins.guess_indent'),
 }
