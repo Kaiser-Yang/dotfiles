@@ -29,6 +29,9 @@ return {
                 label = {
                     exclude = '',
                 },
+                jump = {
+                    do_first_jump = false,
+                },
             },
             search = {
                 highlight = {
@@ -133,6 +136,7 @@ return {
                     end,
                 })
             end,
+            desc = 'Flash Search Two Characters',
         },
     },
 }
