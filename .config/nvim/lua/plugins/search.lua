@@ -5,10 +5,11 @@ local flash_keys = {
     ['T'] = '<f43>',
 }
 local utils = require('utils')
+local map_set = utils.map_set
 return {
     'Kaiser-Yang/flash.nvim',
     event = 'VeryLazy',
-    branch = 'kaiser-fix-current',
+    branch = 'develop',
     depedencies = {
         'nvim-treesitter/nvim-treesitter-textobjects',
     },
@@ -28,8 +29,7 @@ return {
         modes = {
             char = {
                 jump_labels = true,
-                -- BUG: disable multi_line may cause dot repeat to not work as expected
-                multi_line = true,
+                multi_line = false,
                 char_actions = function()
                     return {
                         [';'] = 'next',
@@ -177,21 +177,12 @@ return {
             end,
             desc = 'Flash Search Two Characters',
         },
-        {
-            '<c-s>',
-            mode = { 'n', 'x', 'o' },
-            function()
-                if not vim.g.last_motion or not vim.g.last_motion_char then return end
-                utils.feedkeys(flash_keys[vim.g.last_motion] .. vim.g.last_motion_char, 'm')
-            end,
-            desc = 'Flash Search Character',
-        },
     },
     config = function(_, opts)
         require('flash').setup(opts)
         local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
         for key, _ in pairs(flash_keys) do
-            utils.map_set({ 'n', 'x', 'o' }, key, function()
+            map_set({ 'n', 'x', 'o' }, key, function()
                 ts_repeat_move['builtin_' .. key .. '_expr']()
                 local char = vim.fn.getcharstr()
                 if #char == 1 then
@@ -205,5 +196,35 @@ return {
                 return key .. char
             end, { expr = true })
         end
+        map_set({ 'n', 'x', 'o' }, ';', function()
+            local last_move = ts_repeat_move.last_move
+            if
+                last_move
+                and vim.tbl_contains({ 'f', 't', 'F', 'T' }, last_move.func)
+                and vim.g.last_motion
+                and vim.g.last_motion_char
+            then
+                utils.feedkeys(flash_keys[vim.g.last_motion] .. vim.g.last_motion_char, 'm')
+                return
+            end
+            ts_repeat_move.repeat_last_move()
+        end)
+        map_set({ 'n', 'x', 'o' }, ',', function()
+            local last_move = ts_repeat_move.last_move
+            if
+                last_move
+                and vim.tbl_contains({ 'f', 't', 'F', 'T' }, last_move.func)
+                and vim.g.last_motion
+                and vim.g.last_motion_char
+            then
+                local reversed_key = vim.g.last_motion:gsub(
+                    '%a',
+                    function(c) return c == c:lower() and c:upper() or c:lower() end
+                )
+                utils.feedkeys(flash_keys[reversed_key] .. vim.g.last_motion_char, 'm')
+                return
+            end
+            ts_repeat_move.repeat_last_move_opposite()
+        end)
     end,
 }

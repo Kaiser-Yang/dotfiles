@@ -293,8 +293,6 @@ return {
         })
         local map_set = require('utils').map_set
         local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-        map_set({ 'n', 'x', 'o' }, ';', ts_repeat_move.repeat_last_move)
-        map_set({ 'n', 'x', 'o' }, ',', ts_repeat_move.repeat_last_move_opposite)
         local feedkeys = require('utils').feedkeys
         local next_misspell, prev_misspell = ts_repeat_move.make_repeatable_move_pair(
             function() feedkeys(']s', 'n') end,
