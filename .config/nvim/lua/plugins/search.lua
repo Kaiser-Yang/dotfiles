@@ -184,8 +184,8 @@ return {
         for key, _ in pairs(flash_keys) do
             map_set({ 'n', 'x', 'o' }, key, function()
                 ts_repeat_move['builtin_' .. key .. '_expr']()
-                local char = vim.fn.getcharstr()
-                if #char == 1 then
+                local ok, char = pcall(vim.fn.getcharstr)
+                if ok and #char == 1 then
                     local byte = string.byte(char)
                     if byte >= 32 and byte <= 126 then
                         -- Only record printable character
@@ -193,7 +193,7 @@ return {
                         vim.g.last_motion_char = char
                     end
                 end
-                return key .. char
+                return key .. (char or '')
             end, { expr = true })
         end
         map_set({ 'n', 'x', 'o' }, ';', function()
