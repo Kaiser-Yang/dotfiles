@@ -65,6 +65,33 @@ vim.api.nvim_create_autocmd('ModeChanged', {
         vim.schedule(function() vim.cmd('nohlsearch') end)
     end,
 })
+-- When moving cursor out of a match, disable hlsearch
+vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
+    group = 'UserDIY',
+    callback = function()
+        local mode = vim.fn.mode()
+        if mode ~= 'n' then return end -- Only handle normal mode
+        local pattern = vim.fn.getreg('/') -- Get last search pattern
+        if pattern == '' then return end -- Skip if no pattern
+        local cursor_pos = vim.api.nvim_win_get_cursor(0)
+        local match_pos = vim.fn.matchbufline(
+            vim.api.nvim_get_current_buf(),
+            pattern,
+            cursor_pos[1],
+            cursor_pos[1]
+        )
+
+        local cursor_in_match = false
+        for _, match in pairs(match_pos) do
+            if match.byteidx <= cursor_pos[2] and
+               match.byteidx + #match.text > cursor_pos[2] then
+                cursor_in_match = true
+                break
+            end
+        end
+        if not cursor_in_match then vim.schedule(function() vim.cmd('nohlsearch') end) end
+    end,
+})
 vim.api.nvim_create_autocmd('FileType', {
     group = 'UserDIY',
     pattern = 'gitcommit',
