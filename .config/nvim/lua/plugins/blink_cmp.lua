@@ -251,6 +251,7 @@ return {
                                 duplicateIssue = '',
                                 lockedIssue = '',
                             },
+                            commit = { enable = false, },
                             git_centers = {
                                 github = {
                                     pull_request = {
