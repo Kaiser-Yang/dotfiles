@@ -293,7 +293,7 @@ return {
                 local filename = vim.fn.fnamemodify(fullpath, ':t')
                 local filename_noext = vim.fn.fnamemodify(fullpath, ':t:r')
                 local command = ''
-                if vim.bo.filetype == 'markdown' then
+                if vim.tbl_contains(vim.g.markdown_support_filetype, vim.bo.filetype) then
                     vim.cmd('RenderMarkdown buf_toggle')
                     return
                 elseif vim.bo.filetype == 'c' then
