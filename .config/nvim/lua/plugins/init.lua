@@ -39,6 +39,7 @@ return {
     require('plugins.buffer_line'),
     require('plugins.comment'),
     require('plugins.guess_indent'),
+    require('plugins.highlight_colors'),
     require('plugins.search'),
     require('plugins.snacks_config'),
     require('plugins.surround'),
