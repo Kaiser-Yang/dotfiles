@@ -80,16 +80,18 @@ vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
             cursor_pos[1],
             cursor_pos[1]
         )
-
         local cursor_in_match = false
         for _, match in pairs(match_pos) do
-            if match.byteidx <= cursor_pos[2] and
-               match.byteidx + #match.text > cursor_pos[2] then
+            if match.byteidx <= cursor_pos[2] and match.byteidx + #match.text > cursor_pos[2] then
                 cursor_in_match = true
                 break
             end
         end
-        if not cursor_in_match then vim.schedule(function() vim.cmd('nohlsearch') end) end
+        if not cursor_in_match then
+            vim.schedule(function() vim.cmd('nohlsearch') end)
+        else
+            vim.schedule(function() vim.cmd('set hlsearch') end)
+        end
     end,
 })
 vim.api.nvim_create_autocmd('FileType', {
