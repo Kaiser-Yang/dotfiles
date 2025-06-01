@@ -346,7 +346,6 @@ return {
                     cwd = utils.get_root_directory(),
                     hidden = true,
                     exclude = file_ignore_patterns,
-                    pattern = "'",
                 })
             end,
             desc = 'Toggle find Files',
@@ -358,7 +357,6 @@ return {
                     cwd = utils.get_root_directory(),
                     hidden = true,
                     exclude = file_ignore_patterns,
-                    pattern = "'",
                 })
             end,
             desc = 'Toggle Live Grep',
@@ -477,7 +475,6 @@ return {
                             cwd = utils.get_root_directory(),
                             hidden = true,
                             exclude = file_ignore_patterns,
-                            pattern = "'",
                         })
                     end,
                     { buffer = true }
@@ -490,7 +487,6 @@ return {
                             cwd = utils.get_root_directory(),
                             hidden = true,
                             exclude = file_ignore_patterns,
-                            pattern = "'",
                         })
                     end,
                     { buffer = true }
