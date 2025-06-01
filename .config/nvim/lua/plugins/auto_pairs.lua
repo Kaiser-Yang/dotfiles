@@ -25,7 +25,7 @@ return {
                 { '{', '}', dosuround = false, nft = disabled_filetype },
                 { '"', '"', nft = disabled_filetype },
                 { "'", "'", nft = disabled_filetype },
-                { '`', '`', nft = disabled_filetype },
+                { '`', '`', cmap = false, nft = disabled_filetype },
             },
         })
         local map_set = require('utils').map_set
