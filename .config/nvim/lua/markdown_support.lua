@@ -132,7 +132,12 @@ vim.api.nvim_create_autocmd('FileType', {
     callback = function()
         vim.cmd.setlocal('spell')
         local map_set = require('utils').map_set
-        map_set({ 'i' }, ',f', '<c-g>u<c-o>mz<esc>/<++><cr>:nohlsearch<cr>c4l', { buffer = true })
+        map_set(
+            { 'i' },
+            ',f',
+            '<c-g>u<c-o>mz<esc>/<++><cr>:nohlsearch<cr>c4l',
+            { buffer = true, silent = true }
+        )
         map_set({ 'i' }, ',1', '<c-g>u<c-o>mz# <cr><cr><++><esc>kkA', { buffer = true })
         map_set({ 'i' }, ',2', '<c-g>u<c-o>mz## <cr><cr><++><esc>kkA', { buffer = true })
         map_set({ 'i' }, ',3', '<c-g>u<c-o>mz### <cr><cr><++><esc>kkA', { buffer = true })
