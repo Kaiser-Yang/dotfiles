@@ -185,7 +185,7 @@ return {
         require('flash').setup(opts)
         local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
         for key, _ in pairs(flash_keys) do
-            map_set({ 'n', 'x', 'o' }, key, function()
+            map_set({ 'n', 'x' }, key, function()
                 ts_repeat_move['builtin_' .. key .. '_expr']()
                 vim.schedule(function()
                     local ok, char = pcall(vim.fn.getcharstr)
