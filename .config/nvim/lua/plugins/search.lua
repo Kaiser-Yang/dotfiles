@@ -44,6 +44,7 @@ return {
                 },
                 jump = {
                     do_first_jump = false,
+                    autojump = true,
                 },
                 keys = flash_keys,
             },
