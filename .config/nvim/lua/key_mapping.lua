@@ -31,7 +31,6 @@ map_set({ 'n' }, '<leader>sc', function()
     end
     vim.cmd('set spell!')
 end, { desc = 'Toggle spell check' })
-map_set({ 'n' }, '<leader><cr>', '<cmd>nohlsearch<cr>', { desc = 'No hlsearch' })
 map_set(
     { 'n' },
     '<leader>h',
