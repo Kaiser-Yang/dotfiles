@@ -11,9 +11,7 @@ local item_regex = {
 local function match_item(line, must_end)
     for _, regex in pairs(item_regex) do
         local item = line:match(regex .. (must_end and '$' or ''))
-        if item then
-            return item
-        end
+        if item then return item end
     end
     return nil
 end
@@ -28,7 +26,7 @@ local function feed_list_item_by_context(opts)
     local last_indent_pos = nil
     local context = nil
     while true do
-        cursor_line = cursor_line - 1;
+        cursor_line = cursor_line - 1
         if cursor_line <= 0 then return false end
         context = vim.api.nvim_buf_get_lines(0, cursor_line - 1, cursor_line, true)[1]
         item = match_item(context)
@@ -40,13 +38,13 @@ local function feed_list_item_by_context(opts)
             break
         end
         local match_result = context:match('^ *')
-        if match_result == nil and
-            last_indent_pos ~= nil and
-            last_indent_pos ~= 0 then
+        if match_result == nil and last_indent_pos ~= nil and last_indent_pos ~= 0 then
             return false
-        elseif match_result ~= nil and
-            last_indent_pos ~= nil and
-            last_indent_pos ~= #match_result then
+        elseif
+            match_result ~= nil
+            and last_indent_pos ~= nil
+            and last_indent_pos ~= #match_result
+        then
             return false
         else
             last_indent_pos = match_result and #match_result or 0
@@ -73,9 +71,7 @@ local function promote_a_list_item(item)
     delete_a_list_item(item)
     feedkeys('<bs>' .. item, 'n')
 end
-local function continue_a_list_item_next_line()
-    feedkeys('<cr>', 'n')
-end
+local function continue_a_list_item_next_line() feedkeys('<cr>', 'n') end
 local function add_a_list_item_next_line(item)
     continue_a_list_item_next_line()
     feedkeys(item, 'n')
@@ -90,23 +86,25 @@ local function toggle_check_box_once(line_number)
         context = vim.api.nvim_buf_get_lines(0, line_number - 1, line_number, true)[1]
         item = context:match(item_regex.todo_list)
         if item then
-            local new_line = context:match('^ *') .. string.gsub(context,
-                item_regex.todo_list,
-                item:match('x') and '- [ ] ' or '- [x] ')
-            vim.api.nvim_buf_set_lines(0, line_number - 1, line_number, true,
-                { new_line })
+            local new_line = context:match('^ *')
+                .. string.gsub(
+                    context,
+                    item_regex.todo_list,
+                    item:match('x') and '- [ ] ' or '- [x] '
+                )
+            vim.api.nvim_buf_set_lines(0, line_number - 1, line_number, true, { new_line })
             return line_number - 1
         elseif context:match('^ *$') then
             break
         end
         local match_result = context:match('^ *')
-        if match_result == nil and
-            last_indent_pos ~= nil and
-            last_indent_pos ~= 0 then
+        if match_result == nil and last_indent_pos ~= nil and last_indent_pos ~= 0 then
             break
-        elseif match_result ~= nil and
-            last_indent_pos ~= nil and
-            last_indent_pos ~= #match_result then
+        elseif
+            match_result ~= nil
+            and last_indent_pos ~= nil
+            and last_indent_pos ~= #match_result
+        then
             break
         else
             last_indent_pos = match_result and #match_result or 0
@@ -144,9 +142,18 @@ vim.api.nvim_create_autocmd('FileType', {
         map_set({ 'i' }, ',4', '<c-g>u<c-o>mz#### <cr><cr><++><esc>kkA', { buffer = true })
         map_set({ 'i' }, ',a', '<c-g>u<c-o>mz[](<++>)<++><esc>F[a', { buffer = true })
         map_set({ 'i' }, ',b', '<c-g>u<c-o>mz****<++><esc>F*hi', { buffer = true })
-        map_set({ 'i' }, ',c', '<c-g>u<c-o>mz<cr><cr>```<cr>```<cr><cr><++><esc>3kA', { buffer = true })
-        map_set({ 'i' }, ',p', '<c-g>u<c-o>mz<cr><cr>![](<++>){: .img-fluid}<cr><cr><++><esc>2k0f[a',
-            { buffer = true })
+        map_set(
+            { 'i' },
+            ',c',
+            '<c-g>u<c-o>mz<cr><cr>```<cr>```<cr><cr><++><esc>3kA',
+            { buffer = true }
+        )
+        map_set(
+            { 'i' },
+            ',p',
+            '<c-g>u<c-o>mz<cr><cr>![](<++>){: .img-fluid}<cr><cr><++><esc>2k0f[a',
+            { buffer = true }
+        )
         map_set({ 'i' }, ',t', '<c-g>u<c-o>mz``<++><esc>F`i', { buffer = true })
         map_set({ 'i' }, ',u', '<esc>u`z:delmarks z<cr>a', { buffer = true })
         map_set({ 'n' }, 'o', 'A<cr>', { buffer = true, remap = true })
@@ -155,8 +162,12 @@ vim.api.nvim_create_autocmd('FileType', {
         -- map_set({ 'i' }, ',m', '<c-g>u<c-o>mz$$<++><esc>F$i', { buffer = true })
         -- map_set({ 'i' }, ',M', '<c-g>u<c-o>mz<cr><cr>$$<cr><cr>$$<cr><cr><++><esc>3kA', { buffer = true })
         -- TODO: make the gx in normal mode can be repeated
-        map_set({ 'n' }, 'gx', toggle_check_box_once,
-            { buffer = true, desc = 'Toggler current check box' })
+        map_set(
+            { 'n' },
+            'gx',
+            toggle_check_box_once,
+            { buffer = true, desc = 'Toggler current check box' }
+        )
         map_set({ 'v' }, 'gx', function()
             local start_line = vim.fn.line('v')
             local end_line = vim.fn.line('.')
@@ -217,5 +228,5 @@ vim.api.nvim_create_autocmd('FileType', {
                 feedkeys('<tab>', 'n')
             end
         end, { buffer = true })
-    end
+    end,
 })
