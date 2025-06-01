@@ -136,30 +136,30 @@ vim.api.nvim_create_autocmd('FileType', {
             '<c-g>u<c-o>mz<esc>/<++><cr>:nohlsearch<cr>c4l',
             { buffer = true, silent = true }
         )
-        map_set({ 'i' }, ',1', '<c-g>u<c-o>mz# <cr><cr><++><esc>kkA', { buffer = true })
-        map_set({ 'i' }, ',2', '<c-g>u<c-o>mz## <cr><cr><++><esc>kkA', { buffer = true })
-        map_set({ 'i' }, ',3', '<c-g>u<c-o>mz### <cr><cr><++><esc>kkA', { buffer = true })
-        map_set({ 'i' }, ',4', '<c-g>u<c-o>mz#### <cr><cr><++><esc>kkA', { buffer = true })
+        map_set({ 'i' }, ',1', '<c-g>u<c-o>mz# ', { buffer = true })
+        map_set({ 'i' }, ',2', '<c-g>u<c-o>mz## ', { buffer = true })
+        map_set({ 'i' }, ',3', '<c-g>u<c-o>mz### ', { buffer = true })
+        map_set({ 'i' }, ',4', '<c-g>u<c-o>mz#### ', { buffer = true })
         map_set({ 'i' }, ',a', '<c-g>u<c-o>mz[](<++>)<++><esc>F[a', { buffer = true })
         map_set({ 'i' }, ',b', '<c-g>u<c-o>mz****<++><esc>F*hi', { buffer = true })
         map_set(
             { 'i' },
             ',c',
-            '<c-g>u<c-o>mz<cr><cr>```<cr>```<cr><cr><++><esc>3kA',
-            { buffer = true }
-        )
-        map_set(
-            { 'i' },
-            ',p',
-            '<c-g>u<c-o>mz<cr><cr>![](<++>){: .img-fluid}<cr><cr><++><esc>2k0f[a',
+            '<c-g>u<c-o>mz```<cr>```<cr><++><esc>2kA',
             { buffer = true }
         )
         map_set({ 'i' }, ',t', '<c-g>u<c-o>mz``<++><esc>F`i', { buffer = true })
         map_set({ 'i' }, ',u', '<esc>u`z:delmarks z<cr>a', { buffer = true })
         map_set({ 'n' }, 'o', 'A<cr>', { buffer = true, remap = true })
+        map_set({ 'i' }, ',m', '<c-g>u<c-o>mz$$  $$<++><esc>F i', { buffer = true })
+        -- map_set(
+        --     { 'i' },
+        --     ',p',
+        --     '<c-g>u<c-o>mz<cr><cr>![](<++>){: .img-fluid}<cr><cr><++><esc>2k0f[a',
+        --     { buffer = true }
+        -- )
         -- map_set({ 'i' }, ',d', '<c-g>u<c-o>mz~~~~<++><esc>F~hi', { buffer = true })
         -- map_set({ 'i' }, ',i', '<c-g>u<c-o>mz**<++><esc>F*i', { buffer = true })
-        -- map_set({ 'i' }, ',m', '<c-g>u<c-o>mz$$<++><esc>F$i', { buffer = true })
         -- map_set({ 'i' }, ',M', '<c-g>u<c-o>mz<cr><cr>$$<cr><cr>$$<cr><cr><++><esc>3kA', { buffer = true })
         -- TODO: make the gx in normal mode can be repeated
         map_set(
