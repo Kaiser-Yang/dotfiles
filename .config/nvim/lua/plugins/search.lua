@@ -15,6 +15,9 @@ return {
     },
     ---@type Flash.Config
     opts = {
+        actions = {
+            [''] = function() return false end,
+        },
         search = {
             exclude = {
                 'notify',
