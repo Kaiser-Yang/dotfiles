@@ -68,7 +68,7 @@ return {
             end
             if
                 not utils.is_visible_buffer(vim.api.nvim_get_current_buf())
-                or vim.buf and vim.buf.filetype == 'qf'
+                or vim.bo.filetype == 'qf'
             then
                 vim.cmd('silent q!')
                 return
