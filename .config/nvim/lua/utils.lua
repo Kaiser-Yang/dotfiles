@@ -32,6 +32,24 @@ function M.get_lsp_capabilities(override)
     return require('blink.cmp').get_lsp_capabilities(default)
 end
 
+function M.markdown_support_enabled()
+    return vim.tbl_contains(vim.g.markdown_support_filetype, vim.bo.filetype)
+end
+
+function M.current_file_in_github_io()
+    return vim.fn.expand('%:p'):find('Kaiser-Yang.github.io') ~= nil
+end
+
+M.wsl_init_done = false
+function M.init_for_wsl()
+    if vim.fn.has('wsl') ~= 1 or M.wsl_init_done then return end
+    M.wsl_init_done = true
+    local win_powershell_path = '/mnt/c/Windows/System32/WindowsPowerShell/v1.0/'
+    if vim.fn.executable(win_powershell_path .. 'powershell.exe') == 1 then
+        vim.env.PATH = win_powershell_path .. ':' .. vim.env.PATH
+    end
+end
+
 --- @param types string[]
 function M.inside_block(types)
     if vim.api.nvim_get_mode().mode ~= 'i' then return false end

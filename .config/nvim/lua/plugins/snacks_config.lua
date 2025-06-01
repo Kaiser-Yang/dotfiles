@@ -24,6 +24,7 @@ return {
     priority = 1000,
     lazy = false,
     dependencies = {
+        'HakonHarnes/img-clip.nvim',
         'nvim-treesitter/nvim-treesitter-textobjects',
         'nvim-treesitter/nvim-treesitter',
         'MeanderingProgrammer/render-markdown.nvim',
@@ -272,6 +273,20 @@ return {
     },
 
     keys = {
+        {
+            '<leader>sp',
+            function()
+                Snacks.picker.files({
+                    ft = { 'jpg', 'jpeg', 'png', 'webp' },
+                    confirm = function(self, item, _)
+                        self:close()
+                        require('img-clip').paste_image({}, './' .. item.file)
+                    end,
+                })
+            end,
+            desc = 'Paste image from file',
+            mode = { 'n' },
+        },
         {
             '<c-g>',
             function() Snacks.lazygit() end,
