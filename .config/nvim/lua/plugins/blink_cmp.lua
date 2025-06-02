@@ -347,6 +347,10 @@ return {
                                 -- Remove Snippets and Text from completion list
                                 return item.kind ~= TYPE_ALIAS.Snippet
                                         and item.kind ~= TYPE_ALIAS.Text
+                                        and not (vim.tbl_contains(
+                                            { 'if', 'end', 'while', 'function', 'elseif' },
+                                            item.label
+                                        ) and item.kind == TYPE_ALIAS.Keyword)
                                     or utils.is_rime_item(item)
                                         and item.label:match('^%w*$') == nil
                             end, items)
