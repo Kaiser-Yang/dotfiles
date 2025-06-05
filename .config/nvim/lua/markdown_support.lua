@@ -130,24 +130,18 @@ vim.api.nvim_create_autocmd('FileType', {
     callback = function()
         vim.cmd.setlocal('spell')
         local map_set = require('utils').map_set
-        map_set(
-            { 'i' },
-            ',f',
-            '<c-g>u<c-o>mz<esc>/<++><cr>:nohlsearch<cr>c4l',
-            { buffer = true, silent = true }
-        )
+        map_set({ 'i' }, ',f', function()
+            local pattern = vim.fn.getreg('/')
+            if pattern ~= '' then vim.schedule(function() vim.fn.setreg('/', pattern) end) end
+            return "<c-g>u<c-o>mz<esc>/<++><cr>:nohlsearch<cr>c4l<cmd>call histdel('/', -1)<cr>"
+        end, { buffer = true, silent = true, expr = true })
         map_set({ 'i' }, ',1', '<c-g>u<c-o>mz# ', { buffer = true })
         map_set({ 'i' }, ',2', '<c-g>u<c-o>mz## ', { buffer = true })
         map_set({ 'i' }, ',3', '<c-g>u<c-o>mz### ', { buffer = true })
         map_set({ 'i' }, ',4', '<c-g>u<c-o>mz#### ', { buffer = true })
         map_set({ 'i' }, ',a', '<c-g>u<c-o>mz[](<++>)<++><esc>F[a', { buffer = true })
         map_set({ 'i' }, ',b', '<c-g>u<c-o>mz****<++><esc>F*hi', { buffer = true })
-        map_set(
-            { 'i' },
-            ',c',
-            '<c-g>u<c-o>mz```<cr>```<cr><++><esc>2kA',
-            { buffer = true }
-        )
+        map_set({ 'i' }, ',c', '<c-g>u<c-o>mz```<cr>```<cr><++><esc>2kA', { buffer = true })
         map_set({ 'i' }, ',t', '<c-g>u<c-o>mz``<++><esc>F`i', { buffer = true })
         map_set({ 'i' }, ',u', '<esc>u`z:delmarks z<cr>a', { buffer = true })
         map_set({ 'n' }, 'o', 'A<cr>', { buffer = true, remap = true })
