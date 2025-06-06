@@ -1,6 +1,7 @@
 local utils = require('utils')
 local completion_keymap = {
     preset = 'none',
+    ['<c-x>'] = { function(cmp) cmp.show({providers = { 'snippets' }}) end },
     ['<cr>'] = { 'accept', 'fallback' },
     ['<tab>'] = { 'snippet_forward', 'fallback' },
     ['<s-tab>'] = { 'snippet_backward', 'fallback' },
