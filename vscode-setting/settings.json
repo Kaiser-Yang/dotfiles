@@ -1,256 +1,445 @@
 {
-    // close inlay hints
+    "editor.wrappingIndent": "none",
+    "editor.multiCursorModifier": "alt",
+    "editor.rulers": [
+        72,
+        100
+    ],
     "editor.inlayHints.enabled": "off",
-    // add lines at 80-th column and 100-th column
-    "editor.rulers": [80, 100],
     "editor.unicodeHighlight.nonBasicASCII": true,
+    "editor.mouseWheelZoom": true,
     "editor.lineNumbers": "relative",
-    "editor.fontSize": 16,
-    "editor.suggestSelection": "first",
-    "editor.acceptSuggestionOnEnter": "on",
-    "editor.acceptSuggestionOnCommitCharacter": true,
-    "editor.suggest.preview": true,
-    "editor.quickSuggestions": {
-        "other": "on",
-        "comments": "off",
-        "strings": "off"
-    },
+    "editor.smoothScrolling": true,
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.dragAndDrop": false,
+    "editor.dropIntoEditor.enabled": false,
+    "editor.acceptSuggestionOnCommitCharacter": false,
     "editor.suggestOnTriggerCharacters": true,
-    // close the highlight of the variables below cursor
-    "editor.occurrencesHighlight": "off",
-    "editor.renderWhitespace": "all",
+    "editor.showFoldingControls": "always",
     "editor.wordWrap": "on",
-
+    "editor.suggest.selectionMode": "always",
+    "editor.renderWhitespace": "boundary",
+    "editor.cursorSurroundingLines": 5,
+    "editor.gotoLocation.alternativeDeclarationCommand": "",
+    "editor.gotoLocation.alternativeDefinitionCommand": "",
+    "editor.gotoLocation.alternativeImplementationCommand": "",
+    "editor.gotoLocation.alternativeReferenceCommand": "",
+    "editor.gotoLocation.alternativeTypeDefinitionCommand": "",
     "files.autoSave": "afterDelay",
-
     "window.zoomLevel": 1,
     "window.openFilesInNewWindow": "on",
     "window.openFoldersInNewWindow": "on",
-
     "terminal.integrated.enableMultiLinePasteWarning": "never",
-
     "explorer.confirmDragAndDrop": true,
     "explorer.confirmDelete": true,
-
-    "remote.SSH.showLoginTerminal": true,
-    "remote.SSH.remotePlatform": {
-        "LabSever": "linux",
-        "LeMethod": "linux"
-    },
-
-    "cmake.configureOnOpen": false,
-    "cmake.showOptionsMovedNotification": false,
-
-    "vim.useSystemClipboard": true,
     "vim.hlsearch": true,
     "vim.leader": "<space>",
-    "vim.scroll": 5,
     "vim.incsearch": true,
     "vim.ignorecase": true,
     "vim.smartcase": true,
     "vim.showcmd": true,
-    // TODOs
-    // not support for spell check
-    // not support wild menu
-    // not support set textwidth 0
-    // not support resize windows
     "vim.normalModeKeyBindingsNonRecursive": [
         {
-            "before": ["<leader>", "<enter>"],
-            "commands": [":nohl"]
+            "before": [
+                "<leader>",
+                "y"
+            ],
+            "after": [
+                "\"",
+                "+",
+                "y"
+            ]
         },
         {
-            "before": ["Y"],
-            "after": ["y", "$"]
+            "before": [
+                "<leader>",
+                "Y"
+            ],
+            "after": [
+                "\"",
+                "+",
+                "y",
+                "$"
+            ]
         },
         {
-            "before": ["<leader>", "y", "a"],
-            "after": ["m", "z", "g", "g", "V", "G", "y", "`", "z", ":", "d", "e", "l", "m", "a", "r", "k", " ", "z", "<enter>", "z", "z"]
+            "before": [
+                "<leader>",
+                "p"
+            ],
+            "after": [
+                "\"",
+                "+",
+                "p"
+            ]
         },
         {
-            "before": ["Q"],
-            "after": [":", "q", "!", "<enter>"]
+            "before": [
+                "<leader>",
+                "P"
+            ],
+            "after": [
+                "\"",
+                "+",
+                "P"
+            ]
         },
         {
-            "before": ["S"],
-            "after": [":", "w", "q", "<enter>"]
-        },
-        // TODO: this seems not to work
-        // {
-        //     "before": ["<C-s>"],
-        //     "after": [":", "w", "<enter>"]
-        // },
-        {
-            "before": ["j"],
-            "after": ["g", "j"]
+            "before": [
+                "Y"
+            ],
+            "after": [
+                "y",
+                "$"
+            ]
         },
         {
-            "before": ["k"],
-            "after": ["g", "k"]
-        },
-        // TODO: split window at left
-        // {
-        //     "before": ["<C-h>"],
-        // },
-        {
-            "before": ["<C-l>"],
-            "after": [":", "v", "s", "p", "l", "i", "t", "<enter>"]
+            "before": [
+                "<leader>",
+                "R"
+            ],
+            "commands": [
+                "editor.action.rename"
+            ]
         },
         {
-            "before": ["<leader>", "h"],
-            "after": ["C-w", "h"]
+            "before": [
+                "<leader>",
+                "<enter>"
+            ],
+            "commands": [
+                ":nohl"
+            ]
         },
         {
-            "before": ["<leader>", "j"],
-            "after": ["C-w", "j"]
+            "before": [
+                "Q"
+            ],
+            "after": [
+                ":",
+                "q",
+                "!",
+                "<enter>"
+            ]
         },
         {
-            "before": ["<leader>", "k"],
-            "after": ["C-w", "k"]
+            "before": [
+                "<leader>",
+                "l"
+            ],
+            "after": [
+                ":",
+                "v",
+                "s",
+                "p",
+                "l",
+                "i",
+                "t",
+                "<enter>"
+            ]
         },
         {
-            "before": ["<leader>", "l"],
-            "after": ["C-w", "l"]
-        },
-        // TODO: these four seem not to work
-        // {
-        //     "before": ["<leader>", "H"],
-        //     "after": ["C-w", "H"]
-        // },
-        // {
-        //     "before": ["<leader>", "J"],
-        //     "after": ["C-w", "J"]
-        // },
-        // {
-        //     "before": ["<leader>", "K"],
-        //     "after": ["C-w", "K"]
-        // },
-        // {
-        //     "before": ["<leader>", "l"],
-        //     "after": ["C-w", "l"]
-        // },
-        {
-            "before": ["<C-t>"],
-            "after": [":", "t", "a", "b", "n", "e", "w", "<ENTER>"]
+            "before": [
+                "<C-h>"
+            ],
+            "after": [
+                "C-w",
+                "h"
+            ]
         },
         {
-            "before": ["<leader>", "b"],
-            "after": [":", "t", "a", "b", "p", "r", "e", "v", "<ENTER>"]
+            "before": [
+                "<C-j>"
+            ],
+            "after": [
+                "C-w",
+                "j"
+            ]
         },
         {
-            "before": ["<leader>", "n"],
-            "after": [":", "t", "a", "b", "n", "e", "x", "t", "<ENTER>"]
+            "before": [
+                "<C-k>"
+            ],
+            "after": [
+                "C-w",
+                "k"
+            ]
         },
         {
-            "before": ["<leader>", "1"],
-            "after": ["1", "g", "t"]
+            "before": [
+                "<C-l>"
+            ],
+            "after": [
+                "C-w",
+                "l"
+            ]
         },
         {
-            "before": ["<leader>", "2"],
-            "after": ["2", "g", "t"]
+            "before": [
+                "<leader>",
+                "1"
+            ],
+            "after": [
+                "1",
+                "g",
+                "t"
+            ]
         },
         {
-            "before": ["<leader>", "3"],
-            "after": ["3", "g", "t"]
+            "before": [
+                "<leader>",
+                "2"
+            ],
+            "after": [
+                "2",
+                "g",
+                "t"
+            ]
         },
         {
-            "before": ["<leader>", "4"],
-            "after": ["4", "g", "t"]
+            "before": [
+                "<leader>",
+                "3"
+            ],
+            "after": [
+                "3",
+                "g",
+                "t"
+            ]
         },
         {
-            "before": ["<leader>", "5"],
-            "after": ["5", "g", "t"]
+            "before": [
+                "<leader>",
+                "4"
+            ],
+            "after": [
+                "4",
+                "g",
+                "t"
+            ]
         },
         {
-            "before": ["<leader>", "6"],
-            "after": ["6", "g", "t"]
+            "before": [
+                "<leader>",
+                "5"
+            ],
+            "after": [
+                "5",
+                "g",
+                "t"
+            ]
         },
         {
-            "before": ["<leader>", "7"],
-            "after": ["7", "g", "t"]
+            "before": [
+                "<leader>",
+                "6"
+            ],
+            "after": [
+                "6",
+                "g",
+                "t"
+            ]
         },
         {
-            "before": ["<leader>", "8"],
-            "after": ["8", "g", "t"]
+            "before": [
+                "<leader>",
+                "7"
+            ],
+            "after": [
+                "7",
+                "g",
+                "t"
+            ]
         },
         {
-            "before": ["<leader>", "9"],
-            "after": ["9", "g", "t"]
+            "before": [
+                "<leader>",
+                "8"
+            ],
+            "after": [
+                "8",
+                "g",
+                "t"
+            ]
         },
         {
-            "before": ["<leader>", "d"],
-            "commands": ["editor.action.showHover"]
+            "before": [
+                "<leader>",
+                "9"
+            ],
+            "after": [
+                "9",
+                "g",
+                "t"
+            ]
         },
         {
-            "before": ["g", "h"],
-            "commands": ["clangd.switchheadersource"]
+            "before": [
+                "K"
+            ],
+            "commands": [
+                "editor.action.showHover"
+            ]
         },
         {
-            "before": ["g", "r"],
-            "commands": ["editor.action.referenceSearch.trigger"]
+            "before": [
+                "g",
+                "h"
+            ],
+            "commands": [
+                "clangd.switchheadersource"
+            ]
         },
         {
-            "before": ["<leader>", "R"],
-            "commands": ["editor.action.rename"]
+            "before": [
+                "g",
+                "r"
+            ],
+            "commands": [
+                "editor.action.referenceSearch.trigger"
+            ]
         },
         {
-            "before": ["<leader>", "H"],
-            "commands": ["editor.action.quickFix"]
+            "before": [
+                "g",
+                "a"
+            ],
+            "commands": [
+                "editor.action.quickFix"
+            ]
         },
         {
-            "before": ["<leader>", "c", "<leader>"],
-            "commands": ["editor.action.commentLine"]
+            "before": [
+                "<leader>",
+                "c",
+                "<leader>"
+            ],
+            "commands": [
+                "editor.action.commentLine"
+            ]
         },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "s"
+            ],
+            "commands": [
+                "editor.action.blockComment"
+            ]
+        },
+        {
+            "before": [
+                "<C-n>"
+            ],
+            "after": [
+                "<esc>"
+            ]
+        }
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         {
-            "before": ["j"],
-            "after": ["g", "j"]
+            "before": [
+                "g",
+                "a"
+            ],
+            "commands": [
+                "editor.action.quickFix"
+            ]
         },
         {
-            "before": ["k"],
-            "after": ["g", "k"]
+            "before": [
+                "<leader>",
+                "y"
+            ],
+            "after": [
+                "\"",
+                "+",
+                "y"
+            ]
         },
         {
-            "before": ["<leader>", "c", "<leader>"],
-            "commands": ["editor.action.commentLine"]
+            "before": [
+                "<leader>",
+                "Y"
+            ],
+            "after": [
+                "\"",
+                "+",
+                "y",
+                "$"
+            ]
         },
         {
-            "before": ["<leader>", "c", "s"],
-            "commands": ["editor.action.blockComment"]
+            "before": [
+                "<leader>",
+                "p"
+            ],
+            "after": [
+                "\"",
+                "+",
+                "p"
+            ]
         },
+        {
+            "before": [
+                "<leader>",
+                "P"
+            ],
+            "after": [
+                "\"",
+                "+",
+                "P"
+            ]
+        },
+        {
+            "before": [
+                "Y"
+            ],
+            "after": [
+                "y",
+                "$"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "<leader>"
+            ],
+            "commands": [
+                "editor.action.commentLine"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "s"
+            ],
+            "commands": [
+                "editor.action.blockComment"
+            ]
+        },
+        {
+            "before": [
+                "<C-n>"
+            ],
+            "after": [
+                "<esc>"
+            ]
+        }
     ],
     "vim.insertModeKeyBindingsNonRecursive": [
-        // TODO: split window at left
-        // {
-        //     "before": ["<C-h>"],
-        // },
         {
-            "before": ["<C-l>"],
-            "after": ["<esc>", ":", "v", "s", "p", "l", "i", "t", "<enter>"]
-        },
-        {
-            "before": ["<C-t>"],
-            "after": ["<esc>", ":", "t", "a", "b", "n", "e", "w", "<ENTER>"]
-        },
-
+            "before": [
+                "<C-n>"
+            ],
+            "after": [
+                "<esc>"
+            ]
+        }
     ],
-    "vim.handleKeys": {
-        "<C-f>": false,
-        "<C-p>": false,
-        "<C-e>": false,
-    },
-
-    "gitlens.graph.minimap.additionalTypes": [
-        "localBranches",
-        "stashes",
-        "remoteBranches",
-        "tags"
-    ],
-
-    "workbench.colorTheme": "One Dark Pro Darker",
-
-    "extensions.experimental.affinity": {
-        "vscodevim.vim": 1
-    },
+    "workbench.colorTheme": "Catppuccin Mocha",
+    "workbench.iconTheme": "catppuccin-mocha"
 }
