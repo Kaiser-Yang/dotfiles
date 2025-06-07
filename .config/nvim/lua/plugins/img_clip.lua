@@ -2,7 +2,8 @@ local utils = require('utils')
 utils.init_for_wsl()
 
 return {
-    'HakonHarnes/img-clip.nvim',
+    'Kaiser-Yang/img-clip.nvim',
+    branch = 'main',
     ft = vim.g.markdown_support_filetype,
     opts = {
         default = {
