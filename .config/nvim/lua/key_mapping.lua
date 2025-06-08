@@ -47,12 +47,11 @@ map_set({ 'n', 'x' }, '<leader>P', function()
     local ok, _ = pcall(require, 'img-clip')
     if not utils.markdown_support_enabled() or #plus_reg_content ~= 0 or not ok then
         vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
-        return '"+P'
+        utils.feedkeys('"+P', 'n')
     else
         require('img-clip').paste_image({ insert_template_after_cursor = false })
-        return ''
     end
-end, { desc = 'Paste from clipboard or insert image', expr = true })
+end, { desc = 'Paste from clipboard or insert image' })
 map_set({ 'n' }, '<leader>ay', function()
     local cur = vim.api.nvim_win_get_cursor(0)
     vim.api.nvim_command('normal! ggVGy')
