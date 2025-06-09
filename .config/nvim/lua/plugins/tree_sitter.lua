@@ -226,8 +226,7 @@ return {
                     },
                 },
                 swap = {
-                    -- We rarely use this, now we use 's' to search for two characters in flash
-                    enable = false,
+                    enable = true,
                     swap_next = {
                         ['snf'] = {
                             query = '@function.outer',

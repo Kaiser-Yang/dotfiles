@@ -7,7 +7,7 @@ return {
             delay = vim.o.timeoutlen,
             sort = { 'alphanum', 'local', 'order', 'group', 'mod' },
         })
-        -- local map_set = require('utils').map_set
-        -- map_set({ 'n' }, 's', '<cmd>WhichKey n s<cr>')
+        local map_set = require('utils').map_set
+        map_set({ 'n' }, 's', '<cmd>WhichKey n s<cr>')
     end,
 }

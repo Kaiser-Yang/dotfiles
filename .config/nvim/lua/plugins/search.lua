@@ -128,7 +128,7 @@ return {
             desc = 'Flash Search Current Word Backward',
         },
         {
-            's',
+            '<c-s>',
             mode = { 'n', 'x' },
             function()
                 local flash = require('flash')
