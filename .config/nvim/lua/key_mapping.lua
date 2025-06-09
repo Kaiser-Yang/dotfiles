@@ -127,13 +127,15 @@ map_set(
 map_set({ 'n' }, '<leader>t2', function()
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
-    vim.bo.softtabstop = 2
 end, { desc = 'Set tab with 2 spaces' })
 map_set({ 'n' }, '<leader>t4', function()
     vim.bo.tabstop = 4
     vim.bo.shiftwidth = 4
-    vim.bo.softtabstop = 4
 end, { desc = 'Set tab with 4 spaces' })
+map_set({ 'n' }, '<leader>t8', function()
+    vim.bo.tabstop = 8
+    vim.bo.shiftwidth = 8
+end, { desc = 'Set tab with 8 spaces' })
 map_set({ 'n' }, '<leader>tt', function()
     if vim.bo.expandtab then
         vim.bo.expandtab = false
