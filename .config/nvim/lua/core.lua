@@ -94,10 +94,6 @@ vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
         end
     end,
 })
-vim.api.nvim_create_autocmd('InsertLeave', {
-    group = 'UserDIY',
-    callback = vim.snippet.stop 
-})
 vim.api.nvim_create_autocmd('FileType', {
     group = 'UserDIY',
     pattern = 'gitcommit',
