@@ -297,16 +297,10 @@ return {
             function() feedkeys(']s', 'n') end,
             function() feedkeys('[s', 'n') end
         )
-        local next_word, prev_word = ts_repeat_move.make_repeatable_move_pair(
-            function() feedkeys('w', 'n') end,
-            function() feedkeys('b', 'n') end
-        )
         local next_big_word, prev_big_word = ts_repeat_move.make_repeatable_move_pair(
             function() feedkeys('W', 'n') end,
             function() feedkeys('B', 'n') end
         )
-        map_set('n', 'w', next_word, { desc = 'Next word' })
-        map_set('n', 'b', prev_word, { desc = 'Previous word' })
         map_set('n', 'W', next_big_word, { desc = 'Next big word' })
         map_set('n', 'B', prev_big_word, { desc = 'Previous big word' })
         map_set('n', ']s', next_misspell, { desc = 'Next misspelled word' })
