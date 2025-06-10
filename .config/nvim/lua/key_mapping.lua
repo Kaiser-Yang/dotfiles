@@ -19,7 +19,7 @@ map_set({ 'n', 'i' }, '<C-RightMouse>', function()
         local current_line = vim.api.nvim_get_current_line()
         if not current_line or #current_line == 0 or current_line:find('^%s*$') ~= nil then
             vim.schedule(function()
-                vim.cmd('normal! dd<cr>')
+                vim.cmd('normal! dd')
                 require('img-clip').paste_image({ insert_template_after_cursor = false })
             end)
             res = ''
