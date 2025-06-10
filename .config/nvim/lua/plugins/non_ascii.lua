@@ -25,5 +25,6 @@ return {
         map_set({ 'n', 'x', 'o' }, 'b', prev_word, { desc = 'Previous word' })
         map_set({ 'n', 'x', 'o' }, 'e', next_end_word, { desc = 'Next end word' })
         map_set({ 'n', 'x', 'o' }, 'ge', prev_end_word, { desc = 'Previous end word' })
+        map_set({ 'x', 'o' }, 'iw', non_ascii.iw, { desc = 'Inside a word' })
     end,
 }
