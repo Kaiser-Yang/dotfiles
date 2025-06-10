@@ -21,9 +21,9 @@ return {
             zh.e,
             zh.ge
         )
-        map_set('n', 'w', next_word, { desc = 'Next word' })
-        map_set('n', 'b', prev_word, { desc = 'Previous word' })
-        map_set('n', 'e', next_end_word, { desc = 'Next end word' })
-        map_set('n', 'ge', prev_end_word, { desc = 'Previous end word' })
+        map_set({ 'n', 'x', 'o' }, 'w', next_word, { desc = 'Next word' })
+        map_set({ 'n', 'x', 'o' }, 'b', prev_word, { desc = 'Previous word' })
+        map_set({ 'n', 'x', 'o' }, 'e', next_end_word, { desc = 'Next end word' })
+        map_set({ 'n', 'x', 'o' }, 'ge', prev_end_word, { desc = 'Previous end word' })
     end,
 }
