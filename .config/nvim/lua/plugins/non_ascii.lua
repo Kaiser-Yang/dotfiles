@@ -1,5 +1,5 @@
 return {
-    'Kaiser-Yang/zh.nvim',
+    'Kaiser-Yang/non-ascii.nvim',
     dependencies = {
         'nvim-treesitter/nvim-treesitter',
     },
@@ -9,17 +9,17 @@ return {
         }
     },
     config = function(_, opts)
-        local zh = require('zh')
-        zh.setup(opts)
+        local non_ascii= require('non-ascii')
+        non_ascii.setup(opts)
         local map_set = require('utils').map_set
         local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
         local next_word, prev_word = ts_repeat_move.make_repeatable_move_pair(
-            zh.w,
-            zh.b
+            non_ascii.w,
+            non_ascii.b
         )
         local next_end_word, prev_end_word = ts_repeat_move.make_repeatable_move_pair(
-            zh.e,
-            zh.ge
+            non_ascii.e,
+            non_ascii.ge
         )
         map_set({ 'n', 'x', 'o' }, 'w', next_word, { desc = 'Next word' })
         map_set({ 'n', 'x', 'o' }, 'b', prev_word, { desc = 'Previous word' })
