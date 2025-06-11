@@ -4,7 +4,7 @@ return {
         'nvim-treesitter/nvim-treesitter',
     },
     opts = {
-        word_jump = {
+        word = {
             word_files = { vim.fn.expand('~/.config/nvim/dict/zh_dict.txt') },
         }
     },
@@ -21,10 +21,16 @@ return {
             non_ascii.e,
             non_ascii.ge
         )
-        map_set({ 'n', 'x', 'o' }, 'w', next_word, { desc = 'Next word' })
-        map_set({ 'n', 'x', 'o' }, 'b', prev_word, { desc = 'Previous word' })
-        map_set({ 'n', 'x', 'o' }, 'e', next_end_word, { desc = 'Next end word' })
-        map_set({ 'n', 'x', 'o' }, 'ge', prev_end_word, { desc = 'Previous end word' })
+        map_set({ 'n', 'x' }, 'w', next_word, { desc = 'Next word' })
+        map_set({ 'n', 'x' }, 'w', next_word, { desc = 'Next word' })
+        map_set({ 'n', 'x' }, 'b', prev_word, { desc = 'Previous word' })
+        map_set({ 'n', 'x' }, 'e', next_end_word, { desc = 'Next end word' })
+        map_set({ 'n', 'x' }, 'ge', prev_end_word, { desc = 'Previous end word' })
+        map_set('o', 'w', non_ascii.e, { desc = 'Next word' })
+        map_set('o', 'b', non_ascii.b, { desc = 'Previous word' })
+        map_set('o', 'e', non_ascii.e, { desc = 'Next end word' })
+        map_set('o', 'ge', non_ascii.ge, { desc = 'Previous end word' })
         map_set({ 'x', 'o' }, 'iw', non_ascii.iw, { desc = 'Inside a word' })
+        map_set({ 'x', 'o' }, 'aw', non_ascii.aw, { desc = 'Around a word' })
     end,
 }
