@@ -72,19 +72,19 @@ return {
             function() require('flash').treesitter() end,
             desc = 'Flash Treesitter',
         },
-        {
-            -- For most terminals, this is the same as <c-/>
-            '<c-_>',
-            mode = { 'n', 'x', 'o' },
-            function()
-                local word = vim.fn.histget('/', -1)
-                require('flash').jump({
-                    search = { mode = 'search' },
-                    pattern = word,
-                })
-            end,
-            desc = 'Flash Search Last Searched Word',
-        },
+        -- {
+        -- For most terminals, this is the same as <c-/>
+        -- '<c-_>',
+        -- mode = { 'n', 'x', 'o' },
+        -- function()
+        --     local word = vim.fn.histget('/', -1)
+        --     require('flash').jump({
+        --         search = { mode = 'search' },
+        --         pattern = word,
+        --     })
+        -- end,
+        -- desc = 'Flash Search Last Searched Word',
+        -- },
         {
             '*',
             mode = { 'n', 'x', 'o' },
