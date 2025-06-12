@@ -1,7 +1,7 @@
 local utils = require('utils')
 local completion_keymap = {
     preset = 'none',
-    ['<c-x>'] = { function(cmp) cmp.show({providers = { 'snippets' }}) end },
+    ['<c-x>'] = { function(cmp) cmp.show({ providers = { 'snippets' } }) end },
     ['<cr>'] = { 'accept', 'fallback' },
     ['<tab>'] = { 'snippet_forward', 'fallback' },
     ['<s-tab>'] = { 'snippet_backward', 'fallback' },
@@ -131,7 +131,8 @@ return {
                     range = 'full',
                 },
                 list = {
-                    selection = { preselect = false, auto_insert = true },
+                    -- preselect = true is helpful for snippets
+                    selection = { preselect = true, auto_insert = true },
                 },
                 menu = {
                     border = 'rounded',
@@ -196,7 +197,7 @@ return {
                 completion = {
                     menu = { auto_show = true },
                     ghost_text = { enabled = false },
-                    list = { selection = { preselect = false, auto_insert = true } },
+                    list = { selection = { preselect = true, auto_insert = true } },
                 },
             },
             sources = {
