@@ -1,7 +1,15 @@
 local utils = require('utils')
 local completion_keymap = {
     preset = 'none',
-    ['<c-x>'] = { function(cmp) cmp.show({ providers = { 'snippets' } }) end },
+    ['<c-x>'] = {
+        function(cmp)
+            if cmp.is_visible() then
+                cmp.show_documentation()
+            else
+                cmp.show({ providers = { 'snippets' } })
+            end
+        end,
+    },
     ['<cr>'] = { 'accept', 'fallback' },
     ['<tab>'] = { 'snippet_forward', 'fallback' },
     ['<s-tab>'] = { 'snippet_backward', 'fallback' },
@@ -178,7 +186,7 @@ return {
                     },
                 },
                 documentation = {
-                    auto_show = true,
+                    auto_show = false,
                     window = {
                         border = 'rounded',
                     },
