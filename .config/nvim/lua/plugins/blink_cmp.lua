@@ -197,7 +197,7 @@ return {
                 completion = {
                     menu = { auto_show = true },
                     ghost_text = { enabled = false },
-                    list = { selection = { preselect = true, auto_insert = true } },
+                    list = { selection = { preselect = false, auto_insert = true } },
                 },
             },
             sources = {
