@@ -2,10 +2,10 @@
 -- Author: KaiserYang
 
 local item_regex = {
-    list = '^ *(%* )',
-    list_with_minus = '^ *(%- )',
+    list = '^ *([*-] )',
     number_list = '^ *(%d+%. )',
-    todo_list = '^ *(%- %[[ x]%] )',
+    todo_list = '^ *([*-] %[[ x-]%] )',
+    reference = '^ *(> )',
 }
 --- @param line string
 local function match_item(line, must_end)
