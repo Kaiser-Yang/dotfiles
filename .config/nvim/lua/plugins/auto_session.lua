@@ -8,12 +8,12 @@ return {
         suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
         post_restore_cmds = {
             function()
-                require('neo-tree.command').execute({
-                    action = 'show',
-                    source = 'filesystem',
-                    dir = utils.get_root_directory(),
-                })
-                vim.cmd('wincmd =')
+                -- require('neo-tree.command').execute({
+                --     action = 'show',
+                --     source = 'filesystem',
+                --     dir = utils.get_root_directory(),
+                -- })
+                -- vim.cmd('wincmd =')
             end,
         },
         auto_save = utils.has_root_directory,
