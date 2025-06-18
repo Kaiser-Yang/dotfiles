@@ -86,7 +86,7 @@ return {
                 require('neo-tree.command').execute({
                     action = 'show',
                     source = 'last',
-                    dir = require('utils').get_root_directory(),
+                    dir = vim.fn.getcwd(),
                 })
                 vim.cmd('wincmd =')
             end

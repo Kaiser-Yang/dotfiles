@@ -399,7 +399,6 @@ return {
                 },
             },
         })
-        local get_root_directory = require('utils').get_root_directory
         local function move_cursor_to_neo_tree()
             for _, win in pairs(vim.api.nvim_list_wins()) do
                 if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == 'neo-tree' then
@@ -416,7 +415,6 @@ return {
                 source = 'git_status',
                 reveal = true,
                 reveal_file = current_file,
-                dir = get_root_directory(),
             })
         end)
         map_set({ 'n' }, '<c-e>', function()
@@ -426,7 +424,6 @@ return {
                 source = 'filesystem',
                 reveal = true,
                 reveal_file = current_file,
-                dir = get_root_directory(),
             })
         end)
         map_set({ 'n' }, '<c-w>', function()

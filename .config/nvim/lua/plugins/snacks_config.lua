@@ -358,7 +358,7 @@ return {
             '<c-p>',
             function()
                 Snacks.picker.files({
-                    cwd = utils.get_root_directory(),
+                    cwd = vim.fn.getcwd(),
                     hidden = true,
                     exclude = file_ignore_patterns,
                 })
@@ -369,7 +369,7 @@ return {
             '<c-f>',
             function()
                 Snacks.picker.grep({
-                    cwd = utils.get_root_directory(),
+                    cwd = vim.fn.getcwd(),
                     hidden = true,
                     exclude = file_ignore_patterns,
                 })
@@ -487,7 +487,7 @@ return {
                     '<c-p>',
                     function()
                         Snacks.picker.files({
-                            cwd = utils.get_root_directory(),
+                            cwd = vim.fn.getcwd(),
                             hidden = true,
                             exclude = file_ignore_patterns,
                         })
@@ -499,7 +499,7 @@ return {
                     '<c-f>',
                     function()
                         Snacks.picker.grep({
-                            cwd = utils.get_root_directory(),
+                            cwd = vim.fn.getcwd(),
                             hidden = true,
                             exclude = file_ignore_patterns,
                         })

@@ -32,7 +32,7 @@ local config = {
         workspace_dir,
     },
 
-    root_dir = utils.get_root_directory(),
+    root_dir = vim.fn.getcwd(),
     capabilities = utils.get_lsp_capabilities(),
     handlers = {
         ['$/progress'] = function(_, _, _) end,
