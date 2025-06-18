@@ -1,24 +1,5 @@
 // Place your key bindings in this file to override the defaultsauto[]
 [
-    {
-        "key": "ctrl+e",
-        "command": "-workbench.action.quickOpen"
-    },
-    {
-        "key": "ctrl+e",
-        "command": "-editor.action.toggleScreenReaderAccessibilityMode",
-        "when": "accessibilityHelpIsShown"
-    },
-    {
-        "key": "ctrl+e",
-        "command": "-workbench.action.quickOpenNavigateNextInFilePicker",
-        "when": "inFilesPicker && inQuickOpen"
-    },
-    // TODO update this to close and open explorer
-    {
-        "key": "ctrl+e",
-        "command": "workbench.view.explorer"
-    },
     // do not use ctrl + f in terminal, ctrl + f is the compeletion key of fish shell
     {
         "key": "ctrl+f",
@@ -26,16 +7,6 @@
         "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
     },
     // update all the up arrow and down arrow with ctrl + k and ctrl + j
-    {
-        "key": "ctrl+k",
-        "command": "cursorUp",
-        "when": "textInputFocus"
-    },
-    {
-        "key": "up",
-        "command": "-cursorUp",
-        "when": "textInputFocus"
-    },
     {
         "key": "ctrl+k",
         "command": "editor.action.selectPreviousStickyScrollLine",
@@ -105,16 +76,6 @@
         "key": "up",
         "command": "-showPrevParameterHint",
         "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
-    },
-    {
-        "key": "ctrl+j",
-        "command": "cursorDown",
-        "when": "textInputFocus"
-    },
-    {
-        "key": "down",
-        "command": "-cursorDown",
-        "when": "textInputFocus"
     },
     {
         "key": "ctrl+j",
