@@ -26,7 +26,7 @@ return {
         map_set({ 'n', 'x' }, 'b', prev_word, { desc = 'Previous word' })
         map_set({ 'n', 'x' }, 'e', next_end_word, { desc = 'Next end word' })
         map_set({ 'n', 'x' }, 'ge', prev_end_word, { desc = 'Previous end word' })
-        map_set('o', 'w', non_ascii.e, { desc = 'Next word' })
+        map_set('o', 'w', non_ascii.w, { desc = 'Next word' })
         map_set('o', 'b', non_ascii.b, { desc = 'Previous word' })
         map_set('o', 'e', non_ascii.e, { desc = 'Next end word' })
         map_set('o', 'ge', non_ascii.ge, { desc = 'Previous end word' })
