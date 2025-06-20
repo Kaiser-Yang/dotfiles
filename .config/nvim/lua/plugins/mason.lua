@@ -25,6 +25,8 @@ return {
             'vue-language-server',
             'yaml-language-server',
             'prettier',
+            'buildifier',
+            'bazelrc-lsp',
         }
         local mason_registry = require('mason-registry')
         for _, plugin in ipairs(mason_plugins) do

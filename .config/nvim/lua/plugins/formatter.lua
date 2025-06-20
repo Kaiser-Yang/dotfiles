@@ -1,3 +1,8 @@
+vim.filetype.add {
+  pattern = {
+    ['.*.bazelrc'] = 'bazelrc',
+  },
+}
 return {
     'stevearc/conform.nvim',
     cmd = { 'ConformInfo' },
@@ -29,6 +34,8 @@ return {
             typescript = { 'prettier' },
             javascript = { 'prettier' },
             css = { 'prettier' },
+            bzl = { 'buildifier' },
+            bazelrc = { 'buildifier' },
         },
         formatters = {
             ['autopep8'] = {
