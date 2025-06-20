@@ -42,6 +42,7 @@ return {
         indent = {
             enabled = true,
             animate = {
+                enabled = false,
                 duration = {
                     total = 300,
                 },
