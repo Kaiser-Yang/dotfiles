@@ -142,6 +142,9 @@ return {
                     -- preselect = true is helpful for snippets
                     selection = { preselect = true, auto_insert = true },
                 },
+                trigger = {
+                    show_on_insert_on_trigger_character = false,
+                },
                 menu = {
                     border = 'rounded',
                     max_height = 15,
