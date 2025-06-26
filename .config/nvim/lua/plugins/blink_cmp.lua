@@ -1,6 +1,7 @@
 local utils = require('utils')
 local completion_keymap = {
     preset = 'none',
+    ['<c-s>'] = { 'show_signature', 'hide_signature', 'fallback' },
     ['<c-x>'] = {
         function(cmp)
             if cmp.is_visible() then
@@ -197,9 +198,10 @@ return {
             },
             signature = {
                 enabled = true,
+                auto_show = false,
                 window = {
                     border = 'rounded',
-                    show_documentation = false,
+                    show_documentation = true,
                 },
             },
             keymap = completion_keymap,
