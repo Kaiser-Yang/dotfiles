@@ -136,6 +136,11 @@ return {
                 use_frecency = false,
             },
             completion = {
+                accept = {
+                    auto_brackets = {
+                        enabled = false,
+                    },
+                },
                 keyword = {
                     range = 'full',
                 },
