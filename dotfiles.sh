@@ -48,6 +48,7 @@ DIRS=(
     ".config/tmux/plugins/tmux-battery/battery.tmux"
     ".config/tmux/plugins/tmux-cpu/cpu.tmux"
     ".config/tmux/plugins/tmux-yank/yank.tmux"
+    ".config/tmux/plugins/conda_inherit.sh"
 
     # input method related configurations
     ".local/share/fcitx5/rime/colors"

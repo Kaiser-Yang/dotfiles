@@ -115,9 +115,25 @@ export FZF_DEFAULT_OPTS=" \
 --color=selected-bg:#45475a \
 --multi"
 
-export PATH=$PATH:/opt/nvim-linux64/bin
+[[ ! -d /opt/nvim-linux64/bin ]] || export PATH=$PATH:/opt/nvim-linux64/bin
 
-if [[ -n "$TMUX" ]] then
-  export flavor='conda'
-  source $HOME/.config/tmux/plugins/conda_inherit.sh
+if [ -e "$HOME/opt/miniconda3" ]; then
+    # >>> conda initialize >>>
+    # !! Contents within this block are managed by 'conda init' !!
+    __conda_setup="$("$HOME/opt/miniconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    else
+        if [ -f "$HOME/opt/miniconda3/etc/profile.d/conda.sh" ]; then
+            . "$HOME/opt/miniconda3/etc/profile.d/conda.sh"
+        else
+            export PATH="$HOME/opt/miniconda3/bin:$PATH"
+        fi
+    fi
+    unset __conda_setup
+    # <<< conda initialize <<<
+    if [[ -n "$TMUX" ]] then
+      export flavor='conda'
+      source $HOME/.config/tmux/plugins/conda_inherit.sh
+    fi
 fi
