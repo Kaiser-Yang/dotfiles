@@ -52,16 +52,24 @@ alias gst='git status'
 alias gps='git push'
 alias gpl='git pull --ff-only'
 alias gplr='git pull --rebase'
+
 alias ga='git add'
 alias gaa='git add :/'
 alias gad='git add .'
+
 alias gcm='git commit'
 alias gft='git fetch'
 alias gmg='git merge'
 alias gl='git log'
 alias gdf='git diff'
 alias gswt='git switch'
+alias gdfs='git diff --staged'
+
 alias grbs='git rebase'
+alias grbsa='git rebase --abort'
+alias grbsc='git rebase --continue'
+alias grbsi='git rebase --interactive'
+
 alias gdag='git log \
     --graph \
     --abbrev-commit \
@@ -69,10 +77,23 @@ alias gdag='git log \
     --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" \
     --all'
 alias gdagol='git log --all --decorate --oneline --graph'
+
 alias gbrc='git branch'
+alias gbrca='git branch --all'
+alias gbrcr='git branch --remote'
+alias gbrcd='git branch -d'
+alias gbrcD='git branch -D'
+
 alias gcln='git clone'
+
 alias grst='git reset'
+alias grsth='git reset --hard'
+
 alias grsr='git restore'
+
+alias gsts='git stash'
+alias gstsp='git stash pop'
+alias gstsl='git stash list'
 
 alias tm='tmux'
 alias tmls='tmux ls'
