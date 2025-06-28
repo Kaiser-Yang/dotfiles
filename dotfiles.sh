@@ -148,33 +148,35 @@ back_up_and_link() {
 }
 
 restore() {
-    local dst="$1"
-    if [ -e "$dst.bak" ]; then
-        if [ -e "$dst" ]; then
-            log_verbose "Removing existing $dst before restoring from backup."
-            rm -f "$dst" || {
-                log_error "Failed to remove existing $dst. Please check the file path."
-                return 1
-            }
-            log_verbose "Removed existing $dst."
-        else
-            log_verbose "No existing $dst to remove"
-        fi
-        log_verbose "Restoring $dst from backup $dst.bak."
-        mv "$dst.bak" "$dst" || {
-            log_error "Failed to restore $dst from backup. Please check the file path."
+    local src="$1"
+    local dst="$2"
+    if [ "$(readlink -f "$dst")" = "$(realpath "$src")" ]; then
+        log_verbose "Removing existing $dst before restoring from backup."
+        rm -f "$dst" || {
+            log_error "Failed to remove existing $dst. Please check the file path."
             return 1
         }
-        log_verbose "Restored $dst from backup successfully."
-    else
-        log_verbose "No backup found for $dst."
+        log_verbose "Removed existing $dst."
+    elif [ -e "$dst" ]; then
+        log_error "Cannot restore $dst because it is not a symbolic link to $src."
+        return 1
     fi
+    if [ ! -e "$dst.bak" ]; then
+        log_verbose "No backup found for $dst."
+        return 0
+    fi
+    log_verbose "Restoring $dst from backup $dst.bak."
+    mv "$dst.bak" "$dst" || {
+        log_error "Failed to restore $dst from backup. Please check the file path."
+        return 1
+    }
+    log_verbose "Restored $dst from backup successfully."
 }
 
 for file in "${files[@]}"; do
     if [ -f "$file" ]; then
         if [ "$RUN_RESTORE" = true ]; then
-            restore "$HOME/$file" || exit 1
+            restore "$REPO_ROOT/$file" "$HOME/$file" || exit 1
         else
             back_up_and_link "$REPO_ROOT/$file" "$HOME/$file" || exit 1
         fi
