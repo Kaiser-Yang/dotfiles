@@ -89,8 +89,6 @@ vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
         end
         if not cursor_in_match then
             vim.schedule(function() vim.cmd('nohlsearch') end)
-        else
-            vim.schedule(function() vim.cmd('set hlsearch') end)
         end
     end,
 })
