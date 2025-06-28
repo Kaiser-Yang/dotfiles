@@ -138,7 +138,7 @@ export FZF_DEFAULT_OPTS=" \
 --color=selected-bg:#45475a \
 --multi"
 
-if [ -e "$HOME/opt/miniconda3" ]; then
+if [ -d "$HOME/opt/miniconda3" ]; then
     # >>> conda initialize >>>
     # !! Contents within this block are managed by 'conda init' !!
     __conda_setup="$("$HOME/opt/miniconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
