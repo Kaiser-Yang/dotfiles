@@ -33,6 +33,7 @@ DIRS=(
 INSTALLATION_COMMANDS=()
 
 SUDO=$(command -v sudo)
+IS_MAC_OS=false
 
 # arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release; then
@@ -44,6 +45,14 @@ if grep -qi '^ID=arch' /etc/os-release; then
         ".config/lazygit"
         ".config/wezterm"
     )
+elif [[ "$(uanme)" == "Darwin" ]]; then
+    IS_MAC_OS=true
+    INSTALLATION_COMMANDS+=(
+        "brew install curl git lazygit neovim tmux zsh zoxide node"
+    )
+else
+    log_error "Unsupported operating system. Please use Arch Linux or macOS."
+    exit 1
 fi
 
 log () {
@@ -139,8 +148,27 @@ install_oh_my_zsh() {
     fi
 }
 
+install_home_brew() {
+    if ! command -v brew &>/dev/null; then
+        log_verbose "Installing Home brew..."
+        if ! bash -c "$(curl -fsSL \
+            https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+            local error_code=$?
+            log_error "Failed to install Home brew. "\
+                "Please check your internet connection or the installation script."
+            return $error_code
+        fi
+        log_verbose "Home brew installed successfully."
+    else
+        log_verbose "Home brew is already installed."
+    fi
+}
+
 install_packages() {
     log "Start to install required packages."
+    if [ "$IS_MAC_OS" = true ]; then
+        install_home_brew || return $?
+    fi
     install_oh_my_zsh || return $?
     for cmd in "${INSTALLATION_COMMANDS[@]}"; do
         log_verbose "Executing command: $cmd"
