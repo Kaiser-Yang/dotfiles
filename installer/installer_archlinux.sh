@@ -12,8 +12,7 @@
 # unzip
 
 sudo pacman -Sy \
-    tmux less wl-clipboard \
-    lazygit git \
+    less wl-clipboard \
     fd fzf ripgrep sshfs \
     fcitx5-im fcitx5-rime \
     fire-fox \
@@ -21,8 +20,7 @@ sudo pacman -Sy \
     unzip \
     github-cli \
     glab \
-    zsh \
-    nodejs yarn \
+    yarn \
     docker \
     ttf-cascadia-mono-nerd
 
@@ -51,5 +49,3 @@ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
 bash ~/opt/miniconda3/miniconda.sh -b -u -p ~/opt/miniconda3 || exit 1
 rm -rf ~/miniconda3/miniconda.sh || exit 1
 ~/opt/miniconda3/bin/conda init zsh || exit 1
-
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"

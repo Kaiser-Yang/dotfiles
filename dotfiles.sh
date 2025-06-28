@@ -32,10 +32,12 @@ DIRS=(
 )
 INSTALLATION_COMMANDS=()
 
+SUDO=$(command -v sudo)
+
 # arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release; then
     INSTALLATION_COMMANDS+=(
-        "sudo pacman -S --noconfirm git curl neovim tmux zsh zoxide"
+        "$SUDO pacman -Sy --noconfirm curl git lazygit neovim tmux zsh zoxide nodejs"
     )
     DIRS+=(
         ".config/fontconfig"
