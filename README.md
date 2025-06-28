@@ -5,66 +5,32 @@ My own configure files for UNIX/Linux tools.
 ## Quick Start
 
 1. Use the command `git clone https://github.com/Kaiser-Yang/dotfiles.git` to clone this repository.
-2. Use the command `cd dotfiles` to enter the directory. Run `./dot_files.py init` to install `tmux`
-, `fish`, `vim` and `nvim`.
-3. Use the command `./dot_files.py` to only copy the configuration files to your `$HOME` directory.
-4. You need to install `nodejs` and `yarn` first (If you use `./dot_files.py init` this has been
-done).
-5. Run `vim` or `nvim` to install plugins.
-
-NOTE: Before copying the configuration files to your `$HOME` directory, the original files will be
-backed up to the `backup` directory in this repository. You can use `./dot_files.py recover` to
-recover the original files.
+2. Use the command `cd dotfiles` to enter the directory. Run `./dotfiles.sh -ice`.
+    * `i`: Install all the dependencies.
+    * `c`: Create symbolic links for configuration files.
+    * `e`: Extract files. This will create symbolic links for each file instead of directories.
+    This is useful when you have other configuration files in the directories.
+3. Run `nvim` to install plugins.
 
 ## More Information
 
-In `dot_files.py`, there are two variables:
+You can use `./dotfiles.sh -h` to see more options.
 
-```python
-ignore_file = set(["./.git", "./LICENSE", "./README.md",
-                   "./dot_files.py", "./.gitignore", "./replace_md_image.py",
-                   "./installer", "./vscode-setting", "./README.assets", "./markdownBackup"])
-copy_file = set(["./.tmux.conf", "./proxy.sh", "./proxy.fish", "./.config/nvim"])
-```
-
-The files or directories in `ignore_file` will be ignored during installation, and the files or
-directories in `copy_file` will be copied to your `$HOME` directory. The contents of files which are
-not in those two sets will be appended to the files in your `$HOME` directory.
-
-If you only want to install the configurations of `nvim`, you just need to add `./.config/nvim` to
-`copy_file`, and add all other directory to `ignore_file`. Then run `./dot_files.py`.
-
-If you only want to install the configurations of `tmux`, you just need to add `./.tmux.conf` to
-`copy_file`, and add all other directory to `ignore_file`. Then run `./dot_files.py`.
-
-If you only want to install the configurations of `fish`, you just need to add `./proxy.fish` to
-`copy_file`, and add all other directory, except for `.config/fish`, to `ignore_file`. Then run
-`./dot_files.py`.
-
-Besides, there are other types parameters you can pass to `dot_files.py`:
-
-* `update`: only update the configurations depending on the `ignore_file` and `copy_file`. This will
-backup the original files to `backup` directory first.
-* `recover`: recover all files from backup directory to `$HOME` directory.
-* `init`: install all plugins for `nvim`, `tmux` and install `fish` and set `fish` be your default
-shell.
-
-Indeed, if you run `./dot_files.py` with no parameters, it is same with
-`./dot_files.py recover && ./dot_files.py update`. So I strongly recommend you to use
-`./dot_files.py` to update the configurations.
+When you run `./dotfiles.sh` with `-c`, it will create backup files for your original
+configuration files with the suffix `.bak`. You can use `./dotfiles.sh -r` to restore your
+original configuration files. If you create symbolic links with `/dot_files.sh -ce`,
+you should use `./dotfiles.sh -re` to restore your original configuration files.
 
 There is a file called `replace_md_image.py`, this file receive a directory as a parameter, and it
 will download all the images in the markdown files (recursively) in the directory and replace the
 image links with the local links. This will backup your markdown files first.
 
-# Shortcuts
+## Basic Shortcuts
 
 Note that my leader key is `Space`.
 
 Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V` means visual mode,
 `T` means terminal mode, `X` means select mode, and `N I` means normal mode and insert mode.
-
-## Basic Shortcuts
 
 | Shortcut    | Mode      | Description                                                                                 |
 | -           | -         | -                                                                                           |
