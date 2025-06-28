@@ -110,28 +110,43 @@ init_options() {
     EXTRACT=false
     while [[ $# -gt 0 ]]; do
         case "$1" in
-            -r|--restore)
+            --restore)
                 RESTORE=true
                 shift
                 ;;
-            -h|--help)
+            --help)
                 usage
                 return 1
                 ;;
-            -v|--verbose)
+            --verbose)
                 VERBOSE=true
                 shift
                 ;;
-            -i|--install)
+            --install)
                 INSTALL_PACKAGES=true
                 shift
                 ;;
-            -c|--create)
+            --create)
                 CREATE_LINKS=true
                 shift
                 ;;
-            -e|--extract)
+            --extract)
                 EXTRACT=true
+                shift
+                ;;
+            -*)
+                short_opts="${1:1}"
+                for ((i=0; i<${#short_opts}; i++)); do
+                    case "${short_opts:$i:1}" in
+                        r) RESTORE=true ;;
+                        h) usage; return 1 ;;
+                        v) VERBOSE=true ;;
+                        i) INSTALL_PACKAGES=true ;;
+                        c) CREATE_LINKS=true ;;
+                        e) EXTRACT=true ;;
+                        *) log_erro "Unknown option: -${short_opts:$i:1}"; usage; return 1 ;;
+                    esac
+                done
                 shift
                 ;;
             *)
