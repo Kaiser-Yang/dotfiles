@@ -15,6 +15,7 @@ plugins=(
     zsh-expand
     zsh-autosuggestions
     zsh-syntax-highlighting
+    extract
 )
 
 # zsh-vi-mode
