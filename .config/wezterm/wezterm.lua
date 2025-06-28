@@ -2,37 +2,37 @@ local wezterm = require('wezterm')
 local act = wezterm.action
 -- check if a command exists
 local function command_exists(cmd)
-    local handle = io.popen("command -v " .. cmd .. " >/dev/null 2>&1 && echo 'yes' || echo 'no'")
-    local result = handle:read("*a")
+    local handle = io.popen('command -v ' .. cmd .. " >/dev/null 2>&1 && echo 'yes' || echo 'no'")
+    local result = handle:read('*a')
     handle:close()
     return result:find('yes') ~= nil
 end
 
 -- Check if WSL is available
 local function is_wsl_available()
-    local handle = io.popen("wsl.exe -l")
-    local result = handle:read("*a")
+    local handle = io.popen('wsl.exe -l')
+    local result = handle:read('*a')
     handle:close()
-    return result ~= nil and result ~= ""
+    return result ~= nil and result ~= ''
 end
 
 -- Get the default program based on the operating system
 local function default_program()
     local default_prog = nil
     local target = wezterm.target_triple
-    if target:find("windows") then
+    if target:find('windows') then
         if is_wsl_available() then
-            default_prog = { "wsl.exe" }
+            default_prog = { 'wsl.exe' }
         else
-            default_prog = { "powershell.exe" }
+            default_prog = { 'powershell.exe' }
         end
     else
-        if command_exists("zsh") then
-            default_prog = { "zsh" }
-        elseif command_exists("fish") then
-            default_prog = { "fish" }
+        if command_exists('zsh') then
+            default_prog = { 'zsh' }
+        elseif command_exists('fish') then
+            default_prog = { 'fish' }
         else
-            default_prog = { "bash" }
+            default_prog = { 'bash' }
         end
     end
     return default_prog
@@ -46,13 +46,13 @@ return {
     enable_tab_bar = false,
     font = wezterm.font_with_fallback({
         'CaskaydiaMono Nerd Font',
-        'JetBrains Mono'
+        'JetBrains Mono',
     }),
     keys = {
-        { key = "z", mods = "CTRL|ALT", action = "Nop" },
-        { key = '=', mods = 'CTRL',   action = act.IncreaseFontSize },
-        { key = '-', mods = 'CTRL',   action = act.DecreaseFontSize },
-        { key = '0', mods = 'CTRL',   action = act.ResetFontSize },
+        { key = 'z', mods = 'CTRL|ALT', action = 'Nop' },
+        { key = '=', mods = 'CTRL', action = act.IncreaseFontSize },
+        { key = '-', mods = 'CTRL', action = act.DecreaseFontSize },
+        { key = '0', mods = 'CTRL', action = act.ResetFontSize },
     },
     mouse_bindings = {
         {
@@ -68,7 +68,7 @@ return {
         {
             event = { Up = { streak = 1, button = 'Left' } },
             mods = 'NONE',
-            action = act.CompleteSelection 'ClipboardAndPrimarySelection',
+            action = act.CompleteSelection('ClipboardAndPrimarySelection'),
         },
         {
             event = { Down = { streak = 1, button = 'Left' } },
@@ -79,7 +79,7 @@ return {
             event = { Down = { streak = 1, button = 'Right' } },
             mods = 'NONE',
             action = act.PasteFrom('Clipboard'),
-        }
+        },
     },
     window_close_confirmation = 'NeverPrompt',
     window_decorations = 'NONE',
