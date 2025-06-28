@@ -1,37 +1,76 @@
 #!/bin/bash
 
-print_usage() {
-    echo "Usage: $0 [--restore]"
-    echo "Set up dotfiles by creating symbolic links, or restoring from backup."
-    echo ""
-    echo "Options:"
-    echo "  -r, --restore    Restore the original files from backup."
-    echo "  -h, --help       Show this help message."
-    echo "  -v, --verbose    Enable verbose output."
+log_error() {
+    echo "ERROR: $1" >&2
+}
+
+log_and_exit() {
+    log_error "$1"
     exit 1
 }
 
-RUN_RESTORE=false
+log_verbose() {
+    if [ "$VERBOSE" = true ]; then
+        echo "VERBOSE: $1"
+    fi
+}
+
+usage() {
+    echo "Usage: $0 [OPTION]"
+    echo "Set up dotfiles by creating symbolic links, or restoring from backup."
+    echo ""
+    echo "  -c, --create     Bakc up original files and create symbolic links."
+    echo "  -i, --install    Install required packages."
+    echo "  -r, --restore    Restore the original files from backup."
+    echo "  -v, --verbose    Enable verbose output."
+    echo "  -h, --help       Show this help message."
+    exit 1
+}
+
+RESTORE=false
 VERBOSE=false
+INSTALL_PACKAGES=false
+CREATE_LINKS=false
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -r|--restore)
-            RUN_RESTORE=true
+            RESTORE=true
             shift
             ;;
         -h|--help)
-            print_usage
+            usage
             ;;
         -v|--verbose)
             VERBOSE=true
             shift
             ;;
+        -i|--install)
+            INSTALL_PACKAGES=true
+            shift
+            ;;
+        -c|--create)
+            CREATE_LINKS=true
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
-            print_usage
+            usage
             ;;
     esac
 done
+
+check_options() {
+    if [ "$RESTORE" = false ] && [ "$CREATE_LINKS" = false ] && [ "$INSTALL_PACKAGES" = false ]; then
+        log_error "No valid option provided. Please use -c, -i, or -r."
+        usage
+    fi
+    if [ "$RESTORE" = true ] && [ "$CREATE_LINKS" = true ]; then
+        log_error "Cannot use both -c and -r options at the same time."
+        usage
+    fi
+}
+
+check_options
 
 REPO_ROOT=`pwd`
 DIRS=(
@@ -60,6 +99,10 @@ DIRS=(
 
     # zsh related configurations
     ".zshrc"
+    ".p10k.zsh"
+)
+PACKAGES=(
+    "zoxide"
 )
 # arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release; then
@@ -70,21 +113,24 @@ if grep -qi '^ID=arch' /etc/os-release; then
     )
 fi
 
-
-log_error() {
-    echo "ERROR: $1" >&2
-}
-
-log_and_exit() {
-    log_error "$1"
-    exit 1
-}
-
-log_verbose() {
-    if [ "$VERBOSE" = true ]; then
-        echo "VERBOSE: $1"
+install_oh_my_zsh() {
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        log_verbose "Installing Oh My Zsh..."
+        sh -c "$(curl -fsSL \
+            https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        log_verbose "Oh My Zsh installed successfully."
+    else
+        log_verbose "Oh My Zsh is already installed."
     fi
 }
+
+if [ "$INSTALL_PACKAGES" = true ]; then
+    log_verbose "Start to install required packages."
+    install_oh_my_zsh
+    log_verbose "Packages installed successfully."
+else
+    log_verbose "Skipping package installation."
+fi
 
 log_verbose "Start to update git submodules."
 git submodule update --init --recursive || \
@@ -175,9 +221,9 @@ restore() {
 
 for file in "${files[@]}"; do
     if [ -f "$file" ]; then
-        if [ "$RUN_RESTORE" = true ]; then
+        if [ "$RESTORE" = true ]; then
             restore "$REPO_ROOT/$file" "$HOME/$file" || exit 1
-        else
+        elif [ "$CREATE_LINKS" = true ]; then
             back_up_and_link "$REPO_ROOT/$file" "$HOME/$file" || exit 1
         fi
     else
