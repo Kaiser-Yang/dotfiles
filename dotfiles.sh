@@ -57,6 +57,9 @@ DIRS=(
     ".local/share/fcitx5/rime/opencc"
     ".local/share/fcitx5/rime/*.yaml"
     ".local/share/fcitx5/rime/*.lua"
+
+    # zsh related configurations
+    ".zshrc"
 )
 # arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release; then
