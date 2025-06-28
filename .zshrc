@@ -138,8 +138,6 @@ export FZF_DEFAULT_OPTS=" \
 --color=selected-bg:#45475a \
 --multi"
 
-[[ ! -d /opt/nvim-linux64/bin ]] || export PATH=$PATH:/opt/nvim-linux64/bin
-
 if [ -e "$HOME/opt/miniconda3" ]; then
     # >>> conda initialize >>>
     # !! Contents within this block are managed by 'conda init' !!
