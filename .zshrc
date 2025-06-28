@@ -32,6 +32,7 @@ ZPWR_CORRECT=false
 
 # zsh-completions
 fpath+=$ZSH_CUSTOM/plugins/zsh-completions/src
+autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
 

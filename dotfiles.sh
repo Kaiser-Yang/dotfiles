@@ -28,7 +28,7 @@ DIRS=(
     # zsh related configurations
     ".zshrc"
     ".p10k.zsh"
-    # ".config/zsh/plugins/zsh-completions/src"
+    ".config/zsh/plugins/zsh-completions/src"
 )
 INSTALLATION_COMMANDS=()
 
