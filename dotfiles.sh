@@ -82,6 +82,9 @@ usage() {
     echo "  -c, --create     Bakc up original files and create symbolic links."
     echo "  -i, --install    Install required packages."
     echo "  -r, --restore    Restore the original files from backup."
+    echo "  -e, --extract    Extract files from directories. When use this with -c,"
+    echo "                   it will create symbolic links for every file in directories."
+    echo "                   You should use this with -r when you use it with -c."
     echo "  -v, --verbose    Enable verbose output."
     echo "  -h, --help       Show this help message."
 }
@@ -104,6 +107,7 @@ init_options() {
     VERBOSE=false
     INSTALL_PACKAGES=false
     CREATE_LINKS=false
+    EXTRACT=false
     while [[ $# -gt 0 ]]; do
         case "$1" in
             -r|--restore)
@@ -124,6 +128,10 @@ init_options() {
                 ;;
             -c|--create)
                 CREATE_LINKS=true
+                shift
+                ;;
+            -e|--extract)
+                EXTRACT=true
                 shift
                 ;;
             *)
@@ -233,7 +241,8 @@ restore_one_file() {
         }
         log_verbose "Removed existing $dst."
     elif [ -e "$dst" ]; then
-        log_error "Cannot restore $dst because it is not a symbolic link to $src."
+        log_error "Cannot restore $dst because it is not a symbolic link to $src. " \
+            "If you create symbolic links with -e, you should use -e when restoring."
         return 1
     fi
     if [ ! -e "$dst.bak" ]; then
@@ -267,7 +276,7 @@ find_files() {
     # Do not add double quotes around the array elements,
     # as it will cause issues with globbing and word splitting.
     for dir_or_file in ${DIRS[@]}; do
-        if [ -d "$dir_or_file" ]; then 
+        if [ -d "$dir_or_file" ] && [ "$EXTRACT" = true ]; then
             if ! mapfile -t tmp < <(
                 find "$dir_or_file" \
                     \( -name ".git" -o -name ".github" \) -type d -prune -o \
@@ -279,6 +288,9 @@ find_files() {
             fi
             log_verbose "Found ${#tmp[@]} files in $dir_or_file."
             files+=("${tmp[@]}")
+        elif [ -d "$dir_or_file" ] && [ "$EXTRACT" = false ]; then
+            files+=("$dir_or_file")
+            log_verbose "Found the directory: $dir_or_file"
         elif [ -f "$dir_or_file" ]; then
             files+=("$dir_or_file")
             log_verbose "Found the file: $dir_or_file"
@@ -287,7 +299,7 @@ find_files() {
             return 1
         fi
     done
-    log_verbose "Total ${#files[@]} files found."
+    log_verbose "Total ${#files[@]} files or directories found."
 }
 
 restore_or_create() {
@@ -301,7 +313,7 @@ restore_or_create() {
         return 1
     fi
     for file in "${files[@]}"; do
-        if [ -f "$file" ]; then
+        if [ -e "$file" ]; then
             if [ "$1" = "restore" ]; then
                 restore_one_file "$REPO_ROOT/$file" "$HOME/$file" || return $?
             elif [ "$1" = "create" ]; then
