@@ -1,77 +1,5 @@
 #!/bin/bash
 
-log_error() {
-    echo "ERROR: $1" >&2
-}
-
-log_and_exit() {
-    log_error "$1"
-    exit 1
-}
-
-log_verbose() {
-    if [ "$VERBOSE" = true ]; then
-        echo "VERBOSE: $1"
-    fi
-}
-
-usage() {
-    echo "Usage: $0 [OPTION]"
-    echo "Set up dotfiles by creating symbolic links, or restoring from backup."
-    echo ""
-    echo "  -c, --create     Bakc up original files and create symbolic links."
-    echo "  -i, --install    Install required packages."
-    echo "  -r, --restore    Restore the original files from backup."
-    echo "  -v, --verbose    Enable verbose output."
-    echo "  -h, --help       Show this help message."
-    exit 1
-}
-
-RESTORE=false
-VERBOSE=false
-INSTALL_PACKAGES=false
-CREATE_LINKS=false
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -r|--restore)
-            RESTORE=true
-            shift
-            ;;
-        -h|--help)
-            usage
-            ;;
-        -v|--verbose)
-            VERBOSE=true
-            shift
-            ;;
-        -i|--install)
-            INSTALL_PACKAGES=true
-            shift
-            ;;
-        -c|--create)
-            CREATE_LINKS=true
-            shift
-            ;;
-        *)
-            echo "Unknown option: $1"
-            usage
-            ;;
-    esac
-done
-
-check_options() {
-    if [ "$RESTORE" = false ] && [ "$CREATE_LINKS" = false ] && [ "$INSTALL_PACKAGES" = false ]; then
-        log_error "No valid option provided. Please use -c, -i, or -r."
-        usage
-    fi
-    if [ "$RESTORE" = true ] && [ "$CREATE_LINKS" = true ]; then
-        log_error "Cannot use both -c and -r options at the same time."
-        usage
-    fi
-}
-
-check_options
-
 REPO_ROOT=`pwd`
 DIRS=(
     # nvim related configurations
@@ -100,12 +28,15 @@ DIRS=(
     # zsh related configurations
     ".zshrc"
     ".p10k.zsh"
+    # ".config/zsh/plugins/zsh-completions/src"
 )
-PACKAGES=(
-    "zoxide"
-)
+INSTALLATION_COMMANDS=()
+
 # arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release; then
+    INSTALLATION_COMMANDS+=(
+        "sudo pacman -S --noconfirm git curl neovim tmux zsh zoxide"
+    )
     DIRS+=(
         ".config/fontconfig"
         ".config/lazygit"
@@ -113,51 +44,113 @@ if grep -qi '^ID=arch' /etc/os-release; then
     )
 fi
 
+log () {
+    echo "INFO: $*"
+}
+
+log_error() {
+    echo "ERROR: $*" >&2
+}
+
+log_verbose() {
+    if [ "$VERBOSE" = true ]; then
+        echo "VERBOSE: $*"
+    fi
+}
+
+usage() {
+    echo "Usage: $0 [OPTION]"
+    echo "Set up dotfiles by creating symbolic links, or restoring from backup."
+    echo ""
+    echo "  -c, --create     Bakc up original files and create symbolic links."
+    echo "  -i, --install    Install required packages."
+    echo "  -r, --restore    Restore the original files from backup."
+    echo "  -v, --verbose    Enable verbose output."
+    echo "  -h, --help       Show this help message."
+}
+
+check_options() {
+    if [ "$RESTORE" = false ] && [ "$CREATE_LINKS" = false ] && [ "$INSTALL_PACKAGES" = false ]; then
+        log_error "No valid option provided. Please use -c, -i, or -r."
+        usage
+        return 1
+    fi
+    if [ "$RESTORE" = true ] && [ "$CREATE_LINKS" = true ]; then
+        log_error "Cannot use both -c and -r options at the same time."
+        usage
+        return 1
+    fi
+}
+
+init_options() {
+    RESTORE=false
+    VERBOSE=false
+    INSTALL_PACKAGES=false
+    CREATE_LINKS=false
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -r|--restore)
+                RESTORE=true
+                shift
+                ;;
+            -h|--help)
+                usage
+                return 1
+                ;;
+            -v|--verbose)
+                VERBOSE=true
+                shift
+                ;;
+            -i|--install)
+                INSTALL_PACKAGES=true
+                shift
+                ;;
+            -c|--create)
+                CREATE_LINKS=true
+                shift
+                ;;
+            *)
+                log_erro "Unknown option: $1"
+                usage
+                return 1
+                ;;
+        esac
+    done
+    check_options
+    return $?
+}
+
 install_oh_my_zsh() {
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         log_verbose "Installing Oh My Zsh..."
-        sh -c "$(curl -fsSL \
+        if ! sh -c "$(curl -fsSL \
             https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        then
+            local error_code = $?
+            log_error "Failed to install Oh My Zsh. " \
+                "Please check your internet connection or the installation script."
+            return $error_code
+        fi
         log_verbose "Oh My Zsh installed successfully."
     else
         log_verbose "Oh My Zsh is already installed."
     fi
 }
 
-if [ "$INSTALL_PACKAGES" = true ]; then
-    log_verbose "Start to install required packages."
-    install_oh_my_zsh
-    log_verbose "Packages installed successfully."
-else
-    log_verbose "Skipping package installation."
-fi
-
-log_verbose "Start to update git submodules."
-git submodule update --init --recursive || \
-    log_and_exit "Failed to update git submodules. Please check your git configuration."
-log_verbose "Git submodules updated successfully."
-
-log_verbose "Start to find files in directories."
-files=()
-# Do not add double quotes around the array elements,
-# as it will cause issues with globbing and word splitting.
-for dir_or_file in ${DIRS[@]}; do
-    if [ -d "$dir_or_file" ]; then 
-        mapfile -t tmp < <(
-            find "$dir_or_file" \
-                \( -name ".git" -o -name ".github" \) -type d -prune -o \
-                -type f ! -name '*.md'
-        ) || log_and_exit "Failed to find files in $dir_or_file. Please check the directory path."
-        log_verbose "Found ${#tmp[@]} files in $dir_or_file."
-        files+=("${tmp[@]}")
-    elif [ -f "$dir_or_file" ]; then
-        files+=("$dir_or_file")
-        log_verbose "Found the file: $dir_or_file"
-    else
-        log_and_exit "Directory or file $dir_or_file does not exist."
-    fi
-done
-log_verbose "Total ${#files[@]} files found."
+install_packages() {
+    log "Start to install required packages."
+    install_oh_my_zsh || return $?
+    for cmd in "${INSTALLATION_COMMANDS[@]}"; do
+        log_verbose "Executing command: $cmd"
+        if ! eval "$cmd"; then
+            log_error "Failed to execute command: $cmd. "\
+                "Please check the command and your system configuration."
+            return 1
+        fi
+        log_verbose "Command executed successfully: $cmd"
+    done
+    log "Packages installed successfully."
+}
 
 back_up_and_link() {
     local src="$1"
@@ -193,7 +186,7 @@ back_up_and_link() {
     fi
 }
 
-restore() {
+restore_one_file() {
     local src="$1"
     local dst="$2"
     if [ "$(readlink -f "$dst")" = "$(realpath "$src")" ]; then
@@ -219,14 +212,102 @@ restore() {
     log_verbose "Restored $dst from backup successfully."
 }
 
-for file in "${files[@]}"; do
-    if [ -f "$file" ]; then
-        if [ "$RESTORE" = true ]; then
-            restore "$REPO_ROOT/$file" "$HOME/$file" || exit 1
-        elif [ "$CREATE_LINKS" = true ]; then
-            back_up_and_link "$REPO_ROOT/$file" "$HOME/$file" || exit 1
-        fi
-    else
-        log_and_exit "File $file does not exist."
+find_files() {
+    # check if the files array is already initialized
+    if declare -p files &>/dev/null; then
+        log_verbose "Files array is already initialized."
+        return 0
     fi
-done
+
+    log_verbose "Start to update git submodules."
+    if ! git submodule update --init --recursive; then
+        log_error "Failed to update git submodules. Please check your git configuration."
+        return 1
+    fi
+    log_verbose "Git submodules updated successfully."
+
+    log_verbose "Start to find files in directories."
+    files=()
+    # Do not add double quotes around the array elements,
+    # as it will cause issues with globbing and word splitting.
+    for dir_or_file in ${DIRS[@]}; do
+        if [ -d "$dir_or_file" ]; then 
+            if ! mapfile -t tmp < <(
+                find "$dir_or_file" \
+                    \( -name ".git" -o -name ".github" \) -type d -prune -o \
+                    -type f ! -name '*.md'
+            ); then
+                log_error "Failed to find files in $dir_or_file. "\
+                    "Please check the directory path."
+                return 1
+            fi
+            log_verbose "Found ${#tmp[@]} files in $dir_or_file."
+            files+=("${tmp[@]}")
+        elif [ -f "$dir_or_file" ]; then
+            files+=("$dir_or_file")
+            log_verbose "Found the file: $dir_or_file"
+        else
+            log_error "Directory or file $dir_or_file does not exist."
+            return 1
+        fi
+    done
+    log_verbose "Total ${#files[@]} files found."
+}
+
+restore_or_create() {
+    find_files || return $?
+    if [ "$1" = "restore" ]; then
+        log "Restoring original files from backup."
+    elif [ "$1" = "create" ]; then
+        log "Creating symbolic links."
+    else
+        log_error "Invalid operation: $1. Use 'restore' or 'create'."
+        return 1
+    fi
+    for file in "${files[@]}"; do
+        if [ -f "$file" ]; then
+            if [ "$1" = "restore" ]; then
+                restore_one_file "$REPO_ROOT/$file" "$HOME/$file" || return $?
+            elif [ "$1" = "create" ]; then
+                back_up_and_link "$REPO_ROOT/$file" "$HOME/$file" || return $?
+            fi
+        else
+            log_error "File $file does not exist."
+            return 1
+        fi
+    done
+    if [ "$1" = "restore" ]; then
+        log "All original files restored successfully."
+    elif [ "$1" = "create" ]; then
+        log "All symbolic links created successfully."
+    fi
+}
+
+create() {
+    restore_or_create create || return $?
+}
+
+restore() {
+    restore_or_create restore || return $?
+}
+
+main() {
+    init_options "$@" || return $?
+    if [ "$INSTALL_PACKAGES" = true ]; then
+        install_packages || return $?
+    else
+        log_verbose "Skipping package installation."
+    fi
+    if [ "$CREATE_LINKS" = true ]; then
+        create || return $?
+    else
+        log_verbose "Skipping symbolic link creation."
+    fi
+    if [ "$RESTORE" = true ]; then
+        restore || return $?
+    else
+        log_verbose "Skipping restoration of original files."
+    fi
+}
+
+main "$@" || exit $?
