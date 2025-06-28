@@ -29,6 +29,12 @@ DIRS=(
     ".zshrc"
     ".p10k.zsh"
     ".config/zsh/plugins/zsh-completions/src"
+    ".config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
+    ".config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
+    ".config/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+    # zsh-vi-mode do not expand to absolute path, and we must add 'zsh-vi-mode.zsh' here
+    ".config/zsh/plugins/zsh-vi-mode/zsh-vi-mode.zsh"
+    ".config/zsh/plugins/zsh-expand/zsh-expand.plugin.zsh"
 )
 INSTALLATION_COMMANDS=()
 
