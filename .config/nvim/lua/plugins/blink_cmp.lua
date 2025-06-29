@@ -228,7 +228,8 @@ return {
                     if vim.bo.filetype == 'AvanteInput' then
                         result[#result + 1] = 'avante'
                     elseif
-                        vim.tbl_contains({ 'gitcommit', 'markdown', 'octo' }, vim.bo.filetype)
+                        vim.tbl_contains({ 'gitcommit', 'octo' }, vim.bo.filetype)
+                        and utils.network_available()
                     then
                         result[#result + 1] = 'git'
                     end

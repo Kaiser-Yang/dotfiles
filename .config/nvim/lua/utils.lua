@@ -182,4 +182,19 @@ end
 --- @param opts? { buffer: integer|boolean }
 function M.map_del(mode, lhs, opts) map.del(mode, lhs, opts) end
 
+function M.network_available(domain, timeout)
+    domain = domain or '8.8.8.8'
+    timeout = timeout or 500 -- ms
+    local os_name = vim.loop.os_uname().sysname
+    local command
+    if os_name == 'Linux' or os_name == 'Darwin' then
+        command = 'ping -c 1 -W ' .. tostring(timeout / 1000) .. ' ' .. domain .. '> /dev/null 2>&1'
+    elseif os_name == 'Windows' then
+        command = 'ping -n 1 -w ' .. tostring(timeout) .. ' ' .. domain .. ' > nul 2>&1'
+    else
+        return false
+    end
+    return os.execute(command) == 0
+end
+
 return M
