@@ -46,7 +46,7 @@ if grep -qi '^ID=arch' /etc/os-release; then
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
     INSTALLATION_COMMANDS+=(
-        "brew install wget curl git lazygit neovim tmux zsh zoxide node"
+        "brew install wget curl git lazygit neovim tmux zsh zoxide node wordnet"
         "brew install --cask squirrel"
     )
 else
