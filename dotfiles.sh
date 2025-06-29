@@ -346,8 +346,37 @@ restore_or_create() {
     fi
 }
 
+change_shell_to_zsh() {
+    if [ -z "$SHELL" ] || [ "$(basename "$SHELL")" != "zsh" ]; then
+        log_verbose "Changing default shell to zsh."
+        if ! command -v zsh &>/dev/null; then
+            log_error "zsh is not installed. Please install zsh first."
+            return 1
+        fi
+        if ! grep -q "$(command -v zsh)" /etc/shells; then
+            log_verbose "Adding zsh to /etc/shells."
+            echo "$(command -v zsh)" | $SUDO tee -a /etc/shells >/dev/null || {
+                log_error "Failed to add zsh to /etc/shells. Please check your permissions."
+                return 1
+            }
+            log_verbose "zsh added to /etc/shells successfully."
+        else
+            log_verbose "zsh is already in /etc/shells."
+        fi
+        if ! chsh -s "$(command -v zsh)"; then
+            log_error "Failed to change default shell to zsh. " \
+                "Please check your system configuration."
+            return 1
+        fi
+        log_verbose "Default shell changed to zsh successfully."
+    else
+        log_verbose "Default shell is already zsh."
+    fi
+}
+
 create() {
     restore_or_create create || return $?
+    change_shell_to_zsh
 }
 
 restore() {
