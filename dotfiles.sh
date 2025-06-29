@@ -4,10 +4,7 @@ REPO_ROOT=`pwd`
 DIRS=(
     # nvim related configurations
     ".config/nvim"
-    ".local/share/rime-ls/lua"
-    ".local/share/rime-ls/opencc"
-    ".local/share/rime-ls/*.yaml"
-    ".local/share/rime-ls/*.lua"
+    ".local/share/rime-ls"
 
     # tmux related configurations
     ".tmux.conf"
@@ -16,14 +13,6 @@ DIRS=(
     ".config/tmux/plugins/tmux-cpu/cpu.tmux"
     ".config/tmux/plugins/tmux-yank/yank.tmux"
     ".config/tmux/plugins/conda_inherit.sh"
-
-    # input method related configurations
-    ".local/share/fcitx5/rime/colors"
-    ".local/share/fcitx5/rime/icons"
-    ".local/share/fcitx5/rime/lua"
-    ".local/share/fcitx5/rime/opencc"
-    ".local/share/fcitx5/rime/*.yaml"
-    ".local/share/fcitx5/rime/*.lua"
 
     # zsh related configurations
     ".zshrc"
@@ -35,26 +24,30 @@ DIRS=(
     # zsh-vi-mode do not expand to absolute path, and we must add 'zsh-vi-mode.zsh' here
     ".config/zsh/plugins/zsh-vi-mode/zsh-vi-mode.zsh"
     ".config/zsh/plugins/zsh-expand/zsh-expand.plugin.zsh"
+
+    # input method related configurations
+    ".local/share/fcitx5/rime"
 )
 INSTALLATION_COMMANDS=()
 
 SUDO=$(command -v sudo)
-IS_MAC_OS=false
-
 # arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release; then
     INSTALLATION_COMMANDS+=(
-        "$SUDO pacman -Sy --noconfirm curl git lazygit neovim tmux zsh zoxide nodejs"
+        "$SUDO pacman -Sy --noconfirm \
+            curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime"
+        "yay -Sy --noconfirm wordnet-common rime-ls"
     )
     DIRS+=(
         ".config/fontconfig"
         ".config/lazygit"
         ".config/wezterm"
     )
-elif [[ "$(uanme)" == "Darwin" ]]; then
-    IS_MAC_OS=true
+# macOS related configurations
+elif [[ "$(uname)" == "Darwin" ]]; then
     INSTALLATION_COMMANDS+=(
-        "brew install curl git lazygit neovim tmux zsh zoxide node"
+        "brew install wget curl git lazygit neovim tmux zsh zoxide node"
+        "brew install --cask squirrel"
     )
 else
     log_error "Unsupported operating system. Please use Arch Linux or macOS."
@@ -62,7 +55,7 @@ else
 fi
 
 log () {
-    echo "INFO: $*"
+    echo "INFO: $*" >&2
 }
 
 log_error() {
@@ -71,7 +64,7 @@ log_error() {
 
 log_verbose() {
     if [ "$VERBOSE" = true ]; then
-        echo "VERBOSE: $*"
+        echo "VERBOSE: $*" >&2
     fi
 }
 
@@ -192,10 +185,77 @@ install_home_brew() {
         log_verbose "Home brew is already installed."
     fi
 }
+install_rime_ls() {
+    if command -v rime_ls &>/dev/null; then
+        log_verbose "rime_ls is already installed."
+        return 0
+    fi
+    log_verbose "Installing rime_ls..."
+    if ! command -v wget &>/dev/null; then
+        log_error "wget is not installed. Please install wget first."
+        return 1
+    fi
+    if ! command -v tar &>/dev/null; then
+        log_error "tar is not installed. Please install tar first."
+        return 1
+    fi
+    local RIME_LS_RELEASE_URL="https://github.com/wlh320/rime-ls/releases"
+    local RIME_LS_TAG="v0.4.3"
+    local RIME_LS_PACKAGE_NAME=""
+    local RIME_LS_TARGET=""
+    if [[ "$(uname -s)" == "Linux" ]]; then
+        if [[ "$(uname -m)" == "x86_64" ]]; then
+            RIME_LS_PACKAGE_NAME=rime-ls-$RIME_LS_TAG-x86_64-unknown-linux-gnu.tar.gz
+            RIME_LS_TARGET="rime-ls.tar.gz"
+        else
+            log_error "Unsupported architecture: $(uname -m). Only x86_64 is supported."
+            return 1
+        fi
+    elif [[ "$(uname -s)" == "Darwin" ]]; then
+        RIME_LS_PACKAGE_NAME=rime-ls-$RIME_LS_TAG-universal2-apple-darwin.tar.bz2
+        RIME_LS_TARGET="rime-ls.tar.bz2"
+    else
+        log_error "Unsupported operating system: $(uname -s)."
+        return 1
+    fi
+    local RIME_LS_TARGET_EXTENSION="${RIME_LS_TARGET##*.}"
+    local RIME_LS_URL="$RIME_LS_RELEASE_URL/download/$RIME_LS_TAG/$RIME_LS_PACKAGE_NAME"
+    log_verbose "Downloading rime_ls from $RIME_LS_URL..."
+    wget -O $RIME_LS_PACKAGE_NAME $RIME_LS_URL || {
+        log_error "Failed to download rime_ls from $RIME_LS_URL. "\
+            "Please check your internet connection or the URL."
+        return 1
+    }
+    log_verbose "Downloaded rime_ls package: $RIME_LS_PACKAGE_NAME"
+    log_verbose "Extracting rime_ls package..."
+    if [[ "$RIME_LS_TARGET_EXTENSION" == "gz" ]]; then
+        tar -xzf $RIME_LS_PACKAGE_NAME || {
+            log_error "Failed to extract rime_ls package. "\
+                "Please check the package integrity or the extraction command."
+            return 1
+        }
+    elif [[ "$RIME_LS_TARGET_EXTENSION" == "bz2" ]]; then
+        tar -xjf $RIME_LS_PACKAGE_NAME || {
+            log_error "Failed to extract rime_ls package. "\
+                "Please check the package integrity or the extraction command."
+            return 1
+        }
+    else
+        log_error "Unknown package format: $RIME_LS_TARGET. "\
+            "Please check the RIME_LS_PACKAGE_NAME variable."
+        return 1
+    fi
+    log_verbose "Extracted rime_ls package successfully."
+    "$SUDO" cp rime_ls /usr/bin/ && rm -rf "$RIME_LS_TARGET" rime_ls
+    if [ $? -ne 0 ]; then
+        log_error "Failed to install rime_ls. Please check the installation script."
+        return 1
+    fi
+}
 
 install_packages() {
     log "Start to install required packages."
-    if [ "$IS_MAC_OS" = true ]; then
+    if [[ "$(uname)" == "Darwin" ]]; then
         install_home_brew || return $?
     fi
     install_oh_my_zsh || return $?
@@ -208,6 +268,7 @@ install_packages() {
         fi
         log_verbose "Command executed successfully: $cmd"
     done
+    install_rime_ls || return $?
     log "Packages installed successfully."
 }
 
@@ -317,6 +378,16 @@ find_files() {
     log_verbose "Total ${#files[@]} files or directories found."
 }
 
+get_destination() {
+    local file="$1"
+    if [[ "$(uname)" == "Darwin" && "$file" == ".local/share/fcitx5/rime"* ]]; then
+        file="${file#".local/share/fcitx5/rime/"}"
+        echo "$HOME/Library/Rime/$file"
+    else
+        echo "$HOME/$file"
+    fi
+}
+
 restore_or_create() {
     find_files || return $?
     if [ "$1" = "restore" ]; then
@@ -329,10 +400,11 @@ restore_or_create() {
     fi
     for file in "${files[@]}"; do
         if [ -e "$file" ]; then
+            local dst=$(get_destination "$file")
             if [ "$1" = "restore" ]; then
-                restore_one_file "$REPO_ROOT/$file" "$HOME/$file" || return $?
+                restore_one_file "$REPO_ROOT/$file" "$dst" || return $?
             elif [ "$1" = "create" ]; then
-                back_up_and_link "$REPO_ROOT/$file" "$HOME/$file" || return $?
+                back_up_and_link "$REPO_ROOT/$file" "$dst" || return $?
             fi
         else
             log_error "File $file does not exist."
