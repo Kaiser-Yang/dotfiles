@@ -1,3 +1,4 @@
+local utils = require('utils')
 return {
     'zbirenbaum/copilot.lua',
     event = 'InsertEnter',
@@ -18,7 +19,7 @@ return {
             },
         },
         filetypes = {
-            ['*'] = true,
+            ['*'] = utils.network_available(),
         },
         copilot_node_command = 'node',
         server_opts_overrides = {},
