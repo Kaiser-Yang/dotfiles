@@ -83,12 +83,12 @@ usage() {
 }
 
 check_options() {
-    if [ "$RESTORE" = false ] && [ "$CREATE_LINKS" = false ] && [ "$INSTALL_PACKAGES" = false ]; then
+    if [[ "$RESTORE" == false && "$CREATE_LINKS" == false && "$INSTALL_PACKAGES" == false ]]; then
         log_error "No valid option provided. Please use -c, -i, or -r."
         usage
         return 1
     fi
-    if [ "$RESTORE" = true ] && [ "$CREATE_LINKS" = true ]; then
+    if [[ "$RESTORE" == true && "$CREATE_LINKS" == true ]]; then
         log_error "Cannot use both -c and -r options at the same time."
         usage
         return 1
@@ -352,7 +352,7 @@ find_files() {
     # Do not add double quotes around the array elements,
     # as it will cause issues with globbing and word splitting.
     for dir_or_file in ${DIRS[@]}; do
-        if [ -d "$dir_or_file" ] && [ "$EXTRACT" = true ]; then
+        if [[ -d "$dir_or_file" && "$EXTRACT" = true ]]; then
             if ! mapfile -t tmp < <(
                 find "$dir_or_file" \
                     \( -name ".git" -o -name ".github" \) -type d -prune -o \
@@ -364,7 +364,7 @@ find_files() {
             fi
             log_verbose "Found ${#tmp[@]} files in $dir_or_file."
             files+=("${tmp[@]}")
-        elif [ -d "$dir_or_file" ] && [ "$EXTRACT" = false ]; then
+        elif [[ -d "$dir_or_file" && "$EXTRACT" = false ]]; then
             files+=("$dir_or_file")
             log_verbose "Found the directory: $dir_or_file"
         elif [ -f "$dir_or_file" ]; then
@@ -419,7 +419,7 @@ restore_or_create() {
 }
 
 change_shell_to_zsh() {
-    if [ -z "$SHELL" ] || [ "$(basename "$SHELL")" != "zsh" ]; then
+    if [[ -z "$SHELL" || "$(basename "$SHELL")" != "zsh" ]]; then
         log_verbose "Changing default shell to zsh."
         if ! command -v zsh &>/dev/null; then
             log_error "zsh is not installed. Please install zsh first."
