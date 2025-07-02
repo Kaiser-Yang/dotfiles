@@ -327,14 +327,6 @@
             "commands": [
                 "editor.action.blockComment"
             ]
-        },
-        {
-            "before": [
-                "<C-n>"
-            ],
-            "after": [
-                "<esc>"
-            ]
         }
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
@@ -420,26 +412,9 @@
             "commands": [
                 "editor.action.blockComment"
             ]
-        },
-        {
-            "before": [
-                "<C-n>"
-            ],
-            "after": [
-                "<esc>"
-            ]
         }
     ],
-    "vim.insertModeKeyBindingsNonRecursive": [
-        {
-            "before": [
-                "<C-n>"
-            ],
-            "after": [
-                "<esc>"
-            ]
-        }
-    ],
+    "vim.insertModeKeyBindingsNonRecursive": [],
     "workbench.colorTheme": "Catppuccin Mocha",
     "workbench.iconTheme": "catppuccin-mocha"
 }

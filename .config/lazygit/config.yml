@@ -23,7 +23,3 @@ gui:
     '*': '#b4befe'
   nerdFontsVersion: "3"
   showFileIcons: true
-
-keybinding:
-  universal:
-    return: <c-n>

@@ -31,11 +31,16 @@ DIRS=(
 INSTALLATION_COMMANDS=()
 
 SUDO=$(command -v sudo)
+if [[ "$(uname)" == "Linux" ]]; then
+    DIRS+=(
+        ".config/keyd/config"
+    )
+fi
 # arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release; then
     INSTALLATION_COMMANDS+=(
         "$SUDO pacman -Sy --noconfirm \
-            curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime"
+            curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd"
         "yay -Sy --noconfirm wordnet-common rime-ls"
     )
     DIRS+=(
@@ -275,6 +280,10 @@ install_packages() {
 back_up_and_link() {
     local src="$1"
     local dst="$2"
+    local sudo_cmd
+    if [[ "$dst" == "/etc"* || "$src" == "/etc"* ]]; then
+        sudo_cmd="$SUDO"
+    fi
     if [ ! -e "$src" ]; then
         log_error "Source file $src does not exist. Please check the file path."
         return 1
@@ -286,21 +295,21 @@ back_up_and_link() {
         fi
         # Back up existing $dest to $dest.bak
         log_verbose "Backing up existing $dst to $dst.bak."
-        if ! mv "$dst" "$dst.bak"; then
+        if ! "$sudo_cmd" mv "$dst" "$dst.bak"; then
             log_error "Failed to back up $dst. Please check the file path."
             return 1
         fi
         log_verbose "Backup of $dst created as $dst.bak."
     else
         # Create parent directories if they do not exist
-        mkdir -p "$(dirname "$dst")" || {
+        "$sudo_cmd" mkdir -p "$(dirname "$dst")" || {
             log_error "Failed to create parent directories for $dst. Please check the path."
             return 1
         }
         log_verbose "No existing file at $dst, no backup needed."
     fi
     # Create a symbolic link: $dst --> $src
-    if ! ln -s "$src" "$dst"; then
+    if ! "$sudo_cmd" ln -s "$src" "$dst"; then
         log_error "Failed to create symbolic link from $src to $dst. Please check the file path."
         return 1
     fi
@@ -309,9 +318,13 @@ back_up_and_link() {
 restore_one_file() {
     local src="$1"
     local dst="$2"
+    local sudo_cmd
+    if [[ "$dst" == "/etc"* || "$src" == "/etc"* ]]; then
+        sudo_cmd="$SUDO"
+    fi
     if [ "$(readlink -f "$dst")" = "$(realpath "$src")" ]; then
         log_verbose "Removing existing $dst before restoring from backup."
-        rm -f "$dst" || {
+        "$sudo_cmd" rm -f "$dst" || {
             log_error "Failed to remove existing $dst. Please check the file path."
             return 1
         }
@@ -326,7 +339,7 @@ restore_one_file() {
         return 0
     fi
     log_verbose "Restoring $dst from backup $dst.bak."
-    mv "$dst.bak" "$dst" || {
+    "$sudo_cmd" mv "$dst.bak" "$dst" || {
         log_error "Failed to restore $dst from backup. Please check the file path."
         return 1
     }
@@ -383,6 +396,8 @@ get_destination() {
     if [[ "$(uname)" == "Darwin" && "$file" == ".local/share/fcitx5/rime"* ]]; then
         file="${file#".local/share/fcitx5/rime/"}"
         echo "$HOME/Library/Rime/$file"
+    elif [[ "$file" == ".config/keyd"* ]]; then
+        echo "/etc/keyd/default.conf"
     else
         echo "$HOME/$file"
     fi
@@ -405,6 +420,9 @@ restore_or_create() {
                 restore_one_file "$REPO_ROOT/$file" "$dst" || return $?
             elif [ "$1" = "create" ]; then
                 back_up_and_link "$REPO_ROOT/$file" "$dst" || return $?
+            fi
+            if [ "$dst" = "/etc/keyd/default.conf" ]; then
+                ! command -v keyd &> /dev/null || $SUDO keyd reload
             fi
         else
             log_error "File $file does not exist."

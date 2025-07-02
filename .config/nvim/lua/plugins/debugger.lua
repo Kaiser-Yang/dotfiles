@@ -19,7 +19,7 @@ return {
             },
             floating = {
                 mappings = {
-                    close = { 'q', '<esc>', '<c-c>', '<c-n>' },
+                    close = { 'q', '<esc>', '<c-c>' },
                 },
             },
         })

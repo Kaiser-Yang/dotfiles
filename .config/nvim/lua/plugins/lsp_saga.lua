@@ -11,12 +11,12 @@ return {
             callhierarchy = {
                 keys = {
                     edit = { '<cr>' },
-                    quit = { 'q', '<esc>', '<c-n>' },
+                    quit = { 'q', '<esc>' },
                 },
             },
             definition = {
                 keys = {
-                    quit = { 'q', '<esc>', '<c-n>' },
+                    quit = { 'q', '<esc>'},
                 },
             },
             ui = {
@@ -24,20 +24,20 @@ return {
             },
             code_action = {
                 keys = {
-                    quit = { 'q', '<esc>', '<c-n>' },
+                    quit = { 'q', '<esc>'},
                     exec = '<cr>',
                 },
             },
             diagnostic = {
                 keys = {
                     exec_action = '<cr>',
-                    quit = { 'q', '<esc>', '<c-n>' },
-                    quit_in_show = { 'q', '<esc>', '<c-n>' },
+                    quit = { 'q', '<esc>'},
+                    quit_in_show = { 'q', '<esc>'},
                 },
             },
             finder = {
                 keys = {
-                    quit = { 'q', '<esc>', '<c-n>' },
+                    quit = { 'q', '<esc>'},
                 },
             },
             rename = {
@@ -88,7 +88,7 @@ return {
         vim.api.nvim_create_autocmd('FileType', {
             pattern = 'sagarename',
             callback = function()
-                map_set({ 'i', 'n' }, '<c-n>', function()
+                map_set({ 'i', 'n' }, '<esc>', function()
                     if
                         vim.api.nvim_get_mode().mode == 'i'
                         or vim.api.nvim_get_mode().mode == 'I'

@@ -96,8 +96,6 @@ map_set(
     '<cmd>set nosplitbelow<cr><cmd>split<cr><cmd>set splitbelow<cr>',
     { desc = 'Split above' }
 )
-map_set({ 'i', 'x', 'v', 'n', 'o' }, '<c-n>', '<esc>')
-map_set({ 'c' }, '<c-n>', '<c-c>')
 map_set({ 'n' }, '<leader>I', function()
     if vim.lsp.inlay_hint.is_enabled() then
         vim.notify('Inlay hints disabled', nil, { title = 'LSP' })
