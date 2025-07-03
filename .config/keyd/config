@@ -2,6 +2,7 @@
 *
 
 [main]
+capslock = overload(control, A-space)
 alt = overload(alt, home)
 
 [control]
