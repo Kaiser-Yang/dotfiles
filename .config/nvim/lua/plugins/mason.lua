@@ -2,10 +2,12 @@ return {
     'williamboman/mason.nvim',
     branch = 'v1.x',
     config = function()
+        local path_before_mason = vim.env.PATH
         require('mason').setup()
         local mason_plugins = {
             'bash-language-server',
             'clangd',
+            'shellcheck',
             'clang-format',
             'jdtls',
             'java-debug-adapter',
@@ -33,5 +35,7 @@ return {
             local mason_package = mason_registry.get_package(plugin)
             if not mason_package:is_installed() then mason_package:install() end
         end
-    end,
+        -- Make sure mason's bin directory is at the last in the PATH
+        vim.env.PATH = path_before_mason .. ':' .. vim.env.HOME .. '/.local/share/nvim/mason/bin'
+    end
 }
