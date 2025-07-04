@@ -525,13 +525,7 @@ install_fonts() {
             return 1
         fi
         # WARN:
-        # This following is not checked
-        brew tap homebrew/cask-fonts
-        brew install --cask \
-          font-source-han-sans-cn font-source-han-serif-cn \
-          font-roboto font-dejavu \
-          font-noto-sans-cjk \
-          font-caskaydia-mono-nerd-font || return $?
+        brew install --cask font-caskaydia-mono-nerd-font || return $?
     fi
     fc-cache -fv || {
         log_error "Failed to update font cache. Please check your fonts installation."
