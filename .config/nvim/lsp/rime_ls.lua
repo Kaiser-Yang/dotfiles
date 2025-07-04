@@ -49,13 +49,26 @@ local function rime_on_attach(client, _)
         toggle_rime(client)
     end)
 end
+local shared_data_dir
+if vim.fn.has('mac') == 1 then
+    shared_data_dir = '/Library/Input Methods/Squirrel.app/Contents/SharedSupport'
+elseif vim.fn.has('linux') == 1 then
+    shared_data_dir = '/usr/share/rime-data'
+elseif vim.fn.has('win32') == 1 then
+    vim.notify(
+        'Rime LS is not supported on Windows. Please use rime-ls on WSL.',
+        vim.log.levels.WARN
+    )
+else
+    vim.notify('Rime LS is not supported on this platform.', vim.log.levels.WARN)
+end
 return {
     name = 'rime_ls',
     cmd = { 'rime_ls' },
     capabilities = require('utils').get_lsp_capabilities(),
     init_options = {
         enabled = vim.g.rime_enabled,
-        shared_data_dir = '/usr/share/rime-data',
+        shared_data_dir = shared_data_dir,
         user_data_dir = vim.fn.expand('~/.local/share/rime-ls'),
         log_dir = vim.fn.expand('~/.local/share/rime-ls'),
         always_incomplete = true,
