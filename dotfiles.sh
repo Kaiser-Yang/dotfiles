@@ -27,6 +27,12 @@ DIRS=(
 
     # input method related configurations
     ".local/share/fcitx5/rime"
+
+    # terminal
+    ".config/wezterm"
+
+    # lazygit related configurations
+    ".config/lazygit"
 )
 INSTALLATION_COMMANDS=()
 
@@ -40,20 +46,19 @@ fi
 if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     INSTALLATION_COMMANDS+=(
         "$SUDO pacman -Sy --noconfirm \
-            curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd"
+            curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd \
+            wezterm"
         "yay -Sy --noconfirm wordnet-common rime-ls"
     )
     DIRS+=(
         ".config/fontconfig"
-        ".config/lazygit"
-        ".config/wezterm"
     )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
     INSTALLATION_COMMANDS+=(
         # librime is for rime_ls, we need to install it for macOS
         "brew install wget curl git lazygit neovim tmux zsh zoxide node wordnet librime"
-        "brew install --cask squirrel"
+        "brew install --cask squirrel wezterm"
     )
 fi
 
