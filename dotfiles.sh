@@ -524,7 +524,6 @@ install_fonts() {
             log_error "Homebrew is not installed. Please install Homebrew first."
             return 1
         fi
-        # WARN:
         brew install --cask font-caskaydia-mono-nerd-font || return $?
     fi
     fc-cache -fv || {
