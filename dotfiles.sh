@@ -124,7 +124,8 @@ usage() {
 }
 
 check_options() {
-    if [[ "$RESTORE" == false && "$CREATE_LINKS" == false && "$INSTALL_PACKAGES" == false ]]; then
+    if [[ "$RESTORE" == false && "$CREATE_LINKS" == false && "$INSTALL_PACKAGES" == false && \
+          "$INSTALL_FONTS" == false ]]; then
         log_error "No valid option provided. Please use -c, -i, or -r."
         usage
         return 1
