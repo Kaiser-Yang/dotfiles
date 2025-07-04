@@ -83,7 +83,11 @@ fi
 get_destination() {
     local file="$1"
     if [[ "$(uname)" == "Darwin" && "$file" == ".local/share/fcitx5/rime"* ]]; then
-        file="${file#".local/share/fcitx5/rime/"}"
+        file="${file#".local/share/fcitx5/rime"}"
+        if [[ "$file" == "" ]]; then
+            echo "$HOME/Library/Rime"
+            return
+        fi
         echo "$HOME/Library/Rime/$file"
     elif [[ "$file" == ".config/keyd"* ]]; then
         echo "/etc/keyd/default.conf"
