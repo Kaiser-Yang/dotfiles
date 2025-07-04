@@ -53,6 +53,17 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     DIRS+=(
         ".config/fontconfig"
     )
+# ubuntu related configurations
+elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
+    INSTALLATION_COMMANDS+=(
+        "$SUDO apt update"
+        "$SUDO apt install -y \
+            curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd \
+            wordnet librime wezterm"
+    )
+    DIRS+=(
+        ".config/fontconfig"
+    )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
     INSTALLATION_COMMANDS+=(
