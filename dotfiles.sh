@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO_ROOT=`pwd`
+REPO_ROOT=$(pwd)
 DIRS=(
     # nvim related configurations
     ".config/nvim"
@@ -175,7 +175,7 @@ install_oh_my_zsh() {
         if ! sh -c "$(curl -fsSL \
             https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         then
-            local error_code = $?
+            local error_code=$?
             log_error "Failed to install Oh My Zsh. " \
                 "Please check your internet connection or the installation script."
             return $error_code
@@ -374,9 +374,7 @@ find_files() {
 
     log_verbose "Start to find files in directories."
     files=()
-    # Do not add double quotes around the array elements,
-    # as it will cause issues with globbing and word splitting.
-    for dir_or_file in ${DIRS[@]}; do
+    for dir_or_file in "${DIRS[@]}"; do
         if [[ -d "$dir_or_file" && "$EXTRACT" = true ]]; then
             if ! mapfile -t tmp < <(
                 find "$dir_or_file" \
@@ -415,7 +413,8 @@ restore_or_create() {
     fi
     for file in "${files[@]}"; do
         if [ -e "$file" ]; then
-            local dst=$(get_destination "$file")
+            local dst
+            dst=$(get_destination "$file")
             if [ "$1" = "restore" ]; then
                 restore_one_file "$REPO_ROOT/$file" "$dst" || return $?
             elif [ "$1" = "create" ]; then
