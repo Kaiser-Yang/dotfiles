@@ -37,12 +37,13 @@ DIRS=(
 INSTALLATION_COMMANDS=()
 
 SUDO=$(command -v sudo)
+# Configurations for all Linux distributions
 if [[ "$(uname)" == "Linux" ]]; then
     DIRS+=(
         ".config/keyd/config"
     )
 fi
-# arch linux related configurations
+# Arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     INSTALLATION_COMMANDS+=(
         "$SUDO pacman -Sy --noconfirm \
@@ -51,9 +52,9 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         "yay -Sy --noconfirm wordnet-common rime-ls"
     )
     DIRS+=(
-        ".config/fontconfig"
+        ".config/fontconfig/fonts_arch.conf"
     )
-# ubuntu related configurations
+# Ubuntu related configurations
 elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
     INSTALLATION_COMMANDS+=(
         "$SUDO apt update"
@@ -62,7 +63,8 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
             wordnet librime wezterm"
     )
     DIRS+=(
-        ".config/fontconfig"
+        # WARN: this configuration file is not checked
+        ".config/fontconfig/fonts_ubuntu.conf"
     )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
@@ -70,6 +72,10 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         # librime is for rime_ls, we need to install it for macOS
         "brew install wget curl git lazygit neovim tmux zsh zoxide node wordnet librime"
         "brew install --cask squirrel wezterm"
+    )
+    DIRS+=(
+        # WARN: this configuration file is not checked
+        ".config/fontconfig/fonts_mac.conf"
     )
 fi
 
@@ -81,6 +87,8 @@ get_destination() {
         echo "$HOME/Library/Rime/$file"
     elif [[ "$file" == ".config/keyd"* ]]; then
         echo "/etc/keyd/default.conf"
+    elif [[ "$file" == ".config/fontconfig"* ]]; then
+        echo "$HOME/.config/fontconfig/fonts.conf"
     else
         echo "$HOME/$file"
     fi
@@ -106,6 +114,7 @@ usage() {
     echo ""
     echo "  -c, --create     Bakc up original files and create symbolic links."
     echo "  -i, --install    Install required packages."
+    echo "  -f, --fonts      Install optional fonts."
     echo "  -r, --restore    Restore the original files from backup."
     echo "  -e, --extract    Extract files from directories. When use this with -c,"
     echo "                   it will create symbolic links for every file in directories."
@@ -133,6 +142,7 @@ init_options() {
     INSTALL_PACKAGES=false
     CREATE_LINKS=false
     EXTRACT=false
+    INSTALL_FONTS=false
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --restore)
@@ -159,6 +169,10 @@ init_options() {
                 EXTRACT=true
                 shift
                 ;;
+            --fonts)
+                INSTALL_FONTS=true
+                shift
+                ;;
             -*)
                 short_opts="${1:1}"
                 for ((i=0; i<${#short_opts}; i++)); do
@@ -169,6 +183,7 @@ init_options() {
                         i) INSTALL_PACKAGES=true ;;
                         c) CREATE_LINKS=true ;;
                         e) EXTRACT=true ;;
+                        f) INSTALL_FONTS=true ;;
                         *) log_erro "Unknown option: -${short_opts:$i:1}"; usage; return 1 ;;
                     esac
                 done
@@ -328,7 +343,7 @@ back_up_and_link() {
             return 1
         fi
         log_verbose "Backup of $dst created as $dst.bak."
-    else
+    elif [ ! -d "$dst_dir" ]; then
         # Create parent directories if they do not exist
         eval "$sudo_cmd mkdir -p $dst_dir" || {
             log_error "Failed to create parent directories for $dst. Please check the path."
@@ -488,12 +503,52 @@ restore() {
     restore_or_create restore || return $?
 }
 
+install_fonts() {
+    if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
+        $SUDO pacman -Sy --noconfirm \
+            adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts \
+            noto-fonts-cjk \
+            wqy-microhei wqy-microhei-lite wqy-bitmapfont wqy-zenhei \
+            ttf-arphic-ukai ttf-arphic-uming ttf-cascadia-mono-nerd || return $?
+    elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
+        # WARN:
+        # This following is not checked
+        sudo apt update && sudo apt install -y \
+          fonts-source-han-sans-cn fonts-source-han-serif-cn \
+          fonts-noto-cjk fonts-noto-serif \
+          fonts-roboto fonts-dejavu \
+          fonts-wqy-microhei fonts-wqy-zenhei || return $?
+    elif [[ "$(uname)" == "Darwin" ]]; then
+        if ! command -v brew &>/dev/null; then
+            log_error "Homebrew is not installed. Please install Homebrew first."
+            return 1
+        fi
+        # WARN:
+        # This following is not checked
+        brew tap homebrew/cask-fonts
+        brew install --cask \
+          font-source-han-sans-cn font-source-han-serif-cn \
+          font-roboto font-dejavu \
+          font-noto-sans-cjk \
+          font-caskaydia-mono-nerd-font || return $?
+    fi
+    fc-cache -fv || {
+        log_error "Failed to update font cache. Please check your fonts installation."
+        return 1
+    }
+}
+
 main() {
     init_options "$@" || return $?
     if [ "$INSTALL_PACKAGES" = true ]; then
         install_packages || return $?
     else
         log_verbose "Skipping package installation."
+    fi
+    if [ "$INSTALL_FONTS" = true ]; then
+        install_fonts || return $?
+    else
+        log_verbose "Skipping fonts installation."
     fi
     if [ "$CREATE_LINKS" = true ]; then
         create || return $?
