@@ -262,8 +262,7 @@ install_rime_ls() {
         return 1
     fi
     log_verbose "Extracted rime_ls package successfully."
-    "$SUDO" cp rime_ls /usr/local/bin/ && rm -rf "$RIME_LS_TARGET" rime_ls
-    if [ $? -ne 0 ]; then
+    if ! eval "$SUDO cp rime_ls /usr/local/bin/ && rm -rf $RIME_LS_TARGET rime_ls"; then
         log_error "Failed to install rime_ls. Please check the installation script."
         return 1
     fi
@@ -292,6 +291,8 @@ back_up_and_link() {
     local src="$1"
     local dst="$2"
     local sudo_cmd
+    local dst_dir
+    dst_dir=$(dirname "$dst")
     if [[ "$dst" == "/etc"* || "$src" == "/etc"* ]]; then
         sudo_cmd="$SUDO"
     fi
@@ -306,21 +307,21 @@ back_up_and_link() {
         fi
         # Back up existing $dest to $dest.bak
         log_verbose "Backing up existing $dst to $dst.bak."
-        if ! "$sudo_cmd" mv "$dst" "$dst.bak"; then
+        if ! eval "$sudo_cmd mv $dst $dst.bak"; then
             log_error "Failed to back up $dst. Please check the file path."
             return 1
         fi
         log_verbose "Backup of $dst created as $dst.bak."
     else
         # Create parent directories if they do not exist
-        "$sudo_cmd" mkdir -p "$(dirname "$dst")" || {
+        eval "$sudo_cmd mkdir -p $dst_dir" || {
             log_error "Failed to create parent directories for $dst. Please check the path."
             return 1
         }
         log_verbose "No existing file at $dst, no backup needed."
     fi
     # Create a symbolic link: $dst --> $src
-    if ! "$sudo_cmd" ln -s "$src" "$dst"; then
+    if ! eval "$sudo_cmd ln -s $src $dst"; then
         log_error "Failed to create symbolic link from $src to $dst. Please check the file path."
         return 1
     fi
@@ -335,7 +336,7 @@ restore_one_file() {
     fi
     if [ "$(readlink -f "$dst")" = "$(realpath "$src")" ]; then
         log_verbose "Removing existing $dst before restoring from backup."
-        "$sudo_cmd" rm -f "$dst" || {
+        eval "$sudo_cmd rm -f $dst" || {
             log_error "Failed to remove existing $dst. Please check the file path."
             return 1
         }
@@ -350,7 +351,7 @@ restore_one_file() {
         return 0
     fi
     log_verbose "Restoring $dst from backup $dst.bak."
-    "$sudo_cmd" mv "$dst.bak" "$dst" || {
+    eval "$sudo_cmd mv $dst.bak $dst" || {
         log_error "Failed to restore $dst from backup. Please check the file path."
         return 1
     }
@@ -421,7 +422,7 @@ restore_or_create() {
                 back_up_and_link "$REPO_ROOT/$file" "$dst" || return $?
             fi
             if [ "$dst" = "/etc/keyd/default.conf" ]; then
-                ! command -v keyd &> /dev/null || $SUDO keyd reload
+                eval "! command -v keyd &> /dev/null || $SUDO keyd reload"
             fi
         else
             log_error "File $file does not exist."
@@ -444,7 +445,7 @@ change_shell_to_zsh() {
         fi
         if ! grep -q "$(command -v zsh)" /etc/shells; then
             log_verbose "Adding zsh to /etc/shells."
-            echo "$(command -v zsh)" | $SUDO tee -a /etc/shells >/dev/null || {
+            eval "command -v zsh | $SUDO tee -a /etc/shells > /dev/null" || {
                 log_error "Failed to add zsh to /etc/shells. Please check your permissions."
                 return 1
             }
