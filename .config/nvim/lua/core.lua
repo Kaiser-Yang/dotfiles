@@ -87,9 +87,7 @@ vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
                 break
             end
         end
-        if not cursor_in_match then
-            vim.schedule(function() vim.cmd('nohlsearch') end)
-        end
+        if not cursor_in_match then vim.schedule(function() vim.cmd('nohlsearch') end) end
     end,
 })
 vim.api.nvim_create_autocmd('FileType', {
@@ -102,6 +100,17 @@ vim.api.nvim_create_autocmd('VimLeavePre', {
         -- get all the buffers, and delete all non-modifiable buffers
         for _, buf in ipairs(vim.api.nvim_list_bufs()) do
             if not vim.bo[buf].modifiable then vim.api.nvim_buf_delete(buf, { force = true }) end
+        end
+    end,
+})
+vim.api.nvim_create_autocmd('BufEnter', {
+    group = 'UserDIY',
+    callback = function()
+        if not Snacks then return end
+        if vim.bo.filetype == 'bigfile' then
+            Snacks.indent.disable()
+        else
+            Snacks.indent.enable()
         end
     end,
 })
