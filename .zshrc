@@ -62,7 +62,7 @@ alias gmg='git merge'
 alias gl='git log'
 alias gdf='git diff'
 alias gdfs='git diff --staged'
-# alias gswt='git switch'
+alias gswt='git switch'
 
 alias grbs='git rebase'
 alias grbsa='git rebase --abort'
