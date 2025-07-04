@@ -37,7 +37,7 @@ if [[ "$(uname)" == "Linux" ]]; then
     )
 fi
 # arch linux related configurations
-if grep -qi '^ID=arch' /etc/os-release; then
+if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     INSTALLATION_COMMANDS+=(
         "$SUDO pacman -Sy --noconfirm \
             curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd"
@@ -55,10 +55,20 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         "brew install wget curl git lazygit neovim tmux zsh zoxide node wordnet librime"
         "brew install --cask squirrel"
     )
-else
-    log_error "Unsupported operating system. Please use Arch Linux or macOS."
-    exit 1
 fi
+
+# Destination path for symbolic links
+get_destination() {
+    local file="$1"
+    if [[ "$(uname)" == "Darwin" && "$file" == ".local/share/fcitx5/rime"* ]]; then
+        file="${file#".local/share/fcitx5/rime/"}"
+        echo "$HOME/Library/Rime/$file"
+    elif [[ "$file" == ".config/keyd"* ]]; then
+        echo "/etc/keyd/default.conf"
+    else
+        echo "$HOME/$file"
+    fi
+}
 
 log () {
     echo "INFO: $*" >&2
@@ -390,18 +400,6 @@ find_files() {
         fi
     done
     log_verbose "Total ${#files[@]} files or directories found."
-}
-
-get_destination() {
-    local file="$1"
-    if [[ "$(uname)" == "Darwin" && "$file" == ".local/share/fcitx5/rime"* ]]; then
-        file="${file#".local/share/fcitx5/rime/"}"
-        echo "$HOME/Library/Rime/$file"
-    elif [[ "$file" == ".config/keyd"* ]]; then
-        echo "/etc/keyd/default.conf"
-    else
-        echo "$HOME/$file"
-    fi
 }
 
 restore_or_create() {
