@@ -145,6 +145,10 @@ if [[ -d "/opt/homebrew/lib" && "$(uname)" == "Darwin" ]]; then
     export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/opt/homebrew/lib"
 fi
 
+if [[ -e "$HOME/.zprofile" ]]; then
+    source "$HOME/.zprofile"
+fi
+
 # y for yazi
 # function y() {
 #     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
