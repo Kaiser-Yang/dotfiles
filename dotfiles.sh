@@ -262,7 +262,7 @@ install_rime_ls() {
         return 1
     fi
     log_verbose "Extracted rime_ls package successfully."
-    "$SUDO" cp rime_ls /usr/bin/ && rm -rf "$RIME_LS_TARGET" rime_ls
+    "$SUDO" cp rime_ls /usr/local/bin/ && rm -rf "$RIME_LS_TARGET" rime_ls
     if [ $? -ne 0 ]; then
         log_error "Failed to install rime_ls. Please check the installation script."
         return 1
