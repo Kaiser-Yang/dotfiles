@@ -3,7 +3,7 @@ vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 vim.g.root_markers = { '.git', '.root', 'pom.xml', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' }
 vim.g.frontend_filetype = { 'typescript', 'javascript', 'vue', 'html', 'css' }
 
-vim.g.big_file_limit = 0.5 * 1024 * 1024 -- 0.5 MB
+vim.g.big_file_limit = 5 * 1024 * 1024 -- 5 MB
 
 -- When input method is enabled, disable the following patterns
 vim.g.disable_rime_ls_pattern = {

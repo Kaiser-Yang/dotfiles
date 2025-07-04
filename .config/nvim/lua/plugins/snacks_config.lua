@@ -59,6 +59,7 @@ return {
                     and vim.b[buf].snacks_indent ~= false
                     and vim.bo[buf].buftype == ''
                     and vim.bo[buf].filetype ~= 'markdown'
+                    and vim.bo[buf].filetype ~= 'bigfile'
             end,
         },
         input = { enabled = false },
