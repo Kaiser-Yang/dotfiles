@@ -24,6 +24,7 @@ DIRS=(
     # zsh-vi-mode do not expand to absolute path, and we must add 'zsh-vi-mode.zsh' here
     ".config/zsh/plugins/zsh-vi-mode/zsh-vi-mode.zsh"
     ".config/zsh/plugins/zsh-expand/zsh-expand.plugin.zsh"
+    ".config/zsh/themes/powerlevel10k"
 
     # input method related configurations
     ".local/share/fcitx5/rime"
@@ -69,6 +70,7 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
     INSTALLATION_COMMANDS+=(
+        "brew update"
         # librime is for rime_ls, we need to install it for macOS
         "brew install wget curl git lazygit neovim tmux zsh zoxide node wordnet librime"
         "brew install --cask squirrel wezterm"
