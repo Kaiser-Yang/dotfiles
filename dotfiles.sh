@@ -8,11 +8,7 @@ DIRS=(
 
     # tmux related configurations
     ".tmux.conf"
-    ".config/tmux/plugins/catppuccin/catppuccin.tmux"
-    ".config/tmux/plugins/tmux-battery/battery.tmux"
-    ".config/tmux/plugins/tmux-cpu/cpu.tmux"
-    ".config/tmux/plugins/tmux-yank/yank.tmux"
-    ".config/tmux/plugins/conda_inherit.sh"
+    ".config/tmux/plugins"
 
     # zsh related configurations
     ".zshrc"
