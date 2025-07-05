@@ -31,9 +31,6 @@ local plugins = {
 }
 if vim.fn.has('mac') ~= 1 then
     vim.list_extend(plugins, {
-        require('plugins.octo'),
-        require('plugins.copilot'),
-        require('plugins.avante'),
         require('plugins.ufo'),
         require('plugins.debugger'),
         require('plugins.img_clip'),
@@ -41,5 +38,16 @@ if vim.fn.has('mac') ~= 1 then
         require('plugins.markdown_render'),
         require('plugins.highlight_colors'),
     })
+    if vim.fn.executable('gh') == 1 then
+        vim.list_extend(plugins, {
+            require('plugins.octo'),
+        })
+    end
+    if vim.fn.executable('node') == 1 then
+        vim.list_extend(plugins, {
+            require('plugins.copilot'),
+            require('plugins.avante'),
+        })
+    end
 end
 return plugins
