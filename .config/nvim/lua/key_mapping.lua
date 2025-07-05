@@ -92,7 +92,6 @@ map_set({ 'n' }, 'yaf', function()
     local line_count = vim.api.nvim_buf_line_count(0)
     vim.notify(string.format('Yanked %d lines to + register', line_count), nil, { title = 'Yank' })
 end, { desc = 'Yank all to + reg' })
-map_set({ 'n' }, '<leader>ay', 'yaf', { desc = 'Yank all to + reg', remap = true })
 map_set({ 'n' }, '<leader>sc', function()
     if vim.o.spell then
         vim.notify('Spell check disabled', nil, { title = 'Spell Check' })
