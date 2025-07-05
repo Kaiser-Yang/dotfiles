@@ -1,4 +1,5 @@
 local utils = require('utils')
+local map_set = utils.map_set
 return {
     'numToStr/Comment.nvim',
     dependencies = {
@@ -25,14 +26,14 @@ return {
             },
             -- LHS of operator-pending mappings in NORMAL and VISUAL mode
             opleader = {
-                line = '<space>c<space>',
-                block = '<space>cs',
+                line = '<space>c',
+                block = 'gb',
             },
             -- LHS of extra mappings
             extra = {
-                above = '<leader>cO',
-                below = '<leader>co',
-                eol = '<leader>cA',
+                above = '<space>cO',
+                below = '<space>co',
+                eol = '<space>cA',
             },
             mappings = {
                 basic = true,
@@ -41,11 +42,17 @@ return {
             pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
             post_hook = function(_) end,
         })
-        utils.map_set(
-            { 'n', 'x' },
+        map_set(
+            { 'n' },
             '',
             '<space>c<space>',
             { desc = 'Toggle comment for current line', remap = true }
+        )
+        map_set(
+            { 'x' },
+            '',
+            '<space>c',
+            { desc = 'Toggle comment for selected lines', remap = true }
         )
     end,
 }
