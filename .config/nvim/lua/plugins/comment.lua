@@ -1,3 +1,4 @@
+local utils = require('utils')
 return {
     'numToStr/Comment.nvim',
     dependencies = {
@@ -40,5 +41,11 @@ return {
             pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
             post_hook = function(_) end,
         })
+        utils.map_set(
+            { 'n', 'x' },
+            '<m-/>',
+            '<space>c<space>',
+            { desc = 'Toggle comment for current line', remap = true }
+        )
     end,
 }
