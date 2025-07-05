@@ -17,14 +17,23 @@ local completion_keymap = {
     ['<c-s>'] = { 'show_signature', 'hide_signature', 'fallback' },
     ['<c-x>'] = {
         function(cmp)
-            if cmp.is_visible() then
-                cmp.show_documentation()
-            else
-                cmp.show({ providers = { 'snippets' } })
-            end
+            cmp.show({ providers = { 'snippets' } })
         end,
     },
-    ['<cr>'] = { 'accept', 'fallback' },
+    ['<cr>'] = {
+        function(cmp)
+            if not cmp.is_visible() then return false end
+            local completion_list = require('blink.cmp.completion.list')
+            if completion_list.get_selected_item() then return false end
+            local snippet_kind = require('blink.cmp.types').CompletionItemKind.Snippet
+            if #completion_list.items >= 1 and completion_list.items[1].kind == snippet_kind then
+                return cmp.accept({ index = 1 })
+            end
+            return false
+        end,
+        'accept',
+        'fallback',
+    },
     ['<tab>'] = { 'snippet_forward', 'fallback' },
     ['<s-tab>'] = { 'snippet_backward', 'fallback' },
     ['<c-u>'] = { 'scroll_documentation_up', 'fallback' },
@@ -142,15 +151,14 @@ return {
             completion = {
                 accept = {
                     auto_brackets = {
-                        enabled = false,
+                        enabled = true,
                     },
                 },
                 keyword = {
-                    range = 'full',
+                    range = 'prefix',
                 },
                 list = {
-                    -- preselect = true is helpful for snippets
-                    selection = { preselect = true, auto_insert = true },
+                    selection = { preselect = false, auto_insert = true },
                 },
                 trigger = {
                     show_on_insert_on_trigger_character = false,
@@ -199,7 +207,7 @@ return {
                     },
                 },
                 documentation = {
-                    auto_show = false,
+                    auto_show = true,
                     window = {
                         border = 'rounded',
                     },
@@ -372,10 +380,7 @@ return {
                                 -- Remove Snippets and Text from completion list
                                 return item.kind ~= TYPE_ALIAS.Snippet
                                         and item.kind ~= TYPE_ALIAS.Text
-                                        and not (vim.tbl_contains(
-                                            { 'if', 'end', 'while', 'function', 'elseif' },
-                                            item.label
-                                        ) and item.kind == TYPE_ALIAS.Keyword)
+                                        and item.kind ~= TYPE_ALIAS.Keyword
                                     or utils.is_rime_item(item)
                                         and item.label:match('^%w*$') == nil
                             end, items)
