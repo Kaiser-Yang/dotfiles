@@ -1,4 +1,17 @@
 local utils = require('utils')
+local enable_rime_quick_select = function()
+    if not vim.g.rime_enabled then return false end
+    local content_before_cursor =
+        string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
+    if
+        not content_before_cursor:match('%w+$')
+        or content_before_cursor:match('[^z]{4}$') -- wubi has a maximum of 4 characters
+        or content_before_cursor:match('z%w{4}$') -- reverse query can have a leading 'z'
+    then
+        return false
+    end
+    return true
+end
 local completion_keymap = {
     preset = 'none',
     ['<c-s>'] = { 'show_signature', 'hide_signature', 'fallback' },
@@ -21,10 +34,7 @@ local completion_keymap = {
     ['<c-c>'] = { 'cancel', 'fallback' },
     ['<space>'] = {
         function(cmp)
-            if not vim.g.rime_enabled then return false end
-            local content_before_cursor =
-                string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
-            if content_before_cursor:match('%w+$') == nil then return false end
+            if not enable_rime_quick_select() then return false end
             local rime_item_index = utils.get_n_rime_item_index(1, nil)
             if #rime_item_index ~= 1 then return false end
             return cmp.accept({ index = rime_item_index[1] })
@@ -34,10 +44,7 @@ local completion_keymap = {
     [';'] = {
         -- FIX: can not work when binding ;<space> to other key
         function(cmp)
-            if not vim.g.rime_enabled then return false end
-            local content_before_cursor =
-                string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
-            if content_before_cursor:match('%w+$') == nil then return false end
+            if not enable_rime_quick_select() then return false end
             local rime_item_index = utils.get_n_rime_item_index(2, nil)
             if #rime_item_index ~= 2 then return false end
             return cmp.accept({ index = rime_item_index[2] })
@@ -46,10 +53,7 @@ local completion_keymap = {
     },
     ['z'] = {
         function(cmp)
-            if not vim.g.rime_enabled then return false end
-            local content_before_cursor =
-                string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
-            if content_before_cursor:match('z%w*$') then return false end
+            if not enable_rime_quick_select() then return false end
             local rime_item_index = utils.get_n_rime_item_index(3, nil)
             if #rime_item_index ~= 3 then return false end
             return cmp.accept({ index = rime_item_index[3] })
