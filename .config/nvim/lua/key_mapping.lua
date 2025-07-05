@@ -6,11 +6,12 @@ map_del({ 'x', 'n' }, 'gc')
 map_del({ 'n' }, '<c-w>d')
 map_del({ 'n' }, '<c-w><c-d>')
 map_set({ 'i' }, '<c-p>', '<nop>')
-map_set({ 'n', 'x' }, 'y', '"+y', { desc = 'Yank to + reg' })
-map_set({ 'n' }, 'Y', '"+y$', { desc = 'Yank till eol to + reg' })
-map_set('x', '<c-insert>', '"+y', { desc = 'Yank to +reg' });
-map_set('x', '<c-x>', '"+d', { desc = 'Delete to +reg' });
-map_set({ 'n', 'x' }, '<s-insert>', '"+p', { desc = 'Paste from +reg' });
+map_set({ 'n', 'x' }, '<leader>y', '"+y', { desc = 'Yank to + reg' })
+map_set({ 'n' }, '<leader>Y', '"+y$', { desc = 'Yank till eol to + reg' })
+map_set({ 'n' }, 'Y', 'y$', { desc = 'Yank till eol' })
+map_set('x', '<c-insert>', '"+y', { desc = 'Yank to +reg' })
+map_set('x', '<c-x>', '"+d', { desc = 'Delete to +reg' })
+map_set({ 'n', 'x' }, '<s-insert>', '"+p', { desc = 'Paste from +reg' })
 
 map_set({ 'n', 'i' }, '<c-rightMouse>', function()
     local res
@@ -71,16 +72,27 @@ map_set({ 'n', 'x' }, '<leader>P', function()
         require('img-clip').paste_image({ insert_template_after_cursor = false })
     end
 end, { desc = 'Paste from clipboard or insert image' })
+map_set('i', '<s-insert>', function()
+    local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
+    local ok, _ = pcall(require, 'img-clip')
+    if
+        vim.bo.filetype == 'gitcommit'
+        or not utils.markdown_support_enabled()
+        or #plus_reg_content ~= 0
+        or not ok
+    then
+        vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
+        return '<c-r>+'
+    else
+        return '<cmd>PasteImage<cr>'
+    end
+end, { desc = 'Paste from +reg', expr = true })
 map_set({ 'n' }, 'yaa', function()
-    vim.fn.setreg("+", vim.api.nvim_buf_get_lines(0, 0, -1, false), "l")
+    vim.fn.setreg('+', vim.api.nvim_buf_get_lines(0, 0, -1, false), 'l')
     local line_count = vim.api.nvim_buf_line_count(0)
-    vim.notify(
-        string.format('Yanked %d lines to + register', line_count),
-        nil,
-        { title = 'Yank' }
-    )
+    vim.notify(string.format('Yanked %d lines to + register', line_count), nil, { title = 'Yank' })
 end, { desc = 'Yank all to + reg' })
-map_set({ 'n' }, '<leader>ay', 'gaa', { desc = 'Yank all to + reg', remap = true })
+map_set({ 'n' }, '<leader>ay', 'yaa', { desc = 'Yank all to + reg', remap = true })
 map_set({ 'n' }, '<leader>sc', function()
     if vim.o.spell then
         vim.notify('Spell check disabled', nil, { title = 'Spell Check' })
