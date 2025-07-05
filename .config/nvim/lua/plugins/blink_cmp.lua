@@ -213,10 +213,9 @@ return {
             },
             signature = {
                 enabled = true,
-                auto_show = false,
                 window = {
                     border = 'rounded',
-                    show_documentation = true,
+                    show_documentation = false,
                 },
             },
             keymap = completion_keymap,
