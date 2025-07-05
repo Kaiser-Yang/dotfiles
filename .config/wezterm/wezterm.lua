@@ -82,7 +82,7 @@ return {
         },
     },
     window_close_confirmation = 'NeverPrompt',
-    window_decorations = 'NONE',
+    window_decorations = 'RESIZE',
     window_padding = {
         left = 0,
         right = 0,
