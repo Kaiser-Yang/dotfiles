@@ -18,7 +18,6 @@ return {
                 permanent_wrapper = require('yanky.wrappers').remove_carriage_return,
             },
         })
-        map_set({ 'n', 'x' }, 'y', '<plug>(YankyYank)')
         map_set({ 'n', 'x' }, 'p', '<plug>(YankyPutAfter)')
         map_set({ 'n', 'x' }, 'P', '<plug>(YankyPutBefore)')
         map_set({ 'n', 'x' }, 'gp', '<plug>(YankyGPutAfter)')
