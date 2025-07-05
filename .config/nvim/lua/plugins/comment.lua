@@ -43,7 +43,7 @@ return {
         })
         utils.map_set(
             { 'n', 'x' },
-            '<m-/>',
+            '',
             '<space>c<space>',
             { desc = 'Toggle comment for current line', remap = true }
         )

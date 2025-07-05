@@ -8,3 +8,11 @@ alt = overload(alt, home)
 [control]
 n = esc
 
+[alt]
+z = C-z
+x = C-x
+c = C-insert
+v = S-insert
+a = C-a
+r = C-r
+/ = C-/

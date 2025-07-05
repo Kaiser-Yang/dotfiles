@@ -8,8 +8,11 @@ map_del({ 'n' }, '<c-w><c-d>')
 map_set({ 'i' }, '<c-p>', '<nop>')
 map_set({ 'n', 'x' }, 'y', '"+y', { desc = 'Yank to + reg' })
 map_set({ 'n' }, 'Y', '"+y$', { desc = 'Yank till eol to + reg' })
+map_set('x', '<c-insert>', '"+y', { desc = 'Yank to +reg' });
+map_set('x', '<c-x>', '"+d', { desc = 'Delete to +reg' });
+map_set({ 'n', 'x' }, '<s-insert>', '"+p', { desc = 'Paste from +reg' });
 
-map_set({ 'n', 'i' }, '<C-RightMouse>', function()
+map_set({ 'n', 'i' }, '<c-rightMouse>', function()
     local res
     local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
     local ok, _ = pcall(require, 'img-clip')
@@ -68,12 +71,16 @@ map_set({ 'n', 'x' }, '<leader>P', function()
         require('img-clip').paste_image({ insert_template_after_cursor = false })
     end
 end, { desc = 'Paste from clipboard or insert image' })
-map_set({ 'n' }, '<leader>ay', function()
-    local cur = vim.api.nvim_win_get_cursor(0)
-    vim.api.nvim_command('normal! ggVGy')
-    vim.api.nvim_win_set_cursor(0, cur)
-    vim.defer_fn(function() vim.fn.setreg('+', vim.fn.getreg('"')) end, 0)
+map_set({ 'n' }, 'yaa', function()
+    vim.fn.setreg("+", vim.api.nvim_buf_get_lines(0, 0, -1, false), "l")
+    local line_count = vim.api.nvim_buf_line_count(0)
+    vim.notify(
+        string.format('Yanked %d lines to + register', line_count),
+        nil,
+        { title = 'Yank' }
+    )
 end, { desc = 'Yank all to + reg' })
+map_set({ 'n' }, '<leader>ay', 'gaa', { desc = 'Yank all to + reg', remap = true })
 map_set({ 'n' }, '<leader>sc', function()
     if vim.o.spell then
         vim.notify('Spell check disabled', nil, { title = 'Spell Check' })
