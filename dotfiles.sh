@@ -53,12 +53,27 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     )
 # Ubuntu related configurations
 elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
+    # WARN: installation script for Ubuntu is not tested
     INSTALLATION_COMMANDS+=(
         "$SUDO apt update"
         "$SUDO apt install -y \
-            curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd \
+            curl git neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd \
             wordnet librime wezterm ripgrep"
+        # NOTE: lazygit is only available for Ubuntu 25.10 "Questing Quokka" and later
+        # "$SUDO apt install -y lazygit"
     )
+    if [[ $(uname -m) == "x86_64" ]]; then
+        LAZYGIT_VERSION=$(curl -s \
+            "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \
+            \grep -Po '"tag_name": *"v\K[^"]*')
+        INSTALLATION_COMMANDS+=(
+            "curl -Lo lazygit.tar.gz \
+                https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz && \
+                tar xf lazygit.tar.gz lazygit && \
+                $SUDO install lazygit -D -t /usr/local/bin/ && \
+                rm -f lazygit.tar.gz lazygit"
+        )
+    fi
     DIRS+=(
         # WARN: this configuration file is not checked
         ".config/fontconfig/fonts_ubuntu.conf"

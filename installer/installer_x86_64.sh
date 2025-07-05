@@ -10,21 +10,6 @@ if ! arch | grep 'x86_64'; then
     exit 1
 fi
 
-# lazygit
-if ! command -v lazygit; then
-    cd ~ || exit 1
-    LAZYGIT_VERSION=$(curl -s \
-        "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \
-        grep -Po '"tag_name": "v\K[^"]*') || exit 1
-    curl -Lo lazygit.tar.gz \
-        "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" \
-        || exit 1
-    tar -xf lazygit.tar.gz lazygit || exit 1
-    sudo install lazygit /usr/local/bin || exit 1
-    rm -rf lazygit lazygit.tar.gz || exit 1
-    cd - || exit 1
-fi
-
 if ! command -v node; then
     cd ~ || exit 1
     wget https://nodejs.org/dist/v20.13.0/node-v20.13.0-linux-x64.tar.xz \
@@ -44,14 +29,6 @@ if ! command -v conda; then
     rm -rf ~/miniconda3/miniconda.sh || exit 1
     ~/miniconda3/bin/conda init bash || exit 1
     ~/miniconda3/bin/conda init fish || exit 1
-fi
-
-# neovim latest
-if ! command -v neovim; then
-    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-    sudo rm -rf /opt/nvim
-    sudo tar -C /opt -xzf nvim-linux64.tar.gz
-    rm -f nvim-linux64.tar.gz
 fi
 
 if ! command -v codelldb; then

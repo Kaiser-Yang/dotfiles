@@ -29,10 +29,7 @@ else
 fi
 
 # basic tools
-sudo apt install -y unzip ripgrep fzf wordnet || exit 1
-
-# formater for python3
-sudo apt install -y python3-autopep8
+sudo apt install -y unzip fzf || exit 1
 
 # lcov
 sudo apt install -y lcov
@@ -87,7 +84,7 @@ cd - || exit 1
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
     sudo apt-get remove $pkg;
 done
-sudo apt-get install -y curl gnupg
+sudo apt-get install -y gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
@@ -106,15 +103,6 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 # rust
 curl --proto '=https' --tlsv1.2 -sSf "https://sh.rustup.rs" | sh
 
-# neovide
-sudo apt install -y curl \
-    gnupg ca-certificates git \
-    gcc-multilib g++-multilib cmake libssl-dev pkg-config \
-    libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
-    libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libfontconfig1-dev \
-    libxcursor-dev
-cargo install --git https://github.com/neovide/neovide
-
 # tree-sitter-cli
 cargo install tree-sitter-cli
 
@@ -127,17 +115,6 @@ sudo mv target/release/yazi target/release/ya /usr/local/bin/ || exit 1
 ya pack -a yazi-rs/plugins:smart-enter || exit 1
 ya pack -a yazi-rs/plugins:full-border || exit 1
 ya pack -a yazi-rs/plugins:max-preview || exit 1
-
-# rime
-sudo apt-get install -y ibus-rime clang librime-dev
-cd || exit 1
-git clone https://github.com/wlh320/rime-ls.git
-cd - || exit 1
-cd ~/rime-ls || exit 1
-cargo build --release || exit 1
-sudo ln -s ~/rime-ls/target/release/rime_ls /usr/bin/rime_ls || exit 1
-cd - || exit 1
-ibus-daemon -drx
 
 # ruby and jekyll
 sudo apt install -y ruby-full
