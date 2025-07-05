@@ -5,6 +5,14 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+if [[ -d "/opt/homebrew/lib" && "$(uname)" == "Darwin" ]]; then
+    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/opt/homebrew/lib"
+fi
+
+if [[ -e "$HOME/.zprofile" ]]; then
+    source "$HOME/.zprofile"
+fi
+
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_CUSTOM="$HOME/.config/zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -139,14 +147,6 @@ if [ -d "$HOME/opt/miniconda3" ]; then
       export flavor='conda'
       source $HOME/.config/tmux/plugins/conda_inherit.sh
     fi
-fi
-
-if [[ -d "/opt/homebrew/lib" && "$(uname)" == "Darwin" ]]; then
-    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/opt/homebrew/lib"
-fi
-
-if [[ -e "$HOME/.zprofile" ]]; then
-    source "$HOME/.zprofile"
 fi
 
 # y for yazi
