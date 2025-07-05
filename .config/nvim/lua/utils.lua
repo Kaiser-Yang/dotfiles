@@ -182,7 +182,10 @@ end
 --- @param opts? { buffer: integer|boolean }
 function M.map_del(mode, lhs, opts) map.del(mode, lhs, opts) end
 
+local networdk_available_cache
+
 function M.network_available(domain, timeout)
+    if networdk_available_cache ~= nil then return networdk_available_cache end
     domain = domain or '8.8.8.8'
     timeout = timeout or 500 -- ms
     local os_name = vim.loop.os_uname().sysname
@@ -192,9 +195,10 @@ function M.network_available(domain, timeout)
     elseif os_name == 'Windows' then
         command = 'ping -n 1 -w ' .. tostring(timeout) .. ' ' .. domain .. ' > nul 2>&1'
     else
-        return false
+        networdk_available_cache = true
     end
-    return os.execute(command) == 0
+    if command then networdk_available_cache = os.execute(command) == 0 end
+    return networdk_available_cache
 end
 
 return M
