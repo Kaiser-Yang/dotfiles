@@ -16,9 +16,7 @@ local completion_keymap = {
     preset = 'none',
     ['<c-s>'] = { 'show_signature', 'hide_signature', 'fallback' },
     ['<c-x>'] = {
-        function(cmp)
-            cmp.show({ providers = { 'snippets' } })
-        end,
+        function(cmp) cmp.show({ providers = { 'snippets' } }) end,
     },
     ['<cr>'] = {
         function(cmp)
@@ -423,6 +421,14 @@ return {
                             project_root_fallback = false,
                             fallback_to_regex_highlighting = true,
                         },
+                        transform_items = function(_, items)
+                            return vim.tbl_filter(function(item)
+                                -- Remove items that consist of only numbers
+                                return not (
+                                    item.label:match('^%d+$') or item.label:match('^%d+%.%d+$')
+                                )
+                            end, items)
+                        end,
                     },
                 },
             },
