@@ -45,7 +45,7 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     INSTALLATION_COMMANDS+=(
         "$SUDO pacman -Sy --noconfirm \
             curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd \
-            wezterm rg"
+            wezterm ripgrep"
         "yay -Sy --noconfirm wordnet-common rime-ls"
     )
     DIRS+=(
@@ -57,7 +57,7 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         "$SUDO apt update"
         "$SUDO apt install -y \
             curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd \
-            wordnet librime wezterm rg"
+            wordnet librime wezterm ripgrep"
     )
     DIRS+=(
         # WARN: this configuration file is not checked
@@ -69,7 +69,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         "brew update"
         # librime is for rime_ls, we need to install it for macOS
         "brew install wget curl git lazygit neovim tmux zsh zoxide node wordnet librime"
-        "brew install --cask squirrel wezterm rg"
+        "brew install --cask squirrel wezterm ripgrep"
     )
     DIRS+=(
         # WARN: this configuration file is not checked
