@@ -428,16 +428,43 @@ return {
                     vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
                     return
                 end
-                last_picker_wrapper(
-                    function()
+                local picker
+                if vim.fn.filereadable(utils.get_big_dir_output_path()) then
+                    -- Usage: run :GenBigDirFiles to generate the file list
+                    local cwd = vim.fn.getcwd()
+                    picker = function()
+                        Snacks.picker.grep({
+                            limit = live_grep_limit,
+                            cmd = 'rg',
+                            cwd = cwd,
+                            title = 'Files',
+                            dirs = { utils.get_big_dir_output_path() },
+                            transform = function(item)
+                                item.cwd = cwd
+                                local file, _, _, text = item.text:match('^(.+):(%d+):(%d+):(.*)$')
+                                if not file then
+                                    if not item.text:match('WARNING') then
+                                        Snacks.notify.error('invalid grep output:\n' .. item.text)
+                                    end
+                                    return false
+                                else
+                                    item.file = text
+                                    item.pos = nil
+                                end
+                            end,
+                        })
+                    end
+                else
+                    picker = function()
                         Snacks.picker.files({
-                            cwd = vim.fn.getcwd(),
+                            cwd = cwd,
                             cmd = 'rg',
                             hidden = true,
                             exclude = file_ignore_patterns,
                         })
                     end
-                )()
+                end
+                last_picker_wrapper(picker)()
             end,
             desc = 'Toggle find Files',
         },

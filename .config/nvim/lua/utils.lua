@@ -2,6 +2,8 @@ local M = {}
 
 local map = vim.keymap
 
+function M.get_big_dir_output_path() return vim.fn.getcwd() .. '/' .. vim.g.big_dir_file_name end
+
 function M.should_enable_paste_image()
     local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
     local ok, _ = pcall(require, 'img-clip')
@@ -9,7 +11,7 @@ function M.should_enable_paste_image()
         and M.markdown_support_enabled()
         and ok
         -- wsl will not put images in + reg
-        and (vim.fn.has('wsl') == 0 or #plus_reg_content == 0 )
+        and (vim.fn.has('wsl') == 0 or #plus_reg_content == 0)
 end
 
 function M.get_visible_bufs()

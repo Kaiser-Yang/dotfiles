@@ -4,6 +4,7 @@ vim.g.root_markers = { '.git', '.root', 'pom.xml', 'mvnw', 'gradlew', 'pom.xml',
 vim.g.frontend_filetype = { 'typescript', 'javascript', 'vue', 'html', 'css' }
 
 vim.g.big_file_limit = 5 * 1024 * 1024 -- 5 MB
+vim.g.big_dir_file_name = '.big_dir_files' -- The file name to store big dir files
 
 -- When input method is enabled, disable the following patterns
 vim.g.disable_rime_ls_pattern = {
@@ -114,3 +115,36 @@ vim.api.nvim_create_autocmd('BufEnter', {
         end
     end,
 })
+vim.api.nvim_create_user_command('GenBigDirFiles', function()
+    if vim.fn.executable('rg') == 0 then
+        vim.notify('rg is not executable, please install it first', vim.log.levels.ERROR)
+        return
+    end
+    local cmd = 'rg'
+    local args = {
+        '--hidden',
+        '--files',
+        '--no-messages',
+        '--color',
+        'never',
+        '-g',
+        '!.git',
+        '-g',
+        '!' .. vim.g.big_dir_file_name,
+    }
+    local output_path = require('utils').get_big_dir_output_path()
+    vim.system({ cmd, unpack(args) }, { text = true }, function(result)
+        if result.code ~= 0 then
+            vim.notify('Failed to generate big dir files: ' .. result.stderr, vim.log.levels.ERROR)
+            return
+        end
+        local f = io.open(output_path, 'w')
+        if not f then
+            vim.notify('Failed to open file for writing: ' .. output_path, vim.log.levels.ERROR)
+            return
+        end
+        f:write(result.stdout)
+        f:close()
+        vim.notify('Big dir files generated successfully: ' .. output_path, vim.log.levels.INFO)
+    end)
+end, {})
