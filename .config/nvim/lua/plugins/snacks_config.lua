@@ -42,7 +42,8 @@ vim.api.nvim_create_autocmd('BufEnter', {
         if not should_resume_search_pattern or vim.bo.filetype ~= 'snacks_picker_input' then
             return
         end
-        vim.api.nvim_set_current_line(last_search_pattern or '')
+        if not last_search_pattern or last_search_pattern:match('^%s*$') then return end
+        vim.api.nvim_set_current_line(last_search_pattern)
         should_resume_search_pattern = false
     end,
 })
@@ -586,7 +587,10 @@ return {
                         end
                     )()
                 end, { buffer = true })
-                map_set({ 'i' }, '<c-y>', resume_last_picker, { buffer = true })
+                map_set({ 'i' }, '<c-y>', function()
+                    if not last_search_pattern or last_search_pattern:match('^%s*$') then return end
+                    vim.api.nvim_set_current_line(last_search_pattern)
+                end, { buffer = true })
             end,
         })
         local next_ref_repeat, prev_rev_repeat = require(
