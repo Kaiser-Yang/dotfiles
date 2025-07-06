@@ -26,6 +26,7 @@ local file_ignore_patterns = {
 local last_search_pattern
 local last_picker
 local should_resume_search_pattern = false
+local live_grep_limit = 100
 vim.api.nvim_create_autocmd('BufLeave', {
     group = 'UserDIY',
     callback = function()
@@ -133,9 +134,11 @@ return {
                     if not picker.opts.supports_live then return end
                     picker.opts.live = not picker.opts.live
                     if picker.opts.live then
+                        picker.opts.limit = live_grep_limit
                         picker.input.filter.search = vim.api.nvim_get_current_line()
                         picker.input.filter.pattern = ''
                     else
+                        picker.opts.limit = nil
                         picker.input.filter.search = ''
                         picker.input.filter.pattern = vim.api.nvim_get_current_line()
                     end
@@ -421,11 +424,15 @@ return {
         {
             '<c-p>',
             function()
+                if not vim.fn.executable('rg') then
+                    vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
+                    return
+                end
                 last_picker_wrapper(
                     function()
                         Snacks.picker.files({
                             cwd = vim.fn.getcwd(),
-                            cmd = vim.fn.executable('rg') and 'rg' or nil,
+                            cmd = 'rg',
                             hidden = true,
                             exclude = file_ignore_patterns,
                         })
@@ -437,11 +444,16 @@ return {
         {
             '<c-f>',
             function()
+                if not vim.fn.executable('rg') then
+                    vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
+                    return
+                end
                 last_picker_wrapper(
                     function()
                         Snacks.picker.grep({
                             cwd = vim.fn.getcwd(),
-                            cmd = vim.fn.executable('rg') and 'rg' or nil,
+                            limit = live_grep_limit,
+                            cmd = 'rg',
                             hidden = true,
                             exclude = file_ignore_patterns,
                         })
@@ -459,7 +471,7 @@ return {
                 end
                 Snacks.picker.files({
                     cwd = vim.fn.getcwd(),
-                    cmd = vim.fn.executable('rg') and 'rg' or nil,
+                    cmd = 'rg',
                     hidden = true,
                     ft = { 'gif', 'jpg', 'jpeg', 'png', 'webp' },
                     confirm = function(self, item, _)
@@ -583,11 +595,15 @@ return {
                 vim.b.snacks_animate = false
                 map_set({ 'i' }, '<c-p>', function()
                     should_resume_search_pattern = true
+                    if not vim.fn.executable('rg') then
+                        vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
+                        return
+                    end
                     last_picker_wrapper(
                         function()
                             Snacks.picker.files({
                                 cwd = vim.fn.getcwd(),
-                                cmd = vim.fn.executable('rg') and 'rg' or nil,
+                                cmd = 'rg',
                                 hidden = true,
                                 exclude = file_ignore_patterns,
                             })
@@ -596,11 +612,16 @@ return {
                 end, { buffer = true })
                 map_set({ 'i' }, '<c-f>', function()
                     should_resume_search_pattern = true
+                    if not vim.fn.executable('rg') then
+                        vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
+                        return
+                    end
                     last_picker_wrapper(
                         function()
                             Snacks.picker.grep({
                                 cwd = vim.fn.getcwd(),
-                                cmd = vim.fn.executable('rg') and 'rg' or nil,
+                                cmd = 'rg',
+                                limit = live_grep_limit,
                                 hidden = true,
                                 exclude = file_ignore_patterns,
                             })
