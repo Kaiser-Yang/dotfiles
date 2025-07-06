@@ -141,7 +141,9 @@ return {
                     },
                     ['<c-c>'] = 'cancel',
                     ['<leader>j'] = 'split_with_window_picker',
+                    ['<leader>k'] = 'split_with_window_picker',
                     ['<leader>l'] = 'vsplit_with_window_picker',
+                    ['<leader>h'] = 'vsplit_with_window_picker',
                     ['<c-s>'] = 'split_with_window_picker',
                     ['<c-v>'] = 'vsplit_with_window_picker',
                     ['v'] = {
