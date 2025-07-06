@@ -33,13 +33,12 @@ DIRS=(
 )
 INSTALLATION_COMMANDS=()
 
-SUDO=$(command -v sudo)
-# Configurations for all Linux distributions
-if [[ "$(uname)" == "Linux" ]]; then
+if [[ $XDG_CURRENT_DESKTOP == 'KDE' ]]; then
     DIRS+=(
-        ".config/keyd/config"
+        ".config/autostart/keyd-application-mapper.desktop"
     )
 fi
+SUDO=$(command -v sudo)
 # Arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     INSTALLATION_COMMANDS+=(
@@ -91,6 +90,17 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         ".config/fontconfig/fonts_mac.conf"
     )
 fi
+# Configurations for all Linux distributions
+if [[ "$(uname)" == "Linux" ]]; then
+    DIRS+=(
+        ".config/keyd/config"
+        ".config/keyd/app.conf"
+    )
+    # Must be run after installing keyd
+    INSTALLATION_COMMANDS+=(
+        "$SUDO usermod -aG keyd $USER"
+    )
+fi
 
 # Destination path for symbolic links
 get_destination() {
@@ -102,7 +112,7 @@ get_destination() {
             return
         fi
         echo "$HOME/Library/Rime/$file"
-    elif [[ "$file" == ".config/keyd"* ]]; then
+    elif [[ "$file" == ".config/keyd/config" ]]; then
         echo "/etc/keyd/default.conf"
     elif [[ "$file" == ".config/fontconfig"* ]]; then
         echo "$HOME/.config/fontconfig/fonts.conf"
