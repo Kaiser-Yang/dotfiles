@@ -13,16 +13,10 @@ map_set('x', '<c-insert>', '"+y', { desc = 'Yank to +reg' })
 map_set('x', '<c-x>', '"+d', { desc = 'Delete to +reg' })
 map_set({ 'n', 'x' }, '<s-insert>', '"+p', { desc = 'Paste from +reg' })
 
-map_set({ 'n', 'i' }, '<c-rightMouse>', function()
+map_set({ 'n', 'i' }, '<c-rightmouse>', function()
     local res
     local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
-    local ok, _ = pcall(require, 'img-clip')
-    if
-        vim.bo.filetype == 'gitcommit'
-        or not utils.markdown_support_enabled()
-        or #plus_reg_content ~= 0
-        or not ok
-    then
+    if not utils.should_enable_paste_image() then
         vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
         res = '<cmd>normal! "+p<cr>'
     else
@@ -44,13 +38,7 @@ end, {
 })
 map_set({ 'n', 'x' }, '<leader>p', function()
     local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
-    local ok, _ = pcall(require, 'img-clip')
-    if
-        vim.bo.filetype == 'gitcommit'
-        or not utils.markdown_support_enabled()
-        or #plus_reg_content ~= 0
-        or not ok
-    then
+    if not utils.should_enable_paste_image() then
         vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
         return '"+p'
     else
@@ -59,13 +47,7 @@ map_set({ 'n', 'x' }, '<leader>p', function()
 end, { desc = 'Paste from clipboard or insert image', expr = true })
 map_set({ 'n', 'x' }, '<leader>P', function()
     local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
-    local ok, _ = pcall(require, 'img-clip')
-    if
-        vim.bo.filetype == 'gitcommit'
-        or not utils.markdown_support_enabled()
-        or #plus_reg_content ~= 0
-        or not ok
-    then
+    if not utils.should_enable_paste_image() then
         vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
         utils.feedkeys('"+P', 'n')
     else
@@ -74,13 +56,7 @@ map_set({ 'n', 'x' }, '<leader>P', function()
 end, { desc = 'Paste from clipboard or insert image' })
 map_set('i', '<s-insert>', function()
     local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
-    local ok, _ = pcall(require, 'img-clip')
-    if
-        vim.bo.filetype == 'gitcommit'
-        or not utils.markdown_support_enabled()
-        or #plus_reg_content ~= 0
-        or not ok
-    then
+    if not utils.should_enable_paste_image() then
         vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
         return '<c-r>+'
     else

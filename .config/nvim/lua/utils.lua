@@ -2,6 +2,16 @@ local M = {}
 
 local map = vim.keymap
 
+function M.should_enable_paste_image()
+    local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
+    local ok, _ = pcall(require, 'img-clip')
+    return vim.bo.filetype ~= 'gitcommit'
+        and M.markdown_support_enabled()
+        and ok
+        -- wsl will not put images in + reg
+        and (vim.fn.has('wsl') == 0 or #plus_reg_content == 0 )
+end
+
 function M.get_visible_bufs()
     local visible_bufs = {}
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
