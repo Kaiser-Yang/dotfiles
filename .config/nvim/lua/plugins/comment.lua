@@ -44,13 +44,13 @@ return {
         })
         map_set(
             { 'n' },
-            '',
+            '<m-/>',
             '<space>c<space>',
             { desc = 'Toggle comment for current line', remap = true }
         )
         map_set(
             { 'x' },
-            '',
+            '<m-/>',
             '<space>c',
             { desc = 'Toggle comment for selected lines', remap = true }
         )
