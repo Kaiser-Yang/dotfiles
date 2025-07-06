@@ -44,9 +44,11 @@ return {
             callback = function() _MACRO_RECORDING_STATUS = false end,
         })
         map_set({ 'n' }, '<leader>sn', function()
-            require('noice.integrations.snacks').open({
-                on_show = function() vim.cmd.stopinsert() end,
-            })
+            if Snacks then
+                require('noice.integrations.snacks').open({
+                    on_show = function() vim.cmd.stopinsert() end,
+                })
+            end
         end, { desc = 'Noice history' })
     end,
 }
