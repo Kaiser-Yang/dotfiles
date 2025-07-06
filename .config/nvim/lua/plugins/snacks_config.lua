@@ -441,14 +441,18 @@ return {
                             dirs = { utils.get_big_dir_output_path() },
                             transform = function(item)
                                 item.cwd = cwd
-                                local file, _, _, text = item.text:match('^(.+):(%d+):(%d+):(.*)$')
-                                if not file then
-                                    if not item.text:match('WARNING') then
-                                        Snacks.notify.error('invalid grep output:\n' .. item.text)
-                                    end
+                                local _, _, _, file_path =
+                                    item.text:match('^(.+):(%d+):(%d+):(.*)$')
+                                if vim.fn.filereadable(file_path) == 0 then
+                                    vim.notify(
+                                        'Invalid file path found: '
+                                            .. file_path
+                                            .. '. Please try to re-run GenBigDirFiles.',
+                                        vim.log.levels.ERROR
+                                    )
                                     return false
                                 else
-                                    item.file = text
+                                    item.file = file_path
                                     item.pos = nil
                                 end
                             end,
