@@ -429,7 +429,7 @@ return {
                     return
                 end
                 local picker
-                if vim.fn.filereadable(utils.get_big_dir_output_path()) then
+                if vim.fn.filereadable(utils.get_big_dir_output_path()) == 1 then
                     -- Usage: run :GenBigDirFiles to generate the file list
                     local cwd = vim.fn.getcwd()
                     picker = function()
