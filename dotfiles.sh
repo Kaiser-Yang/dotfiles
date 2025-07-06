@@ -561,16 +561,6 @@ install_fonts() {
 
 main() {
     init_options "$@" || return $?
-    if [ "$INSTALL_PACKAGES" = true ]; then
-        install_packages || return $?
-    else
-        log_verbose "Skipping package installation."
-    fi
-    if [ "$INSTALL_FONTS" = true ]; then
-        install_fonts || return $?
-    else
-        log_verbose "Skipping fonts installation."
-    fi
     if [ "$CREATE_LINKS" = true ]; then
         create || return $?
     else
@@ -580,6 +570,16 @@ main() {
         restore || return $?
     else
         log_verbose "Skipping restoration of original files."
+    fi
+    if [ "$INSTALL_FONTS" = true ]; then
+        install_fonts || return $?
+    else
+        log_verbose "Skipping fonts installation."
+    fi
+    if [ "$INSTALL_PACKAGES" = true ]; then
+        install_packages || return $?
+    else
+        log_verbose "Skipping package installation."
     fi
 }
 
