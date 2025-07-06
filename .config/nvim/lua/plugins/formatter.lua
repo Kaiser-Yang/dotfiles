@@ -28,7 +28,7 @@ return {
             cpp = { 'clang-format' },
             python = { 'autopep8' },
             java = { 'google-java-format' },
-            -- markdown = { 'markdownlint-cli2' },
+            markdown = { 'prettier' },
             lua = { 'stylua' },
             vue = { 'prettier' },
             typescript = { 'prettier' },
