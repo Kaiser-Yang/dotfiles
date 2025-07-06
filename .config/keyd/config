@@ -16,3 +16,4 @@ v = S-insert
 a = C-a
 r = C-r
 / = C-/
+f = C-f
