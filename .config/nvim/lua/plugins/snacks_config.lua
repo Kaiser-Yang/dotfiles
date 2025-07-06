@@ -88,6 +88,9 @@ return {
         dashboard = {
             enabled = false,
         },
+        image = {
+            enabled = vim.fn.has('wsl') == 0,
+        },
         indent = {
             enabled = true,
             animate = {
@@ -182,7 +185,7 @@ return {
                         ['<a-f>'] = { 'toggle_follow', mode = { 'i', 'n' } },
                         ['<a-i>'] = { 'toggle_ignored', mode = { 'i', 'n' } },
                         ['<a-d>'] = { 'toggle_hidden', mode = { 'i', 'n' } },
-                        ['<c-a>'] = { 'select_all', mode = { 'n', 'i' } },
+                        ['<m-a>'] = { 'select_all', mode = { 'n', 'i' } },
                         ['<tab>'] = { 'select_and_next', mode = { 'i', 'n' } },
                         ['<s-tab>'] = { 'select_and_prev', mode = { 'i', 'n' } },
                         ['?'] = 'toggle_help_input',
@@ -192,6 +195,7 @@ return {
                         ['k'] = 'list_up',
                         ['q'] = 'close',
                         ['<esc>'] = 'cancel',
+                        ['<c-a>'] = false,
                         ['<c-f>'] = false,
                         ['<c-p>'] = false,
                         ['<c-up>'] = false,
@@ -240,9 +244,10 @@ return {
                         ['<a-f>'] = 'toggle_follow', -- Toggle whether of not follow link file
                         ['<a-i>'] = 'toggle_ignored',
                         ['<a-d>'] = 'toggle_hidden',
-                        ['<c-a>'] = 'select_all',
+                        ['<m-a>'] = 'select_all',
                         ['<tab>'] = 'select_and_next',
                         ['<s-tab>'] = 'select_and_prev',
+                        ['<c-a>'] = false,
                         ['<c-t>'] = false,
                         ['<c-j>'] = false,
                         ['<c-k>'] = false,
@@ -402,6 +407,7 @@ return {
                             cwd = vim.fn.getcwd(),
                             hidden = true,
                             exclude = file_ignore_patterns,
+                            live = true,
                         })
                     end
                 )()
@@ -417,6 +423,7 @@ return {
                             cwd = vim.fn.getcwd(),
                             hidden = true,
                             exclude = file_ignore_patterns,
+                            live = true,
                         })
                     end
                 )()
@@ -561,6 +568,7 @@ return {
                                 cwd = vim.fn.getcwd(),
                                 hidden = true,
                                 exclude = file_ignore_patterns,
+                                live = true,
                             })
                         end
                     )()
@@ -573,6 +581,7 @@ return {
                                 cwd = vim.fn.getcwd(),
                                 hidden = true,
                                 exclude = file_ignore_patterns,
+                                live = true,
                             })
                         end
                     )()
