@@ -39,6 +39,8 @@ local function default_program()
 end
 
 return {
+    initial_rows = 50,
+    initial_cols = 120,
     automatically_reload_config = true,
     color_scheme = 'Catppuccin Mocha',
     default_prog = default_program(),
