@@ -406,9 +406,9 @@ return {
                     function()
                         Snacks.picker.files({
                             cwd = vim.fn.getcwd(),
+                            cmd = vim.fn.executable('rg') and 'rg' or nil,
                             hidden = true,
                             exclude = file_ignore_patterns,
-                            live = true,
                         })
                     end
                 )()
@@ -422,9 +422,9 @@ return {
                     function()
                         Snacks.picker.grep({
                             cwd = vim.fn.getcwd(),
+                            cmd = vim.fn.executable('rg') and 'rg' or nil,
                             hidden = true,
                             exclude = file_ignore_patterns,
-                            live = true,
                         })
                     end
                 )()
@@ -440,6 +440,7 @@ return {
                 end
                 Snacks.picker.files({
                     cwd = vim.fn.getcwd(),
+                    cmd = vim.fn.executable('rg') and 'rg' or nil,
                     hidden = true,
                     ft = { 'gif', 'jpg', 'jpeg', 'png', 'webp' },
                     confirm = function(self, item, _)
@@ -567,9 +568,9 @@ return {
                         function()
                             Snacks.picker.files({
                                 cwd = vim.fn.getcwd(),
+                                cmd = vim.fn.executable('rg') and 'rg' or nil,
                                 hidden = true,
                                 exclude = file_ignore_patterns,
-                                live = true,
                             })
                         end
                     )()
@@ -580,9 +581,9 @@ return {
                         function()
                             Snacks.picker.grep({
                                 cwd = vim.fn.getcwd(),
+                                cmd = vim.fn.executable('rg') and 'rg' or nil,
                                 hidden = true,
                                 exclude = file_ignore_patterns,
-                                live = true,
                             })
                         end
                     )()
