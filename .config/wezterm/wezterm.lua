@@ -50,9 +50,11 @@ return {
     }),
     keys = {
         { key = 'z', mods = 'CTRL|ALT', action = 'Nop' },
-        { key = '=', mods = 'CTRL', action = act.IncreaseFontSize },
-        { key = '-', mods = 'CTRL', action = act.DecreaseFontSize },
-        { key = '0', mods = 'CTRL', action = act.ResetFontSize },
+        { key = '=', mods = 'CTRL|SUPER', action = act.IncreaseFontSize },
+        { key = '-', mods = 'CTRL|SUPER', action = act.DecreaseFontSize },
+        { key = '0', mods = 'CTRL|SUPER', action = act.ResetFontSize },
+        { key = 'v', mods = 'SUPER', action = act.PasteFrom('Clipboard') },
+        { kye = 'Insert', mods = 'SHIFT', action = act.PasteFrom("clipboard") },
     },
     mouse_bindings = {
         {
@@ -82,7 +84,6 @@ return {
         },
     },
     window_close_confirmation = 'NeverPrompt',
-    window_decorations = 'RESIZE',
     window_padding = {
         left = 0,
         right = 0,
