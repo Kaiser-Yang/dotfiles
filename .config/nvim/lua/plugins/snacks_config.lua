@@ -128,6 +128,21 @@ return {
             jump = {
                 match = true, -- jump to the first match position.
             },
+            actions = {
+                my_toggle_live = function(picker)
+                    if not picker.opts.supports_live then return end
+                    picker.opts.live = not picker.opts.live
+                    if picker.opts.live then
+                        picker.input.filter.search = vim.api.nvim_get_current_line()
+                        picker.input.filter.pattern = ''
+                    else
+                        picker.input.filter.search = ''
+                        picker.input.filter.pattern = vim.api.nvim_get_current_line()
+                    end
+                    picker.input:set()
+                    picker.input:update()
+                end,
+            },
             win = {
                 -- input window
                 input = {
@@ -178,6 +193,10 @@ return {
                             'insert_file_full',
                             mode = 'i',
                             desc = 'Insert full file path under cursor',
+                        },
+                        ['<c-g>'] = {
+                            'my_toggle_live',
+                            mode = { 'i', 'n' },
                         },
                         ['<a-w>'] = { 'toggle_focus', mode = { 'i', 'n' } },
                         ['<a-m>'] = { 'toggle_maximize', mode = { 'i', 'n' } },
