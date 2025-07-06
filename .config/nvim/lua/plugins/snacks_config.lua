@@ -1,3 +1,7 @@
+-- FIX:
+-- Use <c-p> to open file picker,
+-- then use <c-f> to switch to grep picker,
+-- then <c-p> can not switch back to file picker, unless you press <c-p> twice.
 local utils = require('utils')
 local map_set = utils.map_set
 local file_ignore_patterns = {
@@ -19,6 +23,41 @@ local file_ignore_patterns = {
     '%.tar.gz',
     '3rdparty',
 }
+local last_search_pattern
+local last_picker
+local should_resume_search_pattern = false
+vim.api.nvim_create_autocmd('BufLeave', {
+    group = 'UserDIY',
+    callback = function()
+        if vim.bo.filetype ~= 'snacks_picker_input' then return end
+        local current_line = vim.api.nvim_get_current_line()
+        -- If the current line is empty, do not save it
+        if current_line and current_line:match('^%s*$') then return end
+        last_search_pattern = current_line
+    end,
+})
+vim.api.nvim_create_autocmd('BufEnter', {
+    group = 'UserDIY',
+    callback = function()
+        if not should_resume_search_pattern or vim.bo.filetype ~= 'snacks_picker_input' then
+            return
+        end
+        vim.api.nvim_set_current_line(last_search_pattern or '')
+        should_resume_search_pattern = false
+    end,
+})
+local function last_picker_wrapper(picker)
+    last_picker = picker
+    return picker
+end
+local function resume_last_picker()
+    should_resume_search_pattern = true
+    if not last_picker then
+        vim.notify('No last picker found', vim.log.levels.WARN)
+        return
+    end
+    last_picker()
+end
 return {
     'folke/snacks.nvim',
     priority = 1000,
@@ -282,20 +321,6 @@ return {
 
     keys = {
         {
-            '<leader>sp',
-            function()
-                Snacks.picker.files({
-                    ft = { 'jpg', 'jpeg', 'png', 'webp' },
-                    confirm = function(self, item, _)
-                        self:close()
-                        require('img-clip').paste_image({}, './' .. item.file)
-                    end,
-                })
-            end,
-            desc = 'Paste image from file',
-            mode = { 'n' },
-        },
-        {
             '<c-g>',
             function()
                 if vim.fn.executable('lazygit') == 0 then
@@ -309,11 +334,6 @@ return {
         },
         { '<c-t>', function() Snacks.terminal() end, desc = 'Toggle Terminal' },
         { '<c-t>', '<cmd>close<cr>', desc = 'Toggle Terminal', mode = { 't' } },
-        {
-            '<c-y>',
-            function() Snacks.picker.resume() end,
-            desc = 'Resume last picker',
-        },
         {
             '<leader>r',
             function()
@@ -369,32 +389,59 @@ return {
             desc = 'Run and compile',
         },
         {
+            '<c-y>',
+            resume_last_picker,
+            desc = 'Resume last picker',
+        },
+        {
             '<c-p>',
             function()
-                Snacks.picker.files({
-                    cwd = vim.fn.getcwd(),
-                    hidden = true,
-                    exclude = file_ignore_patterns,
-                })
+                last_picker_wrapper(
+                    function()
+                        Snacks.picker.files({
+                            cwd = vim.fn.getcwd(),
+                            hidden = true,
+                            exclude = file_ignore_patterns,
+                        })
+                    end
+                )()
             end,
             desc = 'Toggle find Files',
         },
         {
             '<c-f>',
             function()
-                Snacks.picker.grep({
-                    cwd = vim.fn.getcwd(),
-                    hidden = true,
-                    exclude = file_ignore_patterns,
-                })
+                last_picker_wrapper(
+                    function()
+                        Snacks.picker.grep({
+                            cwd = vim.fn.getcwd(),
+                            hidden = true,
+                            exclude = file_ignore_patterns,
+                        })
+                    end
+                )()
             end,
             desc = 'Toggle Live Grep',
         },
         {
-            '<leader>gb',
-            function() Snacks.gitbrowse() end,
-            desc = 'Git Browse',
-            mode = { 'n', 'v' },
+            '<leader>sp',
+            function()
+                if not utils.should_enable_paste_image() then
+                    vim.notify('Paste image is not supported in this context', vim.log.levels.WARN)
+                    return
+                end
+                Snacks.picker.files({
+                    cwd = vim.fn.getcwd(),
+                    hidden = true,
+                    ft = { 'gif', 'jpg', 'jpeg', 'png', 'webp' },
+                    confirm = function(self, item, _)
+                        self:close()
+                        require('img-clip').paste_image({}, './' .. item.file)
+                    end,
+                })
+            end,
+            desc = 'Paste image from file',
+            mode = { 'n' },
         },
         {
             'gD',
@@ -469,6 +516,12 @@ return {
             function() Snacks.picker.qflist() end,
             desc = 'Quickfix List',
         },
+        {
+            '<leader>gb',
+            function() Snacks.gitbrowse() end,
+            desc = 'Git Browse',
+            mode = { 'n', 'v' },
+        },
     },
     init = function()
         vim.api.nvim_create_autocmd('User', {
@@ -500,30 +553,31 @@ return {
                 -- There is a bug when selecting different itmes in list window,
                 -- therefore, we just simply disable animations
                 vim.b.snacks_animate = false
-                map_set(
-                    { 'i' },
-                    '<c-p>',
-                    function()
-                        Snacks.picker.files({
-                            cwd = vim.fn.getcwd(),
-                            hidden = true,
-                            exclude = file_ignore_patterns,
-                        })
-                    end,
-                    { buffer = true }
-                )
-                map_set(
-                    { 'i' },
-                    '<c-f>',
-                    function()
-                        Snacks.picker.grep({
-                            cwd = vim.fn.getcwd(),
-                            hidden = true,
-                            exclude = file_ignore_patterns,
-                        })
-                    end,
-                    { buffer = true }
-                )
+                map_set({ 'i' }, '<c-p>', function()
+                    should_resume_search_pattern = true
+                    last_picker_wrapper(
+                        function()
+                            Snacks.picker.files({
+                                cwd = vim.fn.getcwd(),
+                                hidden = true,
+                                exclude = file_ignore_patterns,
+                            })
+                        end
+                    )()
+                end, { buffer = true })
+                map_set({ 'i' }, '<c-f>', function()
+                    should_resume_search_pattern = true
+                    last_picker_wrapper(
+                        function()
+                            Snacks.picker.grep({
+                                cwd = vim.fn.getcwd(),
+                                hidden = true,
+                                exclude = file_ignore_patterns,
+                            })
+                        end
+                    )()
+                end, { buffer = true })
+                map_set({ 'i' }, '<c-y>', resume_last_picker, { buffer = true })
             end,
         })
         local next_ref_repeat, prev_rev_repeat = require(
