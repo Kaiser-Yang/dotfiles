@@ -170,7 +170,8 @@ vim.api.nvim_create_autocmd('FileType', {
         end, { buffer = true, desc = 'Toggler selected check boxes' })
         -- This part is to make <cr>, <bs> and <tab> work for bullets, numbers and todo lists
         map_set({ 'i' }, '<cr>', function()
-            local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
+            local cursor_pos = vim.api.nvim_win_get_cursor(0)
+            local cursor_row, cursor_column = cursor_pos[1], cursor_pos[2]
             local content_before_cursor = vim.api.nvim_get_current_line():sub(1, cursor_column)
             local item = match_item(content_before_cursor, true)
             if item then
@@ -182,7 +183,15 @@ vim.api.nvim_create_autocmd('FileType', {
             else
                 item = match_item(content_before_cursor)
                 if item then
-                    if #content_before_cursor == #vim.api.nvim_get_current_line() then
+                    local next_line = ''
+                    if cursor_row < vim.api.nvim_buf_line_count(0) then
+                        next_line =
+                            vim.api.nvim_buf_get_lines(0, cursor_row, cursor_row + 1, true)[1]
+                    end
+                    if
+                        #content_before_cursor == #vim.api.nvim_get_current_line()
+                        and (match_item(next_line) or next_line:match('^ *$'))
+                    then
                         item = string.gsub(item, 'x', ' ')
                         add_a_list_item_next_line(item)
                     else
