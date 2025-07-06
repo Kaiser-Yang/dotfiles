@@ -297,7 +297,13 @@ return {
         },
         {
             '<c-g>',
-            function() Snacks.lazygit() end,
+            function()
+                if vim.fn.executable('lazygit') == 0 then
+                    vim.notify('lazygit not found on your system', vim.log.levels.WARN)
+                    return
+                end
+                Snacks.lazygit()
+            end,
             desc = 'Toggle Lazygit',
             mode = { 'n', 't' },
         },
