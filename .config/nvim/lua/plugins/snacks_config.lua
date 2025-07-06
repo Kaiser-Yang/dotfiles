@@ -496,6 +496,10 @@ return {
                 'snacks_picker_preview',
             },
             callback = function()
+                -- FIX:
+                -- There is a bug when selecting different itmes in list window,
+                -- therefore, we just simply disable animations
+                vim.b.snacks_animate = false
                 map_set(
                     { 'i' },
                     '<c-p>',
