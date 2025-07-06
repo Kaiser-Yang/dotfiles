@@ -28,16 +28,14 @@ local plugins = {
     require('plugins.win_resizer'),
     require('plugins.yanky'),
     require('plugins.non_ascii'),
+    require('plugins.ufo'),
+    require('plugins.debugger'),
+    require('plugins.img_clip'),
+    require('plugins.markdown_toc'),
+    require('plugins.markdown_render'),
+    require('plugins.highlight_colors'),
 }
 if vim.fn.has('mac') ~= 1 then
-    vim.list_extend(plugins, {
-        require('plugins.ufo'),
-        require('plugins.debugger'),
-        require('plugins.img_clip'),
-        require('plugins.markdown_toc'),
-        require('plugins.markdown_render'),
-        require('plugins.highlight_colors'),
-    })
     if vim.fn.executable('gh') == 1 then
         vim.list_extend(plugins, {
             require('plugins.octo'),
