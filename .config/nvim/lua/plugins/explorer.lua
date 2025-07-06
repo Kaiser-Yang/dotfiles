@@ -85,7 +85,10 @@ return {
                 },
                 {
                     event = events.NEO_TREE_WINDOW_AFTER_OPEN,
-                    handler = function(_) vim.g.explorer_visible = true end,
+                    handler = function(_)
+                        vim.g.explorer_visible = true
+                        vim.cmd('wincmd =')
+                    end,
                 },
                 {
                     event = events.NEO_TREE_WINDOW_BEFORE_CLOSE,
@@ -434,5 +437,34 @@ return {
                 source = 'document_symbols',
             })
         end)
+        vim.api.nvim_create_autocmd('BufEnter', {
+            callback = function(_)
+                if vim.bo.filetype ~= 'neo-tree-popup' then return end
+                local current_line = vim.api.nvim_get_current_line()
+                if current_line:match('^ y/n: $') then
+                    map_set({ 'n' }, 'y', 'iy<cr>', { buffer = true })
+                    map_set({ 'n' }, 'Y', 'iy<cr>', { buffer = true })
+                    map_set({ 'n' }, 'n', 'in<cr>', { buffer = true })
+                    map_set({ 'n' }, 'N', 'in<cr>', { buffer = true })
+                    if
+                        vim.api.nvim_get_mode().mode == 'i'
+                        or vim.api.nvim_get_mode().mode == 'I'
+                    then
+                        feedkeys('<esc>', 'n') -- back to normal
+                    end
+                end
+                -- vim.wo.wrap = false
+                map_set({ 'n', 'i' }, '<esc>', function()
+                    if
+                        vim.api.nvim_get_mode().mode == 'i'
+                        or vim.api.nvim_get_mode().mode == 'I'
+                    then
+                        feedkeys('<esc>', 'n') -- back to nromal
+                    else
+                        feedkeys('i<c-c>', 'm') -- quit
+                    end
+                end, { buffer = true })
+            end,
+        })
     end,
 }
