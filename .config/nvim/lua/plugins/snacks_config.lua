@@ -43,6 +43,7 @@ local function get_files_picker()
                 layout = {
                     hidden = { 'preview' },
                 },
+                ignored = true,
                 transform = function(item)
                     item.cwd = cwd
                     local _, _, _, file_path = item.text:match('^(.+):(%d+):(%d+):(.*)$')
@@ -69,6 +70,7 @@ local function get_files_picker()
                 cmd = 'rg',
                 hidden = true,
                 exclude = file_ignore_patterns,
+                ignored = true,
                 layout = {
                     hidden = { 'preview' },
                 },
@@ -95,7 +97,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
         end
         if not last_search_pattern or last_search_pattern:match('^%s*$') then return end
         vim.api.nvim_set_current_line(last_search_pattern)
-        vim.api.nvim_win_set_cursor(0, {1, #last_search_pattern})
+        vim.api.nvim_win_set_cursor(0, { 1, #last_search_pattern })
         should_resume_search_pattern = false
     end,
 })
@@ -493,6 +495,7 @@ return {
                 last_picker_wrapper(
                     function()
                         Snacks.picker.grep({
+                            ignored = true,
                             cwd = vim.fn.getcwd(),
                             limit = live_grep_limit,
                             cmd = 'rg',
@@ -658,6 +661,7 @@ return {
                     last_picker_wrapper(
                         function()
                             Snacks.picker.grep({
+                                ignored = true,
                                 cwd = vim.fn.getcwd(),
                                 cmd = 'rg',
                                 limit = live_grep_limit,
