@@ -95,6 +95,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
         end
         if not last_search_pattern or last_search_pattern:match('^%s*$') then return end
         vim.api.nvim_set_current_line(last_search_pattern)
+        vim.api.nvim_win_set_cursor(0, {1, #last_search_pattern})
         should_resume_search_pattern = false
     end,
 })
@@ -634,6 +635,9 @@ return {
                 -- There is a bug when selecting different itmes in list window,
                 -- therefore, we just simply disable animations
                 vim.b.snacks_animate = false
+                -- TODO:
+                -- FIX:
+                -- This will close the grep picker when using big dirs picker
                 map_set({ 'i' }, '<c-p>', function()
                     should_resume_search_pattern = true
                     if not vim.fn.executable('rg') then
