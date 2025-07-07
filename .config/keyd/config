@@ -3,7 +3,7 @@
 
 [main]
 capslock = overload(control, A-space)
-alt = overload(alt, home)
+alt = overload(alt, C-b)
 
 [control]
 n = esc
