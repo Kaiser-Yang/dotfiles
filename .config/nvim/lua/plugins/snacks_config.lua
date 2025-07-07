@@ -43,6 +43,7 @@ local function get_files_picker()
                 layout = {
                     hidden = { 'preview' },
                 },
+                format = 'file',
                 transform = function(item)
                     item.cwd = cwd
                     local _, _, _, file_path = item.text:match('^(.+):(%d+):(%d+):(.*)$')
