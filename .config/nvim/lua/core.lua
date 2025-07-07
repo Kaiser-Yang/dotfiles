@@ -127,6 +127,7 @@ vim.api.nvim_create_user_command('GenBigDirFiles', function()
         '--no-messages',
         '--color',
         'never',
+        '--no-ignore',
         '-g',
         '!.git',
         '-g',
