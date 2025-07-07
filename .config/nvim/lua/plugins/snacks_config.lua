@@ -5,22 +5,23 @@
 local utils = require('utils')
 local map_set = utils.map_set
 local file_ignore_patterns = {
-    '%.git',
-    '%.root',
-    '%.o',
-    '%.out',
-    '%.exe',
-    '%.png',
-    '%.gif',
-    '%.jpg',
-    '%.so',
-    '%.a',
-    '%.dll',
-    '%.dylib',
-    '%.class',
-    '%.jar',
-    '%.zip',
-    '%.tar.gz',
+    '*'.. vim.g.big_dir_file_name,
+    '*.git',
+    '*.root',
+    '*.o',
+    '*.out',
+    '*.exe',
+    '*.png',
+    '*.gif',
+    '*.jpg',
+    '*.so',
+    '*.a',
+    '*.dll',
+    '*.dylib',
+    '*.class',
+    '*.jar',
+    '*.zip',
+    '*.tar.gz',
     '3rdparty',
 }
 local last_search_pattern
@@ -446,13 +447,14 @@ return {
                                 if vim.fn.filereadable(file_path) == 0 then
                                     vim.notify(
                                         'Invalid file path found: '
-                                            .. file_path
+                                            .. vim.inspect(file_path)
                                             .. '. Please try to re-run GenBigDirFiles.',
                                         vim.log.levels.ERROR
                                     )
                                     return false
                                 else
                                     item.file = file_path
+                                    item.line = nil
                                     item.pos = nil
                                 end
                             end,
