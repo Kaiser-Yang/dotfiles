@@ -1,3 +1,4 @@
+local utils = require('utils')
 local plugins = {
     require('plugins.color_scheme'),
     require('plugins.explorer'),
@@ -41,7 +42,7 @@ if vim.fn.has('mac') ~= 1 then
             require('plugins.octo'),
         })
     end
-    if vim.fn.executable('node') == 1 then
+    if vim.fn.executable('node') == 1 and utils.network_available() then
         vim.list_extend(plugins, {
             require('plugins.copilot'),
             require('plugins.avante'),
