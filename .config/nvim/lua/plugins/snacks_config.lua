@@ -43,7 +43,6 @@ local function get_files_picker()
                 layout = {
                     hidden = { 'preview' },
                 },
-                ignored = true,
                 transform = function(item)
                     item.cwd = cwd
                     local _, _, _, file_path = item.text:match('^(.+):(%d+):(%d+):(.*)$')
@@ -70,7 +69,6 @@ local function get_files_picker()
                 cmd = 'rg',
                 hidden = true,
                 exclude = file_ignore_patterns,
-                ignored = true,
                 layout = {
                     hidden = { 'preview' },
                 },
@@ -495,7 +493,6 @@ return {
                 last_picker_wrapper(
                     function()
                         Snacks.picker.grep({
-                            ignored = true,
                             cwd = vim.fn.getcwd(),
                             limit = live_grep_limit,
                             cmd = 'rg',
@@ -661,7 +658,6 @@ return {
                     last_picker_wrapper(
                         function()
                             Snacks.picker.grep({
-                                ignored = true,
                                 cwd = vim.fn.getcwd(),
                                 cmd = 'rg',
                                 limit = live_grep_limit,
