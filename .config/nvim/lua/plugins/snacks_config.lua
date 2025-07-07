@@ -5,7 +5,7 @@
 local utils = require('utils')
 local map_set = utils.map_set
 local file_ignore_patterns = {
-    '*'.. vim.g.big_dir_file_name,
+    '*' .. vim.g.big_dir_file_name,
     '*.git',
     '*.root',
     '*.o',
@@ -28,6 +28,55 @@ local last_search_pattern
 local last_picker
 local should_resume_search_pattern = false
 local live_grep_limit = 100
+local function get_files_picker()
+    local picker
+    -- Usage: run :GenBigDirFiles to generate the file list
+    if vim.fn.filereadable(utils.get_big_dir_output_path()) == 1 then
+        local cwd = vim.fn.getcwd()
+        picker = function()
+            Snacks.picker.grep({
+                limit = live_grep_limit,
+                cmd = 'rg',
+                cwd = cwd,
+                title = 'Files',
+                dirs = { utils.get_big_dir_output_path() },
+                layout = {
+                    hidden = { 'preview' },
+                },
+                transform = function(item)
+                    item.cwd = cwd
+                    local _, _, _, file_path = item.text:match('^(.+):(%d+):(%d+):(.*)$')
+                    if vim.fn.filereadable(file_path) == 0 then
+                        vim.notify(
+                            'Invalid file path found: '
+                                .. vim.inspect(file_path)
+                                .. '. Please try to re-run GenBigDirFiles.',
+                            vim.log.levels.ERROR
+                        )
+                        return false
+                    else
+                        item.file = file_path
+                        item.line = nil
+                        item.pos = nil
+                    end
+                end,
+            })
+        end
+    else
+        picker = function()
+            Snacks.picker.files({
+                cwd = cwd,
+                cmd = 'rg',
+                hidden = true,
+                exclude = file_ignore_patterns,
+                layout = {
+                    hidden = { 'preview' },
+                },
+            })
+        end
+    end
+    return picker
+end
 vim.api.nvim_create_autocmd('BufLeave', {
     group = 'UserDIY',
     callback = function()
@@ -429,48 +478,7 @@ return {
                     vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
                     return
                 end
-                local picker
-                if vim.fn.filereadable(utils.get_big_dir_output_path()) == 1 then
-                    -- Usage: run :GenBigDirFiles to generate the file list
-                    local cwd = vim.fn.getcwd()
-                    picker = function()
-                        Snacks.picker.grep({
-                            limit = live_grep_limit,
-                            cmd = 'rg',
-                            cwd = cwd,
-                            title = 'Files',
-                            dirs = { utils.get_big_dir_output_path() },
-                            transform = function(item)
-                                item.cwd = cwd
-                                local _, _, _, file_path =
-                                    item.text:match('^(.+):(%d+):(%d+):(.*)$')
-                                if vim.fn.filereadable(file_path) == 0 then
-                                    vim.notify(
-                                        'Invalid file path found: '
-                                            .. vim.inspect(file_path)
-                                            .. '. Please try to re-run GenBigDirFiles.',
-                                        vim.log.levels.ERROR
-                                    )
-                                    return false
-                                else
-                                    item.file = file_path
-                                    item.line = nil
-                                    item.pos = nil
-                                end
-                            end,
-                        })
-                    end
-                else
-                    picker = function()
-                        Snacks.picker.files({
-                            cwd = cwd,
-                            cmd = 'rg',
-                            hidden = true,
-                            exclude = file_ignore_patterns,
-                        })
-                    end
-                end
-                last_picker_wrapper(picker)()
+                last_picker_wrapper(get_files_picker())()
             end,
             desc = 'Toggle find Files',
         },
@@ -632,17 +640,11 @@ return {
                         vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
                         return
                     end
-                    last_picker_wrapper(
-                        function()
-                            Snacks.picker.files({
-                                cwd = vim.fn.getcwd(),
-                                cmd = 'rg',
-                                hidden = true,
-                                exclude = file_ignore_patterns,
-                            })
-                        end
-                    )()
+                    last_picker_wrapper(get_files_picker())()
                 end, { buffer = true })
+                -- TODO:
+                -- FIX:
+                -- This will close the files picker when using big dirs picker
                 map_set({ 'i' }, '<c-f>', function()
                     should_resume_search_pattern = true
                     if not vim.fn.executable('rg') then
