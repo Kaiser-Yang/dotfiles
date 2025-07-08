@@ -11,7 +11,10 @@ map_set({ 'n' }, '<leader>Y', '"+y$', { desc = 'Yank till eol to + reg' })
 map_set({ 'n' }, 'Y', 'y$', { desc = 'Yank till eol' })
 map_set('x', '<c-insert>', '"+y', { desc = 'Yank to +reg' })
 map_set('x', '<c-x>', '"+d', { desc = 'Delete to +reg' })
+map_set({ 'x' }, '<c-insert>', '"+y', { desc = 'Copy to +reg' })
 map_set({ 'n', 'x' }, '<s-insert>', '"+p', { desc = 'Paste from +reg' })
+
+if vim.fn.has('mac') == 1 then map_set({ 'x' }, '<del>', '"+y', { desc = 'Copy to +reg' }) end
 
 map_set({ 'n', 'i' }, '<c-rightmouse>', function()
     local res
