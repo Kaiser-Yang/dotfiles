@@ -2,6 +2,10 @@ local M = {}
 
 local map = vim.keymap
 
+function M.should_ignore_hidden_files()
+    return not vim.fn.getcwd():match('dotfiles')
+end
+
 function M.get_big_dir_output_path() return vim.fn.getcwd() .. '/' .. vim.g.big_dir_file_name end
 
 function M.should_enable_paste_image()

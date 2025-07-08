@@ -68,7 +68,7 @@ local function get_files_picker()
             Snacks.picker.files({
                 cwd = cwd,
                 cmd = 'rg',
-                hidden = true,
+                hidden = not utils.should_ignore_hidden_files(),
                 exclude = file_ignore_patterns,
                 layout = {
                     hidden = { 'preview' },
@@ -497,7 +497,7 @@ return {
                             cwd = vim.fn.getcwd(),
                             limit = live_grep_limit,
                             cmd = 'rg',
-                            hidden = true,
+                            hidden = not utils.should_ignore_hidden_files(),
                             exclude = file_ignore_patterns,
                         })
                     end
@@ -515,7 +515,7 @@ return {
                 Snacks.picker.files({
                     cwd = vim.fn.getcwd(),
                     cmd = 'rg',
-                    hidden = true,
+                    hidden = not utils.should_ignore_hidden_files(),
                     ft = { 'gif', 'jpg', 'jpeg', 'png', 'webp' },
                     confirm = function(self, item, _)
                         self:close()
@@ -662,7 +662,7 @@ return {
                                 cwd = vim.fn.getcwd(),
                                 cmd = 'rg',
                                 limit = live_grep_limit,
-                                hidden = true,
+                                hidden = not utils.should_ignore_hidden_files(),
                                 exclude = file_ignore_patterns,
                             })
                         end
