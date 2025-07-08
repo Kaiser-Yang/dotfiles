@@ -50,6 +50,7 @@ return {
         'CaskaydiaMono Nerd Font',
         'JetBrains Mono',
     }),
+    font_size = 14,
     keys = {
         { key = 'z', mods = 'CTRL|ALT', action = 'Nop' },
         { key = '=', mods = 'CTRL|SUPER', action = act.IncreaseFontSize },
