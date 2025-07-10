@@ -640,22 +640,24 @@ return {
                 -- FIX:
                 -- This will close the grep picker when using big dirs picker
                 map_set({ 'i' }, '<c-p>', function()
-                    should_resume_search_pattern = true
                     if not vim.fn.executable('rg') then
                         vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
                         return
                     end
+                    should_resume_search_pattern =
+                        not vim.api.nvim_get_current_line():match('^%s*$')
                     last_picker_wrapper(get_files_picker())()
                 end, { buffer = true })
                 -- TODO:
                 -- FIX:
                 -- This will close the files picker when using big dirs picker
                 map_set({ 'i' }, '<c-f>', function()
-                    should_resume_search_pattern = true
                     if not vim.fn.executable('rg') then
                         vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
                         return
                     end
+                    should_resume_search_pattern =
+                        not vim.api.nvim_get_current_line():match('^%s*$')
                     last_picker_wrapper(
                         function()
                             Snacks.picker.grep({
@@ -668,6 +670,8 @@ return {
                         end
                     )()
                 end, { buffer = true })
+                -- do not resume the last picker, current picker will always be the last picker
+                -- so resuming the last picker is meaningless
                 map_set({ 'i' }, '<c-y>', function()
                     if not last_search_pattern or last_search_pattern:match('^%s*$') then return end
                     vim.api.nvim_set_current_line(last_search_pattern)
