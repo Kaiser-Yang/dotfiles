@@ -24,7 +24,13 @@ local completion_keymap = {
             local completion_list = require('blink.cmp.completion.list')
             if completion_list.get_selected_item() then return false end
             local snippet_kind = require('blink.cmp.types').CompletionItemKind.Snippet
-            if #completion_list.items >= 1 and completion_list.items[1].kind == snippet_kind then
+            local input_str = completion_list.context.line:sub(
+                completion_list.context.bounds.start_col,
+                completion_list.context.bounds.start_col + completion_list.context.bounds.length
+            )
+            if #completion_list.items >= 1 and completion_list.items[1].kind == snippet_kind and
+                completion_list.items[1].label:sub(1, #input_str) == input_str
+            then
                 return cmp.accept({ index = 1 })
             end
             return false
