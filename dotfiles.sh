@@ -82,8 +82,8 @@ elif [[ "$(uname)" == "Darwin" ]]; then
     INSTALLATION_COMMANDS+=(
         "brew update"
         # librime is for rime_ls, we need to install it for macOS
-        "brew install wget curl git lazygit neovim tmux zsh zoxide node wordnet librime"
-        "brew install --cask squirrel wezterm ripgrep"
+        "brew install wget curl git lazygit neovim tmux zsh zoxide node wordnet librime ripgrep"
+        "brew install --cask squirrel wezterm"
     )
     DIRS+=(
         # WARN: this configuration file is not checked
@@ -553,10 +553,12 @@ install_fonts() {
         fi
         brew install --cask font-caskaydia-mono-nerd-font || return $?
     fi
-    fc-cache -fv || {
-        log_error "Failed to update font cache. Please check your fonts installation."
-        return 1
-    }
+    if [[ "$(uname)" == "Linux" ]]; then
+        fc-cache -fv || {
+            log_error "Failed to update font cache. Please check your fonts installation."
+            return 1
+        }
+    fi
 }
 
 main() {
