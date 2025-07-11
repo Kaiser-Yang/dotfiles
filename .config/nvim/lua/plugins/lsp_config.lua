@@ -11,7 +11,10 @@ return {
         },
     },
     config = function()
-        vim.lsp.config('*', { root_markers = vim.g.root_markers })
+        vim.lsp.config('*', {
+            capabilities = require('utils').get_lsp_capabilities(),
+            root_markers = vim.g.root_markers,
+        })
         vim.lsp.enable({
             'bashls',
             'clangd',
