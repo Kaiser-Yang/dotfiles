@@ -186,7 +186,13 @@ return {
         require('flash').setup(opts)
         local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
         for key, _ in pairs(flash_keys) do
+            -- TODO:
+            -- only search current line for bigfiles.
+            -- To achieve this, we must update the source code of flash.nvim
             map_set({ 'n', 'x' }, key, function()
+                if vim.bo.filetype == 'bigfile' then
+                    return ts_repeat_move['builtin_' .. key .. '_expr']()
+                end
                 ts_repeat_move['builtin_' .. key .. '_expr']()
                 vim.schedule(function()
                     local ok, char = pcall(vim.fn.getcharstr)
@@ -201,7 +207,7 @@ return {
                     char = char or ''
                     utils.feedkeys(key .. char, 'n')
                 end)
-            end)
+            end, { expr = true })
         end
         map_set({ 'n', 'x', 'o' }, ';', function()
             local last_move = ts_repeat_move.last_move
@@ -210,6 +216,7 @@ return {
                 and vim.tbl_contains({ 'f', 't', 'F', 'T' }, last_move.func)
                 and vim.g.last_motion
                 and vim.g.last_motion_char
+                and vim.bo.filetype ~= 'bigfile'
             then
                 utils.feedkeys(flash_keys[vim.g.last_motion] .. vim.g.last_motion_char, 'm')
                 return
@@ -223,6 +230,7 @@ return {
                 and vim.tbl_contains({ 'f', 't', 'F', 'T' }, last_move.func)
                 and vim.g.last_motion
                 and vim.g.last_motion_char
+                and vim.bo.filetype ~= 'bigfile'
             then
                 local reversed_key = vim.g.last_motion:gsub(
                     '%a',
