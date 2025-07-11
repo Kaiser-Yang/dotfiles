@@ -16,10 +16,8 @@ return {
                 checkThirdParty = false,
                 library = {
                     vim.env.VIMRUNTIME,
-                    -- Depending on the usage, you might want to add additional paths
-                    -- here.
-                    -- '${3rd}/luv/library',
-                    -- '${3rd}/busted/library',
+                    vim.fn.getcwd():match('dotfiles$') and '${3rd}/luv/library' or nil,
+                    vim.fn.getcwd():match('dotfiles$') and '${3rd}/busted/library' or nil,
                 },
             },
         })
