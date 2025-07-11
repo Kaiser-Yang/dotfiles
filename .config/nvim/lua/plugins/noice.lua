@@ -1,4 +1,10 @@
 local map_set = require('utils').map_set
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'noice',
+    callback = function()
+        map_set({ 'n' }, '<esc>', 'q', { remap = true });
+    end
+})
 return {
     'folke/noice.nvim',
     event = 'VeryLazy',
