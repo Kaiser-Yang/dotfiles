@@ -9,12 +9,21 @@ map_set({ 'i' }, '<c-p>', '<nop>')
 map_set({ 'n', 'x' }, '<leader>y', '"+y', { desc = 'Yank to + reg' })
 map_set({ 'n' }, '<leader>Y', '"+y$', { desc = 'Yank till eol to + reg' })
 map_set({ 'n' }, 'Y', 'y$', { desc = 'Yank till eol' })
-map_set('x', '<c-insert>', '"+y', { desc = 'Yank to +reg' })
-map_set('x', '<c-x>', '"+d', { desc = 'Delete to +reg' })
 map_set({ 'x' }, '<c-insert>', '"+y', { desc = 'Copy to +reg' })
-map_set({ 'n', 'x' }, '<s-insert>', '"+p', { desc = 'Paste from +reg' })
-
-if vim.fn.has('mac') == 1 then map_set({ 'x' }, '<del>', '"+y', { desc = 'Copy to +reg' }) end
+map_set('x', '<m-x>', '"+d', { desc = 'Delete to +reg' })
+map_set('x', '<m-c>', '"+y', { desc = 'Copy to +reg' })
+map_set({ 'n', 'x' }, '<m-v>', '"+p', { desc = 'Paste from +reg' })
+map_set({ 'n', 'x' }, '<m-a>', function()
+    vim.b.snacks_animate = false
+    vim.schedule(function()
+        vim.b.snacks_animate = true
+    end)
+    if vim.fn.mode() == 'n' then
+        return 'gg0vG$'
+    else
+        return '<esc>gg0vG$'
+    end
+end, { desc = 'Select all', expr = true })
 
 map_set({ 'n', 'i' }, '<c-rightmouse>', function()
     local res
