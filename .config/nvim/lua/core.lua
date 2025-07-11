@@ -28,7 +28,7 @@ vim.g.loaded_netrwPlugin = 1
 
 vim.o.cmdheight = 0
 vim.o.signcolumn = 'yes'
-vim.o.jumpoptions = 'stack'
+vim.o.jumpoptions = 'stack,clean'
 vim.o.termguicolors = true
 vim.o.spelllang = 'en_us,en'
 vim.o.timeoutlen = 300
