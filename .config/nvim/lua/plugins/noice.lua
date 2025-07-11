@@ -1,9 +1,7 @@
 local map_set = require('utils').map_set
 vim.api.nvim_create_autocmd('FileType', {
     pattern = 'noice',
-    callback = function()
-        map_set({ 'n' }, '<esc>', 'q', { remap = true });
-    end
+    callback = function() map_set({ 'n' }, '<esc>', 'q', { remap = true }) end,
 })
 return {
     'folke/noice.nvim',
@@ -50,11 +48,10 @@ return {
             callback = function() _MACRO_RECORDING_STATUS = false end,
         })
         map_set({ 'n' }, '<leader>sn', function()
-            if Snacks then
-                require('noice.integrations.snacks').open({
-                    on_show = function() vim.cmd.stopinsert() end,
-                })
-            end
+            if not Snacks then return end
+            require('noice.integrations.snacks').open({
+                on_show = function() vim.cmd.stopinsert() end,
+            })
         end, { desc = 'Noice history' })
     end,
 }
