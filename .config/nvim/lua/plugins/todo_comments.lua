@@ -1,3 +1,4 @@
+local utils = require('utils')
 return {
     'folke/todo-comments.nvim',
     dependencies = {
@@ -33,11 +34,11 @@ return {
         )
         map_set({ 'n', 'x', 'o' }, ']t', next_todo, { desc = 'Next todo comment' })
         map_set({ 'n', 'x', 'o' }, '[t', prev_todo, { desc = 'Previous todo comment' })
-        map_set(
-            { 'n' },
-            '<leader>st',
-            function() Snacks.picker.todo_comments() end,
-            { desc = 'Search todo comments' }
-        )
+        map_set({ 'n' }, '<leader>st', function()
+            Snacks.picker.todo_comments({
+                on_show = function() vim.cmd.stopinsert() end,
+                hidden = not utils.should_ignore_hidden_files()
+            })
+        end, { desc = 'Search todo comments' })
     end,
 }
