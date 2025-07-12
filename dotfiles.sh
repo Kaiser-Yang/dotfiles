@@ -737,6 +737,8 @@ install_fonts() {
         )
     elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         log_error "Fonts installation for Ubuntu is not implemented yet. "
+        command="$SUDO apt install -y"
+        fonts+=(fonts-cascadia-mono)
     elif [[ "$(uname)" == "Darwin" ]]; then
         if ! command -v brew &>/dev/null; then
             log_error "Homebrew is not installed. Please install Homebrew first."
