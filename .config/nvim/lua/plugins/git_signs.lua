@@ -4,7 +4,7 @@ return {
         'nvim-treesitter/nvim-treesitter-textobjects',
     },
     opts = {
-        current_line_blame = true,
+        current_line_blame = false,
         current_line_blame_opts = {
             delay = 100,
         },
@@ -39,6 +39,12 @@ return {
                 'gcd',
                 gs.preview_hunk,
                 { desc = 'Git diff current hunk', buffer = bufnr }
+            )
+            map_set(
+                { 'n' },
+                'gcs',
+                function() gs.blame_line({ full = true }) end,
+                { desc = 'Git blame current line', buffer = bufnr }
             )
         end,
     },
