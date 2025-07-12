@@ -5,10 +5,10 @@ My own configure files for UNIX/Linux tools.
 ## Quick Start
 
 1. Use the command `git clone https://github.com/Kaiser-Yang/dotfiles.git` to clone this repository.
-2. Use the command `cd dotfiles` to enter the directory. Run `./dotfiles.sh -icef`.
+2. Use the command `cd dotfiles` to enter the directory. Run `./dotfiles.sh -icsf`.
    - `i`: Install all the dependencies.
    - `c`: Create symbolic links for configuration files.
-   - `e`: Extract files. This will create symbolic links for each file instead of directories.
+   - `s`: Change the login shell to `zsh`.
    - `f`: Install fonts.
      This is useful when you have other configuration files in the directories.
 3. Run `nvim` to install plugins.

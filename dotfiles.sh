@@ -143,6 +143,7 @@ usage() {
     echo "  -i, --install    Install required packages."
     echo "  -f, --fonts      Install optional fonts."
     echo "  -r, --restore    Restore the original files from backup."
+    echo "  -s, --change     Change the default shell to zsh."
     echo "  -e, --extract    Extract files from directories. When use this with -c,"
     echo "                   it will create symbolic links for every file in directories."
     echo "                   You should use this with -r when you use it with -c."
@@ -171,6 +172,7 @@ init_options() {
     CREATE_LINKS=false
     EXTRACT=false
     INSTALL_FONTS=false
+    CHANGE_SHELL=false
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --restore)
@@ -201,6 +203,10 @@ init_options() {
                 INSTALL_FONTS=true
                 shift
                 ;;
+            --change)
+                CHANGE_SHELL=true
+                shift
+                ;;
             -*)
                 short_opts="${1:1}"
                 for ((i=0; i<${#short_opts}; i++)); do
@@ -212,6 +218,7 @@ init_options() {
                         c) CREATE_LINKS=true ;;
                         e) EXTRACT=true ;;
                         f) INSTALL_FONTS=true ;;
+                        s) CHANGE_SHELL=true ;;
                         *) log_erro "Unknown option: -${short_opts:$i:1}"; usage; return 1 ;;
                     esac
                 done
@@ -524,7 +531,6 @@ change_shell_to_zsh() {
 
 create() {
     restore_or_create create || return $?
-    change_shell_to_zsh
 }
 
 restore() {
@@ -582,6 +588,11 @@ main() {
         install_packages || return $?
     else
         log_verbose "Skipping package installation."
+    fi
+    if [ "$CHANGE_SHELL" = true ]; then
+        change_shell_to_zsh || return $?
+    else
+        log_verbose "Skipping changing default shell to zsh."
     fi
 }
 
