@@ -108,8 +108,6 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         https://api.github.com/repos/jesseduffield/lazygit/releases/latest | \
         \grep -Po '"tag_name": *"v\K[^"]*')
     if [ -n "$DISPLAY" ]; then
-        # WARN:
-        # Those packages are not checked
         REQUIRED_EXECUTABLES+=(
             "fcitx5"
             "fcitx5-chinese-addons"
