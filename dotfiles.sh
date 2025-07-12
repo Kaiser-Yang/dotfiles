@@ -332,7 +332,6 @@ install_packages() {
     if [[ "$(uname)" == "Darwin" ]]; then
         install_home_brew || return $?
     fi
-    install_oh_my_zsh || return $?
     for cmd in "${INSTALLATION_COMMANDS[@]}"; do
         log_verbose "Executing command: $cmd"
         if ! eval "$cmd"; then
@@ -343,6 +342,7 @@ install_packages() {
         log_verbose "Command executed successfully: $cmd"
     done
     install_rime_ls || return $?
+    install_oh_my_zsh || return $?
     log "Packages installed successfully."
 }
 
