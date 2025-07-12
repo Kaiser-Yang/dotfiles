@@ -22,69 +22,169 @@ DIRS=(
     ".config/zsh/plugins/zsh-expand/zsh-expand.plugin.zsh"
     ".config/zsh/themes/powerlevel10k"
 
-    # input method related configurations
-    ".local/share/fcitx5/rime"
-
-    # terminal
-    ".config/wezterm"
-
     # lazygit related configurations
     ".config/lazygit"
 )
-INSTALLATION_COMMANDS=()
+# The reason why we use both `REQUIRED_EXECUTABLES` and `INSTALLATION_COMMANDS`
+# is to control the sequence of installation commands.
+REQUIRED_EXECUTABLES=(
+    "curl"
+    "wget"
+    "tar"
+    "git"
+    "lazygit"
+    "nvim"
+    "tmux"
+    "zsh"
+    "zoxide"
+    "node"
+    "rg"
+    "rime_ls"
+    "wn"
+)
+declare -A INSTALLATION_COMMANDS
+COMMANDS_AFTER_INSTALLATION=()
 
-if [[ $XDG_CURRENT_DESKTOP == 'KDE' ]]; then
+if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
     DIRS+=(
         ".config/autostart/keyd-application-mapper.desktop"
+    )
+fi
+# Configurations that require a graphical interface
+if [[ -n "$DISPLAY" || "$(uname)" == "Darwin" ]]; then
+    DIRS+=(
+        # input method related configurations
+        ".local/share/fcitx5/rime"
+        # terminal
+        ".config/wezterm"
     )
 fi
 SUDO=$(command -v sudo)
 # Arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
+    if [ -n "$DISPLAY" ]; then
+        REQUIRED_EXECUTABLES+=(
+            "fcitx5-im"
+            "fcitx5-rime"
+            "keyd"
+            "wezterm"
+        )
+    fi
+    REQUIRED_EXECUTABLES+=(
+        "base-devel" # required to compile yay
+        "yay"
+    )
     INSTALLATION_COMMANDS+=(
-        "$SUDO pacman -Sy --noconfirm \
-            curl git lazygit neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd \
-            wezterm ripgrep"
-        "yay -Sy --noconfirm wordnet-common rime-ls"
+        [curl]="$SUDO pacman -Sy --noconfirm curl"
+        [wget]="$SUDO pacman -Sy --noconfirm wget"
+        [tar]="$SUDO pacman -Sy --noconfirm tar"
+        [git]="$SUDO pacman -Sy --noconfirm git"
+        [lazygit]="$SUDO pacman -Sy --noconfirm lazygit"
+        [nvim]="$SUDO pacman -Sy --noconfirm neovim"
+        [tmux]="$SUDO pacman -Sy --noconfirm tmux"
+        [zsh]="$SUDO pacman -Sy --noconfirm zsh"
+        [zoxide]="$SUDO pacman -Sy --noconfirm zoxide"
+        [node]="$SUDO pacman -Sy --noconfirm nodejs"
+        [rg]="$SUDO pacman -Sy --noconfirm ripgrep"
+        [base-devel]="$SUDO pacman -Sy --noconfirm base-devel"
+        [yay]="git clone https://aur.archlinux.org/yay.git &&
+            cd yay && \
+            makepkg -si && \
+            cd .. && rm -rf yay"
+        [wn]="yay -Sy --noconfirm wordnet-common"
+        [rime_ls]="yay -Sy --noconfirm rime-ls"
+        [fcitx5-im]="$SUDO pacman -Sy --noconfirm fcitx5-im"
+        [fcitx5-rime]="$SUDO pacman -Sy --noconfirm fcitx5-rime"
+        [keyd]="$SUDO pacman -Sy --noconfirm keyd"
+        [wezterm]="$SUDO pacman -Sy --noconfirm wezterm"
     )
     DIRS+=(
         ".config/fontconfig/fonts_arch.conf"
     )
 # Ubuntu related configurations
 elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
-    INSTALLATION_COMMANDS+=(
-        "$SUDO apt update"
-        "$SUDO apt install -y \
-            curl git neovim tmux zsh zoxide nodejs fcitx5-im fcitx5-rime keyd \
-            wordnet librime wezterm ripgrep"
-        # NOTE: lazygit is only available for Ubuntu 25.10 "Questing Quokka" and later
-        # "$SUDO apt install -y lazygit"
-    )
-    if [[ $(uname -m) == "x86_64" ]]; then
-        LAZYGIT_VERSION=$(curl -s \
-            "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | \
-            \grep -Po '"tag_name": *"v\K[^"]*')
-        INSTALLATION_COMMANDS+=(
-            "curl -Lo lazygit.tar.gz \
-                https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz && \
-                tar xf lazygit.tar.gz lazygit && \
-                $SUDO install lazygit -D -t /usr/local/bin/ && \
-                rm -f lazygit.tar.gz lazygit"
+    DIRS+=(".config/fontconfig/fonts_ubuntu.conf")
+    LAZYGIT_VERSION=$(curl -s \
+        https://api.github.com/repos/jesseduffield/lazygit/releases/latest | \
+        \grep -Po '"tag_name": *"v\K[^"]*')
+    if [ -n "$DISPLAY" ]; then
+        # WARN:
+        # Those packages are not checked
+        REQUIRED_EXECUTABLES+=(
+            "fcitx5"
+            "fcitx5-chinese-addons"
+            "fcitx5-diagnore"
+            "gpg" # required for wezterm installation
+            "wezterm"
+            "keyd"
         )
     fi
-    DIRS+=(
-        ".config/fontconfig/fonts_ubuntu.conf"
+    # The 'update_package_list' is a placeholder for the command to update package list
+    REQUIRED_EXECUTABLES=("_update_package_list" "${REQUIRED_EXECUTABLES[@]}")
+    INSTALLATION_COMMANDS+=(
+        [_update_package_list]="$SUDO apt update"
+        [curl]="$SUDO apt install -y curl"
+        [wget]="$SUDO apt install -y wget"
+        [tar]="$SUDO apt install -y tar"
+        [git]="$SUDO apt install -y git"
+        [lazygit]="[[ $(uname -m) == 'x86_64' ]] &&
+            curl -Lo lazygit.tar.gz \
+                https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz && \
+            tar xf lazygit.tar.gz lazygit && \
+            $SUDO install lazygit -D -t /usr/local/bin/ && \
+            rm -f lazygit.tar.gz lazygit"
+        [nvim]="$SUDO apt install -y neovim"
+        [tmux]="$SUDO apt install -y tmux"
+        [zsh]="$SUDO apt install -y zsh"
+        [zoxide]="$SUDO apt install -y zoxide"
+        [node]="$SUDO apt install -y nodejs"
+        [rg]="$SUDO apt install -y ripgrep"
+        [rime_ls]="$SUDO apt install -y librime-dev && custom_install rime_ls"
+        [wn]="$SUDO apt install -y wordnet" 
+        [fcitx5]="$SUDO apt install -y fcitx5"
+        [fcitx5-chinese-addons]="$SUDO apt install -y fcitx5-chinese-addons"
+        [fcitx5-diagnore]="$SUDO apt install -y fcitx5-diagnore"
+        [gpg]="$SUDO apt install -y gnupg"
+        [wezterm]="apt list &> /dev/null && \
+            curl -fsSL https://apt.fury.io/wez/gpg.key | \
+                $SUDO gpg --yes --dearmor -o /usr/share/keyrings/wezterm-fury.gpg
+            echo 'deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | \
+                $SUDO tee /etc/apt/sources.list.d/wezterm.list
+            $SUDO chmod 644 /usr/share/keyrings/wezterm-fury.gpg &&
+            $SUDO apt update && $SUDO apt install -y wezterm"
+        [keyd]="git clone https://github.com/rvaiya/keyd && \
+            cd keyd && make && $SUDO make install && \
+            cd .. && rm -rf keyd"
     )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
-    INSTALLATION_COMMANDS+=(
-        "brew update"
-        # librime is for rime_ls, we need to install it for macOS
-        "brew install wget curl git lazygit neovim tmux zsh zoxide node wordnet librime ripgrep"
-        "brew install --cask squirrel wezterm"
+    DIRS+=(".config/fontconfig/fonts_mac.conf")
+    REQUIRED_EXECUTABLES=(
+        "brew"
+        "_update_package_list"
+        "${REQUIRED_EXECUTABLES[@]}"
+        "wezterm"
+        "squirrel"
     )
-    DIRS+=(
-        ".config/fontconfig/fonts_mac.conf"
+    INSTALLATION_COMMANDS+=(
+        [brew]="custom_install brew"
+        [_update_package_list]="brew update"
+        [curl]="brew install curl"
+        [wget]="brew install wget"
+        [tar]="brew install gnu-tar"
+        [git]="brew install git"
+        [lazygit]="brew install lazygit"
+        [nvim]="brew install neovim"
+        [tmux]="brew install tmux"
+        [zsh]="brew install zsh"
+        [zoxide]="brew install zoxide"
+        [node]="brew install node"
+        [rg]="brew install ripgrep"
+        [rime_ls]="brew install librime && install rime_ls"
+        [wn]="brew install wordnet"
+        # macOS should hava GUI always, we do not need to check it
+        [wezterm]="brew install --cask wezterm"
+        [squirrel]="brew install --cask squirrel"
     )
 fi
 # Configurations for all Linux distributions
@@ -93,11 +193,86 @@ if [[ "$(uname)" == "Linux" ]]; then
         ".config/keyd/config"
         ".config/keyd/app.conf"
     )
-    # Must be run after installing keyd
-    INSTALLATION_COMMANDS+=(
-        "$SUDO usermod -aG keyd $USER"
-    )
 fi
+
+# This will check if a command or package is installed.
+# Usage: is_installed <expected_executable> <package_manager> <package_name>
+# Returns:
+#     0  if installed
+#     1  if not installed
+#     2  if an error occurred (e.g., unsupported package manager)
+is_installed() {
+    if [ -z "$3" ]; then
+        log_error "Usage: is_installed <expected_executable> <package_manager> <package_name>"
+        return 2
+    fi
+    local expected_executable="$1"
+    if command -v "$expected_executable" &>/dev/null; then
+        log_verbose "Command '$expected_executable' is installed."
+        return 0
+    fi
+    local package_manager="$2"
+    if ! command -v "$package_manager" &>/dev/null; then
+        log_error "Package manager '$package_manager' is not installed."
+        return 2
+    fi
+    local package_name="$3"
+    if [[ "$package_manager" == "apt" ]]; then
+        if ! command -v dpkg &>/dev/null; then
+            log_error "dpkg is not installed. Please install dpkg first."
+            return 2
+        fi
+        if ! dpkg -s "$package_name" &>/dev/null; then
+            log_verbose "Package '$package_name' is not installed."
+            return 1
+        fi
+    elif [[ "$package_manager" == "pacman" || "$package_manager" == 'yay' ]]; then
+        if  "$package_manager" -Q "$package_name" &> /dev/null || \
+            "$package_manager" -Qg "$package_name" &> /dev/null; then
+            cat /dev/null
+        else
+            log_verbose "Package '$package_name' is not installed."
+            return 1
+        fi
+    elif [[ "$package_manager" == "brew" ]]; then
+        if ! "$package_manager" list --formula | grep -wq "$package_name" || \
+            "$package_manager" list --cask | grep -wq "$package_name"; then
+            log_verbose "Package '$package_name' is not installed."
+            return 1
+        fi
+    else
+        log_error "Unsupported package manager: $package_manager"
+        return 2
+    fi
+    log_verbose "Package '$package_name' is installed, but '$expected_executable' is not found."
+}
+
+# Usage: check_and_install_package <expected_executable> <installation_command>
+# Note: the last argument is the package name, and you can only install one package at a time.
+check_and_install_package() {
+    local expected_executable="$1"
+    local installation_command="${*:2}"
+    IFS=" " read -r -a cmd_array <<< "$installation_command"
+    local package_manager="${cmd_array[0]}"
+    [[ "$package_manager" == "$SUDO" ]] && package_manager="${cmd_array[1]}"
+    local package_name="${cmd_array[-1]}"
+    is_installed "$expected_executable" "$package_manager" "$package_name"
+    local res=$?
+    if [ "$res" -eq 1 ]; then
+        log_verbose "Command '$expected_executable' is not installed. Installing..."
+        log_verbose "Installation command: $installation_command"
+        if ! "${cmd_array[@]}"; then
+            log_error "Failed to install '$expected_executable'. "\
+                "Please check the installation command."
+            return 1
+        fi
+        log_verbose "'$expected_executable' installed successfully."
+        return 0
+    elif [ "$res" -eq 2 ]; then
+        log_verbose "An error occurred while checking '$expected_executable'."
+        return "$res"
+    fi
+}
 
 # Destination path for symbolic links
 get_destination() {
@@ -150,8 +325,8 @@ usage() {
 
 check_options() {
     if [[ "$RESTORE" == false && "$CREATE_LINKS" == false && "$INSTALL_PACKAGES" == false && \
-          "$INSTALL_FONTS" == false ]]; then
-        log_error "No valid option provided. Please use -c, -i, or -r."
+          "$INSTALL_FONTS" == false && "$CHANGE_SHELL" == false ]]; then
+        log_error "No valid option provided. Please use -c, -i, -s, or -r."
         usage
         return 1
     fi
@@ -232,6 +407,10 @@ init_options() {
     return $?
 }
 
+custom_install() {
+    eval install_"$1" || return "$?"
+}
+
 install_oh_my_zsh() {
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         log_verbose "Installing Oh My Zsh..."
@@ -249,7 +428,7 @@ install_oh_my_zsh() {
     fi
 }
 
-install_home_brew() {
+install_brew() {
     if ! command -v brew &>/dev/null; then
         log_verbose "Installing Home brew..."
         if ! bash -c "$(curl -fsSL \
@@ -333,20 +512,36 @@ install_rime_ls() {
 
 install_packages() {
     log "Start to install required packages."
-    if [[ "$(uname)" == "Darwin" ]]; then
-        install_home_brew || return $?
-    fi
-    for cmd in "${INSTALLATION_COMMANDS[@]}"; do
-        log_verbose "Executing command: $cmd"
+    for executable in "${REQUIRED_EXECUTABLES[@]}"; do
+        local cmd=${INSTALLATION_COMMANDS[$executable]}
+        if ! check_and_install_package "$executable" "$cmd"; then
+            log_error "Failed to run cehck_and_install_package for $executable, with cmd:" \
+                "$cmd" \
+                "Please check the command and your system configuration."
+            return 1
+        fi
+        if [ "$executable" = "keyd" ]; then
+            # Add keyd service commands to COMMANDS_AFTER_INSTALLATION
+            COMMANDS_AFTER_INSTALLATION+=(
+                "$SUDO systemctl enable --now keyd"
+                "$SUDO usermod -aG keyd $USER"
+            )
+        elif [[ "$executable" == "zsh" ]]; then
+            COMMANDS_AFTER_INSTALLATION+=(
+                "install_oh_my_zsh"
+            )
+        fi
+        log_verbose "Command executed successfully: $cmd"
+    done
+    for cmd in "${COMMANDS_AFTER_INSTALLATION[@]}"; do
+        log_verbose "Executing command after installation: $cmd"
         if ! eval "$cmd"; then
-            log_error "Failed to execute command: $cmd. "\
+            log_error "Failed to execute command after installation: $cmd" \
                 "Please check the command and your system configuration."
             return 1
         fi
         log_verbose "Command executed successfully: $cmd"
     done
-    install_rime_ls || return $?
-    install_oh_my_zsh || return $?
     log "Packages installed successfully."
 }
 
@@ -467,9 +662,9 @@ find_files() {
 restore_or_create() {
     find_files || return $?
     if [ "$1" = "restore" ]; then
-        log "Restoring original files from backup."
+        log "Start to restore original files from backup."
     elif [ "$1" = "create" ]; then
-        log "Creating symbolic links."
+        log "Start to creat symbolic links."
     else
         log_error "Invalid operation: $1. Use 'restore' or 'create'."
         return 1
@@ -499,6 +694,7 @@ restore_or_create() {
 }
 
 change_shell_to_zsh() {
+    log "Start to change default shell to zsh."
     if [[ -z "$SHELL" || "$(basename "$SHELL")" != "zsh" ]]; then
         log_verbose "Changing default shell to zsh."
         if ! command -v zsh &>/dev/null; then
@@ -524,6 +720,7 @@ change_shell_to_zsh() {
     else
         log_verbose "Default shell is already zsh."
     fi
+    log "Default shell changed to zsh successfully."
 }
 
 create() {
@@ -535,12 +732,17 @@ restore() {
 }
 
 install_fonts() {
+    log "Start to install fonts."
+    local fonts=()
+    local command
     if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
-        $SUDO pacman -Sy --noconfirm \
-            adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts \
-            noto-fonts-cjk \
-            wqy-microhei wqy-microhei-lite wqy-bitmapfont wqy-zenhei \
-            ttf-arphic-ukai ttf-arphic-uming ttf-cascadia-mono-nerd || return $?
+        command="$SUDO pacman -Sy --noconfirm"
+        fonts+=(
+            adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts
+            noto-fonts-cjk
+            wqy-microhei wqy-microhei-lite wqy-bitmapfont wqy-zenhei
+            ttf-arphic-ukai ttf-arphic-uming ttf-cascadia-mono-nerd
+        )
     elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         log_error "Fonts installation for Ubuntu is not implemented yet. "
     elif [[ "$(uname)" == "Darwin" ]]; then
@@ -548,14 +750,22 @@ install_fonts() {
             log_error "Homebrew is not installed. Please install Homebrew first."
             return 1
         fi
-        brew install --cask font-caskaydia-mono-nerd-font || return $?
+        command='brew install --cask'
+        fonts+=(font-caskaydia-mono-nerd-font)
     fi
+    for font in "${fonts[@]}"; do
+        check_and_install_package "$font" "$command $font" || {
+            log_error "Failed to install font: $font. Please check the installation command."
+            return 1
+        }
+    done
     if [[ "$(uname)" == "Linux" ]]; then
-        fc-cache -fv || {
+        fc-cache -f &> /dev/null || {
             log_error "Failed to update font cache. Please check your fonts installation."
             return 1
         }
     fi
+    log "Fonts installed successfully."
 }
 
 main() {
