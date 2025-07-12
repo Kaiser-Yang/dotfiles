@@ -113,7 +113,7 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         REQUIRED_EXECUTABLES+=(
             "fcitx5"
             "fcitx5-chinese-addons"
-            "fcitx5-diagnore"
+            "fcitx5-diagnose"
             "gpg" # required for wezterm installation
             "wezterm"
             "keyd"
@@ -143,7 +143,7 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         [wn]="$SUDO apt install -y wordnet" 
         [fcitx5]="$SUDO apt install -y fcitx5"
         [fcitx5-chinese-addons]="$SUDO apt install -y fcitx5-chinese-addons"
-        [fcitx5-diagnore]="$SUDO apt install -y fcitx5-diagnore"
+        [fcitx5-diagnose]="$SUDO apt install -y fcitx5-diagnose"
         [gpg]="$SUDO apt install -y gnupg"
         [wezterm]="apt list &> /dev/null && \
             curl -fsSL https://apt.fury.io/wez/gpg.key | \
