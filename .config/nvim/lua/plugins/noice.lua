@@ -53,5 +53,6 @@ return {
                 on_show = function() vim.cmd.stopinsert() end,
             })
         end, { desc = 'Noice history' })
+        require('notify').setup({ timeout = 1500, stages = 'static' })
     end,
 }
