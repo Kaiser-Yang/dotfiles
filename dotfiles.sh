@@ -52,7 +52,6 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     )
 # Ubuntu related configurations
 elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
-    # WARN: installation script for Ubuntu is not tested
     INSTALLATION_COMMANDS+=(
         "$SUDO apt update"
         "$SUDO apt install -y \
@@ -74,7 +73,6 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         )
     fi
     DIRS+=(
-        # WARN: this configuration file is not checked
         ".config/fontconfig/fonts_ubuntu.conf"
     )
 # macOS related configurations
@@ -86,7 +84,6 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         "brew install --cask squirrel wezterm"
     )
     DIRS+=(
-        # WARN: this configuration file is not checked
         ".config/fontconfig/fonts_mac.conf"
     )
 fi
@@ -545,13 +542,7 @@ install_fonts() {
             wqy-microhei wqy-microhei-lite wqy-bitmapfont wqy-zenhei \
             ttf-arphic-ukai ttf-arphic-uming ttf-cascadia-mono-nerd || return $?
     elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
-        # WARN:
-        # This following is not checked
-        sudo apt update && sudo apt install -y \
-          fonts-source-han-sans-cn fonts-source-han-serif-cn \
-          fonts-noto-cjk fonts-noto-serif \
-          fonts-roboto fonts-dejavu \
-          fonts-wqy-microhei fonts-wqy-zenhei || return $?
+        log_error "Fonts installation for Ubuntu is not implemented yet. "
     elif [[ "$(uname)" == "Darwin" ]]; then
         if ! command -v brew &>/dev/null; then
             log_error "Homebrew is not installed. Please install Homebrew first."
