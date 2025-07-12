@@ -13,7 +13,9 @@ map_set({ 'x' }, '<c-insert>', '"+y', { desc = 'Copy to +reg' })
 map_set('x', '<m-x>', '"+d', { desc = 'Delete to +reg' })
 map_set('x', '<m-c>', '"+y', { desc = 'Copy to +reg' })
 map_set({ 'n', 'x' }, '<m-v>', '"+p', { desc = 'Paste from +reg' })
-map_set({ 'n', 'x' }, '<m-a>', function()
+map_set({ 'n', 'x', 'i' }, '<m-a>', function()
+    vim.g.snacks_animate_scroll = false
+    vim.schedule(function() vim.g.snacks_animate_scroll = true end)
     if vim.fn.mode() == 'n' then
         return 'gg0vG$'
     else
