@@ -43,8 +43,8 @@ vim.api.nvim_create_autocmd('WinScrolled', {
 local function get_files_picker()
     local picker
     -- Usage: run :GenBigDirFiles to generate the file list
+    local cwd = vim.fn.getcwd()
     if vim.fn.filereadable(utils.get_big_dir_output_path()) == 1 then
-        local cwd = vim.fn.getcwd()
         picker = function()
             Snacks.picker.grep({
                 limit = live_grep_limit,
