@@ -200,7 +200,7 @@ fi
 # Returns:
 #     0  if installed
 #     1  if not installed
-#     2  if an error occurred (e.g., unsupported package manager)
+#     2  if an error occurred
 is_installed() {
     if [ -z "$3" ]; then
         log_error "Usage: is_installed <expected_executable> <package_manager> <package_name>"
@@ -212,16 +212,8 @@ is_installed() {
         return 0
     fi
     local package_manager="$2"
-    if ! command -v "$package_manager" &>/dev/null; then
-        log_error "Package manager '$package_manager' is not installed."
-        return 2
-    fi
     local package_name="$3"
     if [[ "$package_manager" == "apt" ]]; then
-        if ! command -v dpkg &>/dev/null; then
-            log_error "dpkg is not installed. Please install dpkg first."
-            return 2
-        fi
         if ! dpkg -s "$package_name" &>/dev/null; then
             log_verbose "Package '$package_name' is not installed."
             return 1
@@ -242,7 +234,7 @@ is_installed() {
         fi
     else
         log_error "Unsupported package manager: $package_manager"
-        return 2
+        return 1
     fi
     log_verbose "Package '$package_name' is installed, but '$expected_executable' is not found."
 }
@@ -261,7 +253,7 @@ check_and_install_package() {
     if [ "$res" -eq 1 ]; then
         log_verbose "Command '$expected_executable' is not installed. Installing..."
         log_verbose "Installation command: $installation_command"
-        if ! "${cmd_array[@]}"; then
+        if ! eval "$installation_command"; then
             log_error "Failed to install '$expected_executable'. "\
                 "Please check the installation command."
             return 1
