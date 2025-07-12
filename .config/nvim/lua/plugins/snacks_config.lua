@@ -28,6 +28,18 @@ local last_search_pattern
 local last_picker
 local should_resume_search_pattern = false
 local live_grep_limit = 100
+vim.api.nvim_create_autocmd('WinScrolled', {
+    group = 'UserDIY',
+    callback = function()
+        for win, changes in pairs(vim.v.event) do
+            local delta = math.abs(changes.topline)
+            if win and delta <= 1 or delta >= 1000 then
+                vim.g.snacks_animate_scroll = false
+                vim.schedule(function() vim.g.snacks_animate_scroll = true end)
+            end
+        end
+    end,
+})
 local function get_files_picker()
     local picker
     -- Usage: run :GenBigDirFiles to generate the file list
@@ -133,7 +145,7 @@ return {
             setup = function(ctx)
                 if vim.fn.exists(':NoMatchParen') ~= 0 then vim.cmd([[NoMatchParen]]) end
                 Snacks.util.wo(0, { foldmethod = 'manual', statuscolumn = '', conceallevel = 0 })
-                vim.b.snacks_animate = false
+                vim.b.snacks_animate_indent = false
                 vim.schedule(function()
                     if vim.api.nvim_buf_is_valid(ctx.buf) then vim.bo[ctx.buf].syntax = ctx.ft end
                 end)
@@ -205,8 +217,8 @@ return {
                         ['<up>'] = { 'history_back', mode = { 'i', 'n' } },
                         ['<down>'] = { 'history_back', mode = { 'i', 'n' } },
                         ['<c-w>'] = { '<c-s-w>', mode = { 'i' }, expr = true, desc = 'delete word' },
-                        ['<c-j>'] = { 'list_down', mode = { 'i' } },
-                        ['<c-k>'] = { 'list_up', mode = { 'i' } },
+                        ['<c-j>'] = { 'list_down', mode = { 'n', 'i' } },
+                        ['<c-k>'] = { 'list_up', mode = { 'n', 'i' } },
                         ['<c-u>'] = { 'preview_scroll_up', mode = { 'i', 'n' } },
                         ['<c-d>'] = { 'preview_scroll_down', mode = { 'i', 'n' } },
                         ['<c-c>'] = { 'close', mode = { 'n', 'i' } },
@@ -632,10 +644,6 @@ return {
                 'snacks_picker_preview',
             },
             callback = function()
-                -- FIX:
-                -- There is a bug when selecting different itmes in list window,
-                -- therefore, we just simply disable animations
-                vim.b.snacks_animate = false
                 -- TODO:
                 -- FIX:
                 -- This will close the grep picker when using big dirs picker

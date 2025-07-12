@@ -14,10 +14,6 @@ map_set('x', '<m-x>', '"+d', { desc = 'Delete to +reg' })
 map_set('x', '<m-c>', '"+y', { desc = 'Copy to +reg' })
 map_set({ 'n', 'x' }, '<m-v>', '"+p', { desc = 'Paste from +reg' })
 map_set({ 'n', 'x' }, '<m-a>', function()
-    vim.b.snacks_animate = false
-    vim.schedule(function()
-        vim.b.snacks_animate = true
-    end)
     if vim.fn.mode() == 'n' then
         return 'gg0vG$'
     else

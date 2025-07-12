@@ -301,6 +301,20 @@ return {
             function() feedkeys('W', 'n') end,
             function() feedkeys('B', 'n') end
         )
+        local next_search_pattern, prev_search_pattern = ts_repeat_move.make_repeatable_move_pair(
+            function()
+                vim.g.snacks_animate_scroll = false
+                feedkeys('n', 'n')
+                vim.schedule(function() vim.g.snacks_animate_scroll = true end)
+            end,
+            function()
+                vim.g.snacks_animate_scroll = false
+                feedkeys('N', 'n')
+                vim.schedule(function() vim.g.snacks_animate_scroll = true end)
+            end
+        )
+        map_set({ 'n', 'x' }, 'n', next_search_pattern, { desc = 'Next search pattern' })
+        map_set({ 'n', 'x' }, 'N', prev_search_pattern, { desc = 'Previous search pattern' })
         map_set('n', 'W', next_big_word, { desc = 'Next big word' })
         map_set('n', 'B', prev_big_word, { desc = 'Previous big word' })
         map_set('n', ']s', next_misspell, { desc = 'Next misspelled word' })
