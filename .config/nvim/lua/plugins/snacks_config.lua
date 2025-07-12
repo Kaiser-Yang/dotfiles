@@ -684,6 +684,7 @@ return {
                 map_set({ 'i' }, '<c-y>', function()
                     if not last_search_pattern or last_search_pattern:match('^%s*$') then return end
                     vim.api.nvim_set_current_line(last_search_pattern)
+                    vim.api.nvim_win_set_cursor(0, { 1, #last_search_pattern })
                 end, { buffer = true })
             end,
         })
