@@ -4,7 +4,7 @@ return {
     dependencies = {
         'nvim-tree/nvim-web-devicons',
         'catppuccin/nvim',
-        'folke/snacks.nvim',
+        'Kaiser-Yang/snacks.nvim',
     },
     version = '*',
     config = function()

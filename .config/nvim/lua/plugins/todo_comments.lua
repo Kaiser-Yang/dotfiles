@@ -4,7 +4,7 @@ return {
     dependencies = {
         'nvim-lua/plenary.nvim',
         'nvim-treesitter/nvim-treesitter-textobjects',
-        'folke/snacks.nvim',
+        'Kaiser-Yang/snacks.nvim',
     },
     config = function()
         local todo_comments = require('todo-comments')

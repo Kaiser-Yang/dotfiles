@@ -125,7 +125,8 @@ local function resume_last_picker()
     last_picker()
 end
 return {
-    'folke/snacks.nvim',
+    'Kaiser-Yang/snacks.nvim',
+    branch = 'develop',
     priority = 1000,
     lazy = false,
     dependencies = {

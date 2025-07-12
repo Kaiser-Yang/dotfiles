@@ -1,6 +1,6 @@
 return {
     'gbprod/yanky.nvim',
-    dependencies = { 'folke/snacks.nvim' },
+    dependencies = { 'Kaiser-Yang/snacks.nvim' },
     config = function()
         local map_set = require('utils').map_set
         require('yanky').setup({
