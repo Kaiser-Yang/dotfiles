@@ -123,53 +123,46 @@ local function toggle_check_box(start_line, end_line)
         start_line = toggle_check_box_once(start_line)
     end
 end
-
-vim.api.nvim_create_autocmd('FileType', {
-    group = 'UserDIY',
-    pattern = vim.g.markdown_support_filetype,
-    callback = function()
-        vim.cmd.setlocal('spell')
-        local map_set = require('utils').map_set
-        map_set({ 'i' }, ',f', function()
-            local pattern = vim.fn.getreg('/')
-            if pattern ~= '' then vim.schedule(function() vim.fn.setreg('/', pattern) end) end
-            return "<c-g>u<c-o>mz<esc>/<++><cr>:nohlsearch<cr>c4l<cmd>call histdel('/', -1)<cr>"
-        end, { buffer = true, silent = true, expr = true })
-        map_set({ 'i' }, ',1', '<c-g>u<c-o>mz# ', { buffer = true })
-        map_set({ 'i' }, ',2', '<c-g>u<c-o>mz## ', { buffer = true })
-        map_set({ 'i' }, ',3', '<c-g>u<c-o>mz### ', { buffer = true })
-        map_set({ 'i' }, ',4', '<c-g>u<c-o>mz#### ', { buffer = true })
-        map_set({ 'i' }, ',a', '<c-g>u<c-o>mz[](<++>)<++><esc>F[a', { buffer = true })
-        map_set({ 'i' }, ',b', '<c-g>u<c-o>mz****<++><esc>F*hi', { buffer = true })
-        map_set({ 'i' }, ',c', '<c-g>u<c-o>mz```<cr>```<cr><++><esc>2kA', { buffer = true })
-        map_set({ 'i' }, ',t', '<c-g>u<c-o>mz``<++><esc>F`i', { buffer = true })
-        map_set({ 'i' }, ',u', '<esc>u`z:delmarks z<cr>a', { buffer = true })
-        map_set({ 'n' }, 'o', 'A<cr>', { buffer = true, remap = true })
-        map_set({ 'i' }, ',m', '<c-g>u<c-o>mz$$  $$<++><esc>F i', { buffer = true })
-        -- map_set(
-        --     { 'i' },
-        --     ',p',
-        --     '<c-g>u<c-o>mz<cr><cr>![](<++>){: .img-fluid}<cr><cr><++><esc>2k0f[a',
-        --     { buffer = true }
-        -- )
-        -- map_set({ 'i' }, ',d', '<c-g>u<c-o>mz~~~~<++><esc>F~hi', { buffer = true })
-        -- map_set({ 'i' }, ',i', '<c-g>u<c-o>mz**<++><esc>F*i', { buffer = true })
-        -- map_set({ 'i' }, ',M', '<c-g>u<c-o>mz<cr><cr>$$<cr><cr>$$<cr><cr><++><esc>3kA', { buffer = true })
-        -- TODO: make the gx in normal mode can be repeated
-        map_set(
-            { 'n' },
-            'gx',
-            toggle_check_box_once,
-            { buffer = true, desc = 'Toggler current check box' }
-        )
-        map_set({ 'v' }, 'gx', function()
+local key_mappings = {
+    {
+        'i',
+        ',f',
+        "<c-g>u<esc>/<++><cr>c4l<cmd>call histdel('/', -1)<cr>",
+        { buffer = true },
+    },
+    { 'i', ',1', '<c-g>u# ', { buffer = true } },
+    { 'i', ',2', '<c-g>u## ', { buffer = true } },
+    { 'i', ',3', '<c-g>u### ', { buffer = true } },
+    { 'i', ',4', '<c-g>u#### ', { buffer = true } },
+    { 'i', ',a', '<c-g>u[](<++>)<++><esc>F[a', { buffer = true } },
+    { 'i', ',b', '<c-g>u****<++><esc>F*hi', { buffer = true } },
+    { 'i', ',c', '<c-g>u```<cr>```<cr><++><esc>2kA', { buffer = true } },
+    { 'i', ',t', '<c-g>u``<++><esc>F`i', { buffer = true } },
+    { 'n', 'o', 'A<cr>', { buffer = true, remap = true } },
+    { 'i', ',m', '<c-g>u$$  $$<++><esc>F i', { buffer = true } },
+    -- TODO: make the gx in normal mode can be repeated
+    {
+        'n',
+        'gx',
+        toggle_check_box_once,
+        { buffer = true, desc = 'Toggler current check box' },
+    },
+    {
+        'v',
+        'gx',
+        function()
             local start_line = vim.fn.line('v')
             local end_line = vim.fn.line('.')
             toggle_check_box(start_line, end_line)
             feedkeys('<esc>', 'n')
-        end, { buffer = true, desc = 'Toggler selected check boxes' })
-        -- This part is to make <cr>, <bs> and <tab> work for bullets, numbers and todo lists
-        map_set({ 'i' }, '<cr>', function()
+        end,
+        { buffer = true, desc = 'Toggler selected check boxes' },
+    },
+    -- This part is to make <cr>, <bs> and <tab> work for bullets, numbers and todo lists
+    {
+        'i',
+        '<cr>',
+        function()
             local cursor_pos = vim.api.nvim_win_get_cursor(0)
             local cursor_row, cursor_column = cursor_pos[1], cursor_pos[2]
             local content_before_cursor = vim.api.nvim_get_current_line():sub(1, cursor_column)
@@ -203,8 +196,13 @@ vim.api.nvim_create_autocmd('FileType', {
                     feedkeys('<plug>(ultimate-auto-pairs-cr)', 'n')
                 end
             end
-        end, { buffer = true, expr = true })
-        map_set({ 'i' }, '<bs>', function()
+        end,
+        { buffer = true, expr = true },
+    },
+    {
+        'i',
+        '<bs>',
+        function()
             local cursor_coloumn = vim.api.nvim_win_get_cursor(0)[2]
             local content_before_cursor = vim.api.nvim_get_current_line():sub(1, cursor_coloumn)
             local item = match_item(content_before_cursor, true)
@@ -217,8 +215,13 @@ vim.api.nvim_create_autocmd('FileType', {
                 -- normal <bs>
                 feedkeys('<plug>(ultimate-auto-pairs-bs)', 'n')
             end
-        end, { buffer = true, expr = true })
-        map_set({ 'i' }, '<tab>', function()
+        end,
+        { buffer = true, expr = true },
+    },
+    {
+        'i',
+        '<tab>',
+        function()
             local cursor_coloumn = vim.api.nvim_win_get_cursor(0)[2]
             local content_before_cursor = vim.api.nvim_get_current_line():sub(1, cursor_coloumn)
             local item = match_item(content_before_cursor, true)
@@ -230,6 +233,24 @@ vim.api.nvim_create_autocmd('FileType', {
                 -- normal <tab>
                 feedkeys('<tab>', 'n')
             end
-        end, { buffer = true })
+        end,
+        { buffer = true },
+    },
+}
+-- {
+--     'i',
+--     ',p',
+--     '<c-g>u<cr><cr>![](<++>){: .img-fluid}<cr><cr><++><esc>2k0f[a',
+--     { buffer = true }
+-- },
+-- {'i', ',d', '<c-g>u~~~~<++><esc>F~hi', { buffer = true } },
+-- {'i', ',i', '<c-g>u**<++><esc>F*i', { buffer = true } },
+-- {'i', ',M', '<c-g>u<cr><cr>$$<cr><cr>$$<cr><cr><++><esc>3kA', { buffer = true } },
+vim.api.nvim_create_autocmd('FileType', {
+    group = 'UserDIY',
+    pattern = vim.g.markdown_support_filetype,
+    callback = function()
+        vim.cmd.setlocal('spell')
+        require('utils').map_set_all(key_mappings)
     end,
 })

@@ -1,10 +1,10 @@
 local utils = require('utils')
-local map_set = utils.map_set
+local map_set_all = utils.map_set_all
 local map_del = utils.map_del
 map_del({ 'x', 'n' }, 'gc')
 map_del({ 'n' }, '<c-w>d')
 map_del({ 'n' }, '<c-w><c-d>')
-local key_mappings = {
+map_set_all({
     -- Copy, cut, paste, and select all
     { { 'n' }, 'Y', 'y$', { desc = 'Yank till eol' } },
     { { 'n' }, '<m-c>Y', '"+y$', { desc = 'Copy till eol to + reg' } },
@@ -102,8 +102,17 @@ local key_mappings = {
         { desc = 'Select all', expr = true },
     },
 
-    -- TODO: make those mappings work in cmd mode
     -- Quick operations
+    -- {
+    --     'i',
+    --     '<c-k>',
+    --     function()
+    --         local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
+    --         vim.api.nvim_set_current_line(vim.api.nvim_get_current_line():sub(1, cursor_col))
+    --     end,
+    --     { desc = 'Delete to end of line' },
+    -- },
+    -- { 'i', '<m-d>', '<c-g>u<cmd>normal de<cr>', { desc = 'Delete word forwards' } },
     {
         'i',
         '<c-u>',
@@ -118,60 +127,45 @@ local key_mappings = {
         end,
         { desc = 'Delete to start of line' },
     },
-    {
-        'i',
-        '<c-k>',
-        function()
-            local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
-            vim.api.nvim_set_current_line(vim.api.nvim_get_current_line():sub(1, cursor_col))
-        end,
-        { desc = 'Delete to end of line' },
-    },
-    { 'i', '<m-d>', '<c-g>u<cmd>normal de<cr>', { desc = 'Delete word forwards' } },
     { 'i', '<c-w>', '<c-g>u<cmd>normal db<cr>', { desc = 'Delete word backwards' } },
     {
-        { 'n', 'x', 'i' },
+        { 'x', 'i', 'c' },
         '<c-a>',
         function()
-            local line = vim.api.nvim_get_current_line()
-            vim.api.nvim_win_set_cursor(
-                0,
-                { vim.api.nvim_win_get_cursor(0)[1], #line:match('^%s*') }
-            )
+            if vim.fn.mode() == 'c' then return '<home>' end
+            if vim.fn.mode() == 'n' then return '<c-o>^' end
+            return '^'
         end,
-        { desc = 'Move cursor to start of line' },
+        { desc = 'Move cursor to start of line', expr = true },
     },
     {
-        { 'n', 'x', 'i' },
+        { 'x', 'i', 'c' },
         '<c-e>',
-        function()
-            local line = vim.api.nvim_get_current_line()
-            vim.api.nvim_win_set_cursor(0, { vim.api.nvim_win_get_cursor(0)[1], #line })
-        end,
+        '<end>',
         { desc = 'Move cursor to end of line' },
     },
 
     -- Windows related
     {
-        { 'n' },
-        '<leader>h',
-        '<cmd>set nosplitright<cr><cmd>vsplit<cr><cmd>set splitright<cr>',
-        { desc = 'Split  vertically' },
+        'n',
+        '<leader>l',
+        '<cmd>set splitright<cr><cmd>vsplit<cr><cmd>set nosplitright<cr>',
+        { desc = 'Split vertically' },
     },
-    { { 'n' }, '<leader>l', '<leader>h', { desc = 'Split vertically', remap = true } },
-    { { 'n' }, '<leader>j', '<cmd>split<cr>', { desc = 'Split below' } },
-    { { 'n' }, '<leader>k', '<leader>j', { desc = 'Split above', remap = true } },
-    { { 'n' }, '=', '<cmd>wincmd =<cr>', { desc = 'Equalize windows' } },
-    { { 'n' }, '<c-h>', '<c-w>h', { desc = 'Cursor left' } },
-    { { 'n' }, '<c-j>', '<c-w>j', { desc = 'Cursor down' } },
-    { { 'n' }, '<c-k>', '<c-w>k', { desc = 'Cursor up' } },
-    { { 'n' }, '<c-l>', '<c-w>l', { desc = 'Cursor right' } },
     {
         'n',
-        '<leader>T',
-        '<cmd>tabedit %<cr>',
-        { desc = 'Move current window to a new tabpage' },
+        '<leader>j',
+        '<cmd>set splitbelow<cr><cmd>split<cr><cmd>set nosplitbelow<cr>',
+        { desc = 'Split below' },
     },
+    { 'n', '<leader>h', '<cmd>vsplit<cr>', { desc = 'Split  vertically' } },
+    { 'n', '<leader>k', '<cmd>split<cr>', { desc = 'Split above' } },
+    { 'n', '=', '<cmd>wincmd =<cr>', { desc = 'Equalize windows' } },
+    { 'n', '<c-h>', '<c-w>h', { desc = 'Cursor left' } },
+    { 'n', '<c-j>', '<c-w>j', { desc = 'Cursor down' } },
+    { 'n', '<c-k>', '<c-w>k', { desc = 'Cursor up' } },
+    { 'n', '<c-l>', '<c-w>l', { desc = 'Cursor right' } },
+    { 'n', '<leader>T', '<cmd>tabedit %<cr>', { desc = 'Move current window to a new tabpage' } },
 
     -- Tabsize related
     {
@@ -245,7 +239,4 @@ local key_mappings = {
         end,
         { desc = 'Toggle inlay hints' },
     },
-}
-for _, key in ipairs(key_mappings) do
-    map_set(unpack(key))
-end
+})

@@ -190,6 +190,12 @@ function M.map_set(mode, lhs, rhs, opts)
     map.set(mode, lhs, rhs, opts)
 end
 
+function M.map_set_all(key_mappings)
+    for _, mapping in ipairs(key_mappings) do
+        M.map_set(unpack(mapping))
+    end
+end
+
 --- Delete a map by lhs
 --- @param mode string|string[] the mode to delete
 --- @param lhs string the key to delete
