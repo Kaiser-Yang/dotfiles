@@ -1,9 +1,6 @@
 local utils = require('utils')
 return {
     'rmagatti/auto-session',
-    dependencies = {
-        'nvim-neo-tree/neo-tree.nvim',
-    },
     opts = {
         suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
         auto_save = utils.has_root_directory,
