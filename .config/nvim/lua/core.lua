@@ -28,7 +28,7 @@ vim.g.loaded_netrwPlugin = 1
 
 vim.o.cmdheight = 0
 vim.o.signcolumn = 'yes'
-vim.o.jumpoptions = 'stack,clean'
+vim.o.jumpoptions = 'clean'
 vim.o.termguicolors = true
 vim.o.spelllang = 'en_us,en'
 vim.o.timeoutlen = 300
@@ -51,7 +51,6 @@ vim.o.expandtab = true
 vim.o.tabstop = 4
 -- >> and << will shift lines by 4
 vim.o.shiftwidth = 4
--- Every <tab> will go right by 4 spaces, every <bs> will go left by 4 spaces
 vim.o.showbreak = '↪'
 vim.o.encoding = 'utf-8'
 vim.o.foldlevel = 99
@@ -101,17 +100,6 @@ vim.api.nvim_create_autocmd('VimLeavePre', {
         -- get all the buffers, and delete all non-modifiable buffers
         for _, buf in ipairs(vim.api.nvim_list_bufs()) do
             if not vim.bo[buf].modifiable then vim.api.nvim_buf_delete(buf, { force = true }) end
-        end
-    end,
-})
-vim.api.nvim_create_autocmd('BufEnter', {
-    group = 'UserDIY',
-    callback = function()
-        if not Snacks then return end
-        if vim.bo.filetype == 'bigfile' then
-            Snacks.indent.disable()
-        else
-            Snacks.indent.enable()
         end
     end,
 })
