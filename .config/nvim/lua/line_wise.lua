@@ -123,12 +123,15 @@ for _, key_mapping in ipairs(line_wise_keys) do
         else
             map_set(mode, key, function()
                 local actual_count = get_actual_count(key)
+                local prefix = ''
                 if actual_count ~= 0 then
                     -- We +1 here to make other operations more reasonable
                     if key ~= 'j' and key ~= 'k' then actual_count = actual_count + 1 end
-                    feedkeys(tostring(actual_count), 'nt')
+                    prefix = prefix .. tostring(actual_count)
+                elseif key == 'j' or key == 'k' then
+                    prefix = 'g'
                 end
-                feedkeys(target_key, feed_mode .. 't')
+                feedkeys(prefix .. target_key, feed_mode)
             end, { desc = 'Line-wise navigation with comfy labels' })
         end
     end
