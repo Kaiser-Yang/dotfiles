@@ -1,16 +1,21 @@
+vim.g.matchup_matchparen_offscreen = { method = 'popup' }
 return {
     'nvim-treesitter/nvim-treesitter',
     build = function() require('nvim-treesitter.install').update({ with_sync = true })() end,
     dependencies = {
         {
             'andymass/vim-matchup',
-            init = function() vim.g.matchup_matchparen_offscreen = { method = 'popup' } end,
+            config = true,
         },
         'nvim-treesitter/nvim-treesitter-textobjects',
         {
             'nvim-treesitter/nvim-treesitter-context',
             opts = {
                 max_lines = 1,
+                on_attach = function(buf)
+                    vim.b[buf].matchup_matchparen_enabled = 0
+                    return true
+                end
             },
         },
     },
