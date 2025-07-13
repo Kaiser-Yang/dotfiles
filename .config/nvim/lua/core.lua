@@ -51,7 +51,6 @@ vim.o.expandtab = true
 vim.o.tabstop = 4
 -- >> and << will shift lines by 4
 vim.o.shiftwidth = 4
-vim.o.showbreak = '↪'
 vim.o.encoding = 'utf-8'
 vim.o.foldlevel = 99
 vim.o.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions'
