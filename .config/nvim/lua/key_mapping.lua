@@ -90,16 +90,11 @@ map_set(
     { 'n' },
     '<leader>h',
     '<cmd>set nosplitright<cr><cmd>vsplit<cr><cmd>set splitright<cr>',
-    { desc = 'Split left' }
+    { desc = 'Split  vertically' }
 )
-map_set({ 'n' }, '<leader>l', '<cmd>set splitright<cr><cmd>vsplit<cr>', { desc = 'Split right' })
-map_set({ 'n' }, '<leader>j', '<cmd>set splitbelow<cr><cmd>split<cr>', { desc = 'Split below' })
-map_set(
-    { 'n' },
-    '<leader>k',
-    '<cmd>set nosplitbelow<cr><cmd>split<cr><cmd>set splitbelow<cr>',
-    { desc = 'Split above' }
-)
+map_set({ 'n' }, '<leader>l', '<leader>h', { desc = 'Split vertically', remap = true })
+map_set({ 'n' }, '<leader>j', '<cmd>split<cr>', { desc = 'Split below' })
+map_set({ 'n' }, '<leader>k', '<leader>j', { desc = 'Split above', remap = true })
 map_set({ 'n' }, '<leader>I', function()
     if vim.lsp.inlay_hint.is_enabled() then
         vim.notify('Inlay hints disabled', nil, { title = 'LSP' })
@@ -121,9 +116,10 @@ map_set({ 'i' }, '<c-k>', function()
     local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
     vim.api.nvim_set_current_line(vim.api.nvim_get_current_line():sub(1, cursor_col))
 end)
-map_set({ 'i', 'c' }, '<m-d>', '<c-g>u<cmd>normal de<cr>')
-map_set({ 'i', 'c' }, '<c-w>', '<c-g>u<cmd>normal db<cr>', { desc = 'Delete word backwards' })
-map_set({ 'i', 'c' }, '<c-a>', function()
+-- TODO: make those mappings work in cmd mode
+map_set('i', '<m-d>', '<c-g>u<cmd>normal de<cr>')
+map_set('i', '<c-w>', '<c-g>u<cmd>normal db<cr>', { desc = 'Delete word backwards' })
+map_set('i', '<c-a>', function()
     local line = vim.api.nvim_get_current_line()
     vim.api.nvim_win_set_cursor(0, { vim.api.nvim_win_get_cursor(0)[1], #line:match('^%s*') })
 end)
