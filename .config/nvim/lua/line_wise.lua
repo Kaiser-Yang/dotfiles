@@ -64,20 +64,41 @@ vim.api.nvim_create_autocmd({ 'WinNew', 'BufWinEnter', 'BufEnter', 'TermOpen' },
             if not is_popup(win) then
                 vim.api.nvim_win_call(
                     win,
-                    function() vim.opt.statuscolumn = '%=%s%=%{v:lua.get_label()} ' end
+                    function() vim.wo[win].statuscolumn = '%=%s%=%{v:lua.get_label()} ' end
                 )
             end
         end
     end,
 })
 local function get_actual_count(key)
+    local treesitter_context_visible_lines = {}
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local cfg = vim.api.nvim_win_get_config(win)
+        if
+            cfg.relative == 'win'
+            and cfg.row == 0
+            and cfg.win == vim.api.nvim_get_current_win()
+            and vim.w[win].treesitter_context_line_number
+        then
+            local lines = vim.api.nvim_buf_get_lines(vim.api.nvim_win_get_buf(win), 0, -1, false)
+            vim.iter(lines):each(function(line)
+                -- extract the number from the line
+                local number = line:match('^[^%d]*(%d+)[^%d]*$')
+                if not number then return end
+                treesitter_context_visible_lines[tonumber(number)] = true
+            end)
+        end
+    end
     local v_count = vim.v.count
     local actual_count = labels[tostring(v_count)] or v_count
     -- default to goes down, unless the key is 'k'
     local target_line = vim.fn.line('.') + (key == 'k' and -actual_count or actual_count)
     local first_visible_line = vim.fn.line('w0')
     local last_visible_line = vim.fn.line('w$')
-    if target_line < first_visible_line or target_line > last_visible_line then
+    if
+        (target_line < first_visible_line or target_line > last_visible_line)
+        and not treesitter_context_visible_lines[v_count]
+    then
         actual_count = v_count
     end
     return actual_count
