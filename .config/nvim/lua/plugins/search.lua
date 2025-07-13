@@ -85,48 +85,48 @@ return {
         -- end,
         -- desc = 'Flash Search Last Searched Word',
         -- },
-        {
-            '*',
-            mode = { 'n', 'x', 'o' },
-            function()
-                local word = vim.fn.expand('<cword>')
-                require('flash').jump({
-                    search = {
-                        mode = 'search',
-                        forward = true,
-                        wrap = false,
-                        multi_window = false,
-                    },
-                    jump = {
-                        history = true,
-                        register = true,
-                    },
-                    pattern = word,
-                })
-            end,
-            desc = 'Flash Search Current Word',
-        },
-        {
-            '#',
-            mode = { 'n', 'x', 'o' },
-            function()
-                local word = vim.fn.expand('<cword>')
-                require('flash').jump({
-                    search = {
-                        mode = 'search',
-                        forward = false,
-                        wrap = false,
-                        multi_window = false,
-                    },
-                    jump = {
-                        history = true,
-                        register = true,
-                    },
-                    pattern = word,
-                })
-            end,
-            desc = 'Flash Search Current Word Backward',
-        },
+        -- {
+        --     '*',
+        --     mode = { 'n', 'x', 'o' },
+        --     function()
+        --         local word = vim.fn.expand('<cword>')
+        --         require('flash').jump({
+        --             search = {
+        --                 mode = 'search',
+        --                 forward = true,
+        --                 wrap = false,
+        --                 multi_window = false,
+        --             },
+        --             jump = {
+        --                 history = true,
+        --                 register = true,
+        --             },
+        --             pattern = word,
+        --         })
+        --     end,
+        --     desc = 'Flash Search Current Word',
+        -- },
+        -- {
+        --     '#',
+        --     mode = { 'n', 'x', 'o' },
+        --     function()
+        --         local word = vim.fn.expand('<cword>')
+        --         require('flash').jump({
+        --             search = {
+        --                 mode = 'search',
+        --                 forward = false,
+        --                 wrap = false,
+        --                 multi_window = false,
+        --             },
+        --             jump = {
+        --                 history = true,
+        --                 register = true,
+        --             },
+        --             pattern = word,
+        --         })
+        --     end,
+        --     desc = 'Flash Search Current Word Backward',
+        -- },
         {
             '<c-s>',
             mode = { 'n', 'x' },
