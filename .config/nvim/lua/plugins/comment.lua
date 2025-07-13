@@ -21,7 +21,7 @@ return {
             ignore = nil,
             -- LHS of toggle mappings in NORMAL mode
             toggler = {
-                line = '<space>c<space>',
+                line = '<f30>',
                 block = '<space>cs',
             },
             -- LHS of operator-pending mappings in NORMAL and VISUAL mode
