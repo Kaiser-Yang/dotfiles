@@ -70,6 +70,18 @@ vim.api.nvim_create_autocmd({ 'WinNew', 'BufWinEnter', 'BufEnter', 'TermOpen' },
         end
     end,
 })
+local function get_actual_count(key)
+    local v_count = vim.v.count
+    local actual_count = labels[tostring(v_count)] or v_count
+    -- default to goes down, unless the key is 'k'
+    local target_line = vim.fn.line('.') + (key == 'k' and -actual_count or actual_count)
+    local first_visible_line = vim.fn.line('w0')
+    local last_visible_line = vim.fn.line('w$')
+    if target_line < first_visible_line or target_line > last_visible_line then
+        actual_count = v_count
+    end
+    return actual_count
+end
 local map_set = require('utils').map_set
 local feedkeys = require('utils').feedkeys
 for _, key_mapping in ipairs(line_wise_keys) do
@@ -77,21 +89,26 @@ for _, key_mapping in ipairs(line_wise_keys) do
     local target_key = virtual_key or key
     local feed_mode = virtual_key and 'm' or 'n'
     if type(modes) == 'string' then modes = { modes } end
-    map_set(modes, key, function()
-        local v_count = vim.v.count
-        local actual_count = labels[tostring(v_count)] or v_count
-        -- default to goes down, unless the key is 'k'
-        local target_line = vim.fn.line('.') + (key == 'k' and -actual_count or actual_count)
-        local first_visible_line = vim.fn.line('w0')
-        local last_visible_line = vim.fn.line('w$')
-        if target_line < first_visible_line or target_line > last_visible_line then
-            actual_count = v_count
+    for _, mode in ipairs(modes) do
+        if mode == 'o' then
+            map_set(mode, key, function()
+                local actual_count = get_actual_count(key)
+                local prefix = ''
+                if actual_count ~= 0 then
+                    prefix = string.rep('<del>', #tostring(vim.v.count)) .. tostring(actual_count)
+                end
+                return prefix .. target_key
+            end, { desc = 'Line-wise navigation with comfy labels', expr = true })
+        else
+            map_set(mode, key, function()
+                local actual_count = get_actual_count(key)
+                if actual_count ~= 0 then
+                    -- We +1 here to make other operations more reasonable
+                    if key ~= 'j' and key ~= 'k' then actual_count = actual_count + 1 end
+                    feedkeys(tostring(actual_count), 'nt')
+                end
+                feedkeys(target_key, feed_mode .. 't')
+            end, { desc = 'Line-wise navigation with comfy labels' })
         end
-        if actual_count ~= 0 then
-            -- We +1 here to make other operations more reasonable
-            if key ~= 'j' and key ~= 'k' then actual_count = actual_count + 1 end
-            feedkeys(tostring(actual_count), 'n')
-        end
-        feedkeys(target_key, feed_mode)
-    end, { desc = 'Line-wise navigation with comfy labels' })
+    end
 end
