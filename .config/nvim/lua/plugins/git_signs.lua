@@ -8,6 +8,9 @@ return {
         current_line_blame_opts = {
             delay = 100,
         },
+        preview_config = {
+            border = 'rounded',
+        },
         on_attach = function(bufnr)
             local gs = require('gitsigns')
             local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
