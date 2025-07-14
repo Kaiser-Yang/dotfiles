@@ -35,7 +35,9 @@ map_set_all({
             if not utils.should_enable_paste_image() then
                 vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
                 if vim.fn.mode() == 'i' then
+                    vim.cmd('set paste')
                     res = '<c-r>+'
+                    vim.schedule(function() vim.cmd('set nopaste') end)
                 else
                     res = '"+p'
                 end
@@ -133,7 +135,7 @@ map_set_all({
         '<c-a>',
         function()
             if vim.fn.mode() == 'c' then return '<home>' end
-            if vim.fn.mode() == 'n' then return '<c-o>^' end
+            if vim.fn.mode() ~= 'n' then return '<c-o>^' end
             return '^'
         end,
         { desc = 'Move cursor to start of line', expr = true },
