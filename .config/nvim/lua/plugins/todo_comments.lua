@@ -3,7 +3,8 @@ return {
     'folke/todo-comments.nvim',
     dependencies = {
         'nvim-lua/plenary.nvim',
-        'nvim-treesitter/nvim-treesitter-textobjects',
+        -- 'nvim-treesitter/nvim-treesitter',
+        -- 'nvim-treesitter/nvim-treesitter-textobjects',
         'Kaiser-Yang/snacks.nvim',
     },
     config = function()
@@ -27,17 +28,17 @@ return {
             },
         })
         local map_set = require('utils').map_set
-        local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-        local next_todo, prev_todo = ts_repeat_move.make_repeatable_move_pair(
-            todo_comments.jump_next,
-            todo_comments.jump_prev
-        )
-        map_set({ 'n', 'x', 'o' }, ']t', next_todo, { desc = 'Next todo comment' })
-        map_set({ 'n', 'x', 'o' }, '[t', prev_todo, { desc = 'Previous todo comment' })
+        -- local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+        -- local next_todo, prev_todo = ts_repeat_move.make_repeatable_move_pair(
+        --     todo_comments.jump_next,
+        --     todo_comments.jump_prev
+        -- )
+        -- map_set({ 'n', 'x', 'o' }, ']t', next_todo, { desc = 'Next todo comment' })
+        -- map_set({ 'n', 'x', 'o' }, '[t', prev_todo, { desc = 'Previous todo comment' })
         map_set({ 'n' }, '<leader>st', function()
             Snacks.picker.todo_comments({
                 on_show = function() vim.cmd.stopinsert() end,
-                hidden = not utils.should_ignore_hidden_files()
+                hidden = not utils.should_ignore_hidden_files(),
             })
         end, { desc = 'Search todo comments' })
     end,

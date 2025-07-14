@@ -131,8 +131,8 @@ return {
     lazy = false,
     dependencies = {
         'HakonHarnes/img-clip.nvim',
-        'nvim-treesitter/nvim-treesitter-textobjects',
-        'nvim-treesitter/nvim-treesitter',
+        -- 'nvim-treesitter/nvim-treesitter',
+        -- 'nvim-treesitter/nvim-treesitter-textobjects',
         'MeanderingProgrammer/render-markdown.nvim',
     },
     ---@module 'snacks'
@@ -688,13 +688,13 @@ return {
                 end, { buffer = true })
             end,
         })
-        local next_ref_repeat, prev_rev_repeat = require(
-            'nvim-treesitter.textobjects.repeatable_move'
-        ).make_repeatable_move_pair(
-            function() Snacks.words.jump(vim.v.count1) end,
-            function() Snacks.words.jump(-vim.v.count1) end
-        )
-        map_set({ 'n', 't' }, ']w', next_ref_repeat, { desc = 'Next word reference' })
-        map_set({ 'n', 't' }, '[w', prev_rev_repeat, { desc = 'Previous word reference' })
+        -- local next_ref_repeat, prev_rev_repeat = require(
+        --     'nvim-treesitter.textobjects.repeatable_move'
+        -- ).make_repeatable_move_pair(
+        --     function() Snacks.words.jump(vim.v.count1) end,
+        --     function() Snacks.words.jump(-vim.v.count1) end
+        -- )
+        -- map_set({ 'n', 't' }, ']w', next_ref_repeat, { desc = 'Next word reference' })
+        -- map_set({ 'n', 't' }, '[w', prev_rev_repeat, { desc = 'Previous word reference' })
     end,
 }

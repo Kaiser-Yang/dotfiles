@@ -1,7 +1,8 @@
 return {
     'nvimdev/lspsaga.nvim',
     dependencies = {
-        'nvim-treesitter/nvim-treesitter-textobjects',
+        -- 'nvim-treesitter/nvim-treesitter',
+        -- 'nvim-treesitter/nvim-treesitter-textobjects',
         'nvim-tree/nvim-web-devicons',
         'catppuccin/nvim',
     },
@@ -16,7 +17,7 @@ return {
             },
             definition = {
                 keys = {
-                    quit = { 'q', '<esc>'},
+                    quit = { 'q', '<esc>' },
                 },
             },
             ui = {
@@ -24,20 +25,20 @@ return {
             },
             code_action = {
                 keys = {
-                    quit = { 'q', '<esc>'},
+                    quit = { 'q', '<esc>' },
                     exec = '<cr>',
                 },
             },
             diagnostic = {
                 keys = {
                     exec_action = '<cr>',
-                    quit = { 'q', '<esc>'},
-                    quit_in_show = { 'q', '<esc>'},
+                    quit = { 'q', '<esc>' },
+                    quit_in_show = { 'q', '<esc>' },
                 },
             },
             finder = {
                 keys = {
-                    quit = { 'q', '<esc>'},
+                    quit = { 'q', '<esc>' },
                 },
             },
             rename = {

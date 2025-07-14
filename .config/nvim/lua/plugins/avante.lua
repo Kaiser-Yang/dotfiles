@@ -3,7 +3,8 @@ return {
     event = 'VeryLazy',
     build = 'make',
     dependencies = {
-        'nvim-treesitter/nvim-treesitter',
+        -- 'nvim-treesitter/nvim-treesitter',
+        -- 'nvim-treesitter/nvim-treesitter-textobjects',
         'stevearc/dressing.nvim',
         'nvim-lua/plenary.nvim',
         'MunifTanjim/nui.nvim',
@@ -43,13 +44,15 @@ return {
                 provider = 'snacks',
             },
         })
-        local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-        local diff = require('avante.diff')
-        local next_diff, prev_diff = ts_repeat_move.make_repeatable_move_pair(
-            function() diff.find_next('ours') end,
-            function() diff.find_prev('ours') end
-        )
         local map_set = require('utils').map_set
+        -- local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+        -- local diff = require('avante.diff')
+        -- local next_diff, prev_diff = ts_repeat_move.make_repeatable_move_pair(
+        --     function() diff.find_next('ours') end,
+        --     function() diff.find_prev('ours') end
+        -- )
+        -- map_set({ 'n' }, ']a', next_diff, { buffer = true, desc = 'Next avante diff' })
+        -- map_set({ 'n' }, '[a', prev_diff, { buffer = true, desc = 'Previous avante diff' })
         local get_win = function(filetype)
             for _, win in ipairs(vim.api.nvim_list_wins()) do
                 if filetype == vim.bo[vim.api.nvim_win_get_buf(win)].filetype then return win end
@@ -71,7 +74,5 @@ return {
                 end
             end,
         })
-        map_set({ 'n' }, ']a', next_diff, { buffer = true, desc = 'Next avante diff' })
-        map_set({ 'n' }, '[a', prev_diff, { buffer = true, desc = 'Previous avante diff' })
     end,
 }

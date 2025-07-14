@@ -10,9 +10,10 @@ return {
     'Kaiser-Yang/flash.nvim',
     event = 'VeryLazy',
     branch = 'develop',
-    depedencies = {
-        'nvim-treesitter/nvim-treesitter-textobjects',
-    },
+    -- depedencies = {
+    --     'nvim-treesitter/nvim-treesitter',
+    --     'nvim-treesitter/nvim-treesitter-textobjects',
+    -- },
     ---@type Flash.Config
     opts = {
         actions = {

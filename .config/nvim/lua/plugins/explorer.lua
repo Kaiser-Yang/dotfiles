@@ -9,7 +9,8 @@ return {
         'nvim-lua/plenary.nvim',
         'nvim-tree/nvim-web-devicons',
         'MunifTanjim/nui.nvim',
-        'nvim-treesitter/nvim-treesitter-textobjects',
+        -- 'nvim-treesitter/nvim-treesitter',
+        -- 'nvim-treesitter/nvim-treesitter-textobjects',
         {
             's1n7ax/nvim-window-picker',
             version = '2.*',
@@ -43,13 +44,16 @@ return {
         },
     },
     config = function()
-        local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-        local function on_move(data) Snacks.rename.on_rename_file(data.source, data.destination) end
+        -- local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+        local function on_move(data)
+            if not Snacks then return end
+            Snacks.rename.on_rename_file(data.source, data.destination)
+        end
         local events = require('neo-tree.events')
-        local next_git_repeat, prev_git_repeat = ts_repeat_move.make_repeatable_move_pair(
-            require('neo-tree.sources.filesystem.commands').next_git_modified,
-            require('neo-tree.sources.filesystem.commands').prev_git_modified
-        )
+        -- local next_git_repeat, prev_git_repeat = ts_repeat_move.make_repeatable_move_pair(
+        --     require('neo-tree.sources.filesystem.commands').next_git_modified,
+        --     require('neo-tree.sources.filesystem.commands').prev_git_modified
+        -- )
         require('neo-tree').setup({
             sources = {
                 'filesystem',
@@ -256,14 +260,14 @@ return {
                             },
                         },
                         ['<bs>'] = 'navigate_up',
-                        [']g'] = {
-                            function(state) next_git_repeat(state) end,
-                            desc = 'Next Git Modified',
-                        },
-                        ['[g'] = {
-                            function(state) prev_git_repeat(state) end,
-                            desc = 'Prev Git Modified',
-                        },
+                        -- [']g'] = {
+                        --     function(state) next_git_repeat(state) end,
+                        --     desc = 'Next Git Modified',
+                        -- },
+                        -- ['[g'] = {
+                        --     function(state) prev_git_repeat(state) end,
+                        --     desc = 'Prev Git Modified',
+                        -- },
                         ['d'] = 'delete',
                         ['y'] = 'copy_to_clipboard',
                         ['x'] = 'cut_to_clipboard',
