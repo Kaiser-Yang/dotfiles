@@ -33,12 +33,12 @@ Note that my leader key is `Space`.
 Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V` means visual mode,
 `T` means terminal mode, `X` means select mode, and `N I` means normal mode and insert mode.
 
-| Shortcut    | Mode  | Description                                       |
-| ----------- | ----- | ------------------------------------------------- |
-| \<C-T>      | N I T | Toggle a terminal                                 |
-| Q           | N     | Unload a buffer, close a window or tab            |
-| \<LEADER>r  | N     | Run the current file depends on its filetype      |
-| \<LEADER>ay | N     | Copy all lines of current buffer to plus register |
+| Shortcut   | Mode  | Description                                       |
+| ---------- | ----- | ------------------------------------------------- |
+| \<C-T>     | N I T | Toggle a terminal                                 |
+| Q          | N     | Unload a buffer, close a window or tab            |
+| \<LEADER>r | N     | Run the current file depends on its filetype      |
+| yaf        | N     | Copy all lines of current buffer to plus register |
 
 ## Window
 
