@@ -1,3 +1,4 @@
+local utils = require('utils')
 -- INFO: Those variables do not support wildcards
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 vim.g.root_markers = { '.git', '.root', 'pom.xml', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' }
@@ -70,23 +71,7 @@ vim.api.nvim_create_autocmd({ 'CursorMoved' }, {
     callback = function()
         local mode = vim.fn.mode()
         if mode ~= 'n' then return end -- Only handle normal mode
-        local pattern = vim.fn.getreg('/') -- Get last search pattern
-        if pattern == '' then return end -- Skip if no pattern
-        local cursor_pos = vim.api.nvim_win_get_cursor(0)
-        local match_pos = vim.fn.matchbufline(
-            vim.api.nvim_get_current_buf(),
-            pattern,
-            cursor_pos[1],
-            cursor_pos[1]
-        )
-        local cursor_in_match = false
-        for _, match in pairs(match_pos) do
-            if match.byteidx <= cursor_pos[2] and match.byteidx + #match.text > cursor_pos[2] then
-                cursor_in_match = true
-                break
-            end
-        end
-        if not cursor_in_match then vim.schedule(function() vim.cmd('nohlsearch') end) end
+        if not utils.cursor_in_match() then vim.schedule(function() vim.cmd('nohlsearch') end) end
     end,
 })
 vim.api.nvim_create_autocmd('FileType', {
@@ -120,7 +105,7 @@ vim.api.nvim_create_user_command('GenBigDirFiles', function()
         '-g',
         '!' .. vim.g.big_dir_file_name,
     }
-    local output_path = require('utils').get_big_dir_output_path()
+    local output_path = utils.get_big_dir_output_path()
     vim.system({ cmd, unpack(args) }, { text = true }, function(result)
         if result.code ~= 0 then
             vim.notify('Failed to generate big dir files: ' .. result.stderr, vim.log.levels.ERROR)

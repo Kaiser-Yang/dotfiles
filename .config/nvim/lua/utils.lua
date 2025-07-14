@@ -190,6 +190,20 @@ function M.map_set(mode, lhs, rhs, opts)
     map.set(mode, lhs, rhs, opts)
 end
 
+function M.cursor_in_match()
+    local pattern = vim.fn.getreg('/') -- Get last search pattern
+    if pattern == '' then return end -- Skip if no pattern
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local match_pos =
+        vim.fn.matchbufline(vim.api.nvim_get_current_buf(), pattern, cursor_pos[1], cursor_pos[1])
+    for _, match in pairs(match_pos) do
+        if match.byteidx <= cursor_pos[2] and match.byteidx + #match.text > cursor_pos[2] then
+            return true
+        end
+    end
+    return false
+end
+
 function M.map_set_all(key_mappings)
     for _, mapping in ipairs(key_mappings) do
         M.map_set(unpack(mapping))

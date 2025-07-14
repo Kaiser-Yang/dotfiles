@@ -30,6 +30,9 @@ return {
                 long_message_to_split = true,
                 lsp_doc_border = true,
             },
+            messages = {
+                view_search = false,
+            }
         })
         vim.api.nvim_create_autocmd('RecordingEnter', {
             group = 'UserDIY',

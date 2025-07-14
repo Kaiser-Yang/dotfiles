@@ -25,8 +25,8 @@ return {
         },
         sections = {
             lualine_a = { 'mode' },
-            lualine_b = { 'branch', 'diff' },
-            lualine_c = { 'filename' },
+            lualine_b = { 'filename', 'branch', 'diff', 'searchcount' },
+            lualine_c = {},
             lualine_x = {
                 function() return vim.g.rime_enabled and 'ㄓ' or '' end,
                 'copilot',
@@ -34,7 +34,7 @@ return {
                 'fileformat',
                 'filetype',
             },
-            lualine_y = { 'searchcount', 'quickfix', 'progress' },
+            lualine_y = { 'quickfix', 'progress' },
             lualine_z = { 'location' },
         },
         inactive_sections = {

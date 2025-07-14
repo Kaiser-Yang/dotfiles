@@ -31,11 +31,15 @@ local live_grep_limit = 100
 vim.api.nvim_create_autocmd('WinScrolled', {
     group = 'UserDIY',
     callback = function()
+        vim.schedule(function()
+            if utils.cursor_in_match() then vim.cmd('set hlsearch') end
+        end)
         for win, changes in pairs(vim.v.event) do
             local delta = math.abs(changes.topline)
             if win and delta <= 1 or delta >= 1000 then
                 vim.g.snacks_animate_scroll = false
                 vim.schedule(function() vim.g.snacks_animate_scroll = true end)
+                return
             end
         end
     end,

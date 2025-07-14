@@ -15,7 +15,7 @@ return {
                 on_attach = function(buf)
                     vim.b[buf].matchup_matchparen_enabled = 0
                     return true
-                end
+                end,
             },
         },
     },
@@ -307,16 +307,8 @@ return {
             function() feedkeys('B', 'n') end
         )
         local next_search_pattern, prev_search_pattern = ts_repeat_move.make_repeatable_move_pair(
-            function()
-                vim.g.snacks_animate_scroll = false
-                feedkeys('n', 'n')
-                vim.schedule(function() vim.g.snacks_animate_scroll = true end)
-            end,
-            function()
-                vim.g.snacks_animate_scroll = false
-                feedkeys('N', 'n')
-                vim.schedule(function() vim.g.snacks_animate_scroll = true end)
-            end
+            function() feedkeys('n', 'n') end,
+            function() feedkeys('N', 'n') end
         )
         map_set({ 'n', 'x' }, 'n', next_search_pattern, { desc = 'Next search pattern' })
         map_set({ 'n', 'x' }, 'N', prev_search_pattern, { desc = 'Previous search pattern' })
