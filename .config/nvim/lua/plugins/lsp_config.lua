@@ -2,13 +2,7 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = {
         'aznhe21/actions-preview.nvim',
-        {
-
-            'mfussenegger/nvim-jdtls',
-            dependencies = {
-                'mfussenegger/nvim-dap',
-            },
-        },
+        'mfussenegger/nvim-jdtls',
     },
     config = function()
         vim.lsp.config('*', {

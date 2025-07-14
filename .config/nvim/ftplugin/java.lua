@@ -51,4 +51,5 @@ local config = {
         bundles = bundles,
     },
 }
-require('jdtls').start_or_attach(config)
+local ok, jdtls = pcall(require, 'jdtls')
+if ok then jdtls.start_or_attach(config) end
