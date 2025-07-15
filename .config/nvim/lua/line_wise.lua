@@ -42,13 +42,13 @@ generate_labels()
 function _G.get_label()
     if vim.v.virtnum ~= 0 then
         -- do not show line numbers for wrap lines
-        return ' '
+        return ''
     elseif vim.v.relnum == 0 then
-        return string.format('%2d', vim.fn.line('.'))
+        return ' 0'
     elseif vim.v.relnum > 0 and vim.v.relnum <= #labels then
         return string.format('%2s', labels[vim.v.relnum])
     else
-        return string.format('%2d', vim.v.lnum)
+        return '??' -- this should not happen for normal height of screen
     end
 end
 local function is_popup(winid)
