@@ -184,7 +184,7 @@ end
 --- @param mode string|string[]
 --- @param lhs string
 --- @param rhs string|function
---- @param opts? table default: { silent = true, remap = false }
+--- @param opts? vim.keymap.set.Opts default: { silent = true, remap = false }
 function M.map_set(mode, lhs, rhs, opts)
     opts = vim.tbl_extend('force', { silent = true, remap = false }, opts or {})
     map.set(mode, lhs, rhs, opts)
@@ -204,6 +204,13 @@ function M.cursor_in_match()
     return false
 end
 
+--- @class KeyMapping
+--- @field [1] string|string[] the mode to map
+--- @field [2] string the key to map
+--- @field [3] string|function the rhs of the map
+--- @field [4]? vim.keymap.set.Opts default: { silent = true, remap = false }
+
+--- @param key_mappings KeyMapping[]
 function M.map_set_all(key_mappings)
     for _, mapping in ipairs(key_mappings) do
         M.map_set(unpack(mapping))
