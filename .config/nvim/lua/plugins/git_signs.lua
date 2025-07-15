@@ -1,54 +1,47 @@
+local comma_semicolon = require('comma_semicolon')
+local prev_hunk, next_hunk = comma_semicolon.make(
+    function() require('gitsigns').nav_hunk('prev') end,
+    function() require('gitsigns').nav_hunk('next') end
+)
 return {
     'lewis6991/gitsigns.nvim',
-    dependencies = {
-        'nvim-treesitter/nvim-treesitter-textobjects',
-    },
+    event = 'VeryLazy',
     opts = {
-        current_line_blame = false,
+        current_line_blame = true,
         current_line_blame_opts = {
-            delay = 100,
+            delay = 300,
         },
         preview_config = {
             border = 'rounded',
         },
-        on_attach = function(bufnr)
-            local gs = require('gitsigns')
-            local ts_repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-            local map_set = require('utils').map_set
-            local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_pair(
-                function() gs.nav_hunk('next') end,
-                function() gs.nav_hunk('prev') end
-            )
-            map_set(
-                { 'n', 'x', 'o' },
-                ']g',
-                next_hunk_repeat,
-                { desc = 'Next git hunk', buffer = bufnr }
-            )
-            map_set(
-                { 'n', 'x', 'o' },
-                '[g',
-                prev_hunk_repeat,
-                { desc = 'Previous git hunk', buffer = bufnr }
-            )
-            map_set(
-                { 'n' },
-                'gcu',
-                gs.reset_hunk,
-                { desc = 'Git reset current hunk', buffer = bufnr }
-            )
-            map_set(
-                { 'n' },
-                'gcd',
-                gs.preview_hunk,
-                { desc = 'Git diff current hunk', buffer = bufnr }
-            )
-            map_set(
-                { 'n' },
-                'gcs',
-                function() gs.blame_line({ full = true }) end,
-                { desc = 'Git blame current line', buffer = bufnr }
-            )
-        end,
+    },
+    keys = {
+        {
+            'gcu',
+            function() require('gitsigns').reset_hunk() end,
+            desc = 'Git reset current hunk',
+        },
+        {
+            'gcd',
+            function() require('gitsigns').preview_hunk() end,
+            desc = 'Git diff current hunk',
+        },
+        {
+            'gcs',
+            function() require('gitsigns').blame_line({ full = true }) end,
+            desc = 'Git blame current line',
+        },
+        {
+            '[g',
+            prev_hunk,
+            desc = 'Previous git hunk',
+            mode = { 'n', 'x', 'o' },
+        },
+        {
+            ']g',
+            next_hunk,
+            desc = 'Next git hunk',
+            mode = { 'n', 'x', 'o' },
+        },
     },
 }
