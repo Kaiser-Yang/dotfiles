@@ -14,7 +14,6 @@ local plugins = {
     require('plugins.blink_cmp'),
     require('plugins.formatter'),
     require('plugins.git_signs'),
-    require('plugins.git_conflict'),
     require('plugins.auto_pairs'),
     require('plugins.auto_save'),
     require('plugins.auto_session'),
@@ -49,4 +48,7 @@ if vim.fn.has('mac') ~= 1 then
         })
     end
 end
+if utils.is_git_repo() then vim.list_extend(plugins, {
+    require('plugins.git_conflict'),
+}) end
 return plugins

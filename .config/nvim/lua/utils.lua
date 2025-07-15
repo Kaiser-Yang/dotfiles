@@ -2,6 +2,11 @@ local M = {}
 
 local map = vim.keymap
 
+function M.is_git_repo()
+    local git_dir = vim.fn.finddir('.git')
+    return git_dir and #git_dir > 0
+end
+
 --- @return function
 function M.value_wrapper(value)
     return function() return value end
