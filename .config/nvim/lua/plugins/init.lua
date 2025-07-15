@@ -33,6 +33,7 @@ local plugins = {
     require('plugins.markdown_toc'),
     require('plugins.markdown_render'),
     require('plugins.highlight_colors'),
+    require('plugins.vim_matchup'),
 }
 if vim.fn.has('mac') ~= 1 then
     if vim.fn.executable('gh') == 1 then
