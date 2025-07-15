@@ -2,7 +2,6 @@
 *
 
 [main]
-alt = overload(alt, C-b)
 
 [control]
 n = esc
