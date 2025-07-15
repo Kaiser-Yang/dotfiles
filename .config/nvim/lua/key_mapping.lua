@@ -31,6 +31,7 @@ map_set_all({
         '<c-rightmouse>',
         function()
             local res
+            if vim.fn.mode() == 'i' then res = '<c-g>u' end
             local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
             if not utils.should_enable_paste_image() then
                 vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
