@@ -13,6 +13,10 @@ My own configure files for UNIX/Linux tools.
      This is useful when you have other configuration files in the directories.
 3. Run `nvim` to install plugins.
 
+**NOTE:** If you are using a `Mac` or you have problems telling you `unknow option: declare -A`,
+this is because your `bash` version is too old. You can use `zsh dotfiles.sh -icsf`,
+if you have `zsh` installed.
+
 ## More Information
 
 You can use `./dotfiles.sh -h` to see more options.
