@@ -9,18 +9,16 @@ utils.map_set_all({
         ',',
         function()
             if can_repeat(vim.b.last_prev_function) then return vim.b.last_prev_function() end
-            return ','
         end,
-        { desc = 'Exteneded comma', expr = true },
+        { desc = 'Exteneded comma' },
     },
     {
         { 'n', 'v' },
         ';',
         function()
             if can_repeat(vim.b.last_next_function) then return vim.b.last_next_function() end
-            return ';'
         end,
-        { desc = 'Extended semicolon', expr = true },
+        { desc = 'Extended semicolon' },
     },
 })
 
