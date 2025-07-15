@@ -5,7 +5,7 @@ local function can_repeat(fu) return type(fu) == 'function' end
 
 utils.map_set_all({
     {
-        { 'n', 'x' },
+        { 'n', 'v' },
         ',',
         function()
             if can_repeat(vim.b.last_prev_function) then return vim.b.last_prev_function() end
@@ -14,7 +14,7 @@ utils.map_set_all({
         { desc = 'Exteneded comma', expr = true },
     },
     {
-        { 'n', 'x' },
+        { 'n', 'v' },
         ';',
         function()
             if can_repeat(vim.b.last_next_function) then return vim.b.last_next_function() end
@@ -30,8 +30,10 @@ utils.map_set_all({
 --- @return function
 local function repeat_wrapper(prev_func, next_func, reversed)
     return function(...)
-        vim.b.last_prev_function = reversed and next_func or prev_func
-        vim.b.last_next_function = reversed and prev_func or next_func
+        if vim.tbl_contains({ 'v', 'V', 'CTRL-V', 'n' }, vim.fn.mode()) then
+            vim.b.last_prev_function = reversed and next_func or prev_func
+            vim.b.last_next_function = reversed and prev_func or next_func
+        end
         return reversed and prev_func(...) or next_func(...)
     end
 end
