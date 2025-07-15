@@ -1,9 +1,18 @@
 local utils = require('utils')
+local comma_semicolon = require('comma_semicolon')
 local map_set_all = utils.map_set_all
 local map_del = utils.map_del
 map_del({ 'x', 'n' }, 'gc')
 map_del({ 'n' }, '<c-w>d')
 map_del({ 'n' }, '<c-w><c-d>')
+local prev_word, next_word = comma_semicolon.make('b', 'w')
+local prev_big_word, next_big_word = comma_semicolon.make('B', 'W')
+local prev_end_word, next_end_word = comma_semicolon.make('ge', 'e')
+local prev_big_end_word, next_big_end_word = comma_semicolon.make('gE', 'E')
+local prev_find, next_find = comma_semicolon.make('F', 'f')
+local prev_till, next_till = comma_semicolon.make('T', 't')
+local prev_search, next_search = comma_semicolon.make('N', 'n')
+local prev_misspell, next_misspell = comma_semicolon.make('[s', ']s')
 map_set_all({
     -- Copy, cut, paste, and select all
     { { 'n' }, 'Y', 'y$', { desc = 'Yank till eol' } },
@@ -227,6 +236,24 @@ map_set_all({
         end,
         { desc = 'Toggle expandtab' },
     },
+
+    -- Motion
+    { { 'n', 'o', 'x' }, 'b', prev_word, { desc = 'Previous word', expr = true } },
+    { { 'n', 'o', 'x' }, 'w', next_word, { desc = 'Next word', expr = true } },
+    { { 'n', 'o', 'x' }, 'B', prev_big_word, { desc = 'Previous big word', expr = true } },
+    { { 'n', 'o', 'x' }, 'W', next_big_word, { desc = 'Next big word', expr = true } },
+    { { 'n', 'o', 'x' }, 'ge', prev_end_word, { desc = 'Previous end word', expr = true } },
+    { { 'n', 'o', 'x' }, 'e', next_end_word, { desc = 'Next end word', expr = true } },
+    { { 'n', 'o', 'x' }, 'gE', prev_big_end_word, { desc = 'Previous big end word', expr = true } },
+    { { 'n', 'o', 'x' }, 'E', next_big_end_word, { desc = 'Next big end word', expr = true } },
+    { { 'n', 'o', 'x' }, 'F', prev_find, { desc = 'Previous find character', expr = true } },
+    { { 'n', 'o', 'x' }, 'f', next_find, { desc = 'Next find character', expr = true } },
+    { { 'n', 'o', 'x' }, 'T', prev_till, { desc = 'Previous till character', expr = true } },
+    { { 'n', 'o', 'x' }, 't', next_till, { desc = 'Next till character', expr = true } },
+    { { 'n', 'o', 'x' }, 'N', prev_search, { desc = 'Previous search pattern', expr = true } },
+    { { 'n', 'o', 'x' }, 'n', next_search, { desc = 'Next search pattern', expr = true } },
+    { { 'n', 'o', 'x' }, '[s', prev_misspell, { desc = 'Previous misspelled word', expr = true } },
+    { { 'n', 'o', 'x' }, ']s', next_misspell, { desc = 'Next misspelled word', expr = true } },
 
     -- Others
     { { 'i' }, '<c-n>', '<nop>' },
