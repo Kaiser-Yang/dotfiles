@@ -129,7 +129,22 @@ map_set_all({
         end,
         { desc = 'Delete to start of line' },
     },
-    { 'i', '<c-w>', '<c-g>u<cmd>normal db<cr>', { desc = 'Delete word backwards' } },
+    {
+        'i',
+        '<c-w>',
+        function()
+            local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
+            local line_len = #vim.api.nvim_get_current_line()
+            local res = '<c-g>u<c-o>'
+            if cursor_col == line_len then
+                res = res .. 'vlbc'
+            else
+                res = res .. 'lcb'
+            end
+            return res
+        end,
+        { desc = 'Delete word backwards', expr = true, remap = true },
+    },
     {
         { 'x', 'i', 'c' },
         '<c-a>',
