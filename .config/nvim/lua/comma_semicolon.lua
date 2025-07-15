@@ -32,7 +32,11 @@ local function repeat_wrapper(prev_func, next_func, reversed)
             vim.b.last_prev_function = reversed and next_func or prev_func
             vim.b.last_next_function = reversed and prev_func or next_func
         end
-        return reversed and prev_func(...) or next_func(...)
+        if reversed then
+            return prev_func(...)
+        else
+            return next_func(...)
+        end
     end
 end
 
