@@ -151,7 +151,7 @@ local dap = {
         dap.adapters.codelldb = {
             type = 'executable',
             command = 'codelldb',
-            detached = not vim.fn.has('win32'),
+            detached = vim.fn.has('win32') == 0,
         }
         dap.configurations.c = {
             {
