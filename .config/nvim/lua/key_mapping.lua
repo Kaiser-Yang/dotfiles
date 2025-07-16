@@ -155,11 +155,11 @@ map_set_all({
         function()
             local cursor_col = vim.api.nvim_win_get_cursor(0)[2]
             local line_len = #vim.api.nvim_get_current_line()
-            local res = '<c-g>u<c-o>'
+            local res = '<c-o><cmd>normal '
             if cursor_col == line_len then
-                res = res .. 'vlbc'
+                res = res .. 'vlbc<cr>'
             else
-                res = res .. 'lcb'
+                res = res .. 'hvbx<cr>'
             end
             return res
         end,
