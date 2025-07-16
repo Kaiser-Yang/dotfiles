@@ -24,7 +24,6 @@ local plugins = {
     require('plugins.surround'),
     require('plugins.which_key'),
     require('plugins.win_resizer'),
-    require('plugins.yanky'),
     require('plugins.non_ascii'),
     require('plugins.ufo'),
     require('plugins.debugger'),
@@ -36,6 +35,7 @@ local plugins = {
     -- INFO:
     -- Those plugins may cause performance problems
     require('plugins.auto_tag'),
+    require('plugins.yanky'),
 }
 if vim.fn.has('mac') ~= 1 then
     if vim.fn.executable('node') == 1 and utils.network_available() then
