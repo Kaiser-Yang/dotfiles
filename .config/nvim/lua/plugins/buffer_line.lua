@@ -4,7 +4,6 @@ return {
     dependencies = {
         'nvim-tree/nvim-web-devicons',
         'catppuccin/nvim',
-        'Kaiser-Yang/snacks.nvim',
     },
     version = '*',
     config = function()
@@ -29,7 +28,11 @@ return {
                 },
                 close_command = function(bufnum)
                     if #utils.get_visible_bufs() > 1 then
-                        require('snacks').bufdelete(bufnum)
+                        if Snacks then
+                            Snacks.bufdelete(bufnum)
+                        else
+                            vim.cmd('silent bdelete ' .. bufnum)
+                        end
                     else
                         vim.cmd('silent qa!')
                     end
@@ -74,7 +77,11 @@ return {
                 return
             end
             if #utils.get_visible_bufs() > 1 then
-                Snacks.bufdelete()
+                if Snacks then
+                    Snacks.bufdelete()
+                else
+                    vim.cmd('silent bdelete')
+                end
                 return
             end
             local current_tab_visible_buf = 0
