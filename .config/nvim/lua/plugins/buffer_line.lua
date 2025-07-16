@@ -162,6 +162,7 @@ return {
         )
         map_set({ 'n' }, 'H', '<cmd>BufferLineCyclePrev<cr>', { desc = 'Buffer switch left' })
         map_set({ 'n' }, 'L', '<cmd>BufferLineCycleNext<cr>', { desc = 'Buffer switch right' })
-        map_set({ 'n' }, 'gb', '<cmd>BufferLinePick<CR>', { desc = 'Buffer pick' })
+        -- gb is used for block comment in comment.nvim
+        -- map_set({ 'n' }, 'gb', '<cmd>BufferLinePick<CR>', { desc = 'Buffer pick' })
     end,
 }

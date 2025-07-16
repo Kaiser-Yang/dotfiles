@@ -10,7 +10,6 @@ vim.g.flash_keys = {
     '<f35>',
     '<f36>',
 }
--- FIX: a will go to current
 -- TODO:
 -- only search current line for bigfiles.
 -- To achieve this, we must update the source code of flash.nvim
@@ -48,7 +47,7 @@ return {
                     }
                 end,
                 label = {
-                    exclude = '',
+                    exclude = 'hjkliardcg',
                 },
                 jump = {
                     do_first_jump = true,
