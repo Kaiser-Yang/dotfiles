@@ -7,6 +7,17 @@ function M.is_git_repo()
     return git_dir and #git_dir > 0
 end
 
+function M.get_repo_remote_url(remote_name)
+    remote_name = remote_name or 'origin'
+    if vim.fn.executable('git') == 0 then return '' end
+    local out = vim.system({ 'git', 'remote', 'get-url', remote_name }, {
+        text = true,
+        cwd = vim.fn.getcwd(),
+    })
+        :wait(50).stdout
+    return out and out:gsub('\n', '') or ''
+end
+
 --- @return function
 function M.value_wrapper(value)
     return function() return value end
