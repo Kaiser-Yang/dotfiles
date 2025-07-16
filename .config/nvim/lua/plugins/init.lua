@@ -47,7 +47,11 @@ if utils.is_git_repo() then
         require('plugins.git_conflict'),
         require('plugins.git_signs'),
     })
-    if vim.fn.executable('gh') == 1 and utils.get_repo_remote_url():find('github.com') then
+    if
+        vim.fn.executable('gh') == 1
+        and utils.get_repo_remote_url():find('github.com')
+        and utils.network_available()
+    then
         vim.list_extend(plugins, {
             require('plugins.octo'),
         })
