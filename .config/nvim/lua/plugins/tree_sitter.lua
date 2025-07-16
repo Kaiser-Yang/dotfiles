@@ -21,6 +21,8 @@ local function text_objects_move_wrapper(direction, position, query_string)
     end
 end
 local comma_semicolon = require('comma_semicolon')
+-- HACK:
+-- This below can not cycle
 local prev_function_start, next_function_start = comma_semicolon.make(
     text_objects_move_wrapper('previous', 'start', '@function.outer'),
     text_objects_move_wrapper('next', 'start', '@function.outer')

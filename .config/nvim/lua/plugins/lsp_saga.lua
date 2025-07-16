@@ -68,6 +68,8 @@ return {
     keys = {
         { 'gd', '<cmd>Lspsaga goto_definition<cr>', desc = 'Go to definition' },
         { 'gt', '<cmd>Lspsaga goto_type_definition<cr>', desc = 'Go to type definition' },
+        -- TODO:
+        -- update the finder layout ???
         { 'gi', '<cmd>Lspsaga finder imp<cr>', desc = 'Go to implementations' },
         { 'gr', '<cmd>Lspsaga finder ref<cr>', desc = 'Go references' },
         { '<leader>o', '<cmd>Lspsaga outgoing_calls<cr>', desc = 'Outgoing calls' },

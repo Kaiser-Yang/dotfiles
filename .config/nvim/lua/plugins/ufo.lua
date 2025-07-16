@@ -3,12 +3,21 @@ return {
     dependencies = {
         'kevinhwang91/promise-async',
     },
-    lazy = false,
+    event = 'VeryLazy',
     keys = {
         { 'zR', function() require('ufo').openAllFolds() end, desc = 'Open all folds' },
         { 'zM', function() require('ufo').closeAllFolds() end, desc = 'Close all folds' },
+        {
+            'K',
+            function()
+                if require('ufo').peekFoldedLinesUnderCursor() then return end
+                vim.lsp.buf.hover()
+            end,
+            desc = 'Hover',
+        },
     },
     opts = {
+        provider_selector = function() return { 'treesitter', 'indent' } end,
         fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
             local newVirtText = {}
             local suffix = (' 󰁂 %d '):format(endLnum - lnum)

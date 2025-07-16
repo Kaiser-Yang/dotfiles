@@ -6,7 +6,10 @@ vim.api.nvim_create_autocmd('FileType', {
 return {
     'folke/noice.nvim',
     event = 'VeryLazy',
-    -- TODO: remove nvim-notify when snacks.notifier is good enough
+    -- HACK:
+    -- The experience of notify is not good enough
+    -- TODO:
+    -- remove nvim-notify when snacks.notifier is good enough
     dependencies = {
         'MunifTanjim/nui.nvim',
         'rcarriga/nvim-notify',

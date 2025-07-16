@@ -6,9 +6,7 @@ local plugins = {
     require('plugins.noice'),
     require('plugins.rainbow_delimiter'),
     require('plugins.todo_comments'),
-    require('plugins.tree_sitter'),
     require('plugins.lsp_config'),
-    require('plugins.lsp_saga'),
     require('plugins.mason'),
     require('plugins.mason_lsp_config'),
     require('plugins.blink_cmp'),
@@ -19,7 +17,6 @@ local plugins = {
     require('plugins.buffer_line'),
     require('plugins.comment'),
     require('plugins.guess_indent'),
-    require('plugins.search'),
     require('plugins.snacks_config'),
     require('plugins.surround'),
     require('plugins.which_key'),
@@ -32,10 +29,13 @@ local plugins = {
     require('plugins.markdown_render'),
     require('plugins.highlight_colors'),
     require('plugins.vim_matchup'),
+    require('plugins.lsp_saga'),
     -- INFO:
     -- Those plugins may cause performance problems
     require('plugins.auto_tag'),
     require('plugins.yanky'),
+    require('plugins.tree_sitter'),
+    require('plugins.search'),
 }
 if vim.fn.has('mac') ~= 1 then
     if vim.fn.executable('node') == 1 and utils.network_available() then
