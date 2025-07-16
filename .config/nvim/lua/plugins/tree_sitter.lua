@@ -160,13 +160,13 @@ return {
         },
         {
             'ai',
-            text_objects_select_wrapper('@if.outer'),
+            text_objects_select_wrapper('@conditional.outer'),
             mode = { 'x', 'o' },
             desc = 'Select around if',
         },
         {
             'ii',
-            text_objects_select_wrapper('@if.inner'),
+            text_objects_select_wrapper('@conditional.inner'),
             mode = { 'x', 'o' },
             desc = 'Select inside if',
         },
@@ -443,6 +443,6 @@ return {
             next_if_end,
             desc = 'Next if end',
             mode = { 'n', 'x', 'o' },
-        }
+        },
     },
 }
