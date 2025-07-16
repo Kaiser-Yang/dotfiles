@@ -1,12 +1,22 @@
-local flash_keys = {
+local flash_indirect = {
     ['f'] = '<f33>',
     ['t'] = '<f34>',
     ['F'] = '<f35>',
     ['T'] = '<f36>',
 }
+vim.g.flash_keys = {
+    '<f33>',
+    '<f34>',
+    '<f35>',
+    '<f36>',
+}
+local comma_semicolon = require('comma_semicolon')
+local prev_flash_find, next_flash_find =
+    comma_semicolon.make(flash_indirect['F'], flash_indirect['f'])
+local prev_flash_till, next_flash_till =
+    comma_semicolon.make(flash_indirect['T'], flash_indirect['t'])
 return {
     'Kaiser-Yang/flash.nvim',
-    event = 'VeryLazy',
     branch = 'develop',
     ---@type Flash.Config
     opts = {
@@ -35,10 +45,10 @@ return {
                     exclude = '',
                 },
                 jump = {
-                    do_first_jump = false,
+                    do_first_jump = true,
                     autojump = true,
                 },
-                keys = flash_keys,
+                keys = flash_indirect,
             },
             search = {
                 highlight = {
@@ -51,6 +61,10 @@ return {
         },
     },
     keys = {
+        { 'F', prev_flash_find, mode = { 'n', 'x' }, desc = 'Flash backwards find' },
+        { 'f', next_flash_find, mode = { 'n', 'x' }, desc = 'Flash find' },
+        { 'T', prev_flash_till, mode = { 'n', 'x' }, desc = 'Flash backwards till' },
+        { 't', next_flash_till, mode = { 'n', 'x' }, desc = 'Flash till' },
         { 'r', mode = 'o', function() require('flash').remote() end, desc = 'Remote Flash' },
         {
             'R',
