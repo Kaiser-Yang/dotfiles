@@ -1,6 +1,5 @@
 return {
     'gbprod/yanky.nvim',
-    dependencies = { 'Kaiser-Yang/snacks.nvim' },
     config = function()
         local map_set = require('utils').map_set
         require('yanky').setup({
@@ -24,8 +23,12 @@ return {
         map_set({ 'n', 'x' }, 'gp', '<plug>(YankyGPutAfter)')
         map_set({ 'n', 'x' }, 'gP', '<plug>(YankyGPutBefore)')
         map_set({ 'n', 'x' }, 'gy', function()
-            ---@diagnostic disable-next-line: undefined-field
-            require('snacks').picker.yanky({ on_show = function() vim.cmd.stopinsert() end })
+            if not Snacks then return end
+            Snacks.picker.yanky({
+                on_show = function()
+                    vim.cmd.stopinsert()
+                end,
+            })
         end)
         -- TODO:
         -- map_set({ 'n' }, ']p', '<plug>(YankyPutIndentAfterLinewise)')
