@@ -5,7 +5,7 @@ local function can_repeat(fu) return type(fu) == 'function' end
 
 utils.map_set_all({
     {
-        { 'n', 'v' },
+        { 'n', 'x', 'o' },
         ',',
         function()
             if can_repeat(vim.b.last_prev_function) then
@@ -16,7 +16,7 @@ utils.map_set_all({
         { desc = 'Exteneded comma' },
     },
     {
-        { 'n', 'v' },
+        { 'n', 'x', 'o' },
         ';',
         function()
             if can_repeat(vim.b.last_next_function) then
