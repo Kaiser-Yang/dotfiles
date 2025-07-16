@@ -4,6 +4,15 @@ local lua_line_ignore_ft = {
     'AvanteInput',
     'help',
 }
+--- @param ft_list string|string[]
+local function disable_in_ft(ft_list)
+    ft_list = type(ft_list) == 'string' and { ft_list } or ft_list
+    return function(str)
+        for _, f in ipairs(ft_list) do
+            if vim.bo.filetype:match(f) then return '' end
+        end
+    end
+end
 return {
     'nvim-lualine/lualine.nvim',
     dependencies = {
@@ -25,14 +34,33 @@ return {
         },
         sections = {
             lualine_a = { 'progress', 'location' },
-            lualine_b = { 'branch', 'diff', 'searchcount' },
+            lualine_b = {
+                {
+                    'branch',
+                    fmt = disable_in_ft('dap'),
+                },
+                {
+                    'diff',
+                    fmt = disable_in_ft('dap'),
+                },
+                'searchcount',
+            },
             lualine_c = {},
             lualine_x = {
                 function() return vim.g.rime_enabled and 'ㄓ' or '' end,
                 'copilot',
-                'encoding',
-                'fileformat',
-                'filetype',
+                {
+                    'encoding',
+                    fmt = disable_in_ft('dap'),
+                },
+                {
+                    'fileformat',
+                    fmt = disable_in_ft('dap'),
+                },
+                {
+                    'filetype',
+                    fmt = disable_in_ft('dap'),
+                },
             },
             lualine_y = { 'quickfix' },
             lualine_z = { 'filename' },

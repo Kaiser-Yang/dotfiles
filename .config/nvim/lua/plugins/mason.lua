@@ -29,6 +29,7 @@ return {
             'prettier',
             'buildifier',
             'bazelrc-lsp',
+            'codelldb',
         }
         local mason_registry = require('mason-registry')
         for _, plugin in ipairs(mason_plugins) do

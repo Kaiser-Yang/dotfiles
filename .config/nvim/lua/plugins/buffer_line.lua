@@ -72,6 +72,7 @@ return {
             if
                 not utils.is_visible_buffer(vim.api.nvim_get_current_buf())
                 or vim.bo.filetype == 'qf'
+                or vim.bo.filetype:match('^dap')
             then
                 vim.cmd('silent q!')
                 return

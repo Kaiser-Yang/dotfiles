@@ -461,17 +461,6 @@ return {
                 event = events.FILE_RENAMED,
                 handler = on_file_moved,
             },
-            {
-                event = events.NEO_TREE_WINDOW_AFTER_OPEN,
-                handler = function(_)
-                    vim.g.explorer_visible = true
-                    vim.cmd('wincmd =')
-                end,
-            },
-            {
-                event = events.NEO_TREE_WINDOW_BEFORE_CLOSE,
-                handler = function(_) vim.g.explorer_visible = false end,
-            },
         }
         require('neo-tree').setup(opts)
     end,
