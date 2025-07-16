@@ -10,6 +10,12 @@ vim.g.flash_keys = {
     '<f35>',
     '<f36>',
 }
+-- FIX: a will go to current
+-- TODO:
+-- only search current line for bigfiles.
+-- To achieve this, we must update the source code of flash.nvim
+-- case sensitive
+--
 local comma_semicolon = require('comma_semicolon')
 local prev_flash_find, next_flash_find =
     comma_semicolon.make(flash_indirect['F'], flash_indirect['f'])

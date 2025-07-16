@@ -24,6 +24,8 @@ map_set_all({
         'n',
         'yaf',
         function()
+            -- HACK:
+            -- highlight when the file is slow?
             vim.fn.setreg('+', vim.api.nvim_buf_get_lines(0, 0, -1, false), 'l')
             local line_count = vim.api.nvim_buf_line_count(0)
             vim.notify(
@@ -38,6 +40,8 @@ map_set_all({
     -- HACK:
     -- when paste from the system board, we try to restore the cursor position
     -- but this will make the cursor blink once, try to improve this
+    -- TODO:
+    -- make system paste highlight?
     {
         { 'n', 'x', 'i' },
         '<c-rightmouse>',

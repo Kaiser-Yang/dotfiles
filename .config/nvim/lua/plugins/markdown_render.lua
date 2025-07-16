@@ -1,7 +1,6 @@
 return {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = {
-        'nvim-treesitter/nvim-treesitter',
         'nvim-tree/nvim-web-devicons',
     },
     ft = vim.g.markdown_support_filetype,
@@ -14,10 +13,8 @@ return {
         win_options = { concealcursor = { rendered = 'nvic' } },
         on = {
             attach = function()
-                if vim.bo.filetype == 'Avante' then
-                    vim.cmd('RenderMarkdown buf_enable')
-                end
+                if vim.bo.filetype == 'Avante' then vim.cmd('RenderMarkdown buf_enable') end
             end,
-        }
+        },
     },
 }

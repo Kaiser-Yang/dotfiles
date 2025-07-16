@@ -123,7 +123,7 @@ vim.api.nvim_create_autocmd('User', {
             .option('conceallevel', { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
             :map('<leader>uc')
         Snacks.toggle.diagnostics():map('<leader>ud')
-        Snacks.toggle.treesitter():map('<leader>ut')
+        Snacks.toggle.treesitter():map('<leader>ts')
     end,
 })
 vim.api.nvim_create_autocmd('FileType', {
@@ -207,6 +207,7 @@ return {
     ---@module 'snacks'
     ---@type snacks.Config
     opts = {
+        -- TODO: try to remove this
         bigfile = {
             enabled = true,
             size = vim.g.big_file_limit,
@@ -228,6 +229,7 @@ return {
             enabled = vim.fn.has('wsl') == 0,
         },
         indent = {
+            -- TODO: scope can take a very long time for large files
             enabled = true,
             animate = {
                 enabled = true,
@@ -486,6 +488,8 @@ return {
         quickfile = { enabled = true },
     },
     keys = {
+        -- TODO:
+        -- Try to remove terminal
         { '<c-t>', function() Snacks.terminal() end, desc = 'Toggle Terminal' },
         { '<c-t>', '<cmd>close<cr>', desc = 'Toggle Terminal', mode = { 't' } },
         {
@@ -676,5 +680,10 @@ return {
         },
         { ']w', next_word_ref, mode = { 'n', 'o', 'x' }, desc = 'Next word reference' },
         { '[w', prev_word_ref, mode = { 'n', 'o', 'x' }, desc = 'Previous word reference' },
+        {
+            '<leader>si',
+            function() Snacks.picker.command_history() end,
+            desc = 'Command History',
+        },
     },
 }

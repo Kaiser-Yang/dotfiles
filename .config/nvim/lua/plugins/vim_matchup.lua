@@ -1,3 +1,4 @@
+-- vim.g.matchup_matchparen_offscreen = { method = 'popup' }
 local comma_semicolon = require('comma_semicolon')
 local prev_matchup, next_matchup = comma_semicolon.make('<plug>(matchup-g%)', '<plug>(matchup-%)')
 local prev_multi_matchup, next_multi_matchup =

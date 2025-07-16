@@ -1,4 +1,15 @@
-vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+-- TODO:
+-- enable ts automatically??
+-- Now we can use <leader>ts to toggle treesitter
+--
+-- vim.api.nvim_create_autocmd('FileType', {
+--     pattern = '*', -- WARN: update this to only the filetypes you want
+--     callback = function()
+--         vim.treesitter.start()
+--         vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+--         vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+--     end,
+-- })
 local function text_objects_select_wrapper(query_string, query_group)
     return function()
         require('nvim-treesitter-textobjects.select').select_textobject(query_string, query_group)

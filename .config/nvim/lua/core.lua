@@ -1,3 +1,6 @@
+-- TODO:
+-- close some buffers when it is not been used for a while
+-- may be use LFU cache????
 local utils = require('utils')
 -- INFO: Those variables do not support wildcards
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
