@@ -48,28 +48,9 @@ function _G.get_label()
     elseif vim.v.relnum > 0 and vim.v.relnum <= #labels then
         return string.format('%2s', labels[vim.v.relnum])
     else
-        return '??' -- this should not happen for normal height of screen
+        return string.format('%2s', vim.v.relnum)
     end
 end
-local function is_popup(winid)
-    local ok, config = pcall(vim.api.nvim_win_get_config, winid)
-    if not ok then return false end
-    return config.relative ~= ''
-end
-vim.api.nvim_create_autocmd({ 'WinNew', 'BufWinEnter', 'BufEnter', 'TermOpen' }, {
-    group = 'UserDIY',
-    pattern = '*',
-    callback = function()
-        for _, win in ipairs(vim.api.nvim_list_wins()) do
-            if not is_popup(win) then
-                vim.api.nvim_win_call(
-                    win,
-                    function() vim.wo[win].statuscolumn = '%=%s%=%{v:lua.get_label()} ' end
-                )
-            end
-        end
-    end,
-})
 local function get_actual_count(key)
     local treesitter_context_visible_lines = {}
     for _, win in ipairs(vim.api.nvim_list_wins()) do

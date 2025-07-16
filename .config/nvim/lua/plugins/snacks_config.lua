@@ -453,6 +453,11 @@ return {
         statuscolumn = {
             enabled = true,
             left = { 'mark', 'sign', 'git' },
+            middle = function()
+                local lable = get_label()
+                if lable == '' then return '' end
+                return '%=' .. get_label()
+            end,
             right = { 'fold' },
             folds = {
                 open = true,
