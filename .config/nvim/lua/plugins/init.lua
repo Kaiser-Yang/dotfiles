@@ -16,7 +16,6 @@ local plugins = {
     require('plugins.auto_pairs'),
     require('plugins.auto_save'),
     require('plugins.auto_session'),
-    require('plugins.auto_tag'),
     require('plugins.buffer_line'),
     require('plugins.comment'),
     require('plugins.guess_indent'),
@@ -34,6 +33,9 @@ local plugins = {
     require('plugins.markdown_render'),
     require('plugins.highlight_colors'),
     require('plugins.vim_matchup'),
+    -- INFO:
+    -- Those plugins may cause performance problems
+    require('plugins.auto_tag'),
 }
 if vim.fn.has('mac') ~= 1 then
     if vim.fn.executable('node') == 1 and utils.network_available() then
