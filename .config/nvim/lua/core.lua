@@ -83,6 +83,7 @@ vim.api.nvim_create_autocmd('FileType', {
     callback = function() vim.wo.colorcolumn = '50,72' end,
 })
 vim.api.nvim_create_autocmd('VimLeavePre', {
+    group = 'UserDIY',
     callback = function()
         -- get all the buffers, and delete all non-modifiable buffers
         for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -90,6 +91,35 @@ vim.api.nvim_create_autocmd('VimLeavePre', {
         end
     end,
 })
+local refresh_project_config = function(show_info)
+    local project_config_dir = vim.fn.getcwd() .. '/.nvim'
+    -- source all the lua files in the project config directory
+    local files = vim.fn.globpath(project_config_dir, '*.lua', false, true)
+    for _, file in ipairs(files) do
+        if vim.fn.filereadable(file) == 1 then
+            local ok, err = pcall(function() vim.cmd('source ' .. file) end)
+            if not ok then
+                vim.notify('Error sourcing file: ' .. file .. '\n' .. err, vim.log.levels.ERROR)
+                return false
+            elseif show_info then
+                vim.notify('Sourced file: ' .. file, vim.log.levels.INFO)
+            end
+        else
+            vim.notify('File not readable: ' .. file, vim.log.levels.WARN)
+            return false
+        end
+        return true
+    end
+end
+vim.api.nvim_create_autocmd('VimEnter', {
+    group = 'UserDIY',
+    callback = function() refresh_project_config(false) end,
+})
+vim.api.nvim_create_user_command(
+    'RefreshProjectConfig',
+    function() refresh_project_config(true) end,
+    {}
+)
 vim.api.nvim_create_user_command('GenBigDirFiles', function()
     if vim.fn.executable('rg') == 0 then
         vim.notify('rg is not executable, please install it first', vim.log.levels.ERROR)
