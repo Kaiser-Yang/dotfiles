@@ -10,12 +10,9 @@ function M.get_win_with_filetype(filetype)
 end
 function M.is_git_repo()
     if not vim.fn.executable('git') == 0 then return false end
-    local out = vim.system(
-        { 'git', 'rev-parse', '--is-inside-work-tree' },
-        {
-            text = true,
-        }
-    ):wait(50)
+    local out = vim.system({ 'git', 'rev-parse', '--is-inside-work-tree' }, {
+        text = true,
+    }):wait(50)
     return out.code == 0
 end
 
@@ -223,6 +220,15 @@ function M.map_set(mode, lhs, rhs, opts)
     map.set(mode, lhs, rhs, opts)
 end
 
+function M.restore_cursor(schedule)
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local func = function() vim.api.nvim_win_set_cursor(0, cursor_pos) end
+    if schedule then
+        vim.schedule(func)
+    else
+        func()
+    end
+end
 function M.cursor_in_match()
     local pattern = vim.fn.getreg('/') -- Get last search pattern
     if pattern == '' then return end -- Skip if no pattern

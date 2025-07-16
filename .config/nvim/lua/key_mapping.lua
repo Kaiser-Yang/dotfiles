@@ -35,6 +35,9 @@ map_set_all({
         { desc = 'Yank around file to + reg' },
     },
     { { 'n', 'x' }, '<m-x>', '"+d', { desc = 'Cut to + reg' } },
+    -- HACK:
+    -- when paste from the system board, we try to restore the cursor position
+    -- but this will make the cursor blink once, try to improve this
     {
         { 'n', 'x', 'i' },
         '<c-rightmouse>',
@@ -49,6 +52,7 @@ map_set_all({
                     res = '<c-r>+'
                     vim.schedule(function() vim.cmd('set nopaste') end)
                 else
+                    utils.restore_cursor(true)
                     res = '"+p'
                 end
             else
@@ -78,6 +82,7 @@ map_set_all({
             local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
             if not utils.should_enable_paste_image() then
                 vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
+                utils.restore_cursor(true)
                 return '"+p'
             else
                 return '<cmd>PasteImage<cr>'
@@ -93,6 +98,7 @@ map_set_all({
             if not utils.should_enable_paste_image() then
                 vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
                 utils.feedkeys('"+P', 'n')
+                utils.restore_cursor(true)
             else
                 require('img-clip').paste_image({ insert_template_after_cursor = false })
             end
