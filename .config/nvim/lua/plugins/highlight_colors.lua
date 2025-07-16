@@ -1,4 +1,4 @@
 return {
     'brenoprata10/nvim-highlight-colors',
-    config = true,
+    ft = { 'css', 'scss', 'less', 'html', 'javascript', 'typescript', 'vue', 'svelte', 'astro' },
 }
