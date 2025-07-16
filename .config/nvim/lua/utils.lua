@@ -9,8 +9,14 @@ function M.get_win_with_filetype(filetype)
     return nil
 end
 function M.is_git_repo()
-    local git_dir = vim.fn.finddir('.git')
-    return git_dir and #git_dir > 0
+    if not vim.fn.executable('git') == 0 then return false end
+    local out = vim.system(
+        { 'git', 'rev-parse', '--is-inside-work-tree' },
+        {
+            text = true,
+        }
+    ):wait(50)
+    return out.code == 0
 end
 
 function M.get_repo_remote_url(remote_name)
