@@ -11,13 +11,15 @@ local utils = require('utils')
 local function has_neo_tree() return utils.get_win_with_filetype('neo-tree') ~= nil end
 local function dap_ui_toggle()
     dap_ui_visible = not dap_ui_visible
-    require('dapui').toggle()
+    local dap_ui = require('dapui')
     if dap_ui_visible then
+        dap_ui.open()
         if has_neo_tree() then
             need_restore_explorer = true
             require('neo-tree.command').execute({ action = 'close' })
         end
     elseif need_restore_explorer then
+        dap_ui.close()
         need_restore_explorer = false
         require('neo-tree.command').execute({
             action = 'show',
@@ -55,13 +57,9 @@ vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter' }, {
 local dap = {
     'mfussenegger/nvim-dap',
     config = function()
-        local dap = require('dap')
-        dap.listeners.before.attach.dapui_config = function()
-            if not dap_ui_visible then dap_ui_toggle() end
-        end
-        dap.listeners.before.launch.dapui_config = function()
-            if not dap_ui_visible then dap_ui_toggle() end
-        end
+        local dap, dap_ui = require('dap'), require('dapui')
+        dap.listeners.before.attach.dapui_config = function() dap_ui.open() end
+        dap.listeners.before.launch.dapui_config = function() dap_ui.open() end
         dap.adapters.gdb = {
             type = 'executable',
             command = 'gdb',
