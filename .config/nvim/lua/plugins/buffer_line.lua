@@ -25,6 +25,12 @@ return {
                         highlight = 'Directory',
                         text_align = 'left',
                     },
+                    {
+                        filetype = 'dapui_watches',
+                        text = 'DAP',
+                        highlight = 'Error',
+                        text_align = 'left',
+                    },
                 },
                 close_command = function(bufnum)
                     if #utils.get_visible_bufs() > 1 then
