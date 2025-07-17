@@ -18,13 +18,15 @@ local function dap_ui_toggle()
             need_restore_explorer = true
             require('neo-tree.command').execute({ action = 'close' })
         end
-    elseif need_restore_explorer then
+    else
         dap_ui.close()
-        need_restore_explorer = false
-        require('neo-tree.command').execute({
-            action = 'show',
-            source = 'last',
-        })
+        if need_restore_explorer then
+            need_restore_explorer = false
+            require('neo-tree.command').execute({
+                action = 'show',
+                source = 'last',
+            })
+        end
     end
 end
 local function debug_test_under_cursor()
