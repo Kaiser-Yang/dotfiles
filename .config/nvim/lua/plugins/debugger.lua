@@ -165,7 +165,7 @@ return {
                     },
                 },
                 position = 'left',
-                size = math.max(20, math.ceil(vim.o.columns * 0.14)),
+                size = math.max(30, math.ceil(vim.o.columns * 0.14)),
             },
             {
                 elements = {
