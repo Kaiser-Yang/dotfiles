@@ -109,7 +109,7 @@ for _, key_mapping in ipairs(line_wise_keys) do
                     -- We +1 here to make other operations more reasonable
                     if key ~= 'j' and key ~= 'k' then actual_count = actual_count + 1 end
                     prefix = prefix .. tostring(actual_count)
-                elseif key == 'j' or key == 'k' then
+                elseif key == 'j' or key == 'k' and vim.bo.filetype ~= 'qf' then
                     prefix = 'g'
                 end
                 feedkeys(prefix .. target_key, feed_mode)
