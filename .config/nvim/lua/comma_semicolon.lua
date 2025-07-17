@@ -28,6 +28,14 @@ utils.map_set_all({
         { desc = 'Extended semicolon' },
     },
 })
+local function case_sensitive_once()
+    vim.o.ignorecase = false
+    vim.o.smartcase = false
+    vim.schedule(function()
+        vim.o.ignorecase = true
+        vim.o.smartcase = true
+    end)
+end
 -- builtin and can be repeated by comma and semicolon
 local builtin_motions = { 'b', 'w', 'B', 'W', 'ge', 'e', 'gE', 'E', 'F', 'f', 'T', 't' }
 -- builtin but can not be repeated by comma or semicolon
@@ -75,6 +83,7 @@ local function repeat_wrapper(prev_func, next_func, reversed)
                     vim.g.last_motion_char = char
                 end
             end
+            case_sensitive_once()
             char = char or ''
             utils.feedkeys(prev_key .. char, 'm')
         end
@@ -87,6 +96,7 @@ local function repeat_wrapper(prev_func, next_func, reversed)
                     vim.g.last_motion_char = char
                 end
             end
+            case_sensitive_once()
             char = char or ''
             utils.feedkeys(next_key .. char, 'm')
         end
@@ -102,11 +112,23 @@ local function repeat_wrapper(prev_func, next_func, reversed)
                     'prev_func and next_func should be string keys for flash find or till.'
                 )
                 vim.b.last_prev_function = reversed
-                        and function() utils.feedkeys(next_key .. vim.g.last_motion_char, 'm') end
-                    or function() utils.feedkeys(prev_key .. vim.g.last_motion_char, 'm') end
+                        and function()
+                            case_sensitive_once()
+                            utils.feedkeys(next_key .. vim.g.last_motion_char, 'm')
+                        end
+                    or function()
+                        case_sensitive_once()
+                        utils.feedkeys(prev_key .. vim.g.last_motion_char, 'm')
+                    end
                 vim.b.last_next_function = reversed
-                        and function() utils.feedkeys(prev_key .. vim.g.last_motion_char, 'm') end
-                    or function() utils.feedkeys(next_key .. vim.g.last_motion_char, 'm') end
+                        and function()
+                            case_sensitive_once()
+                            utils.feedkeys(prev_key .. vim.g.last_motion_char, 'm')
+                        end
+                    or function()
+                        case_sensitive_once()
+                        utils.feedkeys(next_key .. vim.g.last_motion_char, 'm')
+                    end
             elseif is_find_or_till then
                 vim.b.last_prev_function = function() vim.cmd('normal! ' .. vim.v.count1 .. ',') end
                 vim.b.last_next_function = function() vim.cmd('normal! ' .. vim.v.count1 .. ';') end
