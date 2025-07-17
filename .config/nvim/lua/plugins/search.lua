@@ -10,11 +10,6 @@ vim.g.flash_keys = {
     '<f35>',
     '<f36>',
 }
--- TODO:
--- only search current line for bigfiles.
--- To achieve this, we must update the source code of flash.nvim
--- case sensitive
---
 local comma_semicolon = require('comma_semicolon')
 local prev_flash_find, next_flash_find =
     comma_semicolon.make(flash_indirect['F'], flash_indirect['f'])
@@ -96,6 +91,8 @@ return {
                         { opts.match.label2, 'FlashLabel' },
                     }
                 end
+                local first_visible_line = vim.fn.line('w0')
+                local last_visible_line = vim.fn.line('w$')
                 flash.jump({
                     search = { mode = 'search' },
                     label = {
@@ -104,7 +101,13 @@ return {
                         uppercase = false,
                         format = format,
                     },
-                    pattern = [[\<]],
+                    pattern = [[\%<]]
+                        .. last_visible_line + 1
+                        .. 'l'
+                        .. [[\%>]]
+                        .. first_visible_line - 1
+                        .. 'l'
+                        .. [[\<]],
                     action = function(match, state)
                         state:hide()
                         flash.jump({
