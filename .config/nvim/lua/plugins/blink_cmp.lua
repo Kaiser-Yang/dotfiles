@@ -28,8 +28,10 @@ local completion_keymap = {
                 completion_list.context.bounds.start_col,
                 completion_list.context.bounds.start_col + completion_list.context.bounds.length
             )
-            if #completion_list.items >= 1 and completion_list.items[1].kind == snippet_kind and
-                completion_list.items[1].label:sub(1, #input_str) == input_str
+            if
+                #completion_list.items >= 1
+                and completion_list.items[1].kind == snippet_kind
+                and completion_list.items[1].label:sub(1, #input_str) == input_str
             then
                 return cmp.accept({ index = 1 })
             end
@@ -237,9 +239,9 @@ return {
                 default = function()
                     local result = {
                         'lsp',
-                        'snippets',
                         'path',
                     }
+                    if not vim.bo.filetype:match('dap') then result[#result + 1] = 'snippets' end
                     if vim.bo.filetype == 'AvanteInput' then
                         result[#result + 1] = 'avante'
                     elseif
