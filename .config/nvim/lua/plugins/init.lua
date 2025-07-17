@@ -27,6 +27,7 @@ local plugins = {
     require('plugins.highlight_colors'),
     require('plugins.vim_matchup'),
     require('plugins.lsp_saga'),
+    require('plugins.jobs'),
     -- INFO:
     -- Those plugins may cause performance problems
     require('plugins.auto_tag'),

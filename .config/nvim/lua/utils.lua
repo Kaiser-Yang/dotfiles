@@ -13,6 +13,17 @@ function M.get_win_with_filetype(filetype)
     end
     return nil
 end
+--- @param ft_list string|string[]
+function M.disable_in_ft(ft_list)
+    ft_list = type(ft_list) == 'string' and { ft_list } or ft_list
+    return function(str)
+        assert(type(ft_list) == 'table', 'Expected a table, got: ' .. type(ft_list))
+        for _, f in ipairs(ft_list) do
+            if vim.bo.filetype:match(f) then return '' end
+        end
+        return str
+    end
+end
 function M.is_git_repo()
     if not vim.fn.executable('git') == 0 then return false end
     local out = vim.system({ 'git', 'rev-parse', '--is-inside-work-tree' }, {
