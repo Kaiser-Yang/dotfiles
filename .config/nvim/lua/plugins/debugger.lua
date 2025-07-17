@@ -159,19 +159,11 @@ local dap = {
                 type = 'codelldb',
                 request = 'launch',
                 program = function()
-                    local prompt = vim.g.path_to_executable and vim.g.path_to_executable
-                        or 'not set'
-                    local res = vim.fn.input(
-                        'Path to executable [' .. prompt .. ']: ',
-                        vim.fn.getcwd() .. '/',
-                        'file'
-                    )
-                    if not res:match('^%s*$') then
-                        local fs_stat = vim.uv.fs_stat(res)
-                        if fs_stat and fs_stat.type == 'file' then
-                            vim.g.path_to_executable = res
-                        end
+                    if utils.is_file(vim.g.path_to_executable) then
+                        return vim.g.path_to_executable
                     end
+                    local res = vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    if utils.is_file(res) then vim.g.path_to_executable = res end
                     return vim.g.path_to_executable or ''
                 end,
                 cwd = '${workspaceFolder}',
@@ -182,33 +174,32 @@ local dap = {
                 type = 'codelldb',
                 request = 'attach',
                 pid = function()
-                    local prompt = vim.g.process_id and vim.g.process_id
-                        or vim.g.process_name and vim.g.process_name
-                        or 'not set'
+                    if vim.g.process_id then return vim.g.process_id end
+                    if utils.is_file(vim.g.process_name) then
+                        return dap.utils.pick_process({ filter = vim.g.process_name })
+                    end
                     local id_or_name = vim.fn.input(
-                        'Process ID or Executable name (filter) [' .. prompt .. ']: ',
+                        'Process ID or Executable name (filter): ',
                         vim.fn.getcwd() .. '/',
                         'file'
                     )
+                    -- remove leading and trailing spaces
                     id_or_name = id_or_name:gsub('^%s*(.-)%s*$', '%1')
                     if tonumber(id_or_name) then
                         vim.g.process_id = tonumber(id_or_name)
                         return vim.g.process_id
-                    elseif not id_or_name:match('^%s*$') then
-                        local fs_stat = vim.uv.fs_stat(id_or_name)
-                        if fs_stat and fs_stat.type == 'file' then
-                            vim.g.process_name = id_or_name
-                        end
+                    elseif utils.is_file(id_or_name) then
+                        vim.g.process_name = id_or_name
                     end
                     return dap.utils.pick_process({ filter = vim.g.process_name })
                 end,
                 cwd = '${workspaceFolder}',
             },
         }
-        dap.configurations.cpp = dap.configurations.c
-        dap.configurations.rust = dap.configurations.c
-        dap.configurations.objc = dap.configurations.c
-        dap.configurations.objcpp = dap.configurations.c
+        dap.configurations.cpp = vim.deepcopy(dap.configurations.c)
+        dap.configurations.rust = vim.deepcopy(dap.configurations.c)
+        dap.configurations.objc = vim.deepcopy(dap.configurations.c)
+        dap.configurations.objcpp = vim.deepcopy(dap.configurations.c)
     end,
 }
 return {

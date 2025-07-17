@@ -2,6 +2,11 @@ local M = {}
 
 local map = vim.keymap
 
+function M.is_file(path)
+    path = path and path or ''
+    local fs_stat =  vim.uv.fs_stat(path)
+    return fs_stat and fs_stat.type == 'file'
+end
 function M.get_win_with_filetype(filetype)
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         if filetype == vim.bo[vim.api.nvim_win_get_buf(win)].filetype then return win end
