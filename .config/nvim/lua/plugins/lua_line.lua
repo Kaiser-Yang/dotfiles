@@ -8,9 +8,11 @@ local lua_line_ignore_ft = {
 local function disable_in_ft(ft_list)
     ft_list = type(ft_list) == 'string' and { ft_list } or ft_list
     return function(str)
+        assert(type(ft_list) == 'table', 'Expected a table, got: ' .. type(ft_list))
         for _, f in ipairs(ft_list) do
             if vim.bo.filetype:match(f) then return '' end
         end
+        return str
     end
 end
 return {
