@@ -38,6 +38,13 @@ local function is_popup(winid)
     if not ok then return false end
     return config.relative ~= ''
 end
+vim.api.nvim_create_autocmd('BufEnter', {
+    group = 'UserDIY',
+    pattern = '*',
+    callback = function()
+        if vim.bo.filetype:match('^dap') and vim.fn.mode() == 'i' then vim.cmd('stopinsert') end
+    end,
+})
 vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter' }, {
     group = 'UserDIY',
     pattern = '*',
