@@ -126,6 +126,18 @@ vim.api.nvim_create_autocmd('User', {
         Snacks.toggle.treesitter():map('<leader>ts')
     end,
 })
+vim.api.nvim_create_autocmd('BufEnter', {
+    group = 'UserDIY',
+    callback = function()
+        if vim.bo.filetype == 'snacks_picker_preview' then vim.b.snacks_animate_scroll = nil end
+    end,
+})
+vim.api.nvim_create_autocmd('BufLeave', {
+    group = 'UserDIY',
+    callback = function()
+        if vim.bo.filetype == 'snacks_picker_preview' then vim.b.snacks_animate_scroll = false end
+    end,
+})
 vim.api.nvim_create_autocmd('FileType', {
     pattern = {
         'snacks_picker_list',
@@ -133,6 +145,7 @@ vim.api.nvim_create_autocmd('FileType', {
         'snacks_picker_preview',
     },
     callback = function()
+        if vim.bo.filetype == 'snacks_picker_preview' then vim.b.snacks_animate_scroll = false end
         -- TODO:
         -- FIX:
         -- This will close the grep picker when using big dirs picker
@@ -196,6 +209,16 @@ vim.api.nvim_create_autocmd('BufEnter', {
         should_resume_search_pattern = false
     end,
 })
+local function enable_scroll_for_filetype_once(filetype)
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        if vim.bo[buf].filetype == filetype then
+            vim.b[buf].snacks_animate_scroll = nil
+            vim.schedule(function() vim.b[buf].snacks_animate_scroll = false end)
+            Snacks.scroll.check(win)
+        end
+    end
+end
 return {
     'Kaiser-Yang/snacks.nvim',
     branch = 'develop',
@@ -274,8 +297,20 @@ return {
                         ['<c-w>'] = { '<c-s-w>', mode = { 'i' }, expr = true, desc = 'delete word' },
                         ['<c-j>'] = { 'list_down', mode = { 'n', 'i' } },
                         ['<c-k>'] = { 'list_up', mode = { 'n', 'i' } },
-                        ['<c-u>'] = { 'preview_scroll_up', mode = { 'i', 'n' } },
-                        ['<c-d>'] = { 'preview_scroll_down', mode = { 'i', 'n' } },
+                        ['<c-u>'] = {
+                            function(picker)
+                                enable_scroll_for_filetype_once('snacks_picker_preview')
+                                picker.opts.actions.preview_scroll_up.action()
+                            end,
+                            mode = { 'i', 'n' },
+                        },
+                        ['<c-d>'] = {
+                            function(picker)
+                                enable_scroll_for_filetype_once('snacks_picker_preview')
+                                picker.opts.actions.preview_scroll_down.action()
+                            end,
+                            mode = { 'i', 'n' },
+                        },
                         ['<c-c>'] = { 'close', mode = { 'n', 'i' } },
                         ['<f1>'] = { 'toggle_help_input', mode = { 'i', 'n' } },
                         ['<cr>'] = { 'confirm', mode = { 'n', 'i' } },
