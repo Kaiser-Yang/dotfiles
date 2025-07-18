@@ -27,16 +27,16 @@ local plugins = {
     require('plugins.vim_matchup'),
     require('plugins.lsp_saga'),
     require('plugins.jobs'),
+    require('plugins.debugger'),
     -- INFO:
     -- Those plugins may cause performance problems
     -- require('plugins.rainbow_delimiter'),
+    -- require('plugins.tree_sitter'),
     require('plugins.auto_tag'),
     require('plugins.yanky'),
-    require('plugins.tree_sitter'),
     require('plugins.search'),
     require('plugins.markdown_render'),
     require('plugins.snacks_config'),
-    require('plugins.debugger'),
 }
 if vim.fn.has('mac') ~= 1 then
     if vim.fn.executable('node') == 1 and utils.network_available() then
