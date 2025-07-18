@@ -65,8 +65,13 @@ local function make_find_till_func(key, is_flash)
     return function()
         local mode = 'n'
         if is_flash then
-            mode = 'm'
-            case_sensitive_once()
+            if utils.is_big_file() then
+                -- fall back to the normal f, F, t and T
+                key = vim.g.flash_keys[key] or key
+            else
+                mode = 'm'
+                case_sensitive_once()
+            end
         end
         utils.feedkeys(key .. vim.g.last_motion_char, mode .. 't')
     end
