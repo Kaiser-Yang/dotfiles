@@ -2,9 +2,20 @@ local M = {}
 
 local map = vim.keymap
 
+function M.is_big_file()
+    local line_count = vim.api.nvim_buf_line_count(0)
+    local fs_size = vim.fn.getfsize(vim.api.nvim_buf_get_name(0))
+    if
+        fs_size > vim.g.big_file_limit
+        or fs_size / line_count > vim.g.big_file_limit_per_line
+    then
+        return true
+    end
+end
+
 function M.is_file(path)
     path = path and path or ''
-    local fs_stat =  vim.uv.fs_stat(path)
+    local fs_stat = vim.uv.fs_stat(path)
     return fs_stat and fs_stat.type == 'file'
 end
 function M.get_win_with_filetype(filetype)

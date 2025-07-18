@@ -103,7 +103,7 @@ vim.api.nvim_create_autocmd('WinScrolled', {
         end)
         for win, changes in pairs(vim.v.event) do
             local delta = math.abs(changes.topline)
-            if win and delta <= 1 or delta >= 1000 then
+            if win and delta <= 1 or delta >= vim.g.big_file_limit_per_line then
                 vim.g.snacks_animate_scroll = false
                 vim.schedule(function() vim.g.snacks_animate_scroll = true end)
                 return

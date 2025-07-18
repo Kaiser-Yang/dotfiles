@@ -5,11 +5,12 @@ local flash_indirect = {
     ['T'] = '<f36>',
 }
 vim.g.flash_keys = {
-    '<f33>',
-    '<f34>',
-    '<f35>',
-    '<f36>',
+    ['<f33>'] = 'f',
+    ['<f34>'] = 't',
+    ['<f35>'] = 'F',
+    ['<f36>'] = 'T',
 }
+local utils = require('utils')
 local comma_semicolon = require('comma_semicolon')
 local prev_flash_find, next_flash_find =
     comma_semicolon.make(flash_indirect['F'], flash_indirect['f'])
@@ -82,6 +83,10 @@ return {
             '<c-s>',
             mode = { 'n', 'x' },
             function()
+                if utils.is_big_file() then
+                    vim.notify('File is too big to search, operation aborted', vim.log.levels.WARN)
+                    return
+                end
                 local flash = require('flash')
                 ---@param opts Flash.Format
                 local function format(opts)
