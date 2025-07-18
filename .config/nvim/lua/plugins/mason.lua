@@ -1,10 +1,11 @@
 return {
     'williamboman/mason.nvim',
     branch = 'v1.x',
+    lazy = false,
     config = function()
         local path_before_mason = vim.env.PATH
         require('mason').setup()
-        local mason_plugins = {
+        local ensured_installed = {
             'bash-language-server',
             'clangd',
             'shellcheck',
@@ -31,12 +32,14 @@ return {
             'bazelrc-lsp',
             'codelldb',
         }
-        local mason_registry = require('mason-registry')
-        for _, plugin in ipairs(mason_plugins) do
-            local mason_package = mason_registry.get_package(plugin)
-            if not mason_package:is_installed() then mason_package:install() end
+        local sources = require('mason-registry.sources')
+        for source in sources.iter({ include_uninstalled = true }) do
+            for _, package_name in ipairs(ensured_installed) do
+                local pkg = source:get_package(package_name)
+                if pkg and not pkg:is_installed() then pkg:install() end
+            end
         end
         -- Make sure mason's bin directory is at the last in the PATH
         vim.env.PATH = path_before_mason .. ':' .. vim.env.HOME .. '/.local/share/nvim/mason/bin'
-    end
+    end,
 }
