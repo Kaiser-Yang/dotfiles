@@ -267,7 +267,7 @@ return {
             enabled = true,
             previewers = {
                 file = {
-                    max_size = nil,
+                    max_size = false,
                     max_line_length = 500, -- max line length
                 },
             },
