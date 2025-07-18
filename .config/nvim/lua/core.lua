@@ -112,6 +112,15 @@ local refresh_project_config = function(show_info)
         return true
     end
 end
+vim.api.nvim_create_autocmd('BufLeave', {
+    group = 'UserDIY',
+    pattern = '*',
+    callback = function()
+        if not vim.bo.filetype:match('snacks') and vim.fn.mode() == 'i' then
+            vim.cmd('stopinsert')
+        end
+    end,
+})
 vim.api.nvim_create_autocmd('VimEnter', {
     group = 'UserDIY',
     callback = function() refresh_project_config(false) end,
