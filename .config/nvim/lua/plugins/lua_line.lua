@@ -11,6 +11,7 @@ return {
         'nvim-tree/nvim-web-devicons',
         'AndreM222/copilot-lualine',
     },
+    lazy = false,
     opts = {
         options = {
             icons_enabled = true,
