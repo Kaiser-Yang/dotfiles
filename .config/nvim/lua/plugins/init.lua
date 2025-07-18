@@ -4,7 +4,6 @@ local plugins = {
     require('plugins.explorer'),
     require('plugins.lua_line'),
     require('plugins.noice'),
-    require('plugins.rainbow_delimiter'),
     require('plugins.todo_comments'),
     require('plugins.lsp_config'),
     require('plugins.mason'),
@@ -30,6 +29,7 @@ local plugins = {
     require('plugins.jobs'),
     -- INFO:
     -- Those plugins may cause performance problems
+    -- require('plugins.rainbow_delimiter'),
     require('plugins.auto_tag'),
     require('plugins.yanky'),
     require('plugins.tree_sitter'),
