@@ -100,7 +100,9 @@ function M.get_lsp_capabilities(override)
         },
     }
     default = vim.tbl_deep_extend('force', default, override)
-    return require('blink.cmp').get_lsp_capabilities(default)
+    local ok, blink_cmp = pcall(require, 'blink.cmp')
+    if not ok then return default end
+    return blink_cmp.get_lsp_capabilities(default)
 end
 
 function M.markdown_support_enabled()
