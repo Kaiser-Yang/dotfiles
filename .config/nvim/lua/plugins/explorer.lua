@@ -13,12 +13,8 @@ local function on_file_moved(data)
 end
 
 local function move_cursor_to_neo_tree()
-    for _, win in pairs(vim.api.nvim_list_wins()) do
-        if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == 'neo-tree' then
-            vim.api.nvim_set_current_win(win)
-            break
-        end
-    end
+    local win = utils.get_win_with_filetype('neo-tree')
+    if win then vim.api.nvim_set_current_win(win) end
 end
 local current_file
 vim.api.nvim_create_autocmd('BufEnter', {
@@ -412,8 +408,8 @@ return {
                 move_cursor_to_neo_tree()
                 require('neo-tree.command').execute({
                     source = 'git_status',
-                    reveal = true,
-                    reveal_file = current_file,
+                    reveal = vim.bo.filetype == 'neo-tree',
+                    reveal_file = vim.bo.filetype == 'neo-tree' and current_file or vim.fn.getcwd(),
                 })
             end,
             desc = 'Open Git Status and Reveal Current File',
@@ -425,8 +421,8 @@ return {
                 move_cursor_to_neo_tree()
                 require('neo-tree.command').execute({
                     source = 'filesystem',
-                    reveal = true,
-                    reveal_file = current_file,
+                    reveal = vim.bo.filetype == 'neo-tree',
+                    reveal_file = vim.bo.filetype == 'neo-tree' and current_file or vim.fn.getcwd(),
                 })
             end,
             desc = 'Open File Explorer and Reveal Current File',
@@ -442,6 +438,7 @@ return {
             desc = 'Open Document Symbols',
         },
     },
+    cmd = { 'Neotree' },
     config = function(_, opts)
         local events = require('neo-tree.events')
         opts.event_handlers = {
