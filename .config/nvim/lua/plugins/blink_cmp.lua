@@ -12,9 +12,18 @@ local enable_rime_quick_select = function()
     end
     return true
 end
+local function rime_select_item_wrapper(index)
+    return function(cmp)
+        if not enable_rime_quick_select() then return false end
+        local rime_item_index = utils.get_n_rime_item_index(index)
+        if #rime_item_index ~= index then return false end
+        return cmp.accept({ index = rime_item_index[index] })
+    end
+end
 local completion_keymap = {
     preset = 'none',
     ['<c-s>'] = { 'show_signature', 'hide_signature', 'fallback' },
+    -- TODO: try to remove this key mapping
     ['<c-x>'] = {
         function(cmp) cmp.show({ providers = { 'snippets' } }) end,
     },
@@ -22,7 +31,7 @@ local completion_keymap = {
         function(cmp)
             if not cmp.is_visible() then return false end
             local completion_list = require('blink.cmp.completion.list')
-            if completion_list.get_selected_item() then return false end
+            if completion_list.get_selected_item() then return cmp.accept() end
             local snippet_kind = require('blink.cmp.types').CompletionItemKind.Snippet
             local input_str = completion_list.context.line:sub(
                 completion_list.context.bounds.start_col,
@@ -37,7 +46,6 @@ local completion_keymap = {
             end
             return false
         end,
-        'accept',
         'fallback',
     },
     ['<tab>'] = { 'snippet_forward', 'fallback' },
@@ -48,31 +56,16 @@ local completion_keymap = {
     ['<c-k>'] = { 'select_prev', 'fallback' },
     ['<c-c>'] = { 'cancel', 'fallback' },
     ['<space>'] = {
-        function(cmp)
-            if not enable_rime_quick_select() then return false end
-            local rime_item_index = utils.get_n_rime_item_index(1, nil)
-            if #rime_item_index ~= 1 then return false end
-            return cmp.accept({ index = rime_item_index[1] })
-        end,
+        rime_select_item_wrapper(1),
         'fallback',
     },
+    -- FIX: can not work when binding ;<space> to other key
     [';'] = {
-        -- FIX: can not work when binding ;<space> to other key
-        function(cmp)
-            if not enable_rime_quick_select() then return false end
-            local rime_item_index = utils.get_n_rime_item_index(2, nil)
-            if #rime_item_index ~= 2 then return false end
-            return cmp.accept({ index = rime_item_index[2] })
-        end,
+        rime_select_item_wrapper(2),
         'fallback',
     },
     ['z'] = {
-        function(cmp)
-            if not enable_rime_quick_select() then return false end
-            local rime_item_index = utils.get_n_rime_item_index(3, nil)
-            if #rime_item_index ~= 3 then return false end
-            return cmp.accept({ index = rime_item_index[3] })
-        end,
+        rime_select_item_wrapper(3),
         'fallback',
     },
 }
@@ -136,6 +129,101 @@ for kind_name, hl in pairs(blink_cmp_git_label_name_highlight) do
     vim.api.nvim_set_hl(0, 'BlinkCmpGitLabel' .. kind_name .. 'Id', hl)
 end
 
+local blink_cmp_git_opts = {
+    kind_icons = {
+        openPR = '',
+        openedPR = '',
+        closedPR = '',
+        mergedPR = '',
+        draftPR = '',
+        lockedPR = '',
+        openIssue = '',
+        openedIssue = '',
+        reopenedIssue = '',
+        completedIssue = '',
+        closedIssue = '',
+        not_plannedIssue = '',
+        duplicateIssue = '',
+        lockedIssue = '',
+    },
+    commit = { enable = false },
+    git_centers = {
+        github = {
+            pull_request = {
+                get_command_args = function(command, token)
+                    local args =
+                        require('blink-cmp-git.default.github').pull_request.get_command_args(
+                            command,
+                            token
+                        )
+                    args[#args] = args[#args] .. '?state=all'
+                    return args
+                end,
+                get_kind_name = function(item)
+                    return item.locked and 'lockedPR'
+                        or item.draft and 'draftPR'
+                        or item.merged_at and 'mergedPR'
+                        or item.state .. 'PR'
+                end,
+                configure_score_offset = pr_or_issue_configure_score_offset,
+            },
+            issue = {
+                get_command_args = function(command, token)
+                    local args = require('blink-cmp-git.default.github').issue.get_command_args(
+                        command,
+                        token
+                    )
+                    args[#args] = args[#args] .. '?state=all'
+                    return args
+                end,
+                get_kind_name = function(item)
+                    return item.locked and 'lockedIssue'
+                        or (item.state_reason or item.state) .. 'Issue'
+                end,
+                configure_score_offset = pr_or_issue_configure_score_offset,
+            },
+        },
+        gitlab = {
+            pull_request = {
+                get_command_args = function(command, token)
+                    local args =
+                        require('blink-cmp-git.default.gitlab').pull_request.get_command_args(
+                            command,
+                            token
+                        )
+                    args[#args] = args[#args] .. '?state=all'
+                    return args
+                end,
+                get_kind_name = function(item)
+                    return item.discussion_locked and 'lockedPR'
+                        or item.draft and 'draftPR'
+                        or item.state .. 'PR'
+                end,
+                configure_score_offset = pr_or_issue_configure_score_offset,
+            },
+            issue = {
+                get_command_args = function(command, token)
+                    local args = require('blink-cmp-git.default.gitlab').issue.get_command_args(
+                        command,
+                        token
+                    )
+                    args[#args] = args[#args] .. '?state=all'
+                    return args
+                end,
+                get_kind_name = function(item)
+                    return item.discussion_locked and 'lockedIssue' or item.state .. 'Issue'
+                end,
+                configure_score_offset = pr_or_issue_configure_score_offset,
+            },
+        },
+    },
+}
+
+vim.g.filetype_ignored_keyword = vim.g.filetype_ignored_keyword
+    or {
+        lua = { 'if', 'elseif', 'while', 'for', 'function', 'local' },
+    }
+
 return {
     {
         'saghen/blink.cmp',
@@ -147,7 +235,7 @@ return {
             'rafamadriz/friendly-snippets',
         },
         version = '*',
-
+        event = { 'InsertEnter', 'CmdlineEnter' },
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {
@@ -187,11 +275,12 @@ return {
                             },
                             label = {
                                 text = function(ctx)
-                                    if not vim.g.rime_enabled then
-                                        return ctx.label .. ctx.label_detail
-                                    end
                                     local client = vim.lsp.get_client_by_id(ctx.item.client_id)
-                                    if not client or client.name ~= 'rime_ls' then
+                                    if
+                                        not vim.g.rime_enabled
+                                        or not client
+                                        or client.name ~= 'rime_ls'
+                                    then
                                         return ctx.label .. ctx.label_detail
                                     end
                                     local code_start = #ctx.label_detail + 1
@@ -239,6 +328,8 @@ return {
                 default = function()
                     local result = {
                         'lsp',
+                        -- HACK:
+                        -- this source works not good enough
                         'path',
                     }
                     if not vim.bo.filetype:match('dap') then result[#result + 1] = 'snippets' end
@@ -272,98 +363,7 @@ return {
                         module = 'blink-cmp-git',
                         --- @module 'blink-cmp-git'
                         --- @type blink-cmp-git.Options
-                        opts = {
-                            kind_icons = {
-                                openPR = '',
-                                openedPR = '',
-                                closedPR = '',
-                                mergedPR = '',
-                                draftPR = '',
-                                lockedPR = '',
-                                openIssue = '',
-                                openedIssue = '',
-                                reopenedIssue = '',
-                                completedIssue = '',
-                                closedIssue = '',
-                                not_plannedIssue = '',
-                                duplicateIssue = '',
-                                lockedIssue = '',
-                            },
-                            commit = { enable = false },
-                            git_centers = {
-                                github = {
-                                    pull_request = {
-                                        get_command_args = function(command, token)
-                                            local args =
-                                                require('blink-cmp-git.default.github').pull_request.get_command_args(
-                                                    command,
-                                                    token
-                                                )
-                                            args[#args] = args[#args] .. '?state=all'
-                                            return args
-                                        end,
-                                        get_kind_name = function(item)
-                                            return item.locked and 'lockedPR'
-                                                or item.draft and 'draftPR'
-                                                or item.merged_at and 'mergedPR'
-                                                or item.state .. 'PR'
-                                        end,
-                                        configure_score_offset = pr_or_issue_configure_score_offset,
-                                    },
-                                    issue = {
-                                        get_command_args = function(command, token)
-                                            local args =
-                                                require('blink-cmp-git.default.github').issue.get_command_args(
-                                                    command,
-                                                    token
-                                                )
-                                            args[#args] = args[#args] .. '?state=all'
-                                            return args
-                                        end,
-                                        get_kind_name = function(item)
-                                            return item.locked and 'lockedIssue'
-                                                or (item.state_reason or item.state) .. 'Issue'
-                                        end,
-                                        configure_score_offset = pr_or_issue_configure_score_offset,
-                                    },
-                                },
-                                gitlab = {
-                                    pull_request = {
-                                        get_command_args = function(command, token)
-                                            local args =
-                                                require('blink-cmp-git.default.gitlab').pull_request.get_command_args(
-                                                    command,
-                                                    token
-                                                )
-                                            args[#args] = args[#args] .. '?state=all'
-                                            return args
-                                        end,
-                                        get_kind_name = function(item)
-                                            return item.discussion_locked and 'lockedPR'
-                                                or item.draft and 'draftPR'
-                                                or item.state .. 'PR'
-                                        end,
-                                        configure_score_offset = pr_or_issue_configure_score_offset,
-                                    },
-                                    issue = {
-                                        get_command_args = function(command, token)
-                                            local args =
-                                                require('blink-cmp-git.default.gitlab').issue.get_command_args(
-                                                    command,
-                                                    token
-                                                )
-                                            args[#args] = args[#args] .. '?state=all'
-                                            return args
-                                        end,
-                                        get_kind_name = function(item)
-                                            return item.discussion_locked and 'lockedIssue'
-                                                or item.state .. 'Issue'
-                                        end,
-                                        configure_score_offset = pr_or_issue_configure_score_offset,
-                                    },
-                                },
-                            },
-                        },
+                        opts = blink_cmp_git_opts,
                     },
                     dictionary = {
                         name = 'Dict',
@@ -385,7 +385,10 @@ return {
                                 -- Remove Snippets and Text from completion list
                                 return item.kind ~= TYPE_ALIAS.Snippet
                                         and item.kind ~= TYPE_ALIAS.Text
-                                        and item.kind ~= TYPE_ALIAS.Keyword
+                                        and not (item.kind == TYPE_ALIAS.Keyword and vim.g.filetype_ignored_keyword[vim.bo.filetype] and vim.tbl_contains(
+                                            vim.g.filetype_ignored_keyword[vim.bo.filetype],
+                                            item.label
+                                        ))
                                     or utils.is_rime_item(item)
                                         and item.label:match('^%w*$') == nil
                             end, items)
