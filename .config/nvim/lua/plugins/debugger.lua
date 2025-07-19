@@ -1,10 +1,13 @@
 -- TODO:
 -- completion for dap commands
-vim.fn.sign_define('DapBreakpoint', { text = '🔴' })
-vim.fn.sign_define('DapBreakpointCondition', { text = '⭕' })
-vim.fn.sign_define('DapBreakpointRejected', { text = '🚫' })
-vim.fn.sign_define('DapLogPoint', { text = '📔' })
-vim.fn.sign_define('DapStopped', { text = '👉' })
+vim.api.nvim_set_hl(0, 'DapStopped', { fg = '#98C379' })
+vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#31353F' })
+vim.api.nvim_set_hl(0, 'DapBreakpointRejected', { fg = '#888888' })
+vim.fn.sign_define('DapStopped', { text = '▶', texthl = 'DapStopped', linehl = 'DapStoppedLine' })
+vim.fn.sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint' })
+vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DapBreakpoint' })
+vim.fn.sign_define('DapBreakpointRejected', { text = 'x', texthl = 'DapBreakpointRejected' })
+vim.fn.sign_define('DapBreakpointCondition', { text = '○', texthl = 'DapBreakpointCondition' })
 local dap_ui_visible = false
 local need_restore_explorer = false
 local utils = require('utils')
@@ -224,5 +227,9 @@ return {
         { '<f10>', function() require('dap').step_over() end, desc = 'Debug next' },
         { '<f11>', function() require('dap').step_into() end, desc = 'Debug step into' },
         { '<f12>', function() require('dap').step_out() end, desc = 'Debug step out' },
+        {
+            '<Leader>dl',
+            function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
+        },
     },
 }
