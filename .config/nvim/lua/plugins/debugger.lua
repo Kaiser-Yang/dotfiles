@@ -64,7 +64,8 @@ vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter' }, {
         end
     end,
 })
-local dap = {
+local has_last = false
+local nvim_dap = {
     'mfussenegger/nvim-dap',
     dependencies = {
         'nvim-lua/plenary.nvim',
@@ -72,6 +73,7 @@ local dap = {
     config = function()
         local dap, dap_ui = require('dap'), require('dapui')
         dap.listeners.before.attach.dapui_config = function() dap_ui.open() end
+        dap.listeners.before.attach.set_has_last = function() has_last = true end
         dap.listeners.before.launch.dapui_config = function() dap_ui.open() end
         local vscode = require('dap.ext.vscode')
         local json = require('plenary.json')
@@ -134,7 +136,7 @@ local dap = {
 return {
     'rcarriga/nvim-dap-ui',
     dependencies = {
-        dap,
+        nvim_dap,
         'nvim-neotest/nvim-nio',
         { 'theHamsta/nvim-dap-virtual-text', config = true },
     },
@@ -197,8 +199,8 @@ return {
             debug_test_under_cursor,
             desc = 'Debug test under cursor',
         },
-        { '<leader>D', dap_ui_toggle, { desc = 'Toggle debug ui' } },
-        { '<leader>du', dap_ui_toggle, { desc = 'Toggle debug ui' } },
+        { '<leader>D', dap_ui_toggle, desc = 'Toggle debug ui' },
+        { '<leader>du', dap_ui_toggle, desc = 'Toggle debug ui' },
         {
             '<leader>b',
             function() require('dap').toggle_breakpoint() end,
@@ -209,7 +211,6 @@ return {
             function() require('dap').set_breakpoint(vim.fn.input('Breakpoint Condition: ')) end,
             desc = 'Set condition breakpoint',
         },
-        { '<leader>dr', function() require('dap').repl.open() end, desc = 'Open repl' },
         {
             '<leader>df',
             function() require('dapui').float_element() end,
@@ -220,16 +221,33 @@ return {
             function() require('dapui').eval(vim.fn.input('Evaluate Expression: ')) end,
             desc = 'Debug eval expression',
         },
+        -- TODO:
+        -- check if those two are necessary
+        { '<Leader>dh', function() require('dap.ui.widgets').hover() end, mode = { 'n', 'v' } },
+        { '<Leader>dp', function() require('dap.ui.widgets').preview() end, mode = { 'n', 'v' } },
+        {
+            '<Leader>dl',
+            function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
+            desc = 'Set log point for current line',
+        },
         { '<f4>', function() require('dap').terminate() end, desc = 'Debug terminate' },
-        { '<f5>', function() require('dap').continue() end, desc = 'Debug continue' },
+        {
+            '<f5>',
+            function()
+                local dap = require('dap')
+                local session = dap.session()
+                if session or not has_last then
+                    dap.continue()
+                else
+                    dap.run_last()
+                end
+            end,
+            desc = 'Debug continue or run last',
+        },
         { '<f6>', function() require('dap').restart() end, desc = 'Debug restart' },
         { '<f9>', function() require('dap').step_back() end, desc = 'Debug back' },
         { '<f10>', function() require('dap').step_over() end, desc = 'Debug next' },
         { '<f11>', function() require('dap').step_into() end, desc = 'Debug step into' },
         { '<f12>', function() require('dap').step_out() end, desc = 'Debug step out' },
-        {
-            '<Leader>dl',
-            function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
-        },
     },
 }
