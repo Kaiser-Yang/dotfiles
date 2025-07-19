@@ -1,4 +1,12 @@
 local utils = require('utils')
+local function prepare_system_clipboard()
+    local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
+    local anonymous_reg_content = vim.fn.getreg('"')
+    vim.fn.setreg('+', plus_reg_content)
+    vim.fn.setreg('"', plus_reg_content)
+    vim.schedule(function() vim.fn.setreg('"', anonymous_reg_content) end)
+    return plus_reg_content
+end
 return {
     'gbprod/yanky.nvim',
     opts = {
@@ -9,8 +17,11 @@ return {
                 timer = 50,
             },
         },
+        system_clipboard = {
+            sync_with_ring = true,
+            clipboard_register = '+',
+        },
     },
-    event = { 'TextYankPost' },
     keys = {
         { mode = { 'n', 'x' }, 'y', '<plug>(YankyYank)' },
         { mode = { 'n', 'x' }, 'p', '<plug>(YankyPutAfter)' },
@@ -22,9 +33,7 @@ return {
             'gy',
             function()
                 if not Snacks then return end
-                Snacks.picker.yanky({
-                    on_show = function() vim.cmd.stopinsert() end,
-                })
+                Snacks.picker.yanky({ on_show = function() vim.cmd.stopinsert() end })
             end,
         },
         { 'Y', 'y$', desc = 'Yank till eol' },
@@ -33,12 +42,14 @@ return {
         {
             '<leader>y',
             function()
+                local before_anonymous_reg_content = vim.fn.getreg('"')
                 vim.api.nvim_create_autocmd('TextYankPost', {
                     group = 'UserDIY',
                     pattern = '*',
                     callback = function()
                         local anonymous_reg_content = vim.fn.getreg('"')
-                        vim.fn.setreg('+', anonymous_reg_content, vim.fn.getregtype('+'))
+                        vim.fn.setreg('+', anonymous_reg_content)
+                        vim.fn.setreg('"', before_anonymous_reg_content)
                     end,
                     once = true,
                 })
@@ -55,9 +66,6 @@ return {
             function()
                 local res
                 if not utils.should_enable_paste_image() then
-                    local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
-                    vim.fn.setreg('+', plus_reg_content)
-                    vim.fn.setreg('"', plus_reg_content)
                     if vim.fn.mode() == 'i' then
                         local current_line = vim.api.nvim_get_current_line()
                         if current_line:match('^%s*$') then
@@ -77,6 +85,7 @@ return {
                             res = '<c-g>u<c-o><plug>(YankyPut'
                                 .. (line_len == cursor_col and 'After' or 'Before')
                                 .. 'Charwise)'
+                            local plus_reg_content = prepare_system_clipboard()
                             if plus_reg_content:sub(-1) == '\n' then
                                 plus_reg_content = plus_reg_content:sub(1, -2)
                             end
@@ -131,9 +140,7 @@ return {
             '<leader>p',
             function()
                 if not utils.should_enable_paste_image() then
-                    local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
-                    vim.fn.setreg('+', plus_reg_content)
-                    vim.fn.setreg('"', plus_reg_content)
+                    prepare_system_clipboard()
                     return '<plug>(YankyPutAfter)'
                 else
                     return '<cmd>PasteImage<cr>'
@@ -146,10 +153,8 @@ return {
             mode = { 'n', 'x' },
             '<leader>P',
             function()
-                local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
                 if not utils.should_enable_paste_image() then
-                    vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
-                    vim.fn.setreg('"', plus_reg_content, vim.fn.getregtype('"'))
+                    prepare_system_clipboard()
                     return '<plug>(YankyPutBefore)'
                 else
                     require('img-clip').paste_image({ insert_template_after_cursor = false })
