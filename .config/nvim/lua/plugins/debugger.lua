@@ -41,6 +41,15 @@ local function is_popup(winid)
     if not ok then return false end
     return config.relative ~= ''
 end
+local function input_action(prompt, callback)
+    return function()
+        local input = vim.fn.input(prompt)
+        if not input or input:match('^%s*$') then
+            return -- do nothing if input is empty
+        end
+        callback(input)
+    end
+end
 vim.api.nvim_create_autocmd('BufEnter', {
     group = 'UserDIY',
     callback = function()
@@ -208,7 +217,10 @@ return {
         },
         {
             '<leader>B',
-            function() require('dap').set_breakpoint(vim.fn.input('Breakpoint Condition: ')) end,
+            input_action(
+                'Breakpoint Condition: ',
+                function(input) require('dap').set_breakpoint(input) end
+            ),
             desc = 'Set condition breakpoint',
         },
         {
@@ -218,12 +230,15 @@ return {
         },
         {
             '<leader>de',
-            function() require('dapui').eval(vim.fn.input('Evaluate Expression: ')) end,
+            input_action('Evaluate Expression: ', function(input) require('dapui').eval(input) end),
             desc = 'Debug eval expression',
         },
         {
             '<Leader>dl',
-            function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
+            input_action(
+                'Log point message: ',
+                function(input) require('dap').set_breakpoint(nil, nil, input) end
+            ),
             desc = 'Set log point for current line',
         },
         { '<f4>', function() require('dap').terminate() end, desc = 'Debug terminate' },
