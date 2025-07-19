@@ -1,7 +1,8 @@
--- TODO:
--- close some buffers when it is not been used for a while
--- may be use LFU cache????
 local utils = require('utils')
+-- INFO:
+-- only load 10 buffers by default
+-- We use LFU (Least Frequently Used) algorithm to remove the least used buffers
+vim.g.buffer_limit = 10
 -- INFO: Those variables do not support wildcards
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 vim.g.root_markers =
@@ -117,7 +118,11 @@ vim.api.nvim_create_autocmd('BufLeave', {
     group = 'UserDIY',
     pattern = '*',
     callback = function()
-        if not vim.bo.filetype:match('snacks') and vim.fn.mode() == 'i' then
+        if
+            not vim.bo.filetype:match('snacks')
+            and not vim.bo.filetype:match('neo%-tree')
+            and vim.fn.mode() == 'i'
+        then
             vim.cmd('stopinsert')
         end
     end,
@@ -169,4 +174,12 @@ vim.filetype.add({
     pattern = {
         ['.*.bazelrc'] = 'bazelrc',
     },
+})
+vim.api.nvim_create_autocmd('BufEnter', {
+    callback = function()
+        if not utils.is_visible_buffer() then return end
+        _G.buffer_cache = _G.buffer_cache or require('lfu').new(vim.g.buffer_limit)
+        local deleted_buf, _ = _G.buffer_cache:set(vim.api.nvim_get_current_buf(), true)
+        if deleted_buf then utils.bufdelete(deleted_buf) end
+    end,
 })

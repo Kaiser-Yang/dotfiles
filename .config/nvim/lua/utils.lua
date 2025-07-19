@@ -5,10 +5,7 @@ local map = vim.keymap
 function M.is_big_file()
     local line_count = vim.api.nvim_buf_line_count(0)
     local fs_size = vim.fn.getfsize(vim.api.nvim_buf_get_name(0))
-    if
-        fs_size > vim.g.big_file_limit
-        or fs_size / line_count > vim.g.big_file_limit_per_line
-    then
+    if fs_size > vim.g.big_file_limit or fs_size / line_count > vim.g.big_file_limit_per_line then
         return true
     end
 end
@@ -71,6 +68,14 @@ function M.should_enable_paste_image()
         and ok
         -- wsl will not put images in + reg
         and (vim.fn.has('wsl') == 0 or #plus_reg_content == 0)
+end
+function M.bufdelete(buf)
+    if not buf or buf == 0 then buf = vim.api.nvim_get_current_buf() end
+    if Snacks then
+        Snacks.bufdelete(buf)
+    else
+        vim.cmd('silent bdelete' .. buf)
+    end
 end
 
 function M.get_visible_bufs()
