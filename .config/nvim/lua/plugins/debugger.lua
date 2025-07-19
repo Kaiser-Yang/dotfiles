@@ -1,10 +1,10 @@
 -- TODO:
 -- completion for dap commands
-vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
-vim.fn.sign_define('DapBreakpointCondition', { text = '⭕', texthl = '', linehl = '', numhl = '' })
-vim.fn.sign_define('DapBreakpointRejected', { text = '🚫', texthl = '', linehl = '', numhl = '' })
-vim.fn.sign_define('DapLogPoint', { text = '📔', texthl = '', linehl = '', numhl = '' })
-vim.fn.sign_define('DapStopped', { text = '👉', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpoint', { text = '🔴' })
+vim.fn.sign_define('DapBreakpointCondition', { text = '⭕' })
+vim.fn.sign_define('DapBreakpointRejected', { text = '🚫' })
+vim.fn.sign_define('DapLogPoint', { text = '📔' })
+vim.fn.sign_define('DapStopped', { text = '👉' })
 local dap_ui_visible = false
 local need_restore_explorer = false
 local utils = require('utils')
@@ -40,14 +40,12 @@ local function is_popup(winid)
 end
 vim.api.nvim_create_autocmd('BufEnter', {
     group = 'UserDIY',
-    pattern = '*',
     callback = function()
         if vim.bo.filetype:match('^dap') and vim.fn.mode() == 'i' then vim.cmd('stopinsert') end
     end,
 })
 vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter' }, {
     group = 'UserDIY',
-    pattern = '*',
     callback = function()
         for _, win in ipairs(vim.api.nvim_list_wins()) do
             local buf = vim.api.nvim_win_get_buf(win)
@@ -65,15 +63,17 @@ vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter' }, {
 })
 local dap = {
     'mfussenegger/nvim-dap',
+    dependencies = {
+        'nvim-lua/plenary.nvim',
+    },
     config = function()
         local dap, dap_ui = require('dap'), require('dapui')
         dap.listeners.before.attach.dapui_config = function() dap_ui.open() end
         dap.listeners.before.launch.dapui_config = function() dap_ui.open() end
-        dap.adapters.gdb = {
-            type = 'executable',
-            command = 'gdb',
-            args = { '--interpreter=dap', '--eval-command', 'set print pretty on' },
-        }
+        local vscode = require('dap.ext.vscode')
+        local json = require('plenary.json')
+        vscode.json_decode = function(str) return vim.json.decode(json.json_strip_comments(str)) end
+        if vim.g.only_vscode_launch then return end
         dap.adapters.codelldb = {
             type = 'executable',
             command = 'codelldb',

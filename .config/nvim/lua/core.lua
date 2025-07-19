@@ -12,6 +12,7 @@ vim.g.frontend_filetype = { 'typescript', 'javascript', 'vue', 'html', 'css' }
 vim.g.big_file_limit = 5 * 1024 * 1024 -- 5 MB
 vim.g.big_file_limit_per_line = 1 * 1024 -- 1 KB
 vim.g.big_dir_file_name = '.big_dir_files' -- The file name to store big dir files
+vim.g.only_vscode_launch = true -- Only use the .vscode/launch.json for dap
 
 -- When input method is enabled, disable the following patterns
 vim.g.disable_rime_ls_pattern = {
