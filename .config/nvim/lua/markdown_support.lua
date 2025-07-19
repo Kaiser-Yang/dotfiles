@@ -258,6 +258,9 @@ vim.api.nvim_create_autocmd('FileType', {
     group = 'UserDIY',
     pattern = vim.g.markdown_support_filetype,
     callback = function()
+        -- try to load ultimate-autopair,
+        -- so that vim.g.auto_pairs_cr and vim.g.auto_pairs_bs can be set
+        pcall(require, 'ultimate-autopair')
         vim.cmd.setlocal('spell')
         require('utils').map_set_all(key_mappings)
     end,
