@@ -53,6 +53,7 @@ local function update_find_or_till_char()
             vim.g.last_motion_char = char
         end
     end
+    return ok and char or nil
 end
 
 local function make_builtin_func(cmd)
@@ -61,7 +62,8 @@ end
 
 --- @param key string
 --- @param is_flash boolean
-local function make_find_till_func(key, is_flash)
+--- @param just_key boolean? Just feed key without last motion char, defaults to false
+local function make_find_till_func(key, is_flash, just_key)
     return function()
         local mode = 'n'
         if is_flash then
@@ -73,7 +75,7 @@ local function make_find_till_func(key, is_flash)
                 case_sensitive_once()
             end
         end
-        utils.feedkeys(key .. vim.g.last_motion_char, mode .. 't')
+        utils.feedkeys(key .. (just_key and '' or vim.g.last_motion_char), mode .. 't')
     end
 end
 
@@ -81,8 +83,12 @@ end
 --- @param is_flash boolean
 local function find_till_func(key, is_flash)
     return function(_)
-        update_find_or_till_char()
-        make_find_till_func(key, is_flash)()
+        make_find_till_func(key, is_flash, true)()
+        vim.schedule(function()
+            local res = update_find_or_till_char()
+            if not res then return end
+            utils.feedkeys(res, 'nt')
+        end)
     end
 end
 
