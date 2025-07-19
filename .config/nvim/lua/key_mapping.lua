@@ -15,11 +15,6 @@ local prev_search, next_search = comma_semicolon.make('N', 'n')
 local prev_misspell, next_misspell = comma_semicolon.make('[s', ']s')
 map_set_all({
     -- Copy, cut, paste, and select all
-    { { 'n' }, 'Y', 'y$', { desc = 'Yank till eol' } },
-    { { 'n' }, '<m-c>Y', '"+y$', { desc = 'Copy till eol to + reg' } },
-    { { 'n' }, '<leader>Y', '"+y$', { desc = 'Yank till eol to + reg' } },
-    { { 'n', 'x' }, '<m-c>', '"+y', { desc = 'Copy to + reg' } },
-    { { 'n', 'x' }, '<leader>y', '"+y', { desc = 'Yank to + reg' } },
     {
         'n',
         'yaf',
@@ -37,78 +32,6 @@ map_set_all({
         { desc = 'Yank around file to + reg' },
     },
     { { 'n', 'x' }, '<m-x>', '"+d', { desc = 'Cut to + reg' } },
-    -- HACK:
-    -- when paste from the system board, we try to restore the cursor position
-    -- but this will make the cursor blink once, try to improve this
-    -- TODO:
-    -- make system paste highlight?
-    {
-        { 'n', 'x', 'i' },
-        '<c-rightmouse>',
-        function()
-            local res
-            if vim.fn.mode() == 'i' then res = '<c-g>u' end
-            local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
-            if not utils.should_enable_paste_image() then
-                vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
-                if vim.fn.mode() == 'i' then
-                    vim.cmd('set paste')
-                    res = '<c-r>+'
-                    vim.schedule(function() vim.cmd('set nopaste') end)
-                else
-                    utils.restore_cursor(true)
-                    res = '"+p'
-                end
-            else
-                local current_line = vim.api.nvim_get_current_line()
-                if not current_line or #current_line == 0 or current_line:find('^%s*$') ~= nil then
-                    vim.schedule(function()
-                        vim.cmd('normal! dd')
-                        require('img-clip').paste_image({ insert_template_after_cursor = false })
-                    end)
-                    res = ''
-                else
-                    res = '<cmd>PasteImage<cr>'
-                end
-            end
-            return res
-        end,
-        {
-            desc = 'Paste from + reg',
-            expr = true,
-        },
-    },
-    { { 'n', 'x', 'i' }, '<m-v>', '<c-rightmouse>', { desc = 'Paste from + reg', remap = true } },
-    {
-        { 'n', 'x' },
-        '<leader>p',
-        function()
-            local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
-            if not utils.should_enable_paste_image() then
-                vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
-                utils.restore_cursor(true)
-                return '"+p'
-            else
-                return '<cmd>PasteImage<cr>'
-            end
-        end,
-        { desc = 'Paste from clipboard', expr = true },
-    },
-    {
-        { 'n', 'x' },
-        '<leader>P',
-        function()
-            local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
-            if not utils.should_enable_paste_image() then
-                vim.fn.setreg('+', plus_reg_content, vim.fn.getregtype('+'))
-                utils.feedkeys('"+P', 'n')
-                utils.restore_cursor(true)
-            else
-                require('img-clip').paste_image({ insert_template_after_cursor = false })
-            end
-        end,
-        { desc = 'Paste from clipboard' },
-    },
     {
         { 'n', 'x', 'i' },
         '<m-a>',
