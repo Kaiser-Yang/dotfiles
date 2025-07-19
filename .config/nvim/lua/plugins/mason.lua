@@ -1,17 +1,11 @@
 vim.g.mason_ensure_installed = vim.g.mason_ensure_installed
     or {
+        -- LSP
         'bash-language-server',
         'clangd',
         'shellcheck',
-        'clang-format',
         'jdtls',
-        'java-debug-adapter',
-        'java-test',
-        'google-java-format',
         'lua-language-server',
-        'stylua',
-        'pyright',
-        'autopep8',
         'markdown-oxide',
         'eslint-lsp',
         'json-lsp',
@@ -21,9 +15,20 @@ vim.g.mason_ensure_installed = vim.g.mason_ensure_installed
         'typescript-language-server',
         'vue-language-server',
         'yaml-language-server',
+        'pyright',
+        'bazelrc-lsp',
+
+        -- Formatters
+        'clang-format',
+        'google-java-format',
+        'stylua',
         'prettier',
         'buildifier',
-        'bazelrc-lsp',
+        'autopep8',
+
+        -- Tools for debugging and testing
+        'java-debug-adapter',
+        'java-test',
         'codelldb',
     }
 return {

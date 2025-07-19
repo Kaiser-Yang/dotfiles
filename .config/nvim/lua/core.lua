@@ -165,3 +165,8 @@ vim.api.nvim_create_user_command('GenBigDirFiles', function()
         vim.notify('Big dir files generated successfully: ' .. output_path, vim.log.levels.INFO)
     end)
 end, {})
+vim.filetype.add({
+    pattern = {
+        ['.*.bazelrc'] = 'bazelrc',
+    },
+})

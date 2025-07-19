@@ -1,8 +1,3 @@
-vim.filetype.add {
-  pattern = {
-    ['.*.bazelrc'] = 'bazelrc',
-  },
-}
 return {
     'stevearc/conform.nvim',
     cmd = { 'ConformInfo' },
@@ -36,14 +31,6 @@ return {
             css = { 'prettier' },
             bzl = { 'buildifier' },
             bazelrc = { 'buildifier' },
-        },
-        formatters = {
-            ['autopep8'] = {
-                prepend_args = {
-                    '--max-line-length',
-                    '100',
-                },
-            },
         },
     },
 }
