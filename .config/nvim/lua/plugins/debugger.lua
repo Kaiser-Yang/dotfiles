@@ -221,10 +221,6 @@ return {
             function() require('dapui').eval(vim.fn.input('Evaluate Expression: ')) end,
             desc = 'Debug eval expression',
         },
-        -- TODO:
-        -- check if those two are necessary
-        { '<Leader>dh', function() require('dap.ui.widgets').hover() end, mode = { 'n', 'v' } },
-        { '<Leader>dp', function() require('dap.ui.widgets').preview() end, mode = { 'n', 'v' } },
         {
             '<Leader>dl',
             function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
