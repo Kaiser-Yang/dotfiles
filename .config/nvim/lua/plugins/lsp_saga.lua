@@ -1,3 +1,4 @@
+local map_set_all = require('utils').map_set_all
 local map_set = require('utils').map_set
 local feedkeys = require('utils').feedkeys
 local comma_semicolon = require('comma_semicolon')
@@ -15,6 +16,25 @@ vim.api.nvim_create_autocmd('FileType', {
                 feedkeys('<c-c>', 'm')
             end
         end, { buffer = true })
+    end,
+})
+local lsp_keys = {
+    { 'n', 'gd', '<cmd>Lspsaga goto_definition<cr>', { desc = 'Go to definition' } },
+    { 'n', 'gt', '<cmd>Lspsaga goto_type_definition<cr>', { desc = 'Go to type definition' } },
+    { 'n', 'gi', '<cmd>Lspsaga finder imp<cr>', { desc = 'Go to implementations' } },
+    { 'n', 'gr', '<cmd>Lspsaga finder ref<cr>', { desc = 'Go references' } },
+    { 'n', '<leader>o', '<cmd>Lspsaga outgoing_calls<cr>', { desc = 'Outgoing calls' } },
+    { 'n', '<leader>i', '<cmd>Lspsaga incoming_calls<cr>', { desc = 'Incoming calls' } },
+    { 'n', '<leader>R', '<cmd>Lspsaga rename mode=n<cr>', { desc = 'Rename' } },
+    { { 'n', 'x', 'o' }, ']d', next_diagnostic, { desc = 'Next diagnostic', expr = true } },
+    { { 'n', 'x', 'o' }, '[d', prev_diagnostic, { desc = 'Prev diagnostic', expr = true } },
+}
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+        for _, key in ipairs(lsp_keys) do
+            key[4].buffer = args.buf
+        end
+        map_set_all(lsp_keys)
     end,
 })
 return {
@@ -52,6 +72,10 @@ return {
         finder = {
             keys = {
                 quit = { 'q', '<esc>' },
+                shutter = { '<a-w>' },
+                split = { 's', '<c-s>', '<leader>j', '<leader>k' },
+                vsplit = { 'v', '<c-v>', '<leader>l', '<leader>h' },
+                toggle_or_open = { 'o', '<cr>' },
             },
         },
         rename = {
@@ -65,21 +89,9 @@ return {
             enable = false,
         },
     },
-    keys = {
-        { 'gd', '<cmd>Lspsaga goto_definition<cr>', desc = 'Go to definition' },
-        { 'gt', '<cmd>Lspsaga goto_type_definition<cr>', desc = 'Go to type definition' },
-        -- TODO:
-        -- update the finder layout ???
-        { 'gi', '<cmd>Lspsaga finder imp<cr>', desc = 'Go to implementations' },
-        { 'gr', '<cmd>Lspsaga finder ref<cr>', desc = 'Go references' },
-        { '<leader>o', '<cmd>Lspsaga outgoing_calls<cr>', desc = 'Outgoing calls' },
-        { '<leader>i', '<cmd>Lspsaga incoming_calls<cr>', desc = 'Incoming calls' },
-        { '<leader>R', '<cmd>Lspsaga rename mode=n<cr>', desc = 'Rename' },
-        { ']d', next_diagnostic, desc = 'Next diagnostic', expr = true, mode = { 'n', 'x', 'o' } },
-        { '[d', prev_diagnostic, desc = 'Prev diagnostic', expr = true, mode = { 'n', 'x', 'o' } },
-    },
     config = function(_, opts)
-        opts.ui = { kind = require('catppuccin.groups.integrations.lsp_saga').custom_kind() }
+        local ok, catppuccin_lsp_saga = pcall(require, 'catppuccin.groups.integrations.lsp_saga')
+        if ok then opts.ui = { kind = catppuccin_lsp_saga.custom_kind() } end
         require('lspsaga').setup(opts)
     end,
 }
