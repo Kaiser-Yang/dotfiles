@@ -1,3 +1,11 @@
+vim.api.nvim_create_user_command('OverseerRestartLast', function()
+    local tasks = overseer.list_tasks({ recent_first = true })
+    if vim.tbl_isempty(tasks) then
+        vim.notify('No tasks found', vim.log.levels.WARN)
+    else
+        overseer.run_action(tasks[1], 'restart')
+    end
+end, {})
 return {
     'stevearc/overseer.nvim',
     cmd = {
@@ -14,10 +22,13 @@ return {
         'OverseerQuickAction',
         'OverseerTaskAction',
         'OverseerClearCache',
+        'OverseerRestartLast',
     },
     config = function(_, opts)
         local overseer = require('overseer')
         overseer.setup(opts)
+        local ok, lualine = pcall(require, 'lualine')
+        if not ok then return end
         local lua_line_config = require('lualine.config').get_config()
         table.insert(lua_line_config.sections.lualine_x, 1, {
             'overseer',
@@ -36,14 +47,6 @@ return {
                 [overseer.STATUS.RUNNING] = 'R:',
             },
         })
-        require('lualine').setup(lua_line_config)
-        vim.api.nvim_create_user_command('OverseerRestartLast', function()
-            local tasks = overseer.list_tasks({ recent_first = true })
-            if vim.tbl_isempty(tasks) then
-                vim.notify('No tasks found', vim.log.levels.WARN)
-            else
-                overseer.run_action(tasks[1], 'restart')
-            end
-        end, {})
+        lualine.setup(lua_line_config)
     end,
 }
