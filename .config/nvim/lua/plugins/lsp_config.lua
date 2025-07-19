@@ -4,6 +4,7 @@ return {
         'aznhe21/actions-preview.nvim',
         'mfussenegger/nvim-jdtls',
     },
+    lazy = false,
     config = function()
         vim.lsp.config('*', {
             capabilities = require('utils').get_lsp_capabilities(),

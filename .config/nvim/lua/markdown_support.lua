@@ -245,12 +245,6 @@ local key_mappings = {
         { buffer = true },
     },
 }
--- {
---     'i',
---     ',p',
---     '<c-g>u<cr><cr>![](<++>){: .img-fluid}<cr><cr><++><esc>2k0f[a',
---     { buffer = true }
--- },
 -- {'i', ',d', '<c-g>u~~~~<++><esc>F~hi', { buffer = true } },
 -- {'i', ',i', '<c-g>u**<++><esc>F*i', { buffer = true } },
 -- {'i', ',M', '<c-g>u<cr><cr>$$<cr><cr>$$<cr><cr><++><esc>3kA', { buffer = true } },

@@ -1,6 +1,5 @@
 local utils = require('utils')
 utils.init_for_wsl()
-
 return {
     'Kaiser-Yang/img-clip.nvim',
     branch = 'main',
@@ -8,7 +7,7 @@ return {
     opts = {
         default = {
             prompt_for_file_name = false,
-                  embed_image_as_base64 = false,
+            embed_image_as_base64 = false,
             dir_path = function()
                 local res = 'assets/'
                 if utils.current_file_in_github_io() then
