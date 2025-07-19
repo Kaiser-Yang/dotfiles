@@ -7,6 +7,8 @@ local item_regex = {
     todo_list = '^ *([*-] %[[ x-]%] )',
     reference = '^ *(> )',
 }
+vim.g.auto_pairs_cr = vim.g.auto_pairs_cr or '<cr>'
+vim.g.auto_pairs_bs = vim.g.auto_pairs_bs or '<bs>'
 --- @param line string
 local function match_item(line, must_end)
     for _, regex in pairs(item_regex) do
@@ -193,7 +195,10 @@ local key_mappings = {
                 elseif content_before_cursor:match('^ *$') and feed_list_item_by_context() then
                     -- pass
                 else
-                    feedkeys('<plug>(ultimate-auto-pairs-cr)', 'n')
+                    -- HACK:
+                    -- This is not a good solution, we should consider the original <cr> behavior
+                    -- Maybe we can learn from blink-cmp to know how to implement this
+                    feedkeys(vim.g.auto_pairs_cr, 'n')
                 end
             end
         end,
@@ -212,8 +217,11 @@ local key_mappings = {
                 feedkeys('<bs>', 'n')
                 feed_list_item_by_context()
             else
+                -- HACK:
+                -- This is not a good solution, we should consider the original <cr> behavior
+                -- Maybe we can learn from blink-cmp to know how to implement this
                 -- normal <bs>
-                feedkeys('<plug>(ultimate-auto-pairs-bs)', 'n')
+                feedkeys(vim.g.auto_pairs_bs, 'n')
             end
         end,
         { buffer = true, expr = true },
