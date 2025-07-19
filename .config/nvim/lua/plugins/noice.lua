@@ -3,62 +3,71 @@ vim.api.nvim_create_autocmd('FileType', {
     pattern = 'noice',
     callback = function() map_set('n', '<esc>', 'q', { remap = true, buffer = true }) end,
 })
+local macro_recording_status = false
+vim.api.nvim_create_autocmd('RecordingEnter', {
+    group = 'UserDIY',
+    callback = function()
+        local msg = string.format('Recording @%s', vim.fn.reg_recording())
+        macro_recording_status = true
+        vim.notify(msg, nil, {
+            title = 'Macro Recording',
+            keep = function() return macro_recording_status end,
+            timeout = 0,
+        })
+    end,
+})
+vim.api.nvim_create_autocmd('RecordingLeave', {
+    group = 'UserDIY',
+    callback = function() macro_recording_status = false end,
+})
 return {
     'folke/noice.nvim',
-    event = 'VeryLazy',
     -- HACK:
     -- The experience of notify is not good enough
     -- TODO:
     -- remove nvim-notify when snacks.notifier is good enough
     dependencies = {
         'MunifTanjim/nui.nvim',
-        'rcarriga/nvim-notify',
+        {
+            'rcarriga/nvim-notify',
+            opts = {
+                timeout = 1500,
+                stages = 'static',
+            },
+        },
     },
-    config = function()
-        ---@diagnostic disable-next-line: missing-fields
-        require('noice').setup({
-            lsp = {
-                override = {
-                    ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
-                    ['vim.lsp.util.stylize_markdown'] = true,
-                },
-                signature = {
-                    enabled = false,
-                },
-                documentation = {
-                    enabled = false,
-                },
+    event = 'VeryLazy',
+    opts = {
+        lsp = {
+            override = {
+                ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+                ['vim.lsp.util.stylize_markdown'] = true,
             },
-            presets = {
-                long_message_to_split = true,
-                lsp_doc_border = true,
+            signature = {
+                enabled = false,
             },
-            messages = {
-                view_search = false,
+            documentation = {
+                enabled = false,
             },
-        })
-        vim.api.nvim_create_autocmd('RecordingEnter', {
-            group = 'UserDIY',
-            callback = function()
-                local msg = string.format('Recording @%s', vim.fn.reg_recording())
-                _MACRO_RECORDING_STATUS = true
-                vim.notify(msg, nil, {
-                    title = 'Macro Recording',
-                    keep = function() return _MACRO_RECORDING_STATUS end,
-                    timeout = 0,
+        },
+        presets = {
+            long_message_to_split = true,
+            lsp_doc_border = true,
+        },
+        messages = {
+            view_search = false,
+        },
+    },
+    keys = {
+        {
+            '<leader>sn',
+            function()
+                if not Snacks then return end
+                require('noice.integrations.snacks').open({
+                    on_show = function() vim.cmd.stopinsert() end,
                 })
             end,
-        })
-        vim.api.nvim_create_autocmd('RecordingLeave', {
-            group = 'UserDIY',
-            callback = function() _MACRO_RECORDING_STATUS = false end,
-        })
-        map_set({ 'n' }, '<leader>sn', function()
-            if not Snacks then return end
-            require('noice.integrations.snacks').open({
-                on_show = function() vim.cmd.stopinsert() end,
-            })
-        end, { desc = 'Noice history' })
-        require('notify').setup({ timeout = 1500, stages = 'static' })
-    end,
+            desc = 'Noice history',
+        },
+    },
 }
