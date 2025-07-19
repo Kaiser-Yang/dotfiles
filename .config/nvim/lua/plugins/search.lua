@@ -66,7 +66,18 @@ return {
         { 'f', next_flash_find, mode = { 'n', 'x' }, desc = 'Flash find' },
         { 'T', prev_flash_till, mode = { 'n', 'x' }, desc = 'Flash backwards till' },
         { 't', next_flash_till, mode = { 'n', 'x' }, desc = 'Flash till' },
-        { 'r', mode = 'o', function() require('flash').remote() end, desc = 'Remote Flash' },
+        {
+            'r',
+            mode = 'o',
+            function()
+                if utils.is_big_file() then
+                    vim.notify('File is too big to search, operation aborted', vim.log.levels.WARN)
+                    return
+                end
+                require('flash').remote()
+            end,
+            desc = 'Remote Flash',
+        },
         {
             'R',
             mode = { 'o', 'x' },
