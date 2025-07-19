@@ -1,13 +1,5 @@
 -- TODO:
 -- completion for dap commands
-vim.api.nvim_set_hl(0, 'DapStopped', { fg = '#98C379' })
-vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#31353F' })
-vim.api.nvim_set_hl(0, 'DapBreakpointRejected', { fg = '#888888' })
-vim.fn.sign_define('DapStopped', { text = '▶', texthl = 'DapStopped', linehl = 'DapStoppedLine' })
-vim.fn.sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint' })
-vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DapBreakpoint' })
-vim.fn.sign_define('DapBreakpointRejected', { text = 'x', texthl = 'DapBreakpointRejected' })
-vim.fn.sign_define('DapBreakpointCondition', { text = '○', texthl = 'DapBreakpointCondition' })
 local dap_ui_visible = false
 local need_restore_explorer = false
 local utils = require('utils')
@@ -81,9 +73,13 @@ local nvim_dap = {
     },
     config = function()
         local dap, dap_ui = require('dap'), require('dapui')
-        dap.listeners.before.attach.dapui_config = function() dap_ui.open() end
-        dap.listeners.before.attach.set_has_last = function() has_last = true end
-        dap.listeners.before.launch.dapui_config = function() dap_ui.open() end
+        local before_start = function()
+            has_last = true
+            dap_ui_visible = true
+            dap_ui.open()
+        end
+        dap.listeners.before.attach.dapui_config = before_start
+        dap.listeners.before.launch.dapui_config = before_start
         local vscode = require('dap.ext.vscode')
         local json = require('plenary.json')
         vscode.json_decode = function(str) return vim.json.decode(json.json_strip_comments(str)) end
@@ -140,6 +136,25 @@ local nvim_dap = {
         dap.configurations.rust = vim.deepcopy(dap.configurations.c)
         dap.configurations.objc = vim.deepcopy(dap.configurations.c)
         dap.configurations.objcpp = vim.deepcopy(dap.configurations.c)
+        -- INFO:
+        -- Some colorschemes may have set some highlights, we use force here to override them
+        vim.api.nvim_set_hl(0, 'DapStopped', { fg = '#98C379', force = true })
+        vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#31353F', force = true })
+        vim.api.nvim_set_hl(0, 'DapBreakpointRejected', { fg = '#888888', force = true })
+        vim.fn.sign_define(
+            'DapStopped',
+            { text = '▶', texthl = 'DapStopped', linehl = 'DapStoppedLine' }
+        )
+        vim.fn.sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint' })
+        vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DapBreakpoint' })
+        vim.fn.sign_define(
+            'DapBreakpointRejected',
+            { text = 'x', texthl = 'DapBreakpointRejected' }
+        )
+        vim.fn.sign_define(
+            'DapBreakpointCondition',
+            { text = '○', texthl = 'DapBreakpointCondition' }
+        )
     end,
 }
 return {
