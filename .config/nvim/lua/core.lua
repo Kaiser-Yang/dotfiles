@@ -6,7 +6,7 @@ vim.g.buffer_limit = 10
 -- INFO: Those variables do not support wildcards
 vim.g.markdown_support_filetype = { 'markdown', 'gitcommit', 'text', 'Avante' }
 vim.g.root_markers =
-    { '.nvim', '.git', '.root', 'pom.xml', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' }
+    { '.vscode', '.nvim', '.git', '.root', 'pom.xml', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' }
 vim.g.frontend_filetype = { 'typescript', 'javascript', 'vue', 'html', 'css' }
 
 vim.g.big_file_limit = 5 * 1024 * 1024 -- 5 MB
