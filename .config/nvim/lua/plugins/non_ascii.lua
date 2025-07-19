@@ -17,13 +17,13 @@ return {
     keys = {
         {
             'iw',
-            function() require('non_ascii').iw() end,
+            function() require('non-ascii').iw() end,
             mode = { 'x', 'o' },
             desc = 'Inside a word',
         },
         {
             'aw',
-            function() require('non_ascii').aw() end,
+            function() require('non-ascii').aw() end,
             mode = { 'x', 'o' },
             desc = 'Around a word',
         },
