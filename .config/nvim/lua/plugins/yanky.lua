@@ -1,4 +1,5 @@
 local utils = require('utils')
+local line_wise_key_wrapper = require('utils').line_wise_key_wrapper
 local function prepare_system_clipboard()
     local plus_reg_content = vim.fn.getreg('+'):gsub('\r', '')
     local anonymous_reg_content = vim.fn.getreg('"')
@@ -36,9 +37,12 @@ return {
                 Snacks.picker.yanky({ on_show = function() vim.cmd.stopinsert() end })
             end,
         },
-        { 'Y', 'y$', desc = 'Yank till eol' },
-        { '<m-c>Y', '"+y$', desc = 'Copy till eol to + reg' },
-        { '<leader>Y', '"+y$', desc = 'Yank till eol to + reg' },
+        { 'Y', line_wise_key_wrapper('y$'), desc = 'Line wise yank' },
+        { '<leader>Y', line_wise_key_wrapper('"+y$'), desc = 'Line wise yank to + reg' },
+        { '<m-c>Y', '<leader>Y', remap = true, desc = 'Line wise copy to + reg' },
+        { 'yy', line_wise_key_wrapper('yy'), desc = 'Line wise copy to + reg' },
+        { '<leader>yy', line_wise_key_wrapper('"+yy'), desc = 'Line wise copy to + reg' },
+        { '<m-c>y', '<leader>yy', remap = true, desc = 'Line wise copy to + reg' },
         {
             '<leader>y',
             function()

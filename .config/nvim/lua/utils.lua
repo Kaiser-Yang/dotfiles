@@ -10,11 +10,35 @@ function M.is_big_file()
     end
 end
 
+local get_actual_count = require('line_wise').get_actual_count
+function M.line_wise_key_wrapper(key, operator_mode, feedkeys_mode)
+    if operator_mode then
+        return function()
+            local actual_count = get_actual_count(key == 'k')
+            if actual_count == 0 then return key end
+            return string.rep('<del>', #tostring(vim.v.count)) .. tostring(actual_count) .. key
+        end
+    end
+    return function()
+        local actual_count = get_actual_count(key == 'k')
+        local prefix = ''
+        if actual_count == 0 then
+            if (key == 'j' or key == 'k') and vim.bo.filetype ~= 'qf' then prefix = 'g' end
+        else
+            -- We +1 here to make other operations more reasonable
+            if key ~= 'j' and key ~= 'k' then actual_count = actual_count + 1 end
+            prefix = prefix .. tostring(actual_count)
+        end
+        M.feedkeys(prefix .. key, feedkeys_mode or 'n')
+    end
+end
+
 function M.is_file(path)
     path = path and path or ''
     local fs_stat = vim.uv.fs_stat(path)
     return fs_stat and fs_stat.type == 'file'
 end
+
 function M.get_win_with_filetype(filetype)
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         if filetype == vim.bo[vim.api.nvim_win_get_buf(win)].filetype then return win end

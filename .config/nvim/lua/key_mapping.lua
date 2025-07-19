@@ -1,7 +1,8 @@
 local utils = require('utils')
 local comma_semicolon = require('comma_semicolon')
-local map_set_all = utils.map_set_all
 local map_del = utils.map_del
+local map_set_all = utils.map_set_all
+local line_wise_key_wrapper = require('utils').line_wise_key_wrapper
 map_del({ 'x', 'n' }, 'gc')
 map_del({ 'n' }, '<c-w>d')
 map_del({ 'n' }, '<c-w><c-d>')
@@ -14,6 +15,17 @@ local prev_till, next_till = comma_semicolon.make('T', 't')
 local prev_search, next_search = comma_semicolon.make('N', 'n')
 local prev_misspell, next_misspell = comma_semicolon.make('[s', ']s')
 map_set_all({
+    -- Linewise basic keys
+    { 'n', 'dd', line_wise_key_wrapper('dd'), { desc = 'Line wise dd' } },
+    { 'n', 'cc', line_wise_key_wrapper('cc'), { desc = 'Line wise cc' } },
+    { 'n', 'D', line_wise_key_wrapper('D'), { desc = 'Line wise D' } },
+    { 'n', 'C', line_wise_key_wrapper('C'), { desc = 'Line wise C' } },
+    { { 'n', 'x' }, 'J', line_wise_key_wrapper('J'), { desc = 'Line wise J' } },
+    { { 'n', 'x' }, 'j', line_wise_key_wrapper('j'), { desc = 'Line wise j' } },
+    { { 'n', 'x' }, 'k', line_wise_key_wrapper('k'), { desc = 'Line wise k' } },
+    { 'o', 'j', line_wise_key_wrapper('j', true), { expr = true, desc = 'Line wise j' } },
+    { 'o', 'k', line_wise_key_wrapper('k', true), { expr = true, desc = 'Line wise j' } },
+
     -- Copy, cut, paste, and select all
     {
         'n',
