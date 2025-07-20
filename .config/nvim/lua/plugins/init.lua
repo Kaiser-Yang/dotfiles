@@ -7,7 +7,6 @@ local plugins = {
     require('plugins.todo_comments'),
     require('plugins.lsp_config'),
     require('plugins.mason'),
-    require('plugins.mason_lsp_config'),
     require('plugins.blink_cmp'),
     require('plugins.formatter'),
     require('plugins.auto_pairs'),
