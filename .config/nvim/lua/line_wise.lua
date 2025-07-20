@@ -23,16 +23,26 @@ local function generate_labels()
     end
 end
 generate_labels()
-function _G.get_label()
-    if vim.v.virtnum ~= 0 then
+
+function _G.get_label(current_line, args)
+    local virtnum = vim.v.virtnum
+    local relnum = vim.v.relnum
+    local lnum = vim.v.lnum
+    if args then
+        virtnum = args.virtnum
+        relnum = args.relnum
+        lnum = args.lnum
+    end
+    if virtnum ~= 0 then
         -- do not show line numbers for wrap lines
         return ''
-    elseif vim.v.relnum == 0 then
-        return ' 0'
-    elseif vim.v.relnum > 0 and vim.v.relnum <= #labels then
-        return string.format('%2s', labels[vim.v.relnum])
+    elseif relnum == 0 then
+        if current_line then return string.format('%s', lnum) end
+        return '0'
+    elseif relnum > 0 and relnum <= #labels then
+        return string.format('%s', labels[relnum])
     else
-        return string.format('%2s', vim.v.relnum)
+        return string.format('%s', relnum)
     end
 end
 

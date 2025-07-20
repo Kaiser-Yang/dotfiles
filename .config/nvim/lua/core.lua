@@ -38,7 +38,7 @@ vim.g.loaded_matchit = 1
 
 vim.o.cmdheight = 0
 vim.o.signcolumn = 'yes'
-vim.o.jumpoptions = 'clean'
+vim.o.jumpoptions = 'stack'
 vim.o.termguicolors = true
 vim.o.spelllang = 'en_us,en'
 vim.o.timeoutlen = 300

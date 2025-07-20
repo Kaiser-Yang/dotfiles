@@ -9,6 +9,16 @@ function M.is_big_file(buf)
     return fs_size > vim.g.big_file_limit or fs_size / line_count > vim.g.big_file_limit_per_line
 end
 
+function M.input_action(prompt, callback)
+    return function()
+        local input = vim.fn.input(prompt)
+        if not input or input:match('^%s*$') then
+            return -- do nothing if input is empty
+        end
+        callback(input)
+    end
+end
+
 function M.big_file_checker_wrapper(callback)
     return function()
         if M.is_big_file() then

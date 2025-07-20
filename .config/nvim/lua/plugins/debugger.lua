@@ -28,41 +28,11 @@ local function debug_test_under_cursor()
     if vim.bo.filetype ~= 'java' then return end
     require('jdtls').test_nearest_method()
 end
-local function is_popup(winid)
-    local ok, config = pcall(vim.api.nvim_win_get_config, winid)
-    if not ok then return false end
-    return config.relative ~= ''
-end
-local function input_action(prompt, callback)
-    return function()
-        local input = vim.fn.input(prompt)
-        if not input or input:match('^%s*$') then
-            return -- do nothing if input is empty
-        end
-        callback(input)
-    end
-end
+local input_action = require('utils').input_action
 vim.api.nvim_create_autocmd('BufEnter', {
     group = 'UserDIY',
     callback = function()
         if vim.bo.filetype:match('^dap') and vim.fn.mode() == 'i' then vim.cmd('stopinsert') end
-    end,
-})
-vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter' }, {
-    group = 'UserDIY',
-    callback = function()
-        for _, win in ipairs(vim.api.nvim_list_wins()) do
-            local buf = vim.api.nvim_win_get_buf(win)
-            if not is_popup(win) and vim.bo[buf].filetype:match('^dap') then
-                if vim.fn.winnr('$') ~= 1 then
-                    vim.wo[win].statuscolumn = ' '
-                else
-                    vim.wo[win].statuscolumn = '%{v:lua.get_label()}'
-                end
-                vim.wo[win].cursorcolumn = false
-                vim.wo[win].cursorline = false
-            end
-        end
     end,
 })
 local has_last = false

@@ -137,7 +137,7 @@ map_set_all({
     { 'n', '<c-j>', '<c-w>j', { desc = 'Cursor down' } },
     { 'n', '<c-k>', '<c-w>k', { desc = 'Cursor up' } },
     { 'n', '<c-l>', '<c-w>l', { desc = 'Cursor right' } },
-    { 'n', '<leader>T', '<cmd>tabedit %<cr>', { desc = 'Move current window to a new tabpage' } },
+    { 'n', '<leader>T', '<cmd>tab split<cr>', { desc = 'Move current window to a new tabpage' } },
 
     -- Tabsize related
     {

@@ -357,19 +357,7 @@ return {
                     and vim.bo[buf].filetype ~= 'blink-cmp-menu'
             end,
         },
-        statuscolumn = {
-            enabled = true,
-            left = { 'mark', 'sign', 'git' },
-            middle = function()
-                local lable = get_label()
-                if lable == '' then return '' end
-                return '%=' .. get_label()
-            end,
-            right = { 'fold' },
-            folds = {
-                open = true,
-            },
-        },
+        statuscolumn = { enabled = false },
         words = { enabled = true },
         explorer = { enabled = false },
         ---@type table<string, snacks.win.Config>
