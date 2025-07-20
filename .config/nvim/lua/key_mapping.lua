@@ -29,7 +29,7 @@ map_set_all({
     -- Copy, cut, paste, and select all
     {
         'n',
-        'yaf',
+        '<leader>ay',
         function()
             -- HACK:
             -- highlight when the file is slow?
