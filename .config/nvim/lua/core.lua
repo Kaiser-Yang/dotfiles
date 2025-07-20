@@ -72,6 +72,7 @@ vim.api.nvim_create_autocmd('ModeChanged', {
     group = 'UserDIY',
     pattern = 'n:[^n]',
     callback = function()
+        vim.bo.formatoptions = 'jcrql'
         vim.schedule(function() vim.cmd('nohlsearch') end)
     end,
 })

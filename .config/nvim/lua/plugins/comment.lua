@@ -23,34 +23,14 @@ return {
             desc = 'Comment toggle linewise',
         },
         {
-            '<space>c<space>',
+            '<m-/>',
             line_wise_key_wrapper('<f37>', false, 'm'),
-            desc = 'Comment toggle current line',
+            desc = 'Toggle comment for current line',
         },
-        {
-            '<space>c',
-            '<Plug>(comment_toggle_linewise_visual)',
-            mode = 'x',
-            desc = 'Comment toggle linewise (visual)',
-        },
-        { '<space>C', '<Plug>(comment_toggle_blockwise)', desc = 'Comment toggle blockwise' },
-        {
-            '<space>Cb',
-            line_wise_key_wrapper('<f38>', false, 'm'),
-            desc = 'Comment toggle current block',
-        },
-        {
-            '<space>C',
-            '<Plug>(comment_toggle_blockwise_visual)',
-            mode = 'x',
-            desc = 'Comment toggle blockwise (visual)',
-        },
-        { '<m-/>', '<space>c<space>', desc = 'Toggle comment for current line', remap = true },
         {
             '<m-/>',
-            '<space>c',
+            '<Plug>(comment_toggle_linewise_visual)',
             mode = 'x',
-            remap = true,
             desc = 'Toggle comment for selected lines',
         },
         {
@@ -79,7 +59,7 @@ return {
                     col = after_col or before_col or first_neq_col or col
                     vim.api.nvim_win_set_cursor(0, { row, col })
                 end)
-                return '<c-o><space>c<space>'
+                return '<c-o><f37>'
             end,
             mode = 'i',
             desc = 'Toggle comment for current line',
@@ -87,24 +67,35 @@ return {
             remap = true,
         },
         {
-            '<space>co',
+            '<space>o',
             function() require('Comment.api').insert.linewise.below() end,
             desc = 'Comment insert below',
         },
         {
-            '<space>cO',
+            '<space>O',
             function() require('Comment.api').insert.linewise.above() end,
             desc = 'Comment insert above',
         },
         {
-            '<space>cA',
-            function() require('Comment.api').locked('insert.linewise.eol')() end,
+            '<space>A',
+            function() require('comment.api').locked('insert.linewise.eol')() end,
             desc = 'Comment insert end of line',
+        },
+        { '<space>C', '<Plug>(comment_toggle_blockwise)', desc = 'Comment toggle blockwise' },
+        {
+            '<space>V',
+            line_wise_key_wrapper('<f38>', false, 'm'),
+            desc = 'Comment toggle current block',
+        },
+        {
+            '<space>C',
+            '<Plug>(comment_toggle_blockwise_visual)',
+            mode = 'x',
+            desc = 'Comment toggle blockwise (visual)',
         },
         {
             '<f37>',
             function()
-                -- vim.notify(tostring(vim.v.count))
                 if vim.v.count == 0 then
                     return '<plug>(comment_toggle_linewise_current)'
                 else
