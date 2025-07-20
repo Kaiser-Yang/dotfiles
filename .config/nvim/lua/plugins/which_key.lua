@@ -4,6 +4,9 @@ return {
     opts = {
         delay = vim.o.timeoutlen,
         sort = { 'alphanum', 'local', 'order', 'group', 'mod' },
+        plugins = {
+            spelling = { enabled = false },
+        },
     },
     keys = {
         {
