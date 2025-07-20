@@ -482,7 +482,7 @@ return {
             },
         },
         words = {
-            enabled = true,
+            enabled = false,
         },
         explorer = { enabled = false },
         ---@type table<string, snacks.win.Config>
@@ -673,12 +673,12 @@ return {
             desc = 'Git Browse',
             mode = { 'n', 'v' },
         },
-        { ']w', next_word_ref, mode = { 'n', 'o', 'x' }, desc = 'Next word reference' },
-        { '[w', prev_word_ref, mode = { 'n', 'o', 'x' }, desc = 'Previous word reference' },
         {
             '<leader>si',
             function() Snacks.picker.command_history() end,
             desc = 'Command History',
         },
+        { ']w', next_word_ref, mode = { 'n', 'o', 'x' }, desc = 'Next word reference' },
+        { '[w', prev_word_ref, mode = { 'n', 'o', 'x' }, desc = 'Previous word reference' },
     },
 }
