@@ -24,7 +24,7 @@
 --- @field freq_map table<any, LFUCache.List> A map from frequencies to linked lists of nodes.
 --- @field node_map table<any, LFUCache.Node> A map from keys to their corresponding nodes in the linked list.
 --- @field min_freq number The minimum frequency of access among the items in the cache.
---- @field gmt_last_vis table<any, number> The timestamp of a key when it is visited most recently
+--- @field gmt_last_vis table<any, number> The virtual timestamp of a key when it is visited most recently
 
 --- @class LFUCache
 local M = {
@@ -35,6 +35,7 @@ local M = {
     freq_map = {},
     gmt_last_vis = {},
     min_freq = 0,
+    current_ts = 0,
 }
 M.__index = M
 
@@ -50,6 +51,7 @@ function M.new(capacity)
     self.freq_map = {}
     self.gmt_last_vis = {}
     self.min_freq = 0
+    self.current_ts = 0
     return self
 end
 
@@ -116,7 +118,8 @@ function M:set(key, value)
         self.kv_map[key] = { value = value, freq = freq }
         self.node_map[key] = new_node(key)
         self.freq_map[freq] = self.freq_map[freq] or { head = nil, tail = nil }
-        self.gmt_last_vis[key] = os.time(os.date('!*t'))
+        self.current_ts = self.current_ts + 1
+        self.gmt_last_vis[key] = self.current_ts
         add_to_head(self.freq_map[freq], self.node_map[key])
         self.min_freq = freq
         self.size = self.size + 1
@@ -137,7 +140,8 @@ function M:_increase_freq(key)
     freq = freq + 1
     self.kv_map[key].freq = freq
     self.freq_map[freq] = self.freq_map[freq] or { head = nil, tail = nil }
-    self.gmt_last_vis[key] = os.time(os.date('!*t'))
+    self.current_ts = self.current_ts + 1
+    self.gmt_last_vis[key] = self.current_ts
     add_to_head(self.freq_map[freq], node)
 end
 
@@ -192,8 +196,10 @@ function M:clear()
     self.kv_map = {}
     self.freq_map = {}
     self.node_map = {}
+    self.gmt_last_vis = {}
     self.size = 0
     self.min_freq = 0
+    self.current_ts = 0
 end
 
 return M
