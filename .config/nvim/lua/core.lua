@@ -182,7 +182,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
         if not utils.is_visible_buffer() then return end
         _G.buffer_cache = _G.buffer_cache or require('lfu').new(vim.g.buffer_limit)
         local deleted_buf, _ = _G.buffer_cache:set(vim.api.nvim_get_current_buf(), true)
-        if deleted_buf then utils.bufdelete(deleted_buf) end
+        if deleted_buf then vim.cmd('bdelete ' .. deleted_buf) end
     end,
 })
 vim.api.nvim_create_autocmd('BufDelete', {

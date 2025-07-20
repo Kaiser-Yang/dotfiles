@@ -24,14 +24,16 @@
 --- @field freq_map table<any, LFUCache.List> A map from frequencies to linked lists of nodes.
 --- @field node_map table<any, LFUCache.Node> A map from keys to their corresponding nodes in the linked list.
 --- @field min_freq number The minimum frequency of access among the items in the cache.
+--- @field gmt_last_vis table<any, number> The timestamp of a key when it is visited most recently
 
 --- @class LFUCache
 local M = {
     capacity = 0,
     size = 0,
     kv_map = {},
-    freq_map = {},
     node_map = {},
+    freq_map = {},
+    gmt_last_vis = {},
     min_freq = 0,
 }
 M.__index = M
@@ -44,8 +46,9 @@ function M.new(capacity)
     self.capacity = capacity
     self.size = 0
     self.kv_map = {}
-    self.freq_map = {}
     self.node_map = {}
+    self.freq_map = {}
+    self.gmt_last_vis = {}
     self.min_freq = 0
     return self
 end
@@ -113,6 +116,7 @@ function M:set(key, value)
         self.kv_map[key] = { value = value, freq = freq }
         self.node_map[key] = new_node(key)
         self.freq_map[freq] = self.freq_map[freq] or { head = nil, tail = nil }
+        self.gmt_last_vis[key] = os.time(os.date('!*t'))
         add_to_head(self.freq_map[freq], self.node_map[key])
         self.min_freq = freq
         self.size = self.size + 1
@@ -133,6 +137,7 @@ function M:_increase_freq(key)
     freq = freq + 1
     self.kv_map[key].freq = freq
     self.freq_map[freq] = self.freq_map[freq] or { head = nil, tail = nil }
+    self.gmt_last_vis[key] = os.time(os.date('!*t'))
     add_to_head(self.freq_map[freq], node)
 end
 
@@ -146,6 +151,7 @@ function M:_evict()
     local value = self.kv_map[key].value
     self.kv_map[key] = nil
     self.node_map[key] = nil
+    self.gmt_last_vis[key] = nil
     if not list.head then self.freq_map[self.min_freq] = nil end
     self.size = self.size - 1
     return key, value
@@ -175,6 +181,7 @@ function M:del(key)
 
     self.kv_map[key] = nil
     self.node_map[key] = nil
+    self.gmt_last_vis[key] = nil
     self.size = self.size - 1
 
     return deleted_value

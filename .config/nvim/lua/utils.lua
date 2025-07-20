@@ -93,14 +93,6 @@ function M.should_enable_paste_image()
         -- wsl will not put images in + reg
         and (vim.fn.has('wsl') == 0 or #plus_reg_content == 0)
 end
-function M.bufdelete(buf)
-    if not buf or buf == 0 then buf = vim.api.nvim_get_current_buf() end
-    if Snacks then
-        Snacks.bufdelete(buf)
-    else
-        vim.cmd('silent bdelete' .. buf)
-    end
-end
 
 function M.get_visible_bufs()
     local visible_bufs = {}
@@ -257,6 +249,7 @@ end
 --- @param buf number|nil default 0 for current buffer
 function M.is_visible_buffer(buf)
     buf = buf or 0
+    if buf == 0 then buf = vim.api.nvim_get_current_buf() end
     return vim.api.nvim_buf_is_valid(buf)
         and vim.api.nvim_get_option_value('buflisted', { buf = buf })
 end

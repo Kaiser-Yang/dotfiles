@@ -26,7 +26,7 @@ return {
                 _G.buffer_cache:clear()
                 for _, buf in ipairs(utils.get_visible_bufs()) do
                     local deleted_buf, _ = _G.buffer_cache:set(buf, true)
-                    if deleted_buf then utils.bufdelete(deleted_buf) end
+                    if deleted_buf then vim.cmd('bdelete ' .. deleted_buf) end
                 end
             end,
         },

@@ -1,30 +1,94 @@
 local utils = require('utils')
-local function quit_not_save_on_buffer()
-    if #vim.api.nvim_list_tabpages() > 1 then
-        local current_tab_visible_buf = 0
-        for _, win in pairs(vim.api.nvim_tabpage_list_wins(0)) do
-            if utils.is_visible_buffer(vim.api.nvim_win_get_buf(win)) then
-                current_tab_visible_buf = current_tab_visible_buf + 1
+local function quit_not_save_on_buffer(current_buf, force_delete)
+    current_buf = current_buf or 0
+    if current_buf == 0 then current_buf = vim.api.nvim_get_current_buf() end
+    local tabs = vim.api.nvim_list_tabpages()
+    local current_win = vim.api.nvim_get_current_win()
+    local current_tab = vim.api.nvim_get_current_tabpage()
+    local hold_by_other
+    local wins_for_new_target = {}
+    local current_tab_visible_bufs = {}
+    for _, tab in pairs(tabs) do
+        for _, win in pairs(vim.api.nvim_tabpage_list_wins(tab)) do
+            local win_buf = vim.api.nvim_win_get_buf(win)
+            if win_buf == current_buf and win ~= current_win then hold_by_other = true end
+            if win_buf == current_buf and force_delete then
+                table.insert(wins_for_new_target, win)
+            end
+            if utils.is_visible_buffer(win_buf) and tab == current_tab then
+                table.insert(current_tab_visible_bufs, win_buf)
             end
         end
-        if current_tab_visible_buf <= 1 then
-            vim.cmd('tabclose')
-            return
+    end
+    local function get_target_buf(ignore_visible)
+        local res
+        for _, buf in pairs(utils.get_visible_bufs()) do
+            if
+                buf == current_buf
+                or ignore_visible and vim.tbl_contains(current_tab_visible_bufs, buf)
+            then
+                goto continue
+            end
+            local value = _G.buffer_cache.kv_map[buf]
+            assert(value, 'cache value for a visible buffer should not be nil')
+            if not res then
+                res = buf
+                goto continue
+            end
+            local target_buffer_value = _G.buffer_cache.kv_map[res]
+            assert(target_buffer_value, 'Target buffer value should not be nil')
+            if _G.buffer_cache.gmt_last_vis[res] < _G.buffer_cache.gmt_last_vis[buf] then
+                res = buf
+            end
+            ::continue::
         end
+        return res
+    end
+    if force_delete then
+        if #utils.get_visible_bufs() == 1 then
+            vim.cmd('silent! q')
+        else
+            local target_buffer = get_target_buf()
+            assert(target_buffer, 'target_buffer should not be nill for all visible buffers')
+            for _, win in pairs(wins_for_new_target) do
+                vim.api.nvim_win_set_buf(win, target_buffer)
+            end
+            vim.cmd('bdelete ' .. current_buf)
+        end
+        return
+    end
+    if #tabs > 1 and #current_tab_visible_bufs <= 1 then
+        vim.cmd('tabclose')
+        if not hold_by_other then vim.cmd('bdelete ' .. current_buf) end
+        return
     end
     if
-        not utils.is_visible_buffer(vim.api.nvim_get_current_buf())
+        not utils.is_visible_buffer(current_buf)
         or vim.bo.filetype == 'qf'
         or vim.bo.filetype:match('^dap')
     then
         vim.cmd('silent q!')
         return
     end
-    if #utils.get_visible_bufs() > 1 then
-        utils.bufdelete()
+    if #utils.get_visible_bufs() <= 1 then
+        vim.cmd('silent q!')
+        return
+    -- no cache to get, this should not happen for normal configuration
+    elseif not _G.buffer_cache then
+        vim.cmd('bdelete ' .. current_buf)
         return
     end
-    vim.cmd('silent q!')
+    local target_buffer = get_target_buf(true)
+    assert(
+        not vim.tbl_contains(current_tab_visible_bufs, target_buffer),
+        'target_buf should not be visible'
+    )
+    if target_buffer then
+        vim.api.nvim_win_set_buf(current_win, target_buffer)
+    else
+        vim.cmd('silent q!')
+    end
+    if not hold_by_other then vim.cmd('bdelete ' .. current_buf) end
 end
 return {
     'akinsho/bufferline.nvim',
@@ -56,13 +120,7 @@ return {
                     text_align = 'left',
                 },
             },
-            close_command = function(bufnum)
-                if #utils.get_visible_bufs() > 1 then
-                    utils.bufdelete(bufnum)
-                else
-                    vim.cmd('silent qa!')
-                end
-            end,
+            close_command = function(bufnum) quit_not_save_on_buffer(bufnum, true) end,
             diagnostics = 'nvim_lsp',
             diagnostics_indicator = function(_, _, diagnostics_dict, _)
                 local s = ' '
