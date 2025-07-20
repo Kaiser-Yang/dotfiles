@@ -95,12 +95,24 @@ local function resume_last_picker()
     end
     last_picker()
 end
+
+local SCROLL_WHEEL_UP = vim.api.nvim_replace_termcodes('<ScrollWheelUp>', true, true, true)
+local SCROLL_WHEEL_DOWN = vim.api.nvim_replace_termcodes('<ScrollWheelDown>', true, true, true)
+local on_mouse_scrolling = false
+vim.on_key(function(key, typed)
+    key = typed or key
+    if key ~= SCROLL_WHEEL_UP and key ~= SCROLL_WHEEL_DOWN then return end
+    on_mouse_scrolling = true
+end)
 vim.api.nvim_create_autocmd('WinScrolled', {
     group = 'UserDIY',
     callback = function()
-        vim.schedule(function()
-            if utils.cursor_in_match() then vim.cmd('set hlsearch') end
-        end)
+        if not on_mouse_scrolling then
+            vim.schedule(function()
+                if utils.cursor_in_match() then vim.cmd('set hlsearch') end
+            end)
+        end
+        on_mouse_scrolling = false
         for win, changes in pairs(vim.v.event) do
             local delta = math.abs(changes.topline)
             if win and delta <= 1 or delta >= vim.g.big_file_limit_per_line then
