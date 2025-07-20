@@ -2,10 +2,21 @@ local M = {}
 
 local map = vim.keymap
 
-function M.is_big_file()
-    local line_count = vim.api.nvim_buf_line_count(0)
-    local fs_size = vim.fn.getfsize(vim.api.nvim_buf_get_name(0))
+function M.is_big_file(buf)
+    buf = buf or 0
+    local line_count = vim.api.nvim_buf_line_count(buf)
+    local fs_size = vim.fn.getfsize(vim.api.nvim_buf_get_name(buf))
     return fs_size > vim.g.big_file_limit or fs_size / line_count > vim.g.big_file_limit_per_line
+end
+
+function M.big_file_checker_wrapper(callback)
+    return function()
+        if M.is_big_file() then
+            vim.notify('File is too big to search, operation aborted', vim.log.levels.WARN)
+            return
+        end
+        callback()
+    end
 end
 
 local get_actual_count = require('line_wise').get_actual_count

@@ -16,6 +16,7 @@ local prev_flash_find, next_flash_find =
     comma_semicolon.make(flash_indirect['F'], flash_indirect['f'])
 local prev_flash_till, next_flash_till =
     comma_semicolon.make(flash_indirect['T'], flash_indirect['t'])
+local big_file_checker_wrapper = utils.big_file_checker_wrapper
 return {
     'Kaiser-Yang/flash.nvim',
     branch = 'develop',
@@ -69,35 +70,25 @@ return {
         {
             'r',
             mode = 'o',
-            function()
-                if utils.is_big_file() then
-                    vim.notify('File is too big to search, operation aborted', vim.log.levels.WARN)
-                    return
-                end
-                require('flash').remote()
-            end,
+            big_file_checker_wrapper(function() require('flash').remote() end),
             desc = 'Remote Flash',
         },
         {
             'R',
             mode = { 'o', 'x' },
-            function() require('flash').treesitter_search() end,
+            big_file_checker_wrapper(function() require('flash').treesitter_search() end),
             desc = 'Treesitter Search',
         },
         {
             'gn',
             mode = { 'n', 'x', 'o' },
-            function() require('flash').treesitter() end,
+            big_file_checker_wrapper(function() require('flash').treesitter() end),
             desc = 'Flash Treesitter',
         },
         {
             '<c-s>',
             mode = { 'n', 'x' },
-            function()
-                if utils.is_big_file() then
-                    vim.notify('File is too big to search, operation aborted', vim.log.levels.WARN)
-                    return
-                end
+            big_file_checker_wrapper(function()
                 local flash = require('flash')
                 ---@param opts Flash.Format
                 local function format(opts)
@@ -153,7 +144,7 @@ return {
                         end
                     end,
                 })
-            end,
+            end),
             desc = 'Flash Search Two Characters',
         },
     },
