@@ -2,10 +2,11 @@
 -- Use <c-p> to open file picker,
 -- then use <c-f> to switch to grep picker,
 -- then <c-p> can not switch back to file picker, unless you press <c-p> twice.
+-- When there are more than one window before enterint pickers, and switch to another picker
+-- and on confirm may enter the wrong window.
 local utils = require('utils')
 local map_set = utils.map_set
 local file_ignore_patterns = {
-    '*' .. vim.g.big_dir_file_name,
     '*.git',
     '*.root',
     '*.o',
@@ -24,78 +25,11 @@ local file_ignore_patterns = {
     '*.tar.gz',
     '3rdparty',
 }
-local last_search_pattern
-local last_picker
-local should_resume_search_pattern = false
 local live_grep_limit = 100
 local prev_word_ref, next_word_ref = require('comma_semicolon').make(
     function() Snacks.words.jump(-vim.v.count1, true) end,
     function() Snacks.words.jump(vim.v.count1, true) end
 )
-local function get_files_picker()
-    local picker
-    -- Usage: run :GenBigDirFiles to generate the file list
-    local cwd = vim.fn.getcwd()
-    if vim.fn.filereadable(utils.get_big_dir_output_path()) == 1 then
-        picker = function()
-            Snacks.picker.grep({
-                limit = live_grep_limit,
-                cmd = 'rg',
-                cwd = cwd,
-                title = 'Files',
-                dirs = { utils.get_big_dir_output_path() },
-                layout = {
-                    hidden = { 'preview' },
-                },
-                format = 'file',
-                transform = function(item)
-                    item.cwd = cwd
-                    local _, _, _, file_path = item.text:match('^(.+):(%d+):(%d+):(.*)$')
-                    if vim.fn.filereadable(file_path) == 0 then
-                        vim.notify(
-                            'Invalid file path found: '
-                                .. vim.inspect(file_path)
-                                .. '. Please try to re-run GenBigDirFiles.',
-                            vim.log.levels.ERROR
-                        )
-                        return false
-                    else
-                        item.file = file_path
-                        item.line = nil
-                        item.pos = nil
-                    end
-                end,
-            })
-        end
-    else
-        picker = function()
-            Snacks.picker.files({
-                cwd = cwd,
-                cmd = 'rg',
-                hidden = not utils.should_ignore_hidden_files(),
-                exclude = file_ignore_patterns,
-                layout = {
-                    hidden = { 'preview' },
-                },
-            })
-        end
-    end
-    return picker
-end
-local function last_picker_wrapper(picker)
-    last_picker = picker
-    return picker
-end
--- TODO: this can not set select automatically
-local function resume_last_picker()
-    should_resume_search_pattern = true
-    if not last_picker then
-        vim.notify('No last picker found', vim.log.levels.WARN)
-        return
-    end
-    last_picker()
-end
-
 local SCROLL_WHEEL_UP = vim.api.nvim_replace_termcodes('<ScrollWheelUp>', true, true, true)
 local SCROLL_WHEEL_DOWN = vim.api.nvim_replace_termcodes('<ScrollWheelDown>', true, true, true)
 local on_mouse_scrolling = false
@@ -125,18 +59,7 @@ vim.api.nvim_create_autocmd('WinScrolled', {
 })
 vim.api.nvim_create_autocmd('User', {
     pattern = 'VeryLazy',
-    callback = function()
-        -- Setup some globals for debugging (lazy-loaded)
-        _G.dd = function(...) Snacks.debug.inspect(...) end
-        _G.bt = function() Snacks.debug.backtrace() end
-        vim.print = _G.dd -- Override print to use snacks for `:=` command
-        -- Create some toggle mappings
-        Snacks.toggle
-            .option('conceallevel', { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-            :map('<leader>uc')
-        Snacks.toggle.diagnostics():map('<leader>ud')
-        Snacks.toggle.treesitter():map('<leader>ts')
-    end,
+    callback = function() Snacks.toggle.treesitter():map('<leader>ts') end,
 })
 vim.api.nvim_create_autocmd('BufEnter', {
     group = 'UserDIY',
@@ -158,67 +81,38 @@ vim.api.nvim_create_autocmd('FileType', {
     },
     callback = function()
         if vim.bo.filetype == 'snacks_picker_preview' then vim.b.snacks_animate_scroll = false end
-        -- TODO:
-        -- FIX:
-        -- This will close the grep picker when using big dirs picker
-        map_set({ 'i' }, '<c-p>', function()
-            if not vim.fn.executable('rg') then
-                vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
-                return
-            end
-            should_resume_search_pattern = not vim.api.nvim_get_current_line():match('^%s*$')
-            last_picker_wrapper(get_files_picker())()
-        end, { buffer = true })
-        -- TODO:
-        -- FIX:
-        -- This will close the files picker when using big dirs picker
-        map_set({ 'i' }, '<c-f>', function()
-            if not vim.fn.executable('rg') then
-                vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
-                return
-            end
-            should_resume_search_pattern = not vim.api.nvim_get_current_line():match('^%s*$')
-            last_picker_wrapper(
-                function()
-                    Snacks.picker.grep({
-                        cwd = vim.fn.getcwd(),
-                        cmd = 'rg',
-                        limit = live_grep_limit,
-                        hidden = not utils.should_ignore_hidden_files(),
-                        exclude = file_ignore_patterns,
-                    })
-                end
-            )()
-        end, { buffer = true })
-        -- do not resume the last picker, current picker will always be the last picker
-        -- so resuming the last picker is meaningless
-        map_set({ 'i' }, '<c-y>', function()
-            if not last_search_pattern or last_search_pattern:match('^%s*$') then return end
-            vim.api.nvim_set_current_line(last_search_pattern)
-            vim.api.nvim_win_set_cursor(0, { 1, #last_search_pattern })
-        end, { buffer = true })
-    end,
-})
-vim.api.nvim_create_autocmd('BufLeave', {
-    group = 'UserDIY',
-    callback = function()
-        if vim.bo.filetype ~= 'snacks_picker_input' then return end
-        local current_line = vim.api.nvim_get_current_line()
-        -- If the current line is empty, do not save it
-        if current_line and current_line:match('^%s*$') then return end
-        last_search_pattern = current_line
-    end,
-})
-vim.api.nvim_create_autocmd('BufEnter', {
-    group = 'UserDIY',
-    callback = function()
-        if not should_resume_search_pattern or vim.bo.filetype ~= 'snacks_picker_input' then
-            return
-        end
-        if not last_search_pattern or last_search_pattern:match('^%s*$') then return end
-        vim.api.nvim_set_current_line(last_search_pattern)
-        vim.api.nvim_win_set_cursor(0, { 1, #last_search_pattern })
-        should_resume_search_pattern = false
+        map_set(
+            'i',
+            '<c-p>',
+            function()
+                Snacks.picker.files({
+                    cmd = 'rg',
+                    hidden = not utils.should_ignore_hidden_files(),
+                    exclude = file_ignore_patterns,
+                    pattern = vim.api.nvim_get_current_line(),
+                    layout = {
+                        hidden = { 'preview' },
+                    },
+                })
+            end,
+            { buffer = true }
+        )
+        map_set(
+            'i',
+            '<c-f>',
+            function()
+                Snacks.picker.grep({
+                    cwd = vim.fn.getcwd(),
+                    cmd = 'rg',
+                    limit = live_grep_limit,
+                    hidden = not utils.should_ignore_hidden_files(),
+                    exclude = file_ignore_patterns,
+                    pattern = vim.api.nvim_get_current_line(),
+                })
+            end,
+            { buffer = true }
+        )
+        map_set({ 'i' }, '<c-y>', Snacks.picker.resume, { buffer = true })
     end,
 })
 local function enable_scroll_for_filetype_once(filetype)
@@ -453,12 +347,7 @@ return {
                 },
             },
         },
-        scope = {
-            enabled = false,
-            treesitter = {
-                enabled = false,
-            },
-        },
+        scope = { enabled = false, treesitter = { enabled = false } },
         scroll = {
             enabled = true,
             filter = function(buf)
@@ -481,9 +370,7 @@ return {
                 open = true,
             },
         },
-        words = {
-            enabled = false,
-        },
+        words = { enabled = true },
         explorer = { enabled = false },
         ---@type table<string, snacks.win.Config>
         styles = {
@@ -498,16 +385,10 @@ return {
                 },
             },
         },
-        notifier = {
-            enabled = false,
-        },
+        notifier = { enabled = false },
         quickfile = { enabled = true },
     },
     keys = {
-        -- TODO:
-        -- Try to remove terminal
-        { '<c-t>', function() Snacks.terminal() end, desc = 'Toggle Terminal' },
-        { '<c-t>', '<cmd>close<cr>', desc = 'Toggle Terminal', mode = { 't' } },
         {
             '<leader>r',
             function()
@@ -562,11 +443,7 @@ return {
             end,
             desc = 'Run and compile',
         },
-        {
-            '<c-y>',
-            resume_last_picker,
-            desc = 'Resume last picker',
-        },
+        { '<c-y>', function() Snacks.picker.resume() end, desc = 'Resume last picker' },
         {
             '<c-p>',
             function()
@@ -574,7 +451,14 @@ return {
                     vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
                     return
                 end
-                last_picker_wrapper(get_files_picker())()
+                Snacks.picker.files({
+                    cmd = 'rg',
+                    hidden = not utils.should_ignore_hidden_files(),
+                    exclude = file_ignore_patterns,
+                    layout = {
+                        hidden = { 'preview' },
+                    },
+                })
             end,
             desc = 'Toggle find Files',
         },
@@ -585,17 +469,13 @@ return {
                     vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
                     return
                 end
-                last_picker_wrapper(
-                    function()
-                        Snacks.picker.grep({
-                            cwd = vim.fn.getcwd(),
-                            limit = live_grep_limit,
-                            cmd = 'rg',
-                            hidden = not utils.should_ignore_hidden_files(),
-                            exclude = file_ignore_patterns,
-                        })
-                    end
-                )()
+                Snacks.picker.grep({
+                    cwd = vim.fn.getcwd(),
+                    limit = live_grep_limit,
+                    cmd = 'rg',
+                    hidden = not utils.should_ignore_hidden_files(),
+                    exclude = file_ignore_patterns,
+                })
             end,
             desc = 'Toggle Live Grep',
         },
@@ -678,7 +558,7 @@ return {
             function() Snacks.picker.command_history() end,
             desc = 'Command History',
         },
-        { ']w', next_word_ref, mode = { 'n', 'o', 'x' }, desc = 'Next word reference' },
         { '[w', prev_word_ref, mode = { 'n', 'o', 'x' }, desc = 'Previous word reference' },
+        { ']w', next_word_ref, mode = { 'n', 'o', 'x' }, desc = 'Next word reference' },
     },
 }
