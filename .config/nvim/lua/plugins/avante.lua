@@ -48,8 +48,6 @@ return {
             },
         },
         'nvim-tree/nvim-web-devicons',
-        -- support for image pasting
-        'HakonHarnes/img-clip.nvim',
     },
     event = 'VeryLazy',
     opts = {

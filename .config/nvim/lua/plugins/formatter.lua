@@ -13,8 +13,6 @@ return {
             end,
             mode = { 'n', 'v' },
             desc = 'Format',
-            silent = true,
-            noremap = true,
         },
     },
     opts = {

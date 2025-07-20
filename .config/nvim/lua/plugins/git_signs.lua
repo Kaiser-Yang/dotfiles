@@ -27,7 +27,7 @@ return {
             desc = 'Git diff current hunk',
         },
         {
-            'gcs',
+            'gcl',
             function() require('gitsigns').blame_line({ full = true }) end,
             desc = 'Git blame current line',
         },

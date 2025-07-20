@@ -3,6 +3,8 @@ local utils = require('utils')
 
 local function can_repeat(fu) return type(fu) == 'function' end
 
+-- WARN:
+-- f, F, T, and t can not be used in macro mode
 -- We do not support 'o' mode now
 utils.map_set_all({
     {
