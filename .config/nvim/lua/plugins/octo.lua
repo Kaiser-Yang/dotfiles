@@ -8,5 +8,5 @@ return {
     opts = {
         picker = 'snacks',
     },
-    config = true,
+    cmd = { 'Octo' },
 }
