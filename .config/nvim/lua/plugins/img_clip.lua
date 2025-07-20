@@ -34,4 +34,24 @@ return {
             },
         },
     },
+    config = function(_, opts)
+        require('img-clip').setup(opts)
+        if not Snacks then return end
+        require('utils').map_set({ 'n' }, '<leader>sp', function()
+            if not utils.should_enable_paste_image() then
+                vim.notify('Paste image is not supported in this context', vim.log.levels.WARN)
+                return
+            end
+            Snacks.picker.files({
+                cwd = vim.fn.getcwd(),
+                cmd = 'rg',
+                hidden = not utils.should_ignore_hidden_files(),
+                ft = { 'gif', 'jpg', 'jpeg', 'png', 'webp' },
+                confirm = function(self, item, _)
+                    self:close()
+                    require('img-clip').paste_image({}, './' .. item.file)
+                end,
+            })
+        end, { desc = 'Paste image from file' })
+    end,
 }
