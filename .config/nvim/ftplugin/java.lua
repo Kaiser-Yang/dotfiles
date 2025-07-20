@@ -2,7 +2,7 @@ local utils = require('utils')
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 local workspace_dir = vim.fn.stdpath('data') .. '/jdtls-workspace/' .. project_name
 local jdtls_path = vim.fn.expand('$MASON/packages/jdtls')
-local os_name = vim.fn.has('mac') == 1 and 'mac' or vim.fn.has('windows') == 1 and 'win' or 'linux'
+local os_name = vim.fn.has('mac') == 1 and 'mac' or vim.fn.has('win32') == 1 and 'win' or 'linux'
 local bundles =
     vim.split(vim.fn.glob('$MASON/packages/java-debug-adapter/extension/server/*.jar'), '\n')
 vim.list_extend(
@@ -31,7 +31,6 @@ local config = {
         '-data',
         workspace_dir,
     },
-
     root_dir = vim.fn.getcwd(),
     capabilities = utils.get_lsp_capabilities(),
     handlers = {

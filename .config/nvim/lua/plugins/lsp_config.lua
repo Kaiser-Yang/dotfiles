@@ -1,9 +1,5 @@
 return {
     'neovim/nvim-lspconfig',
-    dependencies = {
-        'aznhe21/actions-preview.nvim',
-        'mfussenegger/nvim-jdtls',
-    },
     lazy = false,
     config = function()
         vim.lsp.config('*', {
@@ -26,12 +22,5 @@ return {
             'yamlls',
             'markdown_oxide',
         })
-        local map_set = require('utils').map_set
-        map_set(
-            { 'v', 'n' },
-            'ga',
-            require('actions-preview').code_actions,
-            { desc = 'Code action' }
-        )
     end,
 }

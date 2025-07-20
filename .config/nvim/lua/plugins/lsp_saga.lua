@@ -30,6 +30,7 @@ local lsp_keys = {
     { { 'n', 'x', 'o' }, '[d', prev_diagnostic, { desc = 'Prev diagnostic', expr = true } },
 }
 vim.api.nvim_create_autocmd('LspAttach', {
+    group = 'UserDIY',
     callback = function(args)
         for _, key in ipairs(lsp_keys) do
             key[4].buffer = args.buf

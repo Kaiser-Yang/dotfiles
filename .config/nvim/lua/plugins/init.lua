@@ -28,6 +28,8 @@ local plugins = {
     require('plugins.lsp_saga'),
     require('plugins.jobs'),
     require('plugins.debugger'),
+    require('plugins.nvim_jdtls'),
+    require('plugins.action_preview'),
     -- INFO:
     -- Those plugins may cause performance problems
     -- require('plugins.rainbow_delimiter'),
