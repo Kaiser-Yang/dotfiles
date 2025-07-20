@@ -32,14 +32,27 @@ return {
     event = 'VeryLazy',
     opts = {
         segments = {
-            { text = { '%s' }, click = 'v:lua.ScSa' },
+            {
+                click = 'v:lua.ScSa',
+                sign = {
+                    name = { 'Dap' },
+                    namespace = { 'diagnostic' },
+                    colwidth = 1,
+                },
+            },
             {
                 text = { function(args) return '%=' .. _G.get_label(false, args) end, ' ' },
                 click = 'v:lua.ScLa',
             },
+            {
+                click = 'v:lua.ScSa',
+                sign = {
+                    namespace = { 'git' },
+                    colwidth = 1,
+                },
+            },
         },
         clickhandlers = {
-            FoldOther = true,
             Lnum = function(args)
                 local ok, dap = pcall(require, 'dap')
                 if not ok then
@@ -55,6 +68,10 @@ return {
                 -- <LeftMouse>
                 elseif args.button == 'l' and args.mods:match('^%s*$') then
                     dap.toggle_breakpoint()
+                end
+            end,
+            ['diagnostic/signs'] = function(args)
+                if args.button == 'l' and args.mods:match('^%s*$') then
                 end
             end,
         },
