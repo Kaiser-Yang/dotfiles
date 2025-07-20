@@ -32,7 +32,7 @@ map_set_all({
         '<leader>ay',
         function()
             -- HACK:
-            -- highlight when the file is slow?
+            -- highlight when the file is small?
             vim.fn.setreg('+', vim.api.nvim_buf_get_lines(0, 0, -1, false), 'l')
             local line_count = vim.api.nvim_buf_line_count(0)
             vim.notify(
