@@ -151,6 +151,35 @@ function M:_evict()
     return key, value
 end
 
+--- @return any the deleted value, nil if not in the cache
+function M:del(key)
+    if not self.kv_map[key] then return end
+
+    local freq = self.kv_map[key].freq
+    local deleted_value = self.kv_map[key].value
+    local node = self.node_map[key]
+    local list = self.freq_map[freq]
+
+    remove_node(list, node)
+
+    if not list.head then
+        self.freq_map[freq] = nil
+        if self.min_freq == freq then
+            self.min_freq = math.huge
+            for f in pairs(self.freq_map) do
+                if f < self.min_freq then self.min_freq = f end
+            end
+            if self.min_freq == math.huge then self.min_freq = 0 end
+        end
+    end
+
+    self.kv_map[key] = nil
+    self.node_map[key] = nil
+    self.size = self.size - 1
+
+    return deleted_value
+end
+
 --- Clear the cache
 function M:clear()
     self.kv_map = {}

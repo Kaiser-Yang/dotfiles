@@ -177,10 +177,18 @@ vim.filetype.add({
     },
 })
 vim.api.nvim_create_autocmd('BufEnter', {
+    group = 'UserDIY',
     callback = function()
         if not utils.is_visible_buffer() then return end
         _G.buffer_cache = _G.buffer_cache or require('lfu').new(vim.g.buffer_limit)
         local deleted_buf, _ = _G.buffer_cache:set(vim.api.nvim_get_current_buf(), true)
         if deleted_buf then utils.bufdelete(deleted_buf) end
+    end,
+})
+vim.api.nvim_create_autocmd('BufDelete', {
+    group = 'UserDIY',
+    callback = function(args)
+        _G.buffer_cache = _G.buffer_cache or require('lfu').new(vim.g.buffer_limit)
+        _G.buffer_cache:del(args.buf)
     end,
 })
