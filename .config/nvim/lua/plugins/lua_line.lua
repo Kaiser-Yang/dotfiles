@@ -5,6 +5,7 @@ local lua_line_ignore_ft = {
     'help',
 }
 local disable_in_ft = require('utils').disable_in_ft
+local utils = require('utils')
 return {
     'nvim-lualine/lualine.nvim',
     dependencies = {
@@ -36,7 +37,21 @@ return {
                     'diff',
                     fmt = disable_in_ft('dap'),
                 },
-                'searchcount',
+                {
+                    function()
+                        -- PERF: performance issue for large files
+                        if utils.is_big_file() then return '' end
+                        local last_search = vim.fn.getreg('/')
+                        if not last_search or last_search == '' then return '' end
+                        local searchcount = vim.fn.searchcount({ maxcount = 9999 })
+                        return last_search
+                            .. '['
+                            .. searchcount.current
+                            .. '/'
+                            .. searchcount.total
+                            .. ']'
+                    end,
+                },
             },
             lualine_c = {},
             lualine_x = {
