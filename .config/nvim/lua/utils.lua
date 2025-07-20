@@ -322,23 +322,27 @@ end
 --- @param opts? { buffer: integer|boolean }
 function M.map_del(mode, lhs, opts) map.del(mode, lhs, opts) end
 
-local networdk_available_cache
-
-function M.network_available(domain, timeout)
-    if networdk_available_cache ~= nil then return networdk_available_cache end
-    domain = domain or '8.8.8.8'
-    timeout = timeout or 500 -- ms
-    local os_name = vim.loop.os_uname().sysname
-    local command
-    if os_name == 'Linux' or os_name == 'Darwin' then
-        command = 'ping -c 1 -W ' .. tostring(timeout / 1000) .. ' ' .. domain .. '> /dev/null 2>&1'
-    elseif os_name == 'Windows' then
-        command = 'ping -n 1 -w ' .. tostring(timeout) .. ' ' .. domain .. ' > nul 2>&1'
-    else
-        networdk_available_cache = true
-    end
-    if command then networdk_available_cache = os.execute(command) == 0 end
-    return networdk_available_cache
+vim.api.nvim_create_autocmd('User', {
+    pattern = 'NetworkCheckedOK',
+    callback = function() M.set_network_status(true) end,
+})
+local network_available_cache
+function M.network_available() return network_available_cache end
+function M.set_network_status(status) network_available_cache = status end
+function M.start_to_check_network(force)
+    if not force and network_available_cache ~= nil then return end
+    local sock = vim.uv.new_tcp()
+    if not sock then return end
+    local domain = '114.114.114.114'
+    sock:connect(domain, 53, function(err)
+        if sock then sock:close() end
+        if err then
+            M.set_network_status(false)
+            return
+        end
+        vim.schedule(
+            function() vim.api.nvim_exec_autocmds('User', { pattern = 'NetworkCheckedOK' }) end
+        )
+    end)
 end
-
 return M

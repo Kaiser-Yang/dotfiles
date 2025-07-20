@@ -8,5 +8,5 @@ return {
     opts = {
         picker = 'snacks',
     },
-    cmd = { 'Octo' },
+    event = { { event = 'User', pattern = 'NetworkCheckedOK' } },
 }
