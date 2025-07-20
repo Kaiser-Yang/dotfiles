@@ -5,9 +5,7 @@ local map = vim.keymap
 function M.is_big_file()
     local line_count = vim.api.nvim_buf_line_count(0)
     local fs_size = vim.fn.getfsize(vim.api.nvim_buf_get_name(0))
-    if fs_size > vim.g.big_file_limit or fs_size / line_count > vim.g.big_file_limit_per_line then
-        return true
-    end
+    return fs_size > vim.g.big_file_limit or fs_size / line_count > vim.g.big_file_limit_per_line
 end
 
 local get_actual_count = require('line_wise').get_actual_count
