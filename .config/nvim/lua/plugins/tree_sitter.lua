@@ -1,7 +1,3 @@
--- TODO:
--- enable ts automatically??
--- Now we can use <leader>ts to toggle treesitter
---
 vim.api.nvim_create_autocmd('FileType', {
     pattern = '*',
     callback = function(args)
