@@ -1,4 +1,3 @@
--- vim.g.matchup_matchparen_offscreen = { method = 'popup' }
 local comma_semicolon = require('comma_semicolon')
 local prev_matchup, next_matchup = comma_semicolon.make('<plug>(matchup-g%)', '<plug>(matchup-%)')
 local prev_multi_matchup, next_multi_matchup =
@@ -7,8 +6,10 @@ local prev_inner_matchup, next_inner_matchup =
     comma_semicolon.make('<plug>(matchup-z%)', '<plug>(matchup-Z%)')
 return {
     'andymass/vim-matchup',
-    event = 'VeryLazy',
-    config = true,
+    -- NOTE:
+    -- We can not lazy load this plugin,
+    -- otherwise there may be some problems when first usinng the keys
+    lazy = false,
     keys = {
         {
             'g%',

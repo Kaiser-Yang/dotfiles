@@ -34,6 +34,9 @@ vim.g.mapleader = ' '
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+-- Disable matchit
+vim.g.loaded_matchit = 1
+
 vim.o.cmdheight = 0
 vim.o.signcolumn = 'yes'
 vim.o.jumpoptions = 'clean'
