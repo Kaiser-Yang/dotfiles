@@ -25,7 +25,7 @@ local config = {
         'java.base/java.lang=ALL-UNNAMED',
         '-javaagent:' .. vim.fn.expand('$MASON/packages/lombok-nightly/lombok.jar'),
         '-jar',
-        vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar'),
+        jdtls_path .. '/plugins/org.eclipse.equinox.launcher.jar',
         '-configuration',
         jdtls_path .. '/config_' .. os_name,
         '-data',
