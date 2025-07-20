@@ -37,7 +37,10 @@ function _G.get_label()
 end
 
 --- @param go_up boolean? defaults to false
-function M.get_actual_count(go_up)
+--- @param visible_only boolean? only consider the visible line numbers, default to false
+--- @return number
+function M.get_actual_count(go_up, visible_only)
+    if not visible_only then return labels[tostring(vim.v.count)] or vim.v.count end
     local treesitter_context_visible_lines = {}
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         local cfg = vim.api.nvim_win_get_config(win)
