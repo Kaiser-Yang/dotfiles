@@ -4,6 +4,13 @@ local prev_multi_matchup, next_multi_matchup =
     comma_semicolon.make('<plug>(matchup-[%)', '<plug>(matchup-][%)')
 local prev_inner_matchup, next_inner_matchup =
     comma_semicolon.make('<plug>(matchup-z%)', '<plug>(matchup-Z%)')
+vim.api.nvim_create_autocmd('BufEnter', {
+    group = 'UserDIY',
+    callback = function()
+        -- only highlight the (), [], and {}
+        vim.b.matchup_matchparen_enabled = 0
+    end,
+})
 return {
     'andymass/vim-matchup',
     -- NOTE:
