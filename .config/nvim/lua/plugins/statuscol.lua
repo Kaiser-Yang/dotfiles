@@ -54,7 +54,8 @@ return {
             },
             {
                 text = {
-                    function(args) return require('statuscol.builtin').foldfunc(args) end,
+                    function(args)
+                        return require('statuscol.builtin').foldfunc(args) .. '%=' end,
                 },
                 click = 'v:lua.ScFa',
             },
