@@ -45,6 +45,7 @@ vim.o.timeoutlen = 300
 vim.o.ttimeoutlen = 0
 vim.o.mouse = 'a'
 vim.o.number = true
+vim.o.numberwidth = 3
 vim.o.relativenumber = true
 vim.o.scrolloff = 5
 vim.o.colorcolumn = '100'
@@ -63,6 +64,7 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.encoding = 'utf-8'
 vim.o.foldlevel = 99
+vim.o.foldcolumn = 'auto'
 vim.o.sessionoptions = 'buffers,curdir,folds,help,tabpages,winsize,winpos,localoptions'
 
 vim.api.nvim_create_augroup('UserDIY', {})

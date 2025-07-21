@@ -27,6 +27,7 @@ vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter', 'TabEnter' }, {
         end
     end,
 })
+vim.o.fillchars = 'fold: ,foldopen:,foldclose:,foldsep: '
 return {
     'luukvbaal/statuscol.nvim',
     event = 'VeryLazy',
@@ -51,6 +52,12 @@ return {
                     colwidth = 1,
                 },
             },
+            {
+                text = {
+                    function(args) return require('statuscol.builtin').foldfunc(args) end,
+                },
+                click = 'v:lua.ScFa',
+            },
         },
         clickhandlers = {
             Lnum = function(args)
@@ -70,10 +77,11 @@ return {
                     dap.toggle_breakpoint()
                 end
             end,
-            ['diagnostic/signs'] = function(args)
-                if args.button == 'l' and args.mods:match('^%s*$') then
-                end
-            end,
+            -- TODO: beautify this
+            -- ['diagnostic/signs'] = function(args)
+            --     if args.button == 'l' and args.mods:match('^%s*$') then
+            --     end
+            -- end,
         },
     },
 }
