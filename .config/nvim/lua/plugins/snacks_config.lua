@@ -107,7 +107,7 @@ vim.api.nvim_create_autocmd('FileType', {
                     limit = live_grep_limit,
                     hidden = not utils.should_ignore_hidden_files(),
                     exclude = file_ignore_patterns,
-                    pattern = vim.api.nvim_get_current_line(),
+                    search  = vim.api.nvim_get_current_line(),
                 })
             end,
             { buffer = true }
