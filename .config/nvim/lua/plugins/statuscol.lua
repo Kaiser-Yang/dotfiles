@@ -9,7 +9,9 @@ vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter', 'TabEnter' }, {
     callback = function()
         for _, win in ipairs(vim.api.nvim_list_wins()) do
             local buf = vim.api.nvim_win_get_buf(win)
-            if not is_popup(win) and vim.bo[buf].filetype:match('^dap') then
+            if is_popup(win) then goto continue end
+            local filetype = vim.bo[buf].filetype
+            if filetype:match('^dap') or filetype == 'neo-true' then
                 if vim.fn.winnr('$') ~= 1 then
                     vim.wo[win].statuscolumn = ' '
                 else
@@ -24,6 +26,7 @@ vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter', 'TabEnter' }, {
                 vim.wo[win].foldcolumn = '0'
                 vim.wo[win].signcolumn = 'no'
             end
+            ::continue::
         end
     end,
 })
@@ -54,8 +57,7 @@ return {
             },
             {
                 text = {
-                    function(args)
-                        return require('statuscol.builtin').foldfunc(args) .. '%=' end,
+                    function(args) return require('statuscol.builtin').foldfunc(args) .. '%=' end,
                 },
                 click = 'v:lua.ScFa',
             },
