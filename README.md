@@ -10,7 +10,6 @@ My own configure files for UNIX/Linux tools.
    - `c`: Create symbolic links for configuration files.
    - `s`: Change the login shell to `zsh`.
    - `f`: Install fonts.
-     This is useful when you have other configuration files in the directories.
 3. Run `nvim` to install plugins.
 
 **NOTE:** If you are using a `Mac` or you have problems telling you `unknow option: declare -A`,
