@@ -1,8 +1,3 @@
-local function is_popup(winid)
-    local ok, config = pcall(vim.api.nvim_win_get_config, winid)
-    if not ok then return false end
-    return config.relative ~= ''
-end
 local input_action = require('utils').input_action
 local diagnostic_bufnr = nil
 local diagnostic_win_id = nil
@@ -11,16 +6,8 @@ vim.api.nvim_create_autocmd({ 'BufNew', 'TabClosed', 'BufWinEnter', 'TabEnter' }
     callback = function()
         for _, win in ipairs(vim.api.nvim_list_wins()) do
             local buf = vim.api.nvim_win_get_buf(win)
-            local cfg = vim.api.nvim_win_get_config(win)
-            local is_treesitter_context = cfg.relative == 'win'
-                and cfg.row == 0
-                and cfg.win == vim.api.nvim_get_current_win()
-                and vim.w[win].treesitter_context_line_number
             local filetype = vim.bo[buf].filetype
-            if
-                not is_popup(win) and (filetype:match('^dap') or filetype == 'neo-true')
-                or is_treesitter_context
-            then
+            if filetype:match('^dap') then
                 if vim.fn.winnr('$') ~= 1 then
                     vim.wo[win].statuscolumn = ' '
                 else
@@ -30,8 +17,10 @@ vim.api.nvim_create_autocmd({ 'BufNew', 'TabClosed', 'BufWinEnter', 'TabEnter' }
                 end
                 vim.wo[win].foldcolumn = '0'
                 vim.wo[win].signcolumn = 'no'
-            elseif vim.bo[buf].filetype == 'snacks_picker_preview' then
-                vim.wo[win].statuscolumn = '%=%{v:lua.get_label(v:true)} '
+            elseif vim.bo[buf].filetype == 'snacks_picker_preview' or filetype == 'neo-tree' then
+                vim.wo[win].statuscolumn = '%=%{v:lua.get_label('
+                    .. (filetype == 'neo-tree' and 'v:false' or 'v:true')
+                    .. ')} '
                 vim.wo[win].foldcolumn = '0'
                 vim.wo[win].signcolumn = 'no'
             end

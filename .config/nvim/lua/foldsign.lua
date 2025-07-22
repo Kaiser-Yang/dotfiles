@@ -57,7 +57,7 @@ function M.update_fold_signs(buf)
                 vim.fn.sign_place(id, group, sign_name, buf, { lnum = lnum, priority = 1000 })
                 cache[lnum] = { fold = fold_status, sign_id = id }
             end
-        else
+        elseif fold_lvl == 0 then
             -- Remove sign if it is no longer needed
             if prev and prev.sign_id then
                 vim.fn.sign_unplace(group, { buffer = buf, id = prev.sign_id })
@@ -80,11 +80,85 @@ function M.update_fold_signs(buf)
     end
 end
 
-vim.api.nvim_create_autocmd({ 'CursorMoved', 'WinScrolled', 'InsertLeave', 'BufWinEnter' }, {
+vim.api.nvim_create_autocmd({
+    'VimEnter',
+    'WinEnter',
+    'ModeChanged',
+    'CursorHold',
+    'CursorMoved',
+    'WinScrolled',
+    'BufWinEnter',
+}, {
     callback = function(args)
         if vim.fn.mode() == 'i' then return end
         M.update_fold_signs(args.buf)
     end,
 })
+
+local fold_keys = {
+    {
+        value = 'za',
+        desc = 'Toggle fold under cursor',
+    },
+    {
+        value = 'zA',
+        desc = 'Toggle all folds under cursor',
+    },
+    {
+        value = 'zd',
+        desc = 'Delete fold under cursor',
+    },
+    {
+        value = 'zc',
+        desc = 'Close fold under cursor',
+    },
+    {
+        value = 'zC',
+        desc = 'Close all folds under cursor',
+    },
+    {
+        value = 'zD',
+        desc = 'Delete all folds under cursor',
+    },
+    {
+        value = 'zE',
+        desc = 'Delete all folds in the buffer',
+    },
+    {
+        value = 'zf',
+        desc = 'Create fold',
+    },
+    {
+        value = 'zm',
+        desc = 'Fold more',
+    },
+    {
+        value = 'zM',
+        desc = 'Close all folds',
+    },
+    {
+        value = 'zo',
+        desc = 'Open fold under cursor',
+    },
+    {
+        value = 'zO',
+        desc = 'Open all folds under cursor',
+    },
+    {
+        value = 'zr',
+        desc = 'Fold less',
+    },
+    {
+        value = 'zR',
+        desc = 'Open all folds',
+    },
+}
+
+for _, key in ipairs(fold_keys) do
+    require('utils').map_set({ 'n', 'x' }, key.value, function()
+        vim.schedule(function() M.update_fold_signs(vim.api.nvim_get_current_buf()) end)
+        return key.value
+    end, { expr = true, desc = key.desc })
+end
 
 return M

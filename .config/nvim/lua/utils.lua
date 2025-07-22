@@ -9,6 +9,14 @@ function M.is_big_file(buf)
     return fs_size > vim.g.big_file_limit or fs_size / line_count > vim.g.big_file_limit_per_line
 end
 
+function M.is_popup(winid)
+    winid = winid or 0
+    if winid == 0 then winid = vim.api.nvim_get_current_win() end
+    local ok, config = pcall(vim.api.nvim_win_get_config, winid)
+    if not ok then return false end
+    return config.relative ~= ''
+end
+
 function M.input_action(prompt, callback)
     return function()
         local input = vim.fn.input(prompt)

@@ -14,6 +14,8 @@ local prev_find, next_find = comma_semicolon.make('F', 'f')
 local prev_till, next_till = comma_semicolon.make('T', 't')
 local prev_search, next_search = comma_semicolon.make('N', 'n')
 local prev_misspell, next_misspell = comma_semicolon.make('[s', ']s')
+local prev_fold, next_fold = comma_semicolon.make('zk', 'zj')
+local prev_open_fold, next_open_fold = comma_semicolon.make('[z', ']z')
 map_set_all({
     -- Linewise basic keys
     { 'n', 'dd', line_wise_key_wrapper('dd'), { desc = 'Line wise dd' } },
@@ -199,6 +201,14 @@ map_set_all({
     { { 'n', 'o', 'x' }, 'n', next_search, { desc = 'Next search pattern', expr = true } },
     { { 'n', 'o', 'x' }, '[s', prev_misspell, { desc = 'Previous misspelled word', expr = true } },
     { { 'n', 'o', 'x' }, ']s', next_misspell, { desc = 'Next misspelled word', expr = true } },
+    -- stylua: ignore
+    { { 'n', 'o', 'x' }, '[z', prev_open_fold, { desc = 'Move to start of current fold', expr = true } },
+    -- stylua: ignore
+    { { 'n', 'o', 'x' }, ']z', next_open_fold, { desc = 'Move to end of current fold', expr = true } },
+    -- stylua: ignore
+    { { 'n', 'o', 'x' }, 'zk', prev_fold, { desc = 'Move upwards to the end of the previous fold', expr = true } },
+    -- stylua: ignore
+    { { 'n', 'o', 'x' }, 'zj', next_fold, { desc = 'Move downwards to the start of the next fold', expr = true } },
 
     -- Others
     { { 'i' }, '<c-n>', '<nop>' },
