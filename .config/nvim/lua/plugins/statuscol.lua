@@ -30,7 +30,6 @@ vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter', 'TabEnter' }, {
         end
     end,
 })
-vim.o.fillchars = 'fold: ,foldopen:,foldclose:,foldsep: '
 return {
     'luukvbaal/statuscol.nvim',
     event = 'VeryLazy',
@@ -39,8 +38,8 @@ return {
             {
                 click = 'v:lua.ScSa',
                 sign = {
-                    name = { 'Dap' },
-                    namespace = { 'diagnostic' },
+                    name = { '^[^gF]' },
+                    namespace = { '^[^gf]' },
                     colwidth = 1,
                 },
             },
@@ -51,15 +50,10 @@ return {
             {
                 click = 'v:lua.ScSa',
                 sign = {
+                    name = { 'FoldClosedSign', 'FoldOpenSign' },
                     namespace = { 'git' },
                     colwidth = 1,
                 },
-            },
-            {
-                text = {
-                    function(args) return require('statuscol.builtin').foldfunc(args) .. '%=' end,
-                },
-                click = 'v:lua.ScFa',
             },
         },
         clickhandlers = {
@@ -85,6 +79,24 @@ return {
             --     if args.button == 'l' and args.mods:match('^%s*$') then
             --     end
             -- end,
+            FoldClosedSign = function(args)
+                -- <C-LeftMouse>
+                if args.button == 'l' and args.mods:find('c') then
+                -- <LeftMouse>
+                elseif args.button == 'l' and args.mods:match('^%s*$') then
+                    vim.cmd('normal! zo')
+                end
+                require('foldsign').update_fold_signs(vim.api.nvim_get_current_buf())
+            end,
+            FoldOpenSign = function(args)
+                -- <C-LeftMouse>
+                if args.button == 'l' and args.mods:find('c') then
+                -- <LeftMouse>
+                elseif args.button == 'l' and args.mods:match('^%s*$') then
+                    vim.cmd('normal! zc')
+                end
+                require('foldsign').update_fold_signs(vim.api.nvim_get_current_buf())
+            end,
         },
     },
 }
