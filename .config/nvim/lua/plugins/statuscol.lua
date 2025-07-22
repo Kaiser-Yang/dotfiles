@@ -1,6 +1,7 @@
 local input_action = require('utils').input_action
 local diagnostic_bufnr = nil
 local diagnostic_win_id = nil
+local get_fold_start = require('utils').get_fold_start
 vim.api.nvim_create_autocmd({ 'BufNew', 'TabClosed', 'BufWinEnter', 'TabEnter' }, {
     group = 'UserDIY',
     callback = function()
@@ -74,7 +75,7 @@ return {
             FoldClosedSign = function(args)
                 -- <C-LeftMouse>
                 if args.button == 'l' and args.mods:find('c') then
-                    vim.cmd('normal! zO')
+                    get_fold_start(args.mousepos.line)
                 -- <LeftMouse>
                 elseif args.button == 'l' and args.mods:match('^%s*$') then
                     vim.cmd('normal! zo')
@@ -84,7 +85,12 @@ return {
             FoldOpenSign = function(args)
                 -- <C-LeftMouse>
                 if args.button == 'l' and args.mods:find('c') then
-                    vim.cmd('normal! zC')
+                    local fold_start = get_fold_start(args.mousepos.line)
+                    -- reverse the order to close from the bottom up
+                    table.sort(fold_start, function(a, b) return a > b end)
+                    for _, lnum in ipairs(fold_start) do
+                        if vim.fn.foldclosed(lnum) == -1 then vim.cmd(lnum .. 'foldclose') end
+                    end
                 -- <LeftMouse>
                 elseif args.button == 'l' and args.mods:match('^%s*$') then
                     vim.cmd('normal! zc')

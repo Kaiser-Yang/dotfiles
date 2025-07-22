@@ -9,7 +9,6 @@ vim.fn.sign_define(
 
 local group = 'foldsign'
 local fold_sign_cache = {}
-local buf_tick_cache = {}
 local M = {}
 
 local function get_buf_cache(buf)
@@ -17,30 +16,36 @@ local function get_buf_cache(buf)
     return fold_sign_cache[buf]
 end
 
-local function get_buf_tick(buf) return vim.api.nvim_buf_get_changedtick(buf) end
-
 local function update_range(buf, first, last)
     local cache = get_buf_cache(buf)
-    local changed = buf_tick_cache[buf] ~= get_buf_tick(buf)
+    local last_fold_end
     for lnum = first, last do
         local fold_lvl = vim.fn.foldlevel(lnum)
-        local closed = vim.fn.foldclosed(lnum) == lnum
         local fold_status = nil
         local sign_name = nil
-
-        -- We have a cache for the buffer, check if the line number is already processed
-        if not changed and cache[lnum] then goto continue end
-
         -- Calculate the new fold status and sign name
         if fold_lvl > 0 then
+            local closed = vim.fn.foldclosed(lnum) == lnum
             if closed then
                 fold_status = 'closed'
                 sign_name = 'FoldClosedSign'
-            -- FIX:
-            -- This may disappear the sign when the fold is open for adjent fold block
-            elseif vim.fn.foldclosed(lnum) == -1 and fold_lvl > vim.fn.foldlevel(lnum - 1) then
+            elseif
+                vim.fn.foldclosed(lnum) == -1
+                and (
+                    fold_lvl > vim.fn.foldlevel(lnum - 1)
+                    or fold_lvl == vim.fn.foldlevel(lnum - 1)
+                        and last_fold_end
+                        and lnum > last_fold_end
+                )
+            then
                 fold_status = 'open'
                 sign_name = 'FoldOpenSign'
+            end
+            last_fold_end = vim.fn.foldclosedend(lnum)
+            if last_fold_end == -1 then
+                vim.cmd(lnum .. 'foldclose')
+                last_fold_end = vim.fn.foldclosedend(lnum)
+                vim.cmd(lnum .. 'foldopen')
             end
         end
 
@@ -63,7 +68,6 @@ local function update_range(buf, first, last)
             end
             cache[lnum] = { fold = nil, sign_id = nil }
         end
-        ::continue::
     end
 end
 
@@ -80,13 +84,11 @@ function M.update_fold_signs(buf)
 end
 
 vim.api.nvim_create_autocmd({
-    'VimEnter',
     'WinEnter',
-    'ModeChanged',
+    'BufWinEnter',
     'CursorHold',
     'CursorMoved',
     'WinScrolled',
-    'BufWinEnter',
 }, {
     callback = function()
         if vim.fn.mode() == 'i' then return end
@@ -94,10 +96,7 @@ vim.api.nvim_create_autocmd({
     end,
 })
 vim.api.nvim_create_autocmd('BufDelete', {
-    callback = function(args)
-        buf_tick_cache[args.buf] = nil
-        fold_sign_cache[args.buf] = nil
-    end,
+    callback = function(args) fold_sign_cache[args.buf] = nil end,
 })
 
 local fold_keys = {

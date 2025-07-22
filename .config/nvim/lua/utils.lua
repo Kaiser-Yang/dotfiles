@@ -2,6 +2,38 @@ local M = {}
 
 local map = vim.keymap
 
+function M.get_fold_start(fold_start)
+    local cur_fold_end = vim.fn.foldclosedend(fold_start)
+    if cur_fold_end == -1 then
+        vim.cmd(fold_start .. 'foldclose')
+        cur_fold_end = vim.fn.foldclosedend(fold_start)
+        vim.cmd(fold_start .. 'foldopen')
+    else
+        vim.cmd(fold_start .. 'foldopen')
+    end
+    local last_fold_end
+    local res = { fold_start }
+    -- Do not fold recursively when more than 1000 lines
+    if cur_fold_end - fold_start > 1000 then return res end
+    for line = fold_start + 1, cur_fold_end - 1 do
+        local fold_lvl = vim.fn.foldlevel(line)
+        if fold_lvl <= 0 then goto continue end
+        local closed = vim.fn.foldclosed(line) == line
+        if closed then vim.cmd(line .. 'foldopen') end
+        if
+            fold_lvl > vim.fn.foldlevel(line - 1)
+            or fold_lvl == vim.fn.foldlevel(line - 1) and last_fold_end and line > last_fold_end
+        then
+            table.insert(res, line)
+        end
+        vim.cmd(line .. 'foldclose')
+        last_fold_end = vim.fn.foldclosedend(line)
+        vim.cmd(line .. 'foldopen')
+        ::continue::
+    end
+    return res
+end
+
 function M.is_big_file(buf)
     buf = buf or 0
     local line_count = vim.api.nvim_buf_line_count(buf)
