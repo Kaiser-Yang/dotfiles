@@ -80,8 +80,11 @@ function M.update_fold_signs(buf)
     end
 end
 
-vim.api.nvim_create_autocmd('CursorMoved', {
-    callback = function(args) M.update_fold_signs(args.buf) end,
+vim.api.nvim_create_autocmd({ 'CursorMoved', 'WinScrolled', 'InsertLeave', 'BufWinEnter' }, {
+    callback = function(args)
+        if vim.fn.mode() == 'i' then return end
+        M.update_fold_signs(args.buf)
+    end,
 })
 
 return M

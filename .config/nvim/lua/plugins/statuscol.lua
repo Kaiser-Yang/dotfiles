@@ -4,14 +4,23 @@ local function is_popup(winid)
     return config.relative ~= ''
 end
 local input_action = require('utils').input_action
-vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter', 'TabEnter' }, {
+local diagnostic_bufnr = nil
+local diagnostic_win_id = nil
+vim.api.nvim_create_autocmd({ 'BufNew', 'TabClosed', 'BufWinEnter', 'TabEnter' }, {
     group = 'UserDIY',
     callback = function()
         for _, win in ipairs(vim.api.nvim_list_wins()) do
             local buf = vim.api.nvim_win_get_buf(win)
-            if is_popup(win) then goto continue end
+            local cfg = vim.api.nvim_win_get_config(win)
+            local is_treesitter_context = cfg.relative == 'win'
+                and cfg.row == 0
+                and cfg.win == vim.api.nvim_get_current_win()
+                and vim.w[win].treesitter_context_line_number
             local filetype = vim.bo[buf].filetype
-            if filetype:match('^dap') or filetype == 'neo-true' then
+            if
+                not is_popup(win) and (filetype:match('^dap') or filetype == 'neo-true')
+                or is_treesitter_context
+            then
                 if vim.fn.winnr('$') ~= 1 then
                     vim.wo[win].statuscolumn = ' '
                 else
@@ -26,7 +35,6 @@ vim.api.nvim_create_autocmd({ 'TabClosed', 'BufWinEnter', 'TabEnter' }, {
                 vim.wo[win].foldcolumn = '0'
                 vim.wo[win].signcolumn = 'no'
             end
-            ::continue::
         end
     end,
 })
@@ -74,14 +82,10 @@ return {
                     dap.toggle_breakpoint()
                 end
             end,
-            -- TODO: beautify this
-            -- ['diagnostic/signs'] = function(args)
-            --     if args.button == 'l' and args.mods:match('^%s*$') then
-            --     end
-            -- end,
             FoldClosedSign = function(args)
                 -- <C-LeftMouse>
                 if args.button == 'l' and args.mods:find('c') then
+                    vim.cmd('normal! zO')
                 -- <LeftMouse>
                 elseif args.button == 'l' and args.mods:match('^%s*$') then
                     vim.cmd('normal! zo')
@@ -91,12 +95,54 @@ return {
             FoldOpenSign = function(args)
                 -- <C-LeftMouse>
                 if args.button == 'l' and args.mods:find('c') then
+                    vim.cmd('normal! zC')
                 -- <LeftMouse>
                 elseif args.button == 'l' and args.mods:match('^%s*$') then
                     vim.cmd('normal! zc')
                 end
                 require('foldsign').update_fold_signs(vim.api.nvim_get_current_buf())
             end,
+            gitsigns = function(args)
+                local ok, gitsigns = pcall(require, 'gitsigns')
+                if not ok then
+                    vim.notify('Gitsigns not found', vim.log.levels.WARN)
+                    return
+                end
+                -- <LeftMouse>
+                if args.button == 'l' and args.mods:match('^%s*$') then
+                    for _, winid in ipairs(vim.api.nvim_list_wins()) do
+                        -- Hunk is visible, we close the preview window
+                        if vim.w[winid].gitsigns_preview == 'hunk' then
+                            vim.api.nvim_win_close(winid, true)
+                            return
+                        end
+                    end
+                    gitsigns.preview_hunk()
+                -- <MiddleMouse>
+                elseif args.button == 'm' and args.mods:match('^%s*$') then
+                    gitsigns.reset_hunk()
+                -- <RightMouse>
+                elseif args.button == 'r' and args.mods:match('^%s*$') then
+                    gitsigns.stage_hunk()
+                end
+            end,
+            ['diagnostic'] = function(args)
+                -- <LeftMouse>
+                if args.button == 'l' and args.mods:match('^%s*$') then
+                    -- Hide if it is already open
+                    if diagnostic_bufnr and diagnostic_win_id then
+                        if vim.api.nvim_win_is_valid(diagnostic_win_id) then
+                            vim.api.nvim_win_close(diagnostic_win_id, true)
+                            diagnostic_bufnr = nil
+                            diagnostic_win_id = nil
+                            return
+                        end
+                    end
+                    diagnostic_bufnr, diagnostic_win_id =
+                        vim.diagnostic.open_float({ border = 'rounded' })
+                end
+            end,
+            ['diagnostic/signs'] = false,
         },
     },
 }
