@@ -19,13 +19,10 @@ end
 
 local function get_buf_tick(buf) return vim.api.nvim_buf_get_changedtick(buf) end
 
-function M.update_fold_signs(buf)
+local function update_range(buf, first, last)
     local cache = get_buf_cache(buf)
-    local first_visible_line = vim.fn.line('w0')
-    local last_visible_line = vim.fn.line('w$')
     local changed = buf_tick_cache[buf] ~= get_buf_tick(buf)
-
-    for lnum = first_visible_line, last_visible_line do
+    for lnum = first, last do
         local fold_lvl = vim.fn.foldlevel(lnum)
         local closed = vim.fn.foldclosed(lnum) == lnum
         local fold_status = nil
@@ -39,6 +36,8 @@ function M.update_fold_signs(buf)
             if closed then
                 fold_status = 'closed'
                 sign_name = 'FoldClosedSign'
+            -- FIX:
+            -- This may disappear the sign when the fold is open for adjent fold block
             elseif vim.fn.foldclosed(lnum) == -1 and fold_lvl > vim.fn.foldlevel(lnum - 1) then
                 fold_status = 'open'
                 sign_name = 'FoldOpenSign'
@@ -52,8 +51,8 @@ function M.update_fold_signs(buf)
                 if prev and prev.sign_id then
                     vim.fn.sign_unplace(group, { buffer = buf, id = prev.sign_id })
                 end
-                local id = lnum
-                assert(sign_name)
+                local id = tonumber(buf .. lnum)
+                assert(id and sign_name)
                 vim.fn.sign_place(id, group, sign_name, buf, { lnum = lnum, priority = 1000 })
                 cache[lnum] = { fold = fold_status, sign_id = id }
             end
@@ -66,16 +65,16 @@ function M.update_fold_signs(buf)
         end
         ::continue::
     end
+end
 
-    if not changed then return end
-    -- Only remove the unavailable signs, when changed
-    for lnum, _ in pairs(cache) do
-        if lnum < first_visible_line or lnum > last_visible_line then
-            local prev = cache[lnum]
-            if prev and prev.sign_id then
-                vim.fn.sign_unplace(group, { buffer = buf, id = prev.sign_id })
-            end
-            cache[lnum] = nil
+function M.update_fold_signs(buf)
+    buf = buf or 0
+    if buf == 0 then buf = vim.api.nvim_get_current_buf() end
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        if vim.api.nvim_win_get_buf(win) == buf then
+            local first_visible_line = vim.fn.line('w0', win)
+            local last_visible_line = vim.fn.line('w$', win)
+            update_range(buf, first_visible_line, last_visible_line)
         end
     end
 end
@@ -89,9 +88,15 @@ vim.api.nvim_create_autocmd({
     'WinScrolled',
     'BufWinEnter',
 }, {
-    callback = function(args)
+    callback = function()
         if vim.fn.mode() == 'i' then return end
-        M.update_fold_signs(args.buf)
+        M.update_fold_signs()
+    end,
+})
+vim.api.nvim_create_autocmd('BufDelete', {
+    callback = function(args)
+        buf_tick_cache[args.buf] = nil
+        fold_sign_cache[args.buf] = nil
     end,
 })
 
@@ -156,7 +161,7 @@ local fold_keys = {
 
 for _, key in ipairs(fold_keys) do
     require('utils').map_set({ 'n', 'x' }, key.value, function()
-        vim.schedule(function() M.update_fold_signs(vim.api.nvim_get_current_buf()) end)
+        vim.schedule(M.update_fold_signs)
         return key.value
     end, { expr = true, desc = key.desc })
 end
