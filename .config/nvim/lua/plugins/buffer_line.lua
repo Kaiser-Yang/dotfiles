@@ -45,7 +45,7 @@ local function quit_not_save_on_buffer(current_buf, force_delete)
         return res
     end
     if force_delete then
-        if #utils.get_visible_bufs() == 1 then
+        if #utils.get_visible_bufs() <= 1 then
             vim.cmd('silent! q')
         else
             local target_buffer = get_target_buf()
@@ -62,20 +62,12 @@ local function quit_not_save_on_buffer(current_buf, force_delete)
         if not hold_by_other then vim.cmd('bdelete ' .. current_buf) end
         return
     end
-    if
-        not utils.is_visible_buffer(current_buf)
-        or vim.bo.filetype == 'qf'
-        or vim.bo.filetype:match('^dap')
-    then
+    if not utils.is_visible_buffer(current_buf) or vim.bo.filetype == 'qf' then
         vim.cmd('silent q!')
         return
     end
     if #utils.get_visible_bufs() <= 1 then
         vim.cmd('silent q!')
-        return
-    -- no cache to get, this should not happen for normal configuration
-    elseif not _G.buffer_cache then
-        vim.cmd('bdelete ' .. current_buf)
         return
     end
     local target_buffer = get_target_buf(true)
