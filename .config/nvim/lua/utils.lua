@@ -99,10 +99,13 @@ function M.is_file(path)
 end
 
 function M.get_win_with_filetype(filetype)
+    local res = {}
     for _, win in ipairs(vim.api.nvim_list_wins()) do
-        if filetype == vim.bo[vim.api.nvim_win_get_buf(win)].filetype then return win end
+        if vim.bo[vim.api.nvim_win_get_buf(win)].filetype:match(filetype) then
+            table.insert(res, win)
+        end
     end
-    return nil
+    return res
 end
 --- @param ft_list string|string[]
 function M.disable_in_ft(ft_list)

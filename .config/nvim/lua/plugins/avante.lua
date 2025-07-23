@@ -4,7 +4,7 @@ vim.api.nvim_create_autocmd('FileType', {
     callback = function()
         for _, key in pairs({ 'i', 'I', 'a', 'A', 'o', 'O' }) do
             utils.map_set({ 'n' }, key, function()
-                local win = utils.get_win_with_filetype('AvanteInput')
+                local win = utils.get_win_with_filetype('AvanteInput')[1]
                 if win and win ~= vim.api.nvim_get_current_win() then
                     vim.api.nvim_set_current_win(win)
                     vim.schedule(function()

@@ -1,27 +1,23 @@
 -- TODO:
 -- completion for dap commands
-local dap_ui_visible = false
-local need_restore_explorer = false
 local utils = require('utils')
-local function has_neo_tree() return utils.get_win_with_filetype('neo-tree') ~= nil end
+local function has_neo_tree() return utils.get_win_with_filetype('neo%-tree')[1] ~= nil end
+local function get_dap_win_num()
+    local res = 0
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        if vim.bo[vim.api.nvim_win_get_buf(win)].filetype:match('dap') then res = res + 1 end
+    end
+    return res
+end
 local function dap_ui_toggle()
-    dap_ui_visible = not dap_ui_visible
     local dap_ui = require('dapui')
-    if dap_ui_visible then
-        dap_ui.open()
-        if has_neo_tree() then
-            need_restore_explorer = true
-            require('neo-tree.command').execute({ action = 'close' })
-        end
+    local dap_win_num = get_dap_win_num()
+    if dap_win_num < 6 then
+        if dap_win_num ~= 0 then dap_ui.close() end
+        if has_neo_tree() then require('neo-tree.command').execute({ action = 'close' }) end
+        dap_ui.open({ reset = true })
     else
         dap_ui.close()
-        if need_restore_explorer then
-            need_restore_explorer = false
-            require('neo-tree.command').execute({
-                action = 'show',
-                source = 'last',
-            })
-        end
     end
 end
 local function debug_test_under_cursor()
@@ -45,8 +41,8 @@ local nvim_dap = {
         local dap, dap_ui = require('dap'), require('dapui')
         local before_start = function()
             has_last = true
-            dap_ui_visible = true
-            dap_ui.open()
+            if has_neo_tree() then require('neo-tree.command').execute({ action = 'close' }) end
+            dap_ui.open({ reset = true })
         end
         dap.listeners.before.attach.dapui_config = before_start
         dap.listeners.before.launch.dapui_config = before_start

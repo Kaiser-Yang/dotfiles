@@ -13,7 +13,7 @@ local function on_file_moved(data)
 end
 
 local function move_cursor_to_neo_tree()
-    local win = utils.get_win_with_filetype('neo-tree')
+    local win = utils.get_win_with_filetype('neo-tree')[1]
     if win then vim.api.nvim_set_current_win(win) end
 end
 local current_file
@@ -444,7 +444,7 @@ return {
         opts.event_handlers = {
             {
                 event = events.NEO_TREE_BUFFER_ENTER,
-                handler = function(_)
+                handler = function()
                     vim.wo.number = true
                     vim.wo.relativenumber = true
                     vim.wo.colorcolumn = ''
@@ -457,6 +457,22 @@ return {
             {
                 event = events.FILE_RENAMED,
                 handler = on_file_moved,
+            },
+            {
+                event = events.NEO_TREE_WINDOW_AFTER_OPEN,
+                handler = function()
+                    for _, win in ipairs(utils.get_win_with_filetype('dap')) do
+                        local buf = vim.api.nvim_win_get_buf(win)
+                        if
+                            not vim.tbl_contains(
+                                { 'dap-repl', 'dapui_console' },
+                                vim.bo[buf].filetype
+                            )
+                        then
+                            vim.api.nvim_win_close(win, true)
+                        end
+                    end
+                end,
             },
         }
         require('neo-tree').setup(opts)
