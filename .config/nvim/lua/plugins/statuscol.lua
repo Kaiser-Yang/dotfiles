@@ -48,7 +48,7 @@ return {
             {
                 click = 'v:lua.ScSa',
                 sign = {
-                    name = { 'FoldClosedSign', 'FoldOpenSign' },
+                    name = { 'FoldClosed', 'FoldOpen' },
                     namespace = { 'git' },
                     colwidth = 1,
                 },
@@ -72,7 +72,7 @@ return {
                     dap.toggle_breakpoint()
                 end
             end,
-            FoldClosedSign = function(args)
+            FoldClosed = function(args)
                 -- <C-LeftMouse>
                 if args.button == 'l' and args.mods:find('c') then
                     get_fold_start(args.mousepos.line)
@@ -82,7 +82,7 @@ return {
                 end
                 require('foldsign').update_fold_signs(vim.api.nvim_get_current_buf())
             end,
-            FoldOpenSign = function(args)
+            FoldOpen = function(args)
                 -- <C-LeftMouse>
                 if args.button == 'l' and args.mods:find('c') then
                     local fold_start = get_fold_start(args.mousepos.line)

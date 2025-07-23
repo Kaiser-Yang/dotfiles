@@ -1,34 +1,28 @@
-vim.fn.sign_define(
-    'FoldClosedSign',
-    { text = vim.opt.fillchars:get().foldclose or '-', texthl = 'Folded' }
-)
-vim.fn.sign_define(
-    'FoldOpenSign',
-    { text = vim.opt.fillchars:get().foldopen or '+', texthl = 'Folded' }
-)
-
 local group = 'foldsign'
-local fold_sign_cache = {}
+local utils = require('utils')
 local M = {}
 
-local function get_buf_cache(buf)
-    if not fold_sign_cache[buf] then fold_sign_cache[buf] = {} end
-    return fold_sign_cache[buf]
-end
+--- @class FoldSignCache
+--- @field fold string? The name of the fold sign
+--- @field sign_id number? The ID of the sign placed in the buffer
+local fold_sign_cache = {}
 
 local function update_range(buf, first, last)
-    local cache = get_buf_cache(buf)
+    if not utils.is_visible_buffer(buf) then
+        fold_sign_cache[buf] = nil
+        return
+    end
+    if not fold_sign_cache[buf] then fold_sign_cache[buf] = {} end
+    local cache = fold_sign_cache[buf]
     local last_fold_end
     for lnum = first, last do
         local fold_lvl = vim.fn.foldlevel(lnum)
-        local fold_status = nil
         local sign_name = nil
         -- Calculate the new fold status and sign name
         if fold_lvl > 0 then
             local closed = vim.fn.foldclosed(lnum) == lnum
             if closed then
-                fold_status = 'closed'
-                sign_name = 'FoldClosedSign'
+                sign_name = 'FoldClosed'
             elseif
                 vim.fn.foldclosed(lnum) == -1
                 and (
@@ -38,8 +32,7 @@ local function update_range(buf, first, last)
                         and lnum > last_fold_end
                 )
             then
-                fold_status = 'open'
-                sign_name = 'FoldOpenSign'
+                sign_name = 'FoldOpen'
             end
             last_fold_end = vim.fn.foldclosedend(lnum)
             if last_fold_end == -1 then
@@ -50,16 +43,17 @@ local function update_range(buf, first, last)
         end
 
         local prev = cache[lnum]
-        if fold_status then
-            if not prev or prev.fold ~= fold_status then
+        if sign_name then
+            if not prev or prev.fold ~= sign_name then
                 -- Remove previous sign if it exists
                 if prev and prev.sign_id then
                     vim.fn.sign_unplace(group, { buffer = buf, id = prev.sign_id })
                 end
                 local id = tonumber(buf .. lnum)
                 assert(id and sign_name)
-                vim.fn.sign_place(id, group, sign_name, buf, { lnum = lnum, priority = 1000 })
-                cache[lnum] = { fold = fold_status, sign_id = id }
+                local sign_id =
+                    vim.fn.sign_place(id, group, sign_name, buf, { lnum = lnum, priority = 1000 })
+                if id == sign_id then cache[lnum] = { fold = sign_name, sign_id = id } end
             end
         elseif fold_lvl == 0 then
             -- Remove sign if it is no longer needed
@@ -159,7 +153,7 @@ local fold_keys = {
 }
 
 for _, key in ipairs(fold_keys) do
-    require('utils').map_set({ 'n', 'x' }, key.value, function()
+    utils.map_set({ 'n', 'x' }, key.value, function()
         vim.schedule(M.update_fold_signs)
         return key.value
     end, { expr = true, desc = key.desc })

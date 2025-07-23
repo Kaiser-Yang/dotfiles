@@ -100,35 +100,6 @@ local function pr_or_issue_configure_score_offset(items)
     end
 end
 
-local blink_cmp_kind_name_highlight = {
-    Dict = { default = false, fg = '#a6e3a1' },
-}
-for kind_name, hl in pairs(blink_cmp_kind_name_highlight) do
-    vim.api.nvim_set_hl(0, 'BlinkCmpKind' .. kind_name, hl)
-end
-
-local blink_cmp_git_label_name_highlight = {
-    Commit = { default = false, fg = '#a6e3a1' },
-    openPR = { default = false, fg = '#a6e3a1' },
-    openedPR = { default = false, fg = '#a6e3a1' },
-    closedPR = { default = false, fg = '#f38ba8' },
-    mergedPR = { default = false, fg = '#cba6f7' },
-    draftPR = { default = false, fg = '#9399b2' },
-    lockedPR = { default = false, fg = '#f5c2e7' },
-    openIssue = { default = false, fg = '#a6e3a1' },
-    openedIssue = { default = false, fg = '#a6e3a1' },
-    reopenedIssue = { default = false, fg = '#a6e3a1' },
-    completedIssue = { default = false, fg = '#cba6f7' },
-    closedIssue = { default = false, fg = '#cba6f7' },
-    not_plannedIssue = { default = false, fg = '#9399b2' },
-    duplicateIssue = { default = false, fg = '#9399b2' },
-    lockedIssue = { default = false, fg = '#f5c2e7' },
-}
-for kind_name, hl in pairs(blink_cmp_git_label_name_highlight) do
-    vim.api.nvim_set_hl(0, 'BlinkCmpGitKindIcon' .. kind_name, hl)
-    vim.api.nvim_set_hl(0, 'BlinkCmpGitLabel' .. kind_name .. 'Id', hl)
-end
-
 local blink_cmp_git_opts = {
     kind_icons = {
         openPR = '',

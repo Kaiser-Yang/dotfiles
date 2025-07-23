@@ -108,23 +108,6 @@ local nvim_dap = {
         dap.configurations.objcpp = vim.deepcopy(dap.configurations.c)
         -- INFO:
         -- Some colorschemes may have set some highlights, we use force here to override them
-        vim.api.nvim_set_hl(0, 'DapStopped', { fg = '#98C379', force = true })
-        vim.api.nvim_set_hl(0, 'DapStoppedLine', { bg = '#31353F', force = true })
-        vim.api.nvim_set_hl(0, 'DapBreakpointRejected', { fg = '#888888', force = true })
-        vim.fn.sign_define(
-            'DapStopped',
-            { text = '▶', texthl = 'DapStopped', linehl = 'DapStoppedLine' }
-        )
-        vim.fn.sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint' })
-        vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DapBreakpoint' })
-        vim.fn.sign_define(
-            'DapBreakpointRejected',
-            { text = 'x', texthl = 'DapBreakpointRejected' }
-        )
-        vim.fn.sign_define(
-            'DapBreakpointCondition',
-            { text = '○', texthl = 'DapBreakpointCondition' }
-        )
     end,
 }
 return {

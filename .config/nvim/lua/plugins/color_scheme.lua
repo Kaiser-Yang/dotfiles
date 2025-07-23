@@ -25,6 +25,15 @@ return {
     config = function(_, opts)
         require('catppuccin').setup(opts)
         vim.cmd.colorscheme('catppuccin')
-        vim.api.nvim_set_hl(0, 'Folded', { fg = '#89b4fa', bg = 'NONE', force = true })
+        -- We set signs and highlight after colorscheme
+        -- to make sure that the colorscheme does not overwrite our settings
+        for _, hl in ipairs(require('appearance.highlight')) do
+            vim.api.nvim_set_hl(unpack(hl))
+        end
+        for _, sign in ipairs(require('appearance.sign')) do
+            vim.fn.sign_define(unpack(sign))
+        end
+        -- Run after plugins are loaded, so that the signs and highlights are set
+        require('foldsign')
     end,
 }
