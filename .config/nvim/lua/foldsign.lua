@@ -86,7 +86,7 @@ vim.api.nvim_create_autocmd({
 }, {
     callback = function()
         if vim.fn.mode() == 'i' then return end
-        M.update_fold_signs()
+        vim.schedule(M.update_fold_signs)
     end,
 })
 vim.api.nvim_create_autocmd('BufDelete', {
