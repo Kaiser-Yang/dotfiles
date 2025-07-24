@@ -121,7 +121,7 @@ return {
                     gitsigns.stage_hunk()
                 end
             end,
-            ['diagnostic'] = function(args)
+            ['diagnostic.signs'] = function(args)
                 -- <LeftMouse>
                 if args.button == 'l' and args.mods:match('^%s*$') then
                     -- Hide if it is already open
@@ -137,7 +137,6 @@ return {
                         vim.diagnostic.open_float({ border = 'rounded' })
                 end
             end,
-            ['diagnostic/signs'] = false,
         },
     },
 }
