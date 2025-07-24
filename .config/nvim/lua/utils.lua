@@ -2,6 +2,8 @@ local M = {}
 
 local map = vim.keymap
 
+function M.termcodes(keys) return vim.api.nvim_replace_termcodes(keys, true, true, true) end
+
 function M.get_fold_start(fold_start)
     local cur_fold_end = vim.fn.foldclosedend(fold_start)
     if cur_fold_end == -1 then

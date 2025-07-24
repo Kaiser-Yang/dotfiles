@@ -30,23 +30,33 @@ local prev_word_ref, next_word_ref = require('comma_semicolon').make(
     function() Snacks.words.jump(-vim.v.count1, true) end,
     function() Snacks.words.jump(vim.v.count1, true) end
 )
-local SCROLL_WHEEL_UP = vim.api.nvim_replace_termcodes('<ScrollWheelUp>', true, true, true)
-local SCROLL_WHEEL_DOWN = vim.api.nvim_replace_termcodes('<ScrollWheelDown>', true, true, true)
-local on_mouse_scrolling = false
+local key_state = {
+    hlsearch = false,
+    diagnostic = false,
+    mouse_scroll = false,
+}
+local function set_key_state(key)
+    for k, _ in pairs(key_state) do
+        if k ~= key then key_state[k] = false end
+    end
+    if key then key_state[key] = true end
+end
 vim.on_key(function(key, typed)
     key = typed or key
-    if key ~= SCROLL_WHEEL_UP and key ~= SCROLL_WHEEL_DOWN then return end
-    on_mouse_scrolling = true
+    if key == utils.termcodes('<ScrollWheelUp>') or key == utils.termcodes('<ScrollWheelDown>') then
+        set_key_state('monse_scroll')
+    elseif key == utils.termcodes('n') or key == utils.termcodes('N') then
+        set_key_state('hlsearch')
+    elseif key == utils.termcodes('[d') or key == utils.termcodes(']d') then
+        set_key_state('diagnostic')
+    elseif not key:match('^%s*$') then
+        vim.schedule(function() vim.cmd('nohlsearch') end)
+        set_key_state()
+    end
 end)
 vim.api.nvim_create_autocmd('WinScrolled', {
     group = 'UserDIY',
     callback = function()
-        if not on_mouse_scrolling then
-            vim.schedule(function()
-                if utils.cursor_in_match() then vim.cmd('set hlsearch') end
-            end)
-        end
-        on_mouse_scrolling = false
         for win, changes in pairs(vim.v.event) do
             local delta = math.abs(changes.topline)
             if win and delta <= 1 or delta >= vim.g.big_file_limit_per_line then
@@ -107,7 +117,7 @@ vim.api.nvim_create_autocmd('FileType', {
                     limit = live_grep_limit,
                     hidden = not utils.should_ignore_hidden_files(),
                     exclude = file_ignore_patterns,
-                    search  = vim.api.nvim_get_current_line(),
+                    search = vim.api.nvim_get_current_line(),
                 })
             end,
             { buffer = true }
@@ -355,6 +365,25 @@ return {
                     and vim.b[buf].snacks_scroll ~= false
                     and vim.bo[buf].buftype ~= 'terminal'
                     and vim.bo[buf].filetype ~= 'blink-cmp-menu'
+            end,
+            on_finished = function()
+                if key_state.mouse_scroll then return end
+                key_state.mouse_scroll = false
+                if key_state.hlsearch and utils.cursor_in_match() then
+                    vim.cmd('set hlsearch')
+                    key_state.hlsearch = false
+                elseif key_state.diagnostic then
+                    local cursor = vim.api.nvim_win_get_cursor(0)
+                    if cursor[1] == 1 and cursor[2] == 0 then
+                        vim.schedule(
+                            function() utils.feedkeys('w<cmd>Lspsaga diagnostic_jump_prev<cr>', 'n') end
+                        )
+                    else
+                        vim.schedule(
+                            function() utils.feedkeys('b<cmd>Lspsaga diagnostic_jump_next<cr>', 'n') end
+                        )
+                    end
+                end
             end,
         },
         statuscolumn = { enabled = false },
