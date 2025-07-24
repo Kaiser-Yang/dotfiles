@@ -404,7 +404,7 @@ return {
             },
         },
         notifier = { enabled = false },
-        quickfile = { enabled = true },
+        quickfile = { enabled = false },
     },
     keys = {
         {

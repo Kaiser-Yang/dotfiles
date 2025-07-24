@@ -1,15 +1,9 @@
 local utils = require('utils')
 vim.treesitter.language.register('objc', { 'objcpp' })
-vim.api.nvim_create_autocmd('BufEnter', {
-    pattern = '*',
+vim.api.nvim_create_autocmd('FileType', {
     callback = function(args)
-        if vim.b.ts_checked then return end
-        vim.b.ts_checked = true
-        if utils.is_big_file(args.buf) then
-            pcall(vim.treesitter.stop)
-        else
-            pcall(vim.treesitter.start)
-        end
+        if utils.is_big_file(args.buf) then return end
+        pcall(vim.treesitter.start)
     end,
 })
 local function text_objects_select_wrapper(query_string, query_group)
