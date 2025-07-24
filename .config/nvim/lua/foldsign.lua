@@ -78,9 +78,7 @@ function M.update_fold_signs(buf)
 end
 
 vim.api.nvim_create_autocmd({
-    'WinEnter',
-    'BufWinEnter',
-    'CursorHold',
+    'BufEnter',
     'CursorMoved',
     'WinScrolled',
 }, {
