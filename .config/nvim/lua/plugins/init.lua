@@ -18,7 +18,7 @@ local plugins = {
     require('plugins.which_key'),
     require('plugins.snacks_config'),
     require('plugins.statuscol'),
-    require('plugins.ufo'), -- PERF: may have performance issues with large files
+    require('plugins.ufo'), -- PERF: large files performance issue
     require('plugins.rainbow_delimiter'), -- PERF: large files performance issue
 
     -- Lazy loaded plugins

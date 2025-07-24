@@ -1,3 +1,4 @@
+local utils = require('utils')
 return {
     'kevinhwang91/nvim-ufo',
     dependencies = {
@@ -16,7 +17,10 @@ return {
     },
     opts = {
         open_fold_hl_timeout = 0, -- disable highlighting when opening folds
-        provider_selector = function() return { 'treesitter', 'indent' } end,
+        provider_selector = function(buf)
+            if utils.is_big_file(buf) then return '' end
+            return { 'treesitter', 'indent' }
+        end,
         fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
             local newVirtText = {}
             local suffix = (' 󰁂 %d '):format(endLnum - lnum)
