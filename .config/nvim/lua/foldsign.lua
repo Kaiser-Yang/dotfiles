@@ -55,7 +55,7 @@ local function update_range(buf, first, last)
                     vim.fn.sign_place(id, group, sign_name, buf, { lnum = lnum, priority = 1000 })
                 if id == sign_id then cache[lnum] = { fold = sign_name, sign_id = id } end
             end
-        elseif fold_lvl == 0 then
+        else
             -- Remove sign if it is no longer needed
             if prev and prev.sign_id then
                 vim.fn.sign_unplace(group, { buffer = buf, id = prev.sign_id })
