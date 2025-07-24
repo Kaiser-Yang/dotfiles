@@ -16,8 +16,8 @@ local plugins = {
     require('plugins.buffer_line'),
     require('plugins.guess_indent'),
     require('plugins.which_key'),
-    require('plugins.snacks_config'),
     require('plugins.statuscol'),
+    require('plugins.snacks_config'), -- PERF: when quit large files, it will take a long time
     require('plugins.ufo'), -- PERF: large files performance issue
     require('plugins.rainbow_delimiter'), -- PERF: large files performance issue
 
