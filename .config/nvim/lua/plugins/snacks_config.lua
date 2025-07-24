@@ -35,6 +35,7 @@ local key_state = {
     diagnostic = false,
     mouse_scroll = false,
 }
+local big_file_check_wrapper = utils.big_file_checker_wrapper
 local function set_key_state(key)
     for k, _ in pairs(key_state) do
         if k ~= key then key_state[k] = false end
@@ -177,7 +178,7 @@ return {
         input = { enabled = false },
         ---@class snacks.picker.Config
         picker = {
-            enabled = true,
+            enabled = vim.fn.executable('rg') == 1,
             previewers = {
                 file = {
                     max_size = false,
@@ -409,7 +410,7 @@ return {
     keys = {
         {
             '<leader>r',
-            function()
+            big_file_check_wrapper(function()
                 local fullpath = vim.fn.expand('%:p')
                 local directory = vim.fn.fnamemodify(fullpath, ':h')
                 local filename = vim.fn.fnamemodify(fullpath, ':t')
@@ -458,17 +459,13 @@ return {
                     command,
                     { start_insert = true, auto_insert = true, auto_close = false }
                 )
-            end,
+            end),
             desc = 'Run and compile',
         },
         { '<c-y>', function() Snacks.picker.resume() end, desc = 'Resume last picker' },
         {
             '<c-p>',
             function()
-                if not vim.fn.executable('rg') then
-                    vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
-                    return
-                end
                 Snacks.picker.files({
                     cmd = 'rg',
                     hidden = not utils.should_ignore_hidden_files(),
@@ -483,10 +480,6 @@ return {
         {
             '<c-f>',
             function()
-                if not vim.fn.executable('rg') then
-                    vim.notify('ripgrep (rg) not found on your system', vim.log.levels.WARN)
-                    return
-                end
                 Snacks.picker.grep({
                     cwd = vim.fn.getcwd(),
                     limit = live_grep_limit,
@@ -504,13 +497,15 @@ return {
         },
         {
             '<leader><leader>',
-            function()
-                Snacks.picker.lines({
-                    layout = {
-                        preset = 'select',
-                    },
-                })
-            end,
+            big_file_check_wrapper(
+                function()
+                    Snacks.picker.lines({
+                        layout = {
+                            preset = 'select',
+                        },
+                    })
+                end
+            ),
             desc = 'Current buffer fuzzy find',
         },
         {
@@ -540,7 +535,7 @@ return {
         },
         {
             '<leader>sw',
-            function() Snacks.picker.grep_word() end,
+            big_file_check_wrapper(function() Snacks.picker.grep_word() end),
             desc = 'Visual selection or word',
             mode = { 'n', 'x' },
         },
