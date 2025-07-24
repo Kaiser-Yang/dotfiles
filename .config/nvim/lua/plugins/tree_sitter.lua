@@ -1,9 +1,15 @@
-vim.api.nvim_create_autocmd('FileType', {
+local utils = require('utils')
+vim.treesitter.language.register('objc', { 'objcpp' })
+vim.api.nvim_create_autocmd('BufEnter', {
     pattern = '*',
     callback = function(args)
-        if require('utils').is_big_file(args.buf) then return end
-        vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-        pcall(vim.treesitter.start)
+        if vim.b.ts_checked then return end
+        vim.b.ts_checked = true
+        if utils.is_big_file(args.buf) then
+            pcall(vim.treesitter.stop)
+        else
+            pcall(vim.treesitter.start)
+        end
     end,
 })
 local function text_objects_select_wrapper(query_string, query_group)
@@ -86,7 +92,7 @@ local prev_if_end, next_if_end = comma_semicolon.make(
     text_objects_move_wrapper('previous', 'end', '@conditional.outer'),
     text_objects_move_wrapper('next', 'end', '@conditional.outer')
 )
-local big_file_checker_wrapper = require('utils').big_file_checker_wrapper
+local big_file_checker_wrapper = utils.big_file_checker_wrapper
 return {
     'nvim-treesitter/nvim-treesitter',
     branch = 'main',
@@ -108,10 +114,7 @@ return {
             'nvim-treesitter/nvim-treesitter-context',
             opts = {
                 max_lines = 3,
-                on_attach = function(buf)
-                    vim.b[buf].matchup_matchparen_enabled = 0
-                    return true
-                end,
+                on_attach = function(buf) return not utils.is_big_file(buf) end,
             },
         },
     },
