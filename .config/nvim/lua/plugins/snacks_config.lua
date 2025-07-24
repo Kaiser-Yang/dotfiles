@@ -367,12 +367,13 @@ return {
                     and vim.bo[buf].filetype ~= 'blink-cmp-menu'
             end,
             on_finished = function()
-                if key_state.mouse_scroll then return end
-                key_state.mouse_scroll = false
-                if key_state.hlsearch and utils.cursor_in_match() then
-                    vim.cmd('set hlsearch')
+                if key_state.mouse_scroll then
+                    key_state.mouse_scroll = false
+                elseif key_state.hlsearch then
                     key_state.hlsearch = false
+                    if utils.cursor_in_match() then vim.cmd('set hlsearch') end
                 elseif key_state.diagnostic then
+                    key_state.diagnostic = false
                     local cursor = vim.api.nvim_win_get_cursor(0)
                     if cursor[1] == 1 and cursor[2] == 0 then
                         vim.schedule(

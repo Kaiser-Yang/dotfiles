@@ -3,8 +3,8 @@ local map_set = require('utils').map_set
 local feedkeys = require('utils').feedkeys
 local comma_semicolon = require('comma_semicolon')
 local prev_diagnostic, next_diagnostic = comma_semicolon.make(
-    '<cmd>Lspsaga diagnostic_jump_prev<cr>',
-    '<cmd>Lspsaga diagnostic_jump_next<cr>'
+    vim.schedule_wrap(function() vim.diagnostic.jump({ count = -1 }) end),
+    vim.schedule_wrap(function() vim.diagnostic.jump({ count = 1 }) end)
 )
 vim.api.nvim_create_autocmd('FileType', {
     pattern = 'sagarename',
