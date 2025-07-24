@@ -115,7 +115,7 @@ return {
             },
         },
     },
-    event = 'VeryLazy',
+    lazy = false,
     -- HACK:
     -- Those below only work for c if and c af can not work for ci f and ca f
     keys = {
