@@ -1,6 +1,7 @@
-local map_set_all = require('utils').map_set_all
-local map_set = require('utils').map_set
-local feedkeys = require('utils').feedkeys
+local utils = require('utils')
+local map_set_all = utils.map_set_all
+local map_set = utils.map_set
+local feedkeys = utils.feedkeys
 local comma_semicolon = require('comma_semicolon')
 local prev_diagnostic, next_diagnostic = comma_semicolon.make(
     vim.schedule_wrap(function() vim.diagnostic.jump({ count = -1 }) end),
