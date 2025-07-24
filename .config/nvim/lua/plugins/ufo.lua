@@ -15,6 +15,7 @@ return {
         },
     },
     opts = {
+        open_fold_hl_timeout = 0, -- disable highlighting when opening folds
         provider_selector = function() return { 'treesitter', 'indent' } end,
         fold_virt_text_handler = function(virtText, lnum, endLnum, width, truncate)
             local newVirtText = {}
