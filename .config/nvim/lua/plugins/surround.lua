@@ -18,18 +18,6 @@ return {
     },
     keys = {
         {
-            '<c-p>s',
-            '<plug>(nvim-surround-insert)',
-            mode = 'i',
-            desc = 'Add a surrounding pair around the cursor (insert mode)',
-        },
-        {
-            '<c-p>S',
-            '<plug>(nvim-surround-insert-line)',
-            mode = 'i',
-            desc = 'Add a surrounding pair around the cursor, on new lines (insert mode)',
-        },
-        {
             'ys',
             '<plug>(nvim-surround-normal)',
             desc = 'Add a surrounding pair around a motion (normal mode)',
