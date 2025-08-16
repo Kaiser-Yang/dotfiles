@@ -4,6 +4,7 @@ return {
     sources = {
       providers = {
         ripgrep = {
+          enabled = vim.fn.has('mac') == 0,
           transform_items = function(_, items)
             items = vim.tbl_filter(function(item)
               -- Remove items that consist of only numbers
