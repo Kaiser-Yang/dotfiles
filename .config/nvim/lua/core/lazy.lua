@@ -12,11 +12,17 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local on_mac = vim.fn.has('mac') == 1
 --- @type LightBoat.Opts
-vim.g.lightboat_opts = {}
+vim.g.lightboat_opts = {
+  mason = { mason_bin_first = not on_mac },
+}
 require('lazy').setup({
   spec = {
     { 'Kaiser-Yang/LightBoat', import = 'lightboat.plugin' },
     { import = 'plugin' },
+    { 'zbirenbaum/copilot.lua', enabled = not on_mac },
+    { 'yetone/avante.nvim', enabled = not on_mac },
+    { 'AndreM222/copilot-lualine', enabled = not on_mac },
   },
 })
