@@ -47,6 +47,8 @@ source $ZSH/oh-my-zsh.sh
 
 bindkey 'f' forward-word
 bindkey 'd' delete-word
+bindkey 'p' up-line-or-search
+bindkey 'n' down-line-or-search
 
 alias ll='ls -lFh'
 
