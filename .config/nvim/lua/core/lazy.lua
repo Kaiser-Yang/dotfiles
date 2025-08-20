@@ -16,6 +16,7 @@ local on_mac = vim.fn.has('mac') == 1
 --- @type LightBoat.Opts
 vim.g.lightboat_opts = {
   mason = { mason_bin_first = not on_mac },
+  lsp = { config = { rime_ls = require('rime_ls') } },
 }
 require('lazy').setup({
   spec = {

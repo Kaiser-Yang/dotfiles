@@ -25,4 +25,3 @@ local function toggle_profile()
   end
 end
 vim.keymap.set('n', '<f1>', toggle_profile)
-vim.lsp.enable('rime_ls')

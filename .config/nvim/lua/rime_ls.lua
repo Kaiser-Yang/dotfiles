@@ -27,6 +27,17 @@ local function rime_on_attach(client, _)
     ['?'] = '？',
     ['\\'] = '、',
     ['!'] = '！',
+    -- [';'] = '；',
+    -- ['('] = '（',
+    -- [')'] = '）',
+    -- ['['] = '【',
+    -- [']'] = '】',
+    -- ['{'] = '｛',
+    -- ['}'] = '｝',
+    -- ['<'] = '《',
+    -- ['>'] = '》',
+    -- ['"'] = '“',
+    -- ["'"] = '‘',
   }
   -- TODO: ,q and ,Q
   -- Toggle rime
@@ -72,7 +83,6 @@ end
 return {
   name = 'rime_ls',
   cmd = { 'rime_ls' },
-  capabilities = require('blink.cmp').get_lsp_capabilities(),
   init_options = {
     enabled = vim.g.rime_enabled,
     shared_data_dir = shared_data_dir,
