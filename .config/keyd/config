@@ -12,6 +12,4 @@ x = C-x
 c = C-insert
 v = S-insert
 a = C-a
-r = C-r
 f = C-f
-/ = C-/
