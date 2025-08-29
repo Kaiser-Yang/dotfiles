@@ -151,6 +151,9 @@ if [ -d "$HOME/opt/miniconda3" ]; then
     fi
 fi
 
+# Check if /opt/nvim-linux64/bin/nvim exists and add to PATH
+[[ -d "/opt/nvim-linux64/bin" ]] && export PATH="/opt/nvim-linux64/bin:$PATH"
+
 # y for yazi
 # function y() {
 #     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
