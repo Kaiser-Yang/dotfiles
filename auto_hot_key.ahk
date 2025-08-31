@@ -14,7 +14,7 @@ $!f::Send ^f
 #If !(WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && WinActive("nv"))
 $!z::Send ^z
 $!x::Send ^x
-$!c::Send ^{Insert}
-$!v::Send +{Insert}
-$!a::Send ^{a}
+$!c::Send ^c
+$!v::Send ^v
+$!a::Send ^a
 #IfWinNotActive
