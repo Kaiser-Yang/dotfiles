@@ -4,6 +4,8 @@
 [main]
 
 [control]
+a = home
+e = end
 n = esc
 
 [alt]
