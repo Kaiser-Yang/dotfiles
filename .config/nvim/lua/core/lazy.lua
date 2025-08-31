@@ -22,8 +22,14 @@ require('lazy').setup({
   spec = {
     { 'Kaiser-Yang/LightBoat', import = 'lightboat.plugin' },
     { import = 'plugin' },
-    { 'zbirenbaum/copilot.lua', enabled = not on_mac },
+    {
+      'zbirenbaum/copilot.lua',
+      enabled = not on_mac and vim.fn.executable('node') == 1 and vim.fn.executable('curl') == 1,
+    },
     { 'yetone/avante.nvim', enabled = not on_mac },
-    { 'AndreM222/copilot-lualine', enabled = not on_mac },
+    {
+      'AndreM222/copilot-lualine',
+      enabled = not on_mac and vim.fn.executable('node') == 1 and vim.fn.executable('curl') == 1,
+    },
   },
 })
