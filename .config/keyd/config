@@ -11,7 +11,7 @@ n = esc
 [alt]
 z = C-z
 x = C-x
-c = C-insert
-v = S-insert
+c = C-c
+v = C-v
 a = C-a
 f = C-f
