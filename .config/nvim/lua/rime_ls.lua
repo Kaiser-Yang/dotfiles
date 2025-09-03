@@ -27,19 +27,18 @@ local function rime_on_attach(client, _)
     ['?'] = '？',
     ['\\'] = '、',
     ['!'] = '！',
+    ['('] = '（',
+    [')'] = '）',
+    ['['] = '「',
+    [']'] = '」',
+    ['{'] = '『',
+    ['}'] = '』',
+    ['<'] = '《',
+    ['>'] = '》',
     -- [';'] = '；',
-    -- ['('] = '（',
-    -- [')'] = '）',
-    -- ['['] = '【',
-    -- [']'] = '】',
-    -- ['{'] = '｛',
-    -- ['}'] = '｝',
-    -- ['<'] = '《',
-    -- ['>'] = '》',
-    -- ['"'] = '“',
-    -- ["'"] = '‘',
+    -- ['"'] = '“”',
+    -- ["'"] = '‘’',
   }
-  -- TODO: ,q and ,Q
   -- Toggle rime
   -- This will toggle Chinese punctuations too
   vim.keymap.set({ 'n', 'i' }, '<c-space>', function()
@@ -61,6 +60,13 @@ local function rime_on_attach(client, _)
           then
             return k .. '<space>'
           else
+            local item = _G.get_n_rime_item_index(1)
+            -- HACK:
+            if #item == 1 then
+              require('blink.cmp').accept({ index = item[1] })
+              -- We must feed the 'v' again to insert, I don't know why
+              vim.defer_fn(function() vim.api.nvim_feedkeys(v, 'n', false) end, 10)
+            end
             return v
           end
         end, { expr = true })

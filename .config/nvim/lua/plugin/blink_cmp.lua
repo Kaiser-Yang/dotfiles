@@ -22,7 +22,7 @@ local function is_rime_item(item)
   return client ~= nil and client.name == 'rime_ls'
 end
 
-local enable_rime_quick_select = function()
+local function enable_rime_quick_select()
   if not vim.g.rime_enabled then return false end
   local content_before_cursor = string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
   if
@@ -36,7 +36,8 @@ local enable_rime_quick_select = function()
 end
 
 --- @param n number
-local function get_n_rime_item_index(n, items)
+function _G.get_n_rime_item_index(n, items)
+  if not require('blink.cmp').is_visible() then return {} end
   if items == nil then items = require('blink.cmp.completion.list').items end
   local result = {}
   if items == nil or #items == 0 then return result end
