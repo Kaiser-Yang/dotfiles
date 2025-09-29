@@ -27,7 +27,7 @@ $!y::Send !y
 $!/::Send !/
 #If
 
-#If WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && WinActive("nv")
+#If (WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && WinActive("nv")) || WinActive("Visual Studio Code")
 $!z::Send !z
 $!x::Send !x
 $!c::Send !c
