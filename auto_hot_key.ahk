@@ -10,6 +10,7 @@ $^n::Send {Esc}
 
 $!z::Send ^z
 $!x::Send ^x
+$!y::Send ^y
 $!c::Send ^c
 $!v::Send ^v
 $!a::Send ^a
@@ -22,6 +23,7 @@ $^e::Send ^e
 $!f::Send !f
 $!c::Send ^{Insert}
 $!v::Send +{Insert}
+$!y::Send !y
 $!/::Send !/
 #If
 
