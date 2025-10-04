@@ -146,10 +146,14 @@ if [ -d "$HOME/opt/miniconda3" ]; then
 fi
 
 # Check if /opt/nvim-linux64/bin/nvim exists and add to PATH
-[[ -d "/opt/nvim-linux-x86_64/bin" ]] && export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
+if [[ -d "/opt/nvim-linux-x86_64/bin" ]] then
+    export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
+fi
 
 # Check if /home/kaiser/node-v20.13.0-linux-x64/bin/ exists and add to PATH
-[[ -d "/home/kaiser/node-v20.13.0-linux-x64/bin/" ]] && export PATH="/home/kaiser/node-v20.13.0-linux-x64/bin/:$PATH"
+if [[ -d "/home/kaiser/node-v20.13.0-linux-x64/bin/" ]] then
+    export PATH="/home/kaiser/node-v20.13.0-linux-x64/bin/:$PATH"
+fi
 
 # y for yazi
 # function y() {
