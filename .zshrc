@@ -28,15 +28,9 @@ plugins=(
 
 # zsh-vi-mode
 ZVM_INIT_MODE=sourcing
-zvm_config() {
-    ZVM_VI_ESCAPE_BINDKEY=^N
-    ZVM_VI_INSERT_ESCAPE_BINDKEY=^N
-    ZVM_VI_VISUAL_ESCAPE_BINDKEY=^N
-    ZVM_VI_OPPEND_ESCAPE_BINDKEY=^N
-}
 
 # zsh-expand
-ZPWR_EXPAND_BLACKLIST=(grep)
+ZPWR_EXPAND_BLACKLIST=(grep ls)
 ZPWR_CORRECT=false
 
 # zsh-completions
@@ -45,8 +39,11 @@ autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
 
+# Make Alt+f move the cursor forward by a word
 bindkey 'f' forward-word
+# Make Alt+d delete the word after the cursor
 bindkey 'd' delete-word
+# Make Alt+p and Alt+n search the history for commands
 bindkey 'p' up-line-or-search
 bindkey 'n' down-line-or-search
 
@@ -61,24 +58,24 @@ alias gst='git status'
 alias gps='git push'
 alias gpl='git pull --ff-only'
 alias gplr='git pull --rebase'
-
 alias ga='git add'
 alias gaa='git add :/'
 alias gad='git add .'
-
 alias gcm='git commit'
 alias gft='git fetch'
+alias gfta='git fetch --all'
+alias gftp='git fetch --prune'
 alias gmg='git merge'
-alias gl='git log'
+alias gmga='git merge --abort'
+alias gmgc='git merge --continue'
 alias gdf='git diff'
 alias gdfs='git diff --staged'
 alias gswt='git switch'
-
 alias grbs='git rebase'
 alias grbsa='git rebase --abort'
 alias grbsc='git rebase --continue'
 alias grbsi='git rebase --interactive'
-
+alias gl='git log'
 alias gdag='git log \
     --graph \
     --abbrev-commit \
@@ -86,26 +83,23 @@ alias gdag='git log \
     --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" \
     --all'
 alias gdagol='git log --all --decorate --oneline --graph'
-
 alias gbrc='git branch'
 alias gbrca='git branch --all'
 alias gbrcr='git branch --remote'
 alias gbrcd='git branch -d'
 alias gbrcD='git branch -D'
-
 alias gcln='git clone'
-
 alias grst='git reset'
 alias grsth='git reset --hard'
-
 alias grsr='git restore'
-
-alias gsts='git stash'
-alias gstsp='git stash pop'
-alias gstsl='git stash list'
+alias grsra='git restore :/'
+alias grsrd='git restore .'
+alias gss='git stash'
+alias gssp='git stash pop'
+alias gssl='git stash list'
 
 alias tm='tmux'
-alias tmls='tmux ls'
+# alias tmls='tmux ls'
 # alias tmlsbf='tmux list-buffers'
 # alias tmlscli='tmux list-clients'
 # alias tmlscmd='tmux list-commands'
@@ -114,9 +108,9 @@ alias tmls='tmux ls'
 # alias tmlsss='tmux list-session'
 # alias tmlswd='tmux list-window'
 # alias tmnss='tmux new-session -s'
-alias tmatc='tmux attach -t'
-alias tmksv='tmux kill-server'
-alias tmkss='tmux kill-session -t'
+# alias tmatc='tmux attach -t'
+# alias tmksv='tmux kill-server'
+# alias tmkss='tmux kill-session -t'
 # alias tmswt='tmux switch -t'
 # alias tmrnss='tmux rename-session -t'
 # alias tmrnwd='tmux rename-window -t'
@@ -152,7 +146,7 @@ if [ -d "$HOME/opt/miniconda3" ]; then
 fi
 
 # Check if /opt/nvim-linux64/bin/nvim exists and add to PATH
-[[ -d "/opt/nvim-linux64/bin" ]] && export PATH="/opt/nvim-linux64/bin:$PATH"
+[[ -d "/opt/nvim-linux-x86_64/bin" ]] && export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
 
 # Check if /home/kaiser/node-v20.13.0-linux-x64/bin/ exists and add to PATH
 [[ -d "/home/kaiser/node-v20.13.0-linux-x64/bin/" ]] && export PATH="/home/kaiser/node-v20.13.0-linux-x64/bin/:$PATH"
