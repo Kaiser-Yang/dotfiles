@@ -43,3 +43,6 @@
 [submodule ".config/nvim/profile.nvim"]
 	path = .config/nvim/profile.nvim
 	url = https://github.com/stevearc/profile.nvim.git
+[submodule ".local/share/fcitx5/themes"]
+	path = .local/share/fcitx5/themes
+	url = https://github.com/thep0y/fcitx5-themes-candlelight.git

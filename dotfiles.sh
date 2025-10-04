@@ -55,6 +55,8 @@ if [[ -n "$DISPLAY" || "$(uname)" == "Darwin" ]]; then
     DIRS+=(
         # input method related configurations
         ".local/share/fcitx5/rime"
+        ".local/share/fcitx5/themes"
+        ".config/fcitx5/conf/classicui.conf"
         # terminal
         ".config/wezterm"
     )
