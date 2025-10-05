@@ -43,9 +43,6 @@ source $ZSH/oh-my-zsh.sh
 bindkey 'f' forward-word
 # Make Alt+d delete the word after the cursor
 bindkey 'd' delete-word
-# Make Alt+p and Alt+n search the history for commands
-bindkey 'p' up-line-or-search
-bindkey 'n' down-line-or-search
 
 alias ll='ls -lFh'
 

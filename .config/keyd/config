@@ -9,6 +9,8 @@ e = end
 n = esc
 
 [alt]
+p = up
+n = down
 z = C-z
 x = C-x
 y = C-y

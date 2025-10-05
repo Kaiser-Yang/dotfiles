@@ -8,6 +8,8 @@ $^a::Send {Home}
 $^e::Send {End}
 $^n::Send {Esc}
 
+$!b::Send {Left}
+$!f::Send {Right}
 $!z::Send ^z
 $!x::Send ^x
 $!y::Send ^y
