@@ -1,12 +1,9 @@
-// Place your key bindings in this file to override the defaultsauto[]
 [
-    // do not use ctrl + f in terminal, ctrl + f is the compeletion key of fish shell
     {
         "key": "ctrl+f",
         "command": "-workbench.action.terminal.focusFind",
         "when": "terminalFindFocused && terminalHasBeenCreated || terminalFindFocused && terminalProcessSupported || terminalFocusInAny && terminalHasBeenCreated || terminalFocusInAny && terminalProcessSupported"
     },
-    // update all the up arrow and down arrow with ctrl + k and ctrl + j
     {
         "key": "ctrl+k",
         "command": "editor.action.selectPreviousStickyScrollLine",
@@ -146,5 +143,5 @@
         "key": "down",
         "command": "-showNextParameterHint",
         "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
-    },
+    }
 ]

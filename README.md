@@ -29,46 +29,6 @@ There is a file called `replace_md_image.py`, this file receive a directory as a
 will download all the images in the markdown files (recursively) in the directory and replace the
 image links with the local links. This will backup your markdown files first.
 
-## Basic Shortcuts
-
-Note that my leader key is `Space`.
-
-Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V` means visual mode,
-`T` means terminal mode, `X` means select mode, and `N I` means normal mode and insert mode.
-
-| Shortcut    | Mode  | Description                                       |
-| ----------- | ----- | ------------------------------------------------- |
-| \<C-T>      | N I T | Toggle a terminal                                 |
-| Q           | N     | Unload a buffer, close a window or tab            |
-| \<LEADER>r  | N     | Run the current file depends on its filetype      |
-| \<LEADER>ay | N     | Copy all lines of current buffer to plus register |
-
-## Window
-
-| Shortcut    | Mode | Description                                                    |
-| ----------- | ---- | -------------------------------------------------------------- |
-| \<LEADER>h  | N    | Split window horizontally, and move cursor to the left window  |
-| \<LEADER>l  | N    | Split window horizontally, and move cursor to the right window |
-| \<LEADER>j  | N    | Split window vertically, and move cursor to the bottom window  |
-| \<LEADER>k  | N    | Split window vertically, and move cursor to the top window     |
-| \<LEADER>tt | N    | Toggle expandtab                                               |
-| \<LEADER>t2 | N    | Set tabstop to 2 spaces                                        |
-| \<LEADER>t4 | N    | Set tabstop to 4 spaces                                        |
-| \<LEADER>t8 | N    | Set tabstop to 8 spaces                                        |
-| \<C-H>      | N    | Move the cursor to the left window                             |
-| \<C-J>      | N    | Move the cursor to the bottom window                           |
-| \<C-K>      | N    | Move the cursor to the top window                              |
-| \<C-L>      | N    | Move the cursor to the right window                            |
-| \<LEADER>1  | N    | Go to the first buffer                                         |
-| \<LEADER>2  | N    | Go to the second buffer                                        |
-| ...         | ...  | ...                                                            |
-| \<LEADER>8  | N    | Go to the eighth buffer                                        |
-| \<LEADER>9  | N    | Go to the ninth buffer                                         |
-| Up          | N    | Smart resize the current window to the top                     |
-| Down        | N    | Smart resize the current window to the bottom                  |
-| Left        | N    | Smart resize the current window to the left                    |
-| Right       | N    | Smart resize the current window to the right                   |
-
 ## Copy and Paste
 
 | Shortcut   | Mode | Description                                                                                      |
@@ -87,23 +47,6 @@ Note that in the `Mode` column, `N` means normal mode, `I` means insert mode, `V
 | \<C-J>   |      | Move the cursor to the next selection     |
 | \<C-K>   |      | Move the cursor to the previous selection |
 
-## Markdown Helper
-
-These settings only work in a markdown file.
-
-Some of the settings below will insert `<++>` as a placeholder symbol, and you can use `,f` to move
-the cursor out of the current block and remove the placeholder symbol.
-
-| Shortcut | Mode | Description                                                                      |
-| -------- | ---- | -------------------------------------------------------------------------------- |
-| ,f       | I    | Move the cursor out of the current block and remove next placeholder symbol      |
-| ,t       | I    | Insert command line block and leave the cursor where you can input the command   |
-| ,b       | I    | Insert bold line block and leave the cursor where you can input the bold content |
-| ,m       | I    | Insert math line block and leave the cursor where you can input the math         |
-| ,M       | I    | Insert math block and leave the cursor where you can input the math              |
-| ,c       | I    | Insert code block, and leave the cursor where you should input the code language |
-| ,n       | I    | Insert a new line symbol of html                                                 |
-
 ## Useful Plugins' Shortcuts
 
 ### Commenting
@@ -116,31 +59,6 @@ the cursor out of the current block and remove the placeholder symbol.
 | gb[count][motion]        | N    | Toggle comments (block style) with motion          |
 | \<space>c\<space>        | V    | Toggle comments (line style) of the selected line  |
 | \<space>cs               | V    | Toggle comments (block style) of the selected line |
-
-### Surrounding
-
-| Shortcut              | Mode | Description                                          |
-| --------------------- | ---- | ---------------------------------------------------- |
-| ys\<motion>\<bracket> | N    | Surround something                                   |
-| yss\<bracket>         | N    | Surround the whole line with the character you input |
-| ySS\<bracket>         | N    | Surround the whole line with the character you input |
-| ds\<bracket>          | N    | Delete the surrounding you input                     |
-| cs\<old>\<new>        | N    | Change the surround with a new one                   |
-| S\<bracket>           | V    | Surround the selected characters                     |
-| ys{motion}f{name}     | N    | Surround the part with a function call               |
-| dsf                   | N    | Delete a function call, only parameters will be left |
-| csf{name}             | N    | Change a function call with a new one                |
-
-Some examples of surrounding:
-
-- `ysf;{`: surround the character from the cursor to next `;` with `{}`.
-- `yst;{`: surround the character from the cursor till next `;` with `{}`, this will leave the `;`
-  out of the surrounding.
-- `ds(`: delete the `()` surrounding current part.
-- `cs([`: change the `()` with `[]` for current surrounded part.
-
-NOTE: the difference between `ysw[` ans `ysw]` is that the former will add white space at left and
-right, the latter will not.
 
 ### Code Related
 
@@ -155,21 +73,6 @@ right, the latter will not.
 | ]d         | N    | Go to next diagnostic                                                 |
 | [d         | N    | Go to previous diagnostic                                             |
 | K          | N    | Show document symbols, this can also be used to show variables' types |
-
-### Git Related
-
-| Shortcut | Mode | Description                                              |
-| -------- | ---- | -------------------------------------------------------- |
-| ]g       | N    | Go to next git hunk                                      |
-| [g       | N    | Go to previous git hunk                                  |
-| ]x       | N    | Go to next git conflict                                  |
-| [x       | N    | Go to previous git conflict                              |
-| gcu      | N    | Undo (reset) current git hunk                            |
-| gcd      | N    | Show difference of current git hunk                      |
-| gcc      | N    | When there is a conflict, this will keep current change  |
-| gci      | N    | When there is a conflict, this will keep incoming change |
-| gcb      | N    | When there is a conflict, this will keep both changes    |
-| gcn      | N    | When there is a conflict, this will keep none change     |
 
 ### Automatic Completion
 
