@@ -1,5 +1,7 @@
 require('core.lazy')
 
+if vim.g.vscode then return end
+
 local should_profile = os.getenv('NVIM_PROFILE')
 if should_profile then
   require('profile').instrument_autocmds()
