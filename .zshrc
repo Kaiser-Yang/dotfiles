@@ -147,11 +147,6 @@ if [[ -d "/opt/nvim-linux-x86_64/bin" ]] then
     export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
 fi
 
-# Check if /home/kaiser/node-v20.13.0-linux-x64/bin/ exists and add to PATH
-if [[ -d "/home/kaiser/node-v20.13.0-linux-x64/bin/" ]] then
-    export PATH="/home/kaiser/node-v20.13.0-linux-x64/bin/:$PATH"
-fi
-
 # y for yazi
 # function y() {
 #     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
