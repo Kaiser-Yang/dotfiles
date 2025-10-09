@@ -8,8 +8,6 @@ $^a::Send {Home}
 $^e::Send {End}
 $^n::Send {Esc}
 
-$!b::Send {Left}
-$!f::Send {Right}
 $!z::Send ^z
 $!x::Send ^x
 $!y::Send ^y
@@ -19,9 +17,7 @@ $!a::Send ^a
 $!f::Send ^f
 $!/::Send ^/
 
-#If WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS")
-$^a::Send ^a
-$^e::Send ^e
+#If WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && !WinActive("nv")
 $!f::Send !f
 $!c::Send ^{Insert}
 $!v::Send +{Insert}
@@ -30,6 +26,11 @@ $!/::Send !/
 #If
 
 #If (WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && WinActive("nv")) || WinActive("Visual Studio Code")
+$^a::Send ^a
+$^e::Send ^e
+$!f::Send !f
+$!y::Send !y
+$!/::Send !/
 $!z::Send !z
 $!x::Send !x
 $!c::Send !c
