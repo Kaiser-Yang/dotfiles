@@ -608,6 +608,30 @@ restore_one_file() {
     log_verbose "Restored $dst from backup successfully."
 }
 
+update_submodules() {
+    git submodule foreach --quiet "echo \$name" | while read -r submodule; do
+        url=$(git config --file .gitmodules --get submodule."$submodule".url)
+        if [[ "$url" =~ ^git@ || "$url" =~ ^ssh:// ]]; then
+            log "Skip submodule $submodule with ssh url: $url"
+            continue
+        fi
+        if ! git submodule update --init "$submodule"; then
+            log_error "Failed to update git submodules. Please check your git configuration."
+            return 1
+        fi
+        if [ -f "$submodule/.gitmodules" ]; then
+            origin_cwd=$(pwd)
+            echo "$submodule"
+            if ! cd "$submodule" && update_submodules; then
+                log_error "Failed to update submodule $submodule. Please check your git configuration."
+                cd "$origin_cwd" || exit
+                return 1
+            fi
+            cd "$origin_cwd" || exit
+        fi
+    done
+}
+
 find_files() {
     # check if the files array is already initialized
     if declare -p files &>/dev/null; then
@@ -616,10 +640,7 @@ find_files() {
     fi
 
     log_verbose "Start to update git submodules."
-    if ! git submodule update --init --recursive; then
-        log_error "Failed to update git submodules. Please check your git configuration."
-        return 1
-    fi
+    update_submodules
     log_verbose "Git submodules updated successfully."
 
     log_verbose "Start to find files in directories."
