@@ -23,6 +23,8 @@ $!c::Send ^{Insert}
 $!v::Send +{Insert}
 $!y::Send !y
 $!/::Send !/
+$!p::Send {up}
+$!n::Send {down}
 #If
 
 #If (WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && WinActive("nv")) || WinActive("Visual Studio Code")
@@ -36,4 +38,6 @@ $!x::Send !x
 $!c::Send !c
 $!v::Send !v
 $!a::Send !a
+$!p::Send {up}
+$!n::Send {down}
 #If
