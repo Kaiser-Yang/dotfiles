@@ -1,0 +1,22 @@
+{
+    "ojp": {
+        "prefix": "ojp",
+        "body": [
+            "// problem statement: $1",
+            "",
+            "#include <cstdint>",
+            "#include <iostream>",
+            "",
+            "using i64 = int64_t;",
+            "using u64 = uint64_t;",
+            "",
+            "int main() {",
+            "    std::ios::sync_with_stdio(false);",
+            "    std::cin.tie(nullptr);",
+            "    $0",
+            "    return 0;",
+            "}"
+        ],
+        "description": "Competitive programming template"
+    }
+}
