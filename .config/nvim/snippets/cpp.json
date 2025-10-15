@@ -1,6 +1,6 @@
 {
-    "ojp": {
-        "prefix": "ojp",
+    "oj": {
+        "prefix": "oj",
         "body": [
             "// problem statement: $1",
             "",
