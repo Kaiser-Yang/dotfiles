@@ -23,7 +23,7 @@ vim.g.lightboat_opts = {
         prev = {
           'big_file_check',
           function()
-            if not vim.fn.expand('%:p') or not vim.bo.filetype == 'cpp' then return false end
+            if not vim.fn.expand('%:p'):match('OJProblems') or vim.bo.filetype ~= 'cpp' then return false end
             local file_dir = vim.fn.expand('%:p:h')
             local file_name = vim.fn.expand('%:t:r')
             if vim.fn.filereadable(file_dir .. '/' .. file_name .. '_0.in') == 0 then
