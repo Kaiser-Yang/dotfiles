@@ -1,15 +1,15 @@
 -- When input method is enabled, disable the following patterns
 vim.g.disable_rime_ls_pattern = {
   -- disable in ``
-  '`([%w%s%p]*)`',
+  '`([%w%s%p]-)`',
   -- disable in ''
-  "'([%w%s%p]*)'",
+  "'([%w%s%p]-)'",
   -- disable in ""
-  '"([%w%s%p]*)"',
+  '"([%w%s%p]-)"',
   -- disable after ```
-  '```[%w%s%p]*',
+  '```[%w%s%p]-',
   -- disable in $$
-  '%$+[%w%s%p]*%$+',
+  '%$+[%w%s%p]-%$+',
 }
 
 vim.g.rime_enabled = false
