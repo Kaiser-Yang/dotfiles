@@ -222,13 +222,16 @@ is_installed() {
         if  "$package_manager" -Q "$package_name" &> /dev/null || \
             "$package_manager" -Qg "$package_name" &> /dev/null; then
             cat /dev/null
+            return 0
         else
             log_verbose "Package '$package_name' is not installed."
             return 1
         fi
     elif [[ "$package_manager" == "brew" ]]; then
-        if ! "$package_manager" list --formula | grep -wq "$package_name" || \
-            "$package_manager" list --cask | grep -wq "$package_name"; then
+        if { "$package_manager" list --formula 2>/dev/null | grep -Fxq -- "$package_name"; } || \
+           { "$package_manager" list --cask 2>/dev/null | grep -Fxq -- "$package_name"; }; then
+            log_verbose "Package '$package_name' is installed."
+        else
             log_verbose "Package '$package_name' is not installed."
             return 1
         fi
