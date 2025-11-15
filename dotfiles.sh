@@ -383,13 +383,13 @@ init_options() {
                         e) EXTRACT=true ;;
                         f) INSTALL_FONTS=true ;;
                         s) CHANGE_SHELL=true ;;
-                        *) log_erro "Unknown option: -${short_opts:$i:1}"; usage; return 1 ;;
+                        *) log_error "Unknown option: -${short_opts:$i:1}"; usage; return 1 ;;
                     esac
                 done
                 shift
                 ;;
             *)
-                log_erro "Unknown option: $1"
+                log_error "Unknown option: $1"
                 usage
                 return 1
                 ;;
