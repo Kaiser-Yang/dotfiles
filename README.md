@@ -29,6 +29,19 @@ There is a file called `replace_md_image.py`, this file receive a directory as a
 will download all the images in the markdown files (recursively) in the directory and replace the
 image links with the local links. This will backup your markdown files first.
 
+## Requirements
+
+For markdown render working properly in `nvim`, you should install those tree-sitter parsers:
+
+- `markdown`
+- `markdown_inline`
+- `html`
+- `latex`
+- `yaml`
+
+And `pylatexenc` is required for rendering LaTeX formulas in markdown files. You can install it
+with `pip install pylatexenc`.
+
 ## Copy and Paste
 
 | Shortcut   | Mode | Description                                                                                      |
