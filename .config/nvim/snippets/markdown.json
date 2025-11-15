@@ -1,0 +1,26 @@
+{
+    "io": {
+        "prefix": "io",
+        "body": [
+            "---",
+            "layout: post",
+            "title: $1",
+            "date: ${2}+0800",
+            "last_updated: ${2}+0800",
+            "description: $3",
+            "tags:",
+            "  - $4",
+            "categories: $5",
+            "featured:",
+            "giscus_comments: true",
+            "toc:",
+            "  sidebar: left",
+            "related_posts: true",
+            "pretty_table: true",
+            "---",
+            "",
+            "$0"
+        ],
+        "description": "github io page template"
+    }
+}
