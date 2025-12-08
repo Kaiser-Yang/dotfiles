@@ -15,7 +15,17 @@ vim.opt.rtp:prepend(lazypath)
 local on_mac = vim.fn.has('mac') == 1
 --- @type LightBoat.Opts
 vim.g.lightboat_opts = {
-  mason = { mason_bin_first = not on_mac },
+  mason = {
+    mason_bin_first = not on_mac,
+    ensure_installed = {
+      ['lemminx'] = false,
+      ['json-lsp'] = false,
+      ['eslint-lsp'] = false,
+      ['vue-language-server'] = false,
+      ['yaml-language-server'] = false,
+      ['typescript-language-server'] = false,
+    },
+  },
   lsp = { config = { rime_ls = require('rime_ls') } },
   snack = {
     keys = {
