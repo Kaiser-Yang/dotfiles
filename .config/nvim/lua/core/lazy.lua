@@ -24,9 +24,21 @@ vim.g.lightboat_opts = {
       ['vue-language-server'] = false,
       ['yaml-language-server'] = false,
       ['typescript-language-server'] = false,
+      ['tailwindcss-language-server'] = false,
     },
   },
-  lsp = { config = { rime_ls = require('rime_ls') } },
+  lsp = {
+    config = {
+      rime_ls = require('rime_ls'),
+      lemminx = false,
+      jsonls = false,
+      eslint = false,
+      vue_ls = false,
+      yamlls = false,
+      ts_ls = false,
+      tailwindcss = false,
+    },
+  },
   snack = {
     keys = {
       ['<leader>r'] = {
