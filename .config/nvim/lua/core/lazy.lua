@@ -27,6 +27,20 @@ vim.g.lightboat_opts = {
       ['tailwindcss-language-server'] = false,
     },
   },
+  yanky = {
+    keys = {
+      ['y'] = false,
+      ['Y'] = false,
+      ['P'] = false,
+      ['p'] = false,
+      ['gp'] = false,
+      ['gP'] = false,
+      ['<leader>p'] = false,
+      ['<leader>P'] = false,
+      ['<leader>y'] = { key = 'y' },
+      ['<leader>Y'] = { key = 'Y' },
+    },
+  },
   lsp = {
     config = {
       rime_ls = require('rime_ls'),
