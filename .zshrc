@@ -146,16 +146,6 @@ if [ -d "$HOME/opt/miniconda3" ]; then
     fi
 fi
 
-# y for yazi
-# function y() {
-#     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-#     yazi "$@" --cwd-file="$tmp"
-#     if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-#         builtin cd -- "$cwd"
-#     fi
-#     rm -f -- "$tmp"
-# }
-#
 # export FZF_DEFAULT_OPTS=" \
 # --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
 # --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
