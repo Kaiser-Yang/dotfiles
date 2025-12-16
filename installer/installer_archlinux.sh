@@ -12,25 +12,18 @@
 # unzip
 
 sudo pacman -Sy \
-    less wl-clipboard \
-    fd fzf ripgrep sshfs \
+    fd fzf sshfs \
     fire-fox \
     noto-fonts-cjk \
-    unzip \
     github-cli \
     glab \
     yarn \
     docker \
     ttf-cascadia-mono-nerd
 
-yay -Sy codelldb-bin input-remapper-git
+yay -Sy codelldb-bin
 
-sudo pacman -S starship
-
-sudo pacman -Sy yazi ffmpeg 7zip jq poppler zoxide imagemagick
-ya pack -a yazi-rs/plugins:smart-enter || exit 1
-ya pack -a yazi-rs/plugins:full-border || exit 1
-ya pack -a yazi-rs/plugins:max-preview || exit 1
+sudo pacman -Sy ffmpeg 7zip jq poppler imagemagick
 
 cargo install tree-sitter-cli
 
