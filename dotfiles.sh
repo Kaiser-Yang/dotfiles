@@ -21,6 +21,9 @@ DIRS=(
     ".config/zsh/plugins/zsh-vi-mode/zsh-vi-mode.zsh"
     ".config/zsh/plugins/zsh-expand/zsh-expand.plugin.zsh"
     ".config/zsh/themes/powerlevel10k"
+
+    # lazygit related configurations
+    ".config/lazygit"
 )
 # The reason why we use both `REQUIRED_EXECUTABLES` and `INSTALLATION_COMMANDS`
 # is to control the sequence of installation commands.
@@ -31,6 +34,7 @@ REQUIRED_EXECUTABLES=(
     "wget"
     "tar"
     "git"
+    "lazygit"
     "nvim"
     "tmux"
     "zsh"
@@ -80,6 +84,7 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         [wget]="$SUDO pacman -Sy --noconfirm wget"
         [tar]="$SUDO pacman -Sy --noconfirm tar"
         [git]="$SUDO pacman -Sy --noconfirm git"
+        [lazygit]="$SUDO pacman -Sy --noconfirm lazygit"
         [nvim]="$SUDO pacman -Sy --noconfirm neovim"
         [tmux]="$SUDO pacman -Sy --noconfirm tmux"
         [zsh]="$SUDO pacman -Sy --noconfirm zsh"
@@ -106,6 +111,10 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     )
 # Ubuntu related configurations
 elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
+    DIRS+=(".config/fontconfig/fonts_ubuntu.conf")
+    LAZYGIT_VERSION=$(curl -s \
+        https://api.github.com/repos/jesseduffield/lazygit/releases/latest | \
+        \grep -Po '"tag_name": *"v\K[^"]*')
     if [ -n "$DISPLAY" ]; then
         REQUIRED_EXECUTABLES+=(
             "fcitx5"
@@ -126,6 +135,12 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         [wget]="$SUDO apt install -y wget"
         [tar]="$SUDO apt install -y tar"
         [git]="$SUDO apt install -y git"
+        [lazygit]="[[ $(uname -m) == 'x86_64' ]] &&
+            curl -Lo lazygit.tar.gz \
+                https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz && \
+            tar xf lazygit.tar.gz lazygit && \
+            $SUDO install lazygit -D -t /usr/local/bin/ && \
+            rm -f lazygit.tar.gz lazygit"
         [nvim]="$SUDO apt install -y neovim"
         [tmux]="$SUDO apt install -y tmux"
         [zsh]="$SUDO apt install -y zsh"
@@ -170,6 +185,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [wget]="brew install wget"
         [tar]="brew install gnu-tar"
         [git]="brew install git"
+        [lazygit]="brew install lazygit"
         [nvim]="brew install neovim"
         [tmux]="brew install tmux"
         [zsh]="brew install zsh"
