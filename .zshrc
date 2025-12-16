@@ -5,12 +5,12 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if [[ -d "/opt/homebrew/lib" && "$(uname)" == "Darwin" ]]; then
-    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/opt/homebrew/lib"
-fi
-
 if [[ -e "$HOME/.zprofile" ]]; then
     source "$HOME/.zprofile"
+fi
+
+if [[ -d "/opt/homebrew/lib" && "$(uname)" == "Darwin" ]]; then
+    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/opt/homebrew/lib"
 fi
 
 export ZSH="$HOME/.oh-my-zsh"
