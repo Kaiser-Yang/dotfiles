@@ -98,5 +98,6 @@ require('lazy').setup({
       'AndreM222/copilot-lualine',
       enabled = not on_mac and vim.fn.executable('node') == 1 and vim.fn.executable('curl') == 1,
     },
+    { 'NeogitOrg/neogit', enabled = false },
   },
 })
