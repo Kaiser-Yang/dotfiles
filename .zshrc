@@ -113,13 +113,17 @@ alias tmkss='tmux kill-session -t'
 # alias tmrnwd='tmux rename-window -t'
 
 export EDITOR=nvim
-export PATH=$PATH:~/.local/bin:~/.cargo/bin:~/.yarn/bin
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Configure cd to use zoxide if available
 ! command -v zoxide &>/dev/null || eval "$(zoxide init --cmd cd zsh)"
+
+# Check if /opt/nvim-linux64/bin/nvim exists and add to PATH
+if [[ -d "/opt/nvim-linux-x86_64/bin" ]] then
+    export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
+fi
 
 if [ -d "$HOME/opt/miniconda3" ]; then
     # >>> conda initialize >>>
@@ -140,11 +144,6 @@ if [ -d "$HOME/opt/miniconda3" ]; then
       export flavor='conda'
       source $HOME/.config/tmux/plugins/conda_inherit.sh
     fi
-fi
-
-# Check if /opt/nvim-linux64/bin/nvim exists and add to PATH
-if [[ -d "/opt/nvim-linux-x86_64/bin" ]] then
-    export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
 fi
 
 # y for yazi
