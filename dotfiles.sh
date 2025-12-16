@@ -26,6 +26,8 @@ DIRS=(
 # is to control the sequence of installation commands.
 REQUIRED_EXECUTABLES=(
     "curl"
+    "make"
+    "unzip"
     "wget"
     "tar"
     "git"
@@ -34,6 +36,7 @@ REQUIRED_EXECUTABLES=(
     "zsh"
     "zoxide"
     "node"
+    "npm"
     "rg"
     "rime_ls"
     "wn"
@@ -51,8 +54,6 @@ if [[ -n "$DISPLAY" || "$(uname)" == "Darwin" ]]; then
     DIRS+=(
         # input method related configurations
         ".local/share/fcitx5/rime"
-        ".local/share/fcitx5/themes"
-        ".config/fcitx5/conf/classicui.conf"
         # terminal
         ".config/wezterm"
     )
@@ -74,6 +75,8 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     )
     INSTALLATION_COMMANDS+=(
         [curl]="$SUDO pacman -Sy --noconfirm curl"
+        [make]="$SUDO pacman -Sy --noconfirm make"
+        [unzip]="$SUDO pacman -Sy --noconfirm unzip"
         [wget]="$SUDO pacman -Sy --noconfirm wget"
         [tar]="$SUDO pacman -Sy --noconfirm tar"
         [git]="$SUDO pacman -Sy --noconfirm git"
@@ -82,6 +85,7 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         [zsh]="$SUDO pacman -Sy --noconfirm zsh"
         [zoxide]="$SUDO pacman -Sy --noconfirm zoxide"
         [node]="$SUDO pacman -Sy --noconfirm nodejs"
+        [npm]="$SUDO pacman -Sy --noconfirm npm"
         [rg]="$SUDO pacman -Sy --noconfirm ripgrep"
         [base-devel]="$SUDO pacman -Sy --noconfirm base-devel"
         [yay]="git clone https://aur.archlinux.org/yay.git &&
@@ -94,13 +98,14 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         [fcitx5-rime]="$SUDO pacman -Sy --noconfirm fcitx5-rime"
         [keyd]="$SUDO pacman -Sy --noconfirm keyd"
         [wezterm]="$SUDO pacman -Sy --noconfirm wezterm"
+        [wl-paste]="$SUDO pacman -Sy --noconfirm wl-clipboard"
+        [xclip]="$SUDO pacman -Sy --noconfirm xclip"
     )
     DIRS+=(
         ".config/fontconfig/fonts_arch.conf"
     )
 # Ubuntu related configurations
 elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
-    DIRS+=(".config/fontconfig/fonts_ubuntu.conf")
     if [ -n "$DISPLAY" ]; then
         REQUIRED_EXECUTABLES+=(
             "fcitx5"
@@ -116,6 +121,8 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
     INSTALLATION_COMMANDS+=(
         [_update_package_list]="$SUDO apt update"
         [curl]="$SUDO apt install -y curl"
+        [make]="$SUDO apt install -y make"
+        [unzip]="$SUDO apt install -y unzip"
         [wget]="$SUDO apt install -y wget"
         [tar]="$SUDO apt install -y tar"
         [git]="$SUDO apt install -y git"
@@ -124,6 +131,7 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         [zsh]="$SUDO apt install -y zsh"
         [zoxide]="$SUDO apt install -y zoxide"
         [node]="$SUDO apt install -y nodejs"
+        [npm]="$SUDO apt install -y npm"
         [rg]="$SUDO apt install -y ripgrep"
         [rime_ls]="$SUDO apt install -y librime-dev && custom_install rime_ls"
         [wn]="$SUDO apt install -y wordnet" 
@@ -141,21 +149,24 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         [keyd]="git clone https://github.com/rvaiya/keyd && \
             cd keyd && make && $SUDO make install && \
             cd .. && rm -rf keyd"
+        [wl-paste]="$SUDO apt install -y wl-clipboard"
+        [xclip]="$SUDO apt install -y xclip"
     )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
-    DIRS+=(".config/fontconfig/fonts_mac.conf")
     REQUIRED_EXECUTABLES=(
         "brew"
         "_update_package_list"
         "${REQUIRED_EXECUTABLES[@]}"
         "wezterm"
         "squirrel"
+        "pngpaste"
     )
     INSTALLATION_COMMANDS+=(
         [brew]="custom_install brew"
         [_update_package_list]="brew update"
         [curl]="brew install curl"
+        [unzip]="brew install unzip"
         [wget]="brew install wget"
         [tar]="brew install gnu-tar"
         [git]="brew install git"
@@ -170,14 +181,26 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         # macOS should hava GUI always, we do not need to check it
         [wezterm]="brew install --cask wezterm"
         [squirrel]="brew install --cask squirrel"
+        [pngpaste]="brew install pngpaste"
     )
 fi
 # Configurations for all Linux distributions
 if [[ "$(uname)" == "Linux" ]]; then
     DIRS+=(
+        ".config/fcitx5/conf/classicui.conf"
+        ".local/share/fcitx5/themes"
         ".config/keyd/config"
         ".config/keyd/app.conf"
     )
+    if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+        REQUIRED_EXECUTABLES+=(
+            "wl-paste"
+        )
+    elif [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
+        REQUIRED_EXECUTABLES+=(
+            "xclip"
+        )
+    fi
 fi
 
 # This will check if a command or package is installed.
@@ -423,6 +446,7 @@ install_brew() {
         log_verbose "Home brew is already installed."
     fi
 }
+
 install_rime_ls() {
     if command -v rime_ls &>/dev/null; then
         log_verbose "rime_ls is already installed."
