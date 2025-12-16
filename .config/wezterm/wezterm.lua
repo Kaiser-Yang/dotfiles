@@ -39,8 +39,8 @@ local function default_program()
 end
 
 return {
-    initial_rows = 50,
-    initial_cols = 120,
+    initial_rows = 40,
+    initial_cols = 80,
     automatically_reload_config = true,
     color_scheme = 'Catppuccin Mocha',
     default_prog = default_program(),
@@ -56,8 +56,6 @@ return {
         { key = '=', mods = 'CTRL|SUPER', action = act.IncreaseFontSize },
         { key = '-', mods = 'CTRL|SUPER', action = act.DecreaseFontSize },
         { key = '0', mods = 'CTRL|SUPER', action = act.ResetFontSize },
-        { key = 'v', mods = 'SUPER', action = act.PasteFrom('Clipboard') },
-        { key = 'Insert', mods = 'SHIFT', action = act.PasteFrom("Clipboard") },
     },
     mouse_bindings = {
         {
