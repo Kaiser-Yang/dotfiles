@@ -84,6 +84,25 @@ vim.g.lightboat_opts = {
       },
     },
   },
+  treesitter = {
+    keys = {
+      ['s'] = false,
+      ['snf'] = false,
+      ['snc'] = false,
+      ['snl'] = false,
+      ['snb'] = false,
+      ['snr'] = false,
+      ['snp'] = false,
+      ['sni'] = false,
+      ['spf'] = false,
+      ['spc'] = false,
+      ['spl'] = false,
+      ['spb'] = false,
+      ['spr'] = false,
+      ['spp'] = false,
+      ['spi'] = false,
+    },
+  },
 }
 require('lazy').setup({
   spec = {
