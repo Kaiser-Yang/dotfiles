@@ -103,6 +103,20 @@ vim.g.lightboat_opts = {
       ['spi'] = false,
     },
   },
+  keymap = {
+    keys = {
+      ['b'] = false,
+      ['w'] = false,
+      ['B'] = false,
+      ['W'] = false,
+      ['ge'] = false,
+      ['e'] = false,
+      ['gE'] = false,
+      ['E'] = false,
+      ['N'] = false,
+      ['n'] = false,
+    },
+  },
 }
 require('lazy').setup({
   spec = {
