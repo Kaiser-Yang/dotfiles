@@ -13,23 +13,13 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local on_mac = vim.fn.has('mac') == 1
-local sync_with_anonymous_g = nil
-local function sync_with_anonymous()
-  if sync_with_anonymous_g then return false end
-  sync_with_anonymous_g = vim.api.nvim_create_augroup('SyncPlusToUnnamed', { clear = true })
-  vim.api.nvim_create_autocmd('TextYankPost', {
-    group = sync_with_anonymous_g,
-    callback = function()
-      vim.schedule(function()
-        vim.api.nvim_del_augroup_by_id(sync_with_anonymous_g)
-        sync_with_anonymous_g = nil
-      end)
-      if vim.v.event and vim.v.event.regname == '+' then vim.fn.setreg('"', vim.fn.getreg('+'), vim.v.event.regtype) end
-    end,
-    once = true,
-  })
-  return false
-end
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    if vim.v.event.regname == '' and vim.v.event.operator == 'y' then
+      vim.fn.setreg('+', vim.fn.getreg('"'), vim.v.event.regtype)
+    end
+  end,
+})
 --- @type LightBoat.Opts
 vim.g.lightboat_opts = {
   buffer_line = {
@@ -52,10 +42,8 @@ vim.g.lightboat_opts = {
   },
   yanky = {
     keys = {
-      ['y'] = false,
-      ['Y'] = false,
-      ['<leader>y'] = { prev = sync_with_anonymous, key = 'y' },
-      ['<leader>Y'] = { prev = sync_with_anonymous, key = 'Y' },
+      ['<leader>y'] = false,
+      ['<leader>Y'] = false,
     },
   },
   lsp = {
