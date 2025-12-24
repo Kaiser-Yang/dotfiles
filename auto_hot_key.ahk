@@ -27,6 +27,7 @@ $!n::Send {down}
 #If (WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && WinActive("nv"))
 $^a::Send ^a
 $^e::Send ^e
+$^h::Send ^h
 $!z::Send !z
 $!x::Send !x
 $!c::Send !c
@@ -38,6 +39,7 @@ $!f::Send !f
 #IF WinActive("Visual Studio Code")
 $^a::Send ^a
 $^e::Send ^e
+$^h::Send ^h
 $!z::Send !z
 $!x::Send !x
 $!c::Send !c
