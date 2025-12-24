@@ -7,6 +7,7 @@
 a = home
 e = end
 n = esc
+h = backspace
 
 [alt]
 z = C-z

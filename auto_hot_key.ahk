@@ -7,6 +7,7 @@ CapsLock::Send #{Space}
 $^a::Send {Home}
 $^e::Send {End}
 $^n::Send {Esc}
+$^h::Send {Backspace}
 
 $!z::Send ^z
 $!x::Send ^x
