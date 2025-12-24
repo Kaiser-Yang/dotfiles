@@ -32,6 +32,12 @@ local function sync_with_anonymous()
 end
 --- @type LightBoat.Opts
 vim.g.lightboat_opts = {
+  buffer_line = {
+    keys = {
+      ['H'] = false,
+      ['L'] = false,
+    },
+  },
   mason = {
     mason_bin_first = not on_mac,
     ensure_installed = {
