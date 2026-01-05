@@ -24,6 +24,9 @@ DIRS=(
 
     # lazygit related configurations
     ".config/lazygit"
+
+    # git configuration
+    ".gitconfig"
 )
 # The reason why we use both `REQUIRED_EXECUTABLES` and `INSTALLATION_COMMANDS`
 # is to control the sequence of installation commands.

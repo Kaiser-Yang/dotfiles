@@ -1,0 +1,19 @@
+[core]
+    editor = nvim
+[alias]
+    st = status
+    ps = push
+    pl = pull
+    a = add
+    cm = commit
+    ft = fetch
+    mg = merge
+    df = diff
+    swt = switch
+    rbs = rebase
+    l = log
+    brc = branch
+    cln = clone
+    rst = reset
+    rsr = restore
+    ss = stash
