@@ -56,6 +56,12 @@ if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
         ".config/autostart/keyd-application-mapper.desktop"
     )
 fi
+if [[ "$(uname)" == "Darwin" ]]; then
+    DIRS+=(
+        # karabiner configuration
+        ".config/karabiner/karabiner.json"
+    )
+fi
 # Configurations that require a graphical interface
 if [[ -n "$DISPLAY" || "$(uname)" == "Darwin" ]]; then
     DIRS+=(
