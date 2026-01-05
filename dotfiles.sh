@@ -195,7 +195,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [zoxide]="brew install zoxide"
         [node]="brew install node"
         [rg]="brew install ripgrep"
-        [rime_ls]="brew install librime && install rime_ls"
+        [rime_ls]="brew install librime && custom_install rime_ls"
         [wn]="brew install wordnet"
         # macOS should hava GUI always, we do not need to check it
         [wezterm]="brew install --cask wezterm"
@@ -237,6 +237,10 @@ is_installed() {
     if command -v "$expected_executable" &>/dev/null; then
         log_verbose "Command '$expected_executable' is installed."
         return 0
+    elif [[ -z "$2" || -z "$3" ]]; then
+        log_verbose "Package manager or package name is not provided."
+        log_verbose "Command '$expected_executable' is not installed"
+        return 1
     fi
     local package_manager="$2"
     local package_name="$3"
