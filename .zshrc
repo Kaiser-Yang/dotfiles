@@ -13,6 +13,10 @@ if [[ -d "/opt/homebrew/lib" && "$(uname)" == "Darwin" ]]; then
     export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/opt/homebrew/lib"
 fi
 
+if [[ -d "/usr/local/bin" ]]; then
+    export PATH="/usr/local/bin:$PATH"
+fi
+
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_CUSTOM="$HOME/.config/zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
