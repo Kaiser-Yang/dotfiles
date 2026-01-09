@@ -61,6 +61,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
         # karabiner configuration
         ".config/karabiner/karabiner.json"
     )
+    COMMANDS_AFTER_INSTALLATION+=("defaults write com.apple.dock autohide-delay 0")
 fi
 # Configurations that require a graphical interface
 if [[ -n "$DISPLAY" || "$(uname)" == "Darwin" ]]; then
@@ -235,10 +236,6 @@ fi
 #     1  if not installed
 #     2  if an error occurred
 is_installed() {
-    if [ -z "$3" ]; then
-        log_error "Usage: is_installed <expected_executable> <package_manager> <package_name>"
-        return 2
-    fi
     local expected_executable="$1"
     if command -v "$expected_executable" &>/dev/null; then
         log_verbose "Command '$expected_executable' is installed."

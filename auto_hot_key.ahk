@@ -20,8 +20,6 @@ $!f::Send ^f
 $!f::Send !f
 $!c::Send ^{Insert}
 $!v::Send +{Insert}
-$!p::Send {up}
-$!n::Send {down}
 #If
 
 #If (WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && WinActive("nv"))

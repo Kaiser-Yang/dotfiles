@@ -9,6 +9,10 @@ if [[ -e "$HOME/.zprofile" ]]; then
     source "$HOME/.zprofile"
 fi
 
+if [[ "$(uname)" == "Darwin" && -e "/opt/homebrew/bin/brew" ]]; then
+    eval "$(opt/homebrew/bin/brew shellenv)"
+fi
+
 if [[ -d "/opt/homebrew/lib" && "$(uname)" == "Darwin" ]]; then
     export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/opt/homebrew/lib"
 fi
@@ -47,6 +51,10 @@ source $ZSH/oh-my-zsh.sh
 bindkey 'f' forward-word
 # Make Alt+d delete the word after the cursor
 bindkey 'd' delete-word
+# Make Alt+p be up
+bindkey 'p' up-line-or-search
+# Make Alt+n be down
+bindkey 'n' down-line-or-search
 
 alias ll='ls -lFh'
 
