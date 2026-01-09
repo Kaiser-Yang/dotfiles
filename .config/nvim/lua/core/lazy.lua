@@ -15,7 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 local on_mac = vim.fn.has('mac') == 1
 vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
-    if vim.v.event.regname == '' and vim.v.event.operator == 'y' then
+    if (vim.v.event.regname == '' or vim.v.event.regname == '"') and vim.v.event.operator == 'y' then
       vim.fn.setreg('+', vim.fn.getreg('"'), vim.v.event.regtype)
     end
   end,
