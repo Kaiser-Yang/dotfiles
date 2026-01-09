@@ -17,3 +17,4 @@
     rst = reset
     rsr = restore
     ss = stash
+    cm = commit
