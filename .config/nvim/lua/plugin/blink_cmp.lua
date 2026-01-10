@@ -1,7 +1,7 @@
 --- @param context { line: string, cursor: number[] }
 --- Return if rime_ls should be disabled in current context
 function _G.rime_ls_disabled(context)
-  if not vim.g.rime_enabled then return true end
+  if not vim.g.rime_enabled or vim.bo.buftype ~= '' then return true end
   local line = context.line
   local cursor_column = context.cursor[2]
   for _, pattern in ipairs(vim.g.disable_rime_ls_pattern) do
