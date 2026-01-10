@@ -44,12 +44,15 @@ REQUIRED_EXECUTABLES=(
     "zoxide"
     "node"
     "npm"
+    "tree-sitter"
     "rg"
     "rime_ls"
     "wn"
 )
 declare -A INSTALLATION_COMMANDS
-COMMANDS_AFTER_INSTALLATION=()
+COMMANDS_AFTER_INSTALLATION=(
+    [tree-sitter]="$SUDO npm install -g tree-sitter-cli"
+)
 
 if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
     DIRS+=(
@@ -270,10 +273,9 @@ is_installed() {
             return 1
         fi
     else
-        log_error "Unsupported package manager: $package_manager"
+        log "Unsupported package manager: $package_manager"
         return 1
     fi
-    log_verbose "Package '$package_name' is installed, but '$expected_executable' is not found."
 }
 
 # Usage: check_and_install_package <expected_executable> <installation_command>
@@ -322,7 +324,7 @@ get_destination() {
     fi
 }
 
-log () {
+log() {
     echo "INFO: $*" >&2
 }
 
