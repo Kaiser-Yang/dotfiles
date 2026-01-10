@@ -18,11 +18,11 @@ $!f::Send ^f
 
 #If WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && !WinActive("nv")
 $!f::Send !f
-$!c::Send ^{Insert}
+$!c::Send !c
 $!v::Send +{Insert}
 #If
 
-#If (WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && WinActive("nv"))
+#If (WinActive("ahk_class CASCADIA_HOSTING_WINDOW_CLASS") && WinActive("nv")) || WinActive("Visual Studio Code")
 $^a::Send ^a
 $^e::Send ^e
 $^h::Send ^h
@@ -33,15 +33,3 @@ $!v::Send !v
 $!a::Send !a
 $!f::Send !f
 #If
-
-#IF WinActive("Visual Studio Code")
-$^a::Send ^a
-$^e::Send ^e
-$^h::Send ^h
-$!z::Send !z
-$!x::Send !x
-$!c::Send !c
-$!v::Send !v
-$!a::Send !a
-$!f::Send !f
-#IF
