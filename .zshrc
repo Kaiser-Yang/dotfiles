@@ -10,7 +10,7 @@ if [[ -e "$HOME/.zprofile" ]]; then
 fi
 
 if [[ "$(uname)" == "Darwin" && -e "/opt/homebrew/bin/brew" ]]; then
-    eval "$(opt/homebrew/bin/brew shellenv)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 if [[ -d "/opt/homebrew/lib" && "$(uname)" == "Darwin" ]]; then
