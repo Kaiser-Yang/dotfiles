@@ -14,3 +14,24 @@ for _, ch in pairs({ '0', '^', '$' }) do
     end
   end, { expr = true, silent = true, noremap = true })
 end
+local function clear_hlsearch()
+  local v = vim.o.hlsearch
+  vim.o.hlsearch = false
+  return vim.schedule_wrap(function() vim.o.hlsearch = v end)
+end
+vim.keymap.set('n', ']]', function()
+  clear_hlsearch()()
+  return 'j0[[%/{<CR>'
+end, { expr = true, silent = true, remap = true, desc = 'Jump to next section or {' })
+vim.keymap.set('n', '[[', function()
+  clear_hlsearch()()
+  return '?{<CR>w99[{'
+end, { expr = true, silent = true, desc = 'Jump to previous section or {' })
+vim.keymap.set('n', '][', function()
+  clear_hlsearch()()
+  return '/}<CR>b99]}'
+end, { expr = true, silent = true, desc = 'Jump to next section or }' })
+vim.keymap.set('n', '[]', function()
+  clear_hlsearch()()
+  return 'k$][%?}<CR>'
+end, { expr = true, silent = true, remap = true, desc = 'Jump to previous section or }' })
