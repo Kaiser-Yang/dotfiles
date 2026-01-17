@@ -37,7 +37,6 @@ end
 
 --- @param n number
 function _G.get_n_rime_item_index(n, items)
-  if not require('blink.cmp').is_visible() then return {} end
   if items == nil then items = require('blink.cmp.completion.list').items end
   local result = {}
   if items == nil or #items == 0 then return result end
@@ -50,12 +49,25 @@ function _G.get_n_rime_item_index(n, items)
   return result
 end
 
-local function rime_select_item_wrapper(index)
+local function rime_select_item_wrapper(index, key)
   return function(cmp)
     if not enable_rime_quick_select() then return false end
-    local rime_item_index = get_n_rime_item_index(index)
-    if #rime_item_index ~= index then return false end
-    return cmp.accept({ index = rime_item_index[index] })
+    local select = function()
+      local rime_item_index = get_n_rime_item_index(index)
+      if #rime_item_index ~= index then return false end
+      return cmp.accept({ index = rime_item_index[index] })
+    end
+    if require('blink.cmp').is_visible() then
+      return select()
+    else
+      require('blink.cmp').show({
+        callback = function()
+          local res = select()
+          if not res then vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'nt', false) end
+        end,
+      })
+    end
+    return true
   end
 end
 
@@ -63,9 +75,11 @@ return {
   'saghen/blink.cmp',
   opts = {
     keymap = {
-      ['<space>'] = { rime_select_item_wrapper(1), 'fallback' },
-      [';'] = { rime_select_item_wrapper(2), 'fallback' },
-      ['z'] = { rime_select_item_wrapper(3), 'fallback' },
+      ['<space>'] = { rime_select_item_wrapper(1, '<space>'), 'fallback' },
+      [';'] = { rime_select_item_wrapper(2, ';'), 'fallback' },
+      ['z'] = { rime_select_item_wrapper(3, 'z'), 'fallback' },
+      ['4'] = { rime_select_item_wrapper(4, '4'), 'fallback' },
+      ['5'] = { rime_select_item_wrapper(5, '5'), 'fallback' },
     },
     completion = {
       menu = {
