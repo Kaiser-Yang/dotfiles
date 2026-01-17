@@ -60,12 +60,12 @@ return {
     },
     mouse_bindings = {
         {
-            event = { Down = { streak = 1, button = { WheelUp = 1 } } },
+            event = { Up = { streak = 1, button = { WheelUp = 1 } } },
             mods = 'CTRL',
             action = act.IncreaseFontSize,
         },
         {
-            event = { Down = { streak = 1, button = { WheelDown = 1 } } },
+            event = { Up = { streak = 1, button = { WheelDown = 1 } } },
             mods = 'CTRL',
             action = act.DecreaseFontSize,
         },
@@ -75,12 +75,12 @@ return {
             action = act.CompleteSelection('ClipboardAndPrimarySelection'),
         },
         {
-            event = { Down = { streak = 1, button = 'Left' } },
+            event = { Up = { streak = 1, button = 'Left' } },
             mods = 'CTRL',
             action = act.OpenLinkAtMouseCursor,
         },
         {
-            event = { Down = { streak = 1, button = 'Right' } },
+            event = { Up = { streak = 1, button = 'Right' } },
             mods = 'NONE',
             action = act.PasteFrom('Clipboard'),
         },
