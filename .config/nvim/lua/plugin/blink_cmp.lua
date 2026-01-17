@@ -36,8 +36,8 @@ local function enable_rime_quick_select()
 end
 
 --- @param n number
-function _G.get_n_rime_item_index(n, items)
-  if items == nil then items = require('blink.cmp.completion.list').items end
+function _G.get_n_rime_item_index(n)
+  local items = require('blink.cmp.completion.list').items
   local result = {}
   if items == nil or #items == 0 then return result end
   for i, item in ipairs(items) do
@@ -57,16 +57,14 @@ local function rime_select_item_wrapper(index, key)
       if #rime_item_index ~= index then return false end
       return cmp.accept({ index = rime_item_index[index] })
     end
-    if require('blink.cmp').is_visible() then
-      return select()
-    else
-      require('blink.cmp').show({
-        callback = function()
-          local res = select()
-          if not res then vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'nt', false) end
-        end,
-      })
-    end
+    if select() then return true end
+    require('blink.cmp').show({
+      providers = { 'lsp' },
+      callback = function()
+        local res = select()
+        if not res then vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'nt', false) end
+      end,
+    })
     return true
   end
 end
