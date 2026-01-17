@@ -116,9 +116,6 @@ return {
       providers = {
         lsp = {
           transform_items = function(context, items)
-            local origin =
-              require('lightboat.plugin.code.blink_cmp').spec()[5].opts.sources.providers.lsp.transform_items
-            items = origin(context, items)
             if _G.rime_ls_disabled(context) then
               items = vim.tbl_filter(function(item) return not is_rime_item(item) end, items)
             else
@@ -128,10 +125,14 @@ return {
                   if idx then
                     -- make sure this is not affected by frecency
                     item.score_offset = (#items - tonumber(idx)) * 9999
+                    item.kind = require('blink.cmp.types').CompletionItemKind.Value
                   end
                 end
               end
             end
+            local origin =
+              require('lightboat.plugin.code.blink_cmp').spec()[5].opts.sources.providers.lsp.transform_items
+            items = origin(context, items)
             if #items == 0 and failed_key then
               vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(failed_key, true, false, true), 'nt', false)
               failed_key = nil
