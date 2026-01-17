@@ -116,17 +116,9 @@ return {
       providers = {
         lsp = {
           transform_items = function(context, items)
-            local TYPE_ALIAS = require('blink.cmp.types').CompletionItemKind
-            items = vim.tbl_filter(function(item)
-              local c = require('lightboat.config').get().blink_cmp.ignored_keyword
-              return is_rime_item(item) and not item.label:match('^%w*$')
-                or item.kind ~= TYPE_ALIAS.Snippet
-                  and item.kind ~= TYPE_ALIAS.Text
-                  and not (item.kind == TYPE_ALIAS.Keyword and c[vim.bo.filetype] and vim.tbl_contains(
-                    c[vim.bo.filetype],
-                    item.label
-                  ))
-            end, items)
+            local origin =
+              require('lightboat.plugin.code.blink_cmp').spec()[5].opts.sources.providers.lsp.transform_items
+            items = origin(context, items)
             if _G.rime_ls_disabled(context) then
               items = vim.tbl_filter(function(item) return not is_rime_item(item) end, items)
             else
@@ -158,37 +150,6 @@ return {
               items = vim.list_slice(items, 1, 100)
             end
             return items
-          end,
-        },
-        buffer = {
-          -- keep case of first char
-          transform_items = function(context, items)
-            local keyword = context.get_keyword()
-            local case
-            if keyword:match('^%l') then
-              case = string.lower
-            elseif keyword:match('^%u%u') then
-              case = string.upper
-            elseif not keyword:match('^%u') then
-              return items
-            end
-
-            -- TODO:
-            -- Now this is impossible to filter duplicates in the source level
-            -- See https://github.com/saghen/blink.cmp/issues/1222
-            local seen = {}
-            local out = {}
-            for _, item in ipairs(items) do
-              local raw = item.insertText
-              local text = (case ~= nil and case(raw) or (string.upper(raw) .. raw:sub(2)))
-              item.insertText = text
-              item.label = text
-              if not seen[item.insertText] then
-                seen[item.insertText] = true
-                table.insert(out, item)
-              end
-            end
-            return out
           end,
         },
       },
