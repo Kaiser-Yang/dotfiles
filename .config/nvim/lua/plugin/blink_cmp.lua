@@ -26,9 +26,9 @@ local function enable_rime_quick_select()
   if not vim.g.rime_enabled then return false end
   local content_before_cursor = string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
   if
-    not content_before_cursor:match('%w+$')
-    or content_before_cursor:match('[^z]{4}$') -- wubi has a maximum of 4 characters
-    or content_before_cursor:match('z%w{4}$') -- reverse query can have a leading 'z'
+    content_before_cursor:match('[a-z]+$') == nil
+    or content_before_cursor:match('[a-y][a-y][a-y][a-y][a-y]$') ~= nil -- wubi has a maximum of 4 characters
+    or content_before_cursor:match('z[a-z][a-z][a-z][a-z]$') ~= nil -- reverse query can have a leading 'z'
   then
     return false
   end
