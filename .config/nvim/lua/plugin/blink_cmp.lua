@@ -49,6 +49,7 @@ function _G.get_n_rime_item_index(n)
   return result
 end
 
+local failed_key = nil
 local function rime_select_item_wrapper(index, key)
   return function(cmp)
     if not enable_rime_quick_select() then return false end
@@ -58,9 +59,11 @@ local function rime_select_item_wrapper(index, key)
       return cmp.accept({ index = rime_item_index[index] })
     end
     if select() then return true end
+    failed_key = key
     require('blink.cmp').show({
       providers = { 'lsp' },
       callback = function()
+        failed_key = nil
         local res = select()
         if not res then vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'nt', false) end
       end,
@@ -136,6 +139,10 @@ return {
                   end
                 end
               end
+            end
+            if #items == 0 and failed_key then
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(failed_key, true, false, true), 'nt', false)
+              failed_key = nil
             end
             return items
           end,
