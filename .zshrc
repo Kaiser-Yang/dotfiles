@@ -56,6 +56,10 @@ bindkey 'p' up-line-or-search
 # Make Alt+n be down
 bindkey 'n' down-line-or-search
 
+if grep -qi '^ID=arch' /etc/os-release &> /dev/null && command -v xdg-open &> /dev/null; then
+    alias open='xdg-open'
+fi
+
 alias ll='ls -lFh'
 
 alias nv='nvim'
