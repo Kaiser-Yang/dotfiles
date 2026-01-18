@@ -81,6 +81,11 @@ return {
       ['z'] = { rime_select_item_wrapper(3, 'z'), 'fallback' },
       ['4'] = { rime_select_item_wrapper(4, '4'), 'fallback' },
       ['5'] = { rime_select_item_wrapper(5, '5'), 'fallback' },
+      ['6'] = { rime_select_item_wrapper(6, '6'), 'fallback' },
+      ['7'] = { rime_select_item_wrapper(7, '7'), 'fallback' },
+      ['8'] = { rime_select_item_wrapper(8, '8'), 'fallback' },
+      ['9'] = { rime_select_item_wrapper(9, '9'), 'fallback' },
+      ['0'] = { rime_select_item_wrapper(0, '0'), 'fallback' },
     },
     completion = {
       menu = {
