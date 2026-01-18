@@ -8,6 +8,7 @@ DIRS=(
 
     # tmux related configurations
     ".tmux.conf"
+    "tmux_title.sh"
     ".config/tmux/plugins"
 
     # zsh related configurations
