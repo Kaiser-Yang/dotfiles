@@ -20,51 +20,10 @@ local function toggle_rime(client)
 end
 
 local function rime_on_attach(client, _)
-  local mapped_punc = {
-    [','] = '，',
-    ['.'] = '。',
-    [':'] = '：',
-    ['?'] = '？',
-    ['\\'] = '、',
-    ['!'] = '！',
-    ['('] = '（',
-    [')'] = '）',
-    ['['] = '「',
-    [']'] = '」',
-    ['{'] = '『',
-    ['}'] = '』',
-    ['<'] = '《',
-    ['>'] = '》',
-    -- [';'] = '；',
-    -- ['"'] = '“”',
-    -- ["'"] = '‘’',
-  }
   -- Toggle rime
-  -- This will toggle Chinese punctuations too
   vim.keymap.set({ 'n', 'i' }, '<c-space>', function()
     -- We must check the status before the toggle
-    if vim.g.rime_enabled then
-      vim.g.rime_enabled = false
-      for k, _ in pairs(mapped_punc) do
-        pcall(vim.keymap.del, 'i', k .. '<space>')
-      end
-    else
-      vim.g.rime_enabled = true
-      for k, v in pairs(mapped_punc) do
-        vim.keymap.set('i', k .. '<space>', function()
-          if
-            _G.rime_ls_disabled({
-              line = vim.api.nvim_get_current_line(),
-              cursor = vim.api.nvim_win_get_cursor(0),
-            })
-          then
-            return k .. '<space>'
-          else
-            return v
-          end
-        end, { expr = true })
-      end
-    end
+    vim.g.rime_enabled = not vim.g.rime_enabled
     toggle_rime(client)
   end)
 end

@@ -22,12 +22,12 @@ local function is_rime_item(item)
   return client ~= nil and client.name == 'rime_ls'
 end
 
-local function enable_rime_quick_select()
-  if not vim.g.rime_enabled then return false end
+local function should_hack_select_or_punc()
+  if not vim.g.rime_enabled or vim.fn.mode('1') ~= 'i' then return false end
   local content_before_cursor = string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
+  -- When the line is too long, we should not hack
   if
-    content_before_cursor:match('[a-z]+$') == nil
-    or content_before_cursor:match('[a-y][a-y][a-y][a-y][a-y]$') ~= nil -- wubi has a maximum of 4 characters
+    content_before_cursor:match('[a-y][a-y][a-y][a-y][a-y]$') ~= nil -- wubi has a maximum of 4 characters
     or content_before_cursor:match('z[a-z][a-z][a-z][a-z]$') ~= nil -- reverse query can have a leading 'z'
   then
     return false
@@ -49,26 +49,77 @@ function _G.get_n_rime_item_index(n)
   return result
 end
 
-local failed_key = nil
-local function rime_select_item_wrapper(index, key)
+local util = require('util')
+
+--- @alias key_generator string | fun():string
+
+--- @type key_generator|nil
+local key_on_empty = nil
+
+--- @param index number
+--- @param failed_key key_generator
+--- @param succeeded_key? key_generator
+local function rime_select_item_wrapper(index, failed_key, succeeded_key)
   return function(cmp)
-    if not enable_rime_quick_select() then return false end
-    local select = function()
+    if not should_hack_select_or_punc() then return false end
+    --- @param callback? fun()
+    local select = function(callback)
       local rime_item_index = get_n_rime_item_index(index)
       if #rime_item_index ~= index then return false end
-      return cmp.accept({ index = rime_item_index[index] })
+      return cmp.accept({ index = rime_item_index[index], callback = callback })
     end
-    if select() then return true end
-    failed_key = key
+    local callback = function()
+      if succeeded_key then util.key.feedkeys(util.get(succeeded_key), 'nt') end
+    end
+    if select(callback) then return true end
+    key_on_empty = failed_key
     require('blink.cmp').show({
       providers = { 'lsp' },
       callback = function()
-        failed_key = nil
-        local res = select()
-        if not res then vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, false, true), 'nt', false) end
+        key_on_empty = nil
+        local res = select(callback)
+        if not res then util.key.feedkeys(util.get(failed_key), 'nt') end
       end,
     })
     return true
+  end
+end
+
+local quotation_generator_wrap = function(opening, closing)
+  return function()
+    local line = vim.api.nvim_get_current_line()
+    local cnt = 0
+    for i = 1, #line do
+      if line:sub(i, i + #opening - 1) == opening then
+        cnt = cnt + 1
+      elseif line:sub(i, i + #closing - 1) == closing then
+        cnt = cnt - 1
+      end
+    end
+    vim.notify(tostring(cnt))
+    if cnt > 0 then
+      return closing
+    else
+      return opening
+    end
+  end
+end
+
+---@pram en_key key_generator
+---@pram zh_key key_generator
+---@return key_generator
+local failed_key_generator_wrap = function(en_key, zh_key)
+  return function()
+    if
+      _G.rime_ls_disabled({
+        line = vim.api.nvim_get_current_line(),
+        cursor = vim.api.nvim_win_get_cursor(0),
+      })
+    then
+      return util.get(en_key)
+    else
+      return util.get(zh_key)
+    end
   end
 end
 
@@ -77,8 +128,9 @@ return {
   opts = {
     keymap = {
       ['<space>'] = { rime_select_item_wrapper(1, '<space>'), 'fallback' },
-      [';'] = { rime_select_item_wrapper(2, ';'), 'fallback' },
-      ['z'] = { rime_select_item_wrapper(3, 'z'), 'fallback' },
+      ['1'] = { rime_select_item_wrapper(1, '1'), 'fallback' },
+      ['2'] = { rime_select_item_wrapper(2, '2'), 'fallback' },
+      ['3'] = { rime_select_item_wrapper(3, '3'), 'fallback' },
       ['4'] = { rime_select_item_wrapper(4, '4'), 'fallback' },
       ['5'] = { rime_select_item_wrapper(5, '5'), 'fallback' },
       ['6'] = { rime_select_item_wrapper(6, '6'), 'fallback' },
@@ -86,6 +138,38 @@ return {
       ['8'] = { rime_select_item_wrapper(8, '8'), 'fallback' },
       ['9'] = { rime_select_item_wrapper(9, '9'), 'fallback' },
       ['0'] = { rime_select_item_wrapper(0, '0'), 'fallback' },
+
+      ['z'] = { rime_select_item_wrapper(3, 'z'), 'fallback' },
+
+      [';'] = { rime_select_item_wrapper(2, failed_key_generator_wrap(';', '；')), 'fallback' },
+      [','] = { rime_select_item_wrapper(1, failed_key_generator_wrap(',', '，'), '，'), 'fallback' },
+      ['.'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('.', '。'), '。'), 'fallback' },
+      [':'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(':', '：'), '：'), 'fallback' },
+      ['?'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('?', '？'), '？'), 'fallback' },
+      ['\\'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('\\', '、'), '、'), 'fallback' },
+      ['!'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('!', '！'), '！'), 'fallback' },
+      ['('] = { rime_select_item_wrapper(1, failed_key_generator_wrap('(', '（'), '（'), 'fallback' },
+      [')'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(')', '）'), '）'), 'fallback' },
+      ['['] = { rime_select_item_wrapper(1, failed_key_generator_wrap('[', '【'), '【'), 'fallback' },
+      [']'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(']', '】'), '】'), 'fallback' },
+      ['<'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('<', '《'), '《'), 'fallback' },
+      ['>'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('>', '》'), '》'), 'fallback' },
+      ["'"] = {
+        rime_select_item_wrapper(
+          1,
+          failed_key_generator_wrap("'", quotation_generator_wrap('‘', '’')),
+          quotation_generator_wrap('‘', '’')
+        ),
+        'fallback',
+      },
+      ['"'] = {
+        rime_select_item_wrapper(
+          1,
+          failed_key_generator_wrap('"', quotation_generator_wrap('“', '”')),
+          quotation_generator_wrap('“', '”')
+        ),
+        'fallback',
+      },
     },
     completion = {
       menu = {
@@ -138,9 +222,9 @@ return {
             local origin =
               require('lightboat.plugin.code.blink_cmp').spec()[5].opts.sources.providers.lsp.transform_items
             items = origin(context, items)
-            if #items == 0 and failed_key then
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(failed_key, true, false, true), 'nt', false)
-              failed_key = nil
+            if #items == 0 and key_on_empty then
+              util.key.feedkeys(util.get(key_on_empty), 'nt')
+              key_on_empty = nil
             end
             return items
           end,
