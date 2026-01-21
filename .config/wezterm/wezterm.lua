@@ -58,6 +58,7 @@ return {
         { key = '0', mods = 'CTRL|SUPER', action = act.ResetFontSize },
         { key = 'Insert', mods = 'CTRL', action = act.CopyTo('Clipboard') },
         { key = 'Insert', mods = 'SHIFT', action = act.PasteFrom('Clipboard') },
+        { key = 'v', mods = 'SUPER', action = act.PasteFrom('Clipboard') },
     },
     mouse_bindings = {
         {

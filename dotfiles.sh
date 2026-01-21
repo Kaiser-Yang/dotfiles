@@ -51,9 +51,7 @@ REQUIRED_EXECUTABLES=(
     "wn"
 )
 declare -A INSTALLATION_COMMANDS
-COMMANDS_AFTER_INSTALLATION=(
-    [tree-sitter]="$SUDO npm install -g tree-sitter-cli"
-)
+COMMANDS_AFTER_INSTALLATION=("$SUDO npm install -g tree-sitter-cli")
 
 if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
     DIRS+=(
@@ -61,11 +59,11 @@ if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
     )
 fi
 if [[ "$(uname)" == "Darwin" ]]; then
-    DIRS+=(
-        # karabiner configuration
-        ".config/karabiner/karabiner.json"
+    DIRS+=("./.hammerspoon/init.lua")
+    COMMANDS_AFTER_INSTALLATION+=(
+        "defaults write com.apple.dock autohide-delay 0"
+        "cp .config/karabiner/karabiner.json ~/.config/karabiner/"
     )
-    COMMANDS_AFTER_INSTALLATION+=("defaults write com.apple.dock autohide-delay 0")
 fi
 # Configurations that require a graphical interface
 if [[ -n "$DISPLAY" || "$(uname)" == "Darwin" ]]; then
@@ -190,6 +188,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         "wezterm"
         "squirrel"
         "pngpaste"
+        "hammerspoon"
     )
     INSTALLATION_COMMANDS+=(
         [brew]="custom_install brew"
@@ -212,6 +211,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [wezterm]="brew install --cask wezterm"
         [squirrel]="brew install --cask squirrel"
         [pngpaste]="brew install pngpaste"
+        [hammerspoon]="brew install --cask hammerspoon"
     )
 fi
 # Configurations for all Linux distributions
