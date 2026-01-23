@@ -1,3 +1,17 @@
+-- When input method is enabled, disable the following patterns
+vim.g.disable_rime_ls_pattern = {
+  -- disable in ``
+  '`([%w%s%p]-)`',
+  -- disable in ''
+  "'([%w%s%p]-)'",
+  -- disable in ""
+  '"([%w%s%p]-)"',
+  -- disable after ```
+  '```[%w%s%p]-',
+  -- disable in $$
+  '%$+[%w%s%p]-%$+',
+}
+
 --- @param types string[]
 --- @return boolean|nil
 --- Returns true if the cursor is inside a block of the specified types,
@@ -43,10 +57,21 @@ local function should_hack_select_or_punc()
   if
     content_before_cursor:match('[a-y][a-y][a-y][a-y][a-y]$') ~= nil -- wubi has a maximum of 4 characters
     or content_before_cursor:match('z[a-z][a-z][a-z][a-z]$') ~= nil -- reverse query can have a leading 'z'
-    or inside_block({ 'string', 'comment' }) == false -- not in comment or string
+    or vim.bo.filetype ~= 'markdown' and inside_block({ 'comment', 'string', 'text' }) == false
     or content_before_cursor:match('%s$')
   then
     return false
+  end
+  local line = vim.api.nvim_get_current_line()
+  local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
+  for _, pattern in ipairs(vim.g.disable_rime_ls_pattern) do
+    local start_pos = 1
+    while true do
+      local match_start, match_end = string.find(line, pattern, start_pos)
+      if not match_start then break end
+      if cursor_column >= match_start and cursor_column < match_end then return false end
+      start_pos = match_end + 1
+    end
   end
   return true
 end
