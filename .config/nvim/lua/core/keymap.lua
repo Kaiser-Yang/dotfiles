@@ -36,3 +36,4 @@ util.key.set('n', '[]', function()
   clear_hlsearch()()
   return 'k$][%?}<CR>'
 end, { expr = true, remap = true, desc = 'Jump to previous section or }' })
+util.key.set('n', '&', '<cmd>&&<cr>')
