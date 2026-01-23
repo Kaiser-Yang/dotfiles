@@ -96,13 +96,18 @@ local util = require('util')
 
 --- @type key_generator|nil
 local key_on_empty = nil
+local trigger_by_empty = false
+local rime_ls_keymap = {}
 
 --- @param index number
 --- @param failed_key key_generator
 --- @param succeeded_key? key_generator
 local function rime_select_item_wrapper(index, failed_key, succeeded_key)
   return function(cmp)
-    if not should_hack_select_or_punc() then return false end
+    if trigger_by_empty or not should_hack_select_or_punc() then
+      trigger_by_empty = false
+      return false
+    end
     --- @param callback? fun()
     local select = function(callback)
       local rime_item_index = get_n_rime_item_index(index)
@@ -119,7 +124,11 @@ local function rime_select_item_wrapper(index, failed_key, succeeded_key)
       callback = function()
         key_on_empty = nil
         local res = select(callback)
-        if not res then util.key.feedkeys(util.get(failed_key), 'nt') end
+        if not res then
+          local key = util.get(failed_key)
+          util.key.feedkeys(key, 'mt')
+          if vim.tbl_contains(vim.tbl_keys(rime_ls_keymap), key) then trigger_by_empty = true end
+        end
       end,
     })
     return true
@@ -159,54 +168,56 @@ local failed_key_generator_wrap = function(en_key, zh_key)
   end
 end
 
+rime_ls_keymap = {
+  ['<space>'] = { rime_select_item_wrapper(1, '<space>'), 'fallback' },
+  ['1'] = { rime_select_item_wrapper(1, '1'), 'fallback' },
+  ['2'] = { rime_select_item_wrapper(2, '2'), 'fallback' },
+  ['3'] = { rime_select_item_wrapper(3, '3'), 'fallback' },
+  ['4'] = { rime_select_item_wrapper(4, '4'), 'fallback' },
+  ['5'] = { rime_select_item_wrapper(5, '5'), 'fallback' },
+  ['6'] = { rime_select_item_wrapper(6, '6'), 'fallback' },
+  ['7'] = { rime_select_item_wrapper(7, '7'), 'fallback' },
+  ['8'] = { rime_select_item_wrapper(8, '8'), 'fallback' },
+  ['9'] = { rime_select_item_wrapper(9, '9'), 'fallback' },
+  ['0'] = { rime_select_item_wrapper(0, '0'), 'fallback' },
+
+  ['z'] = { rime_select_item_wrapper(3, 'z'), 'fallback' },
+
+  [';'] = { rime_select_item_wrapper(2, failed_key_generator_wrap(';', '；')), 'fallback' },
+  [','] = { rime_select_item_wrapper(1, failed_key_generator_wrap(',', '，'), '，'), 'fallback' },
+  ['.'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('.', '。'), '。'), 'fallback' },
+  [':'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(':', '：'), '：'), 'fallback' },
+  ['?'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('?', '？'), '？'), 'fallback' },
+  ['\\'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('\\', '、'), '、'), 'fallback' },
+  ['!'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('!', '！'), '！'), 'fallback' },
+  ['('] = { rime_select_item_wrapper(1, failed_key_generator_wrap('(', '（'), '（'), 'fallback' },
+  [')'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(')', '）'), '）'), 'fallback' },
+  ['['] = { rime_select_item_wrapper(1, failed_key_generator_wrap('[', '【'), '【'), 'fallback' },
+  [']'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(']', '】'), '】'), 'fallback' },
+  ['<'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('<', '《'), '《'), 'fallback' },
+  ['>'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('>', '》'), '》'), 'fallback' },
+  ["'"] = {
+    rime_select_item_wrapper(
+      1,
+      failed_key_generator_wrap("'", quotation_generator_wrap('‘', '’')),
+      quotation_generator_wrap('‘', '’')
+    ),
+    'fallback',
+  },
+  ['"'] = {
+    rime_select_item_wrapper(
+      1,
+      failed_key_generator_wrap('"', quotation_generator_wrap('“', '”')),
+      quotation_generator_wrap('“', '”')
+    ),
+    'fallback',
+  },
+}
+
 return {
   'saghen/blink.cmp',
   opts = {
-    keymap = {
-      ['<space>'] = { rime_select_item_wrapper(1, '<space>'), 'fallback' },
-      ['1'] = { rime_select_item_wrapper(1, '1'), 'fallback' },
-      ['2'] = { rime_select_item_wrapper(2, '2'), 'fallback' },
-      ['3'] = { rime_select_item_wrapper(3, '3'), 'fallback' },
-      ['4'] = { rime_select_item_wrapper(4, '4'), 'fallback' },
-      ['5'] = { rime_select_item_wrapper(5, '5'), 'fallback' },
-      ['6'] = { rime_select_item_wrapper(6, '6'), 'fallback' },
-      ['7'] = { rime_select_item_wrapper(7, '7'), 'fallback' },
-      ['8'] = { rime_select_item_wrapper(8, '8'), 'fallback' },
-      ['9'] = { rime_select_item_wrapper(9, '9'), 'fallback' },
-      ['0'] = { rime_select_item_wrapper(0, '0'), 'fallback' },
-
-      ['z'] = { rime_select_item_wrapper(3, 'z'), 'fallback' },
-
-      [';'] = { rime_select_item_wrapper(2, failed_key_generator_wrap(';', '；')), 'fallback' },
-      [','] = { rime_select_item_wrapper(1, failed_key_generator_wrap(',', '，'), '，'), 'fallback' },
-      ['.'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('.', '。'), '。'), 'fallback' },
-      [':'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(':', '：'), '：'), 'fallback' },
-      ['?'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('?', '？'), '？'), 'fallback' },
-      ['\\'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('\\', '、'), '、'), 'fallback' },
-      ['!'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('!', '！'), '！'), 'fallback' },
-      ['('] = { rime_select_item_wrapper(1, failed_key_generator_wrap('(', '（'), '（'), 'fallback' },
-      [')'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(')', '）'), '）'), 'fallback' },
-      ['['] = { rime_select_item_wrapper(1, failed_key_generator_wrap('[', '【'), '【'), 'fallback' },
-      [']'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(']', '】'), '】'), 'fallback' },
-      ['<'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('<', '《'), '《'), 'fallback' },
-      ['>'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('>', '》'), '》'), 'fallback' },
-      ["'"] = {
-        rime_select_item_wrapper(
-          1,
-          failed_key_generator_wrap("'", quotation_generator_wrap('‘', '’')),
-          quotation_generator_wrap('‘', '’')
-        ),
-        'fallback',
-      },
-      ['"'] = {
-        rime_select_item_wrapper(
-          1,
-          failed_key_generator_wrap('"', quotation_generator_wrap('“', '”')),
-          quotation_generator_wrap('“', '”')
-        ),
-        'fallback',
-      },
-    },
+    keymap = rime_ls_keymap,
     completion = {
       menu = {
         draw = {
@@ -259,7 +270,9 @@ return {
               require('lightboat.plugin.code.blink_cmp').spec()[5].opts.sources.providers.lsp.transform_items
             items = origin(context, items)
             if #items == 0 and key_on_empty then
-              util.key.feedkeys(util.get(key_on_empty), 'nt')
+              local key = util.get(key_on_empty)
+              util.key.feedkeys(key, 'mt')
+              if vim.tbl_contains(vim.tbl_keys(rime_ls_keymap), key) then trigger_by_empty = true end
               key_on_empty = nil
             end
             return items
