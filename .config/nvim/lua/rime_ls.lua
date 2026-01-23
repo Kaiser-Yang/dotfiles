@@ -1,17 +1,3 @@
--- When input method is enabled, disable the following patterns
-vim.g.disable_rime_ls_pattern = {
-  -- disable in ``
-  '`([%w%s%p]-)`',
-  -- disable in ''
-  "'([%w%s%p]-)'",
-  -- disable in ""
-  '"([%w%s%p]-)"',
-  -- disable after ```
-  '```[%w%s%p]-',
-  -- disable in $$
-  '%$+[%w%s%p]-%$+',
-}
-
 vim.g.rime_enabled = false
 local function toggle_rime(client)
   client.request('workspace/executeCommand', { command = 'rime-ls.toggle-rime' }, function(_, result, ctx, _)

@@ -1,21 +1,35 @@
---- @param context { line: string, cursor: number[] }
---- Return if rime_ls should be disabled in current context
-function _G.rime_ls_disabled(context)
-  if not vim.g.rime_enabled or vim.bo.buftype ~= '' then return true end
-  local line = context.line
-  local cursor_column = context.cursor[2]
-  for _, pattern in ipairs(vim.g.disable_rime_ls_pattern) do
-    local start_pos = 1
-    while true do
-      local match_start, match_end = string.find(line, pattern, start_pos)
-      if not match_start then break end
-      if cursor_column >= match_start and cursor_column < match_end then return true end
-      start_pos = match_end + 1
+--- @param types string[]
+--- @return boolean|nil
+--- Returns true if the cursor is inside a block of the specified types,
+--- false if not, or nil if unable to determine.
+local function inside_block(types)
+  local node_under_cursor = vim.treesitter.get_node()
+  local parser = vim.treesitter.get_parser(nil, nil, { error = false })
+  if not parser or not node_under_cursor then return nil end
+  local query = vim.treesitter.query.get(parser:lang(), 'highlights')
+  if not query then return nil end
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  row = row - 1
+  for id, node, _ in query:iter_captures(node_under_cursor, 0, row, row + 1) do
+    for _, t in ipairs(types) do
+      if query.captures[id]:find(t) then
+        local start_row, start_col, end_row, end_col = node:range()
+        if start_row <= row and row <= end_row then
+          if start_row == row and end_row == row then
+            if start_col <= col and col <= end_col then return true end
+          elseif start_row == row then
+            if start_col <= col then return true end
+          elseif end_row == row then
+            if col <= end_col then return true end
+          else
+            return true
+          end
+        end
+      end
     end
   end
   return false
 end
-
 local function is_rime_item(item)
   if item == nil or item.source_name ~= 'LSP' then return false end
   local client = vim.lsp.get_client_by_id(item.client_id)
@@ -25,10 +39,12 @@ end
 local function should_hack_select_or_punc()
   if not vim.g.rime_enabled or vim.fn.mode('1') ~= 'i' then return false end
   local content_before_cursor = string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
-  -- When the line is too long, we should not hack
+  -- When the line is too long, not in comment or string, or there is a space before, we should not hack
   if
     content_before_cursor:match('[a-y][a-y][a-y][a-y][a-y]$') ~= nil -- wubi has a maximum of 4 characters
     or content_before_cursor:match('z[a-z][a-z][a-z][a-z]$') ~= nil -- reverse query can have a leading 'z'
+    or inside_block({ 'string', 'comment' }) == false -- not in comment or string
+    or content_before_cursor:match('%s$')
   then
     return false
   end
@@ -110,15 +126,10 @@ end
 ---@return key_generator
 local failed_key_generator_wrap = function(en_key, zh_key)
   return function()
-    if
-      _G.rime_ls_disabled({
-        line = vim.api.nvim_get_current_line(),
-        cursor = vim.api.nvim_win_get_cursor(0),
-      })
-    then
-      return util.get(en_key)
-    else
+    if should_hack_select_or_punc() then
       return util.get(zh_key)
+    else
+      return util.get(en_key)
     end
   end
 end
@@ -205,7 +216,7 @@ return {
       providers = {
         lsp = {
           transform_items = function(context, items)
-            if _G.rime_ls_disabled(context) then
+            if not should_hack_select_or_punc() then
               items = vim.tbl_filter(function(item) return not is_rime_item(item) end, items)
             else
               for _, item in ipairs(items) do
