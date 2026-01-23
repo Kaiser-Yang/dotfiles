@@ -213,7 +213,7 @@ return {
                   local idx = item.label:match('^(%d+)')
                   if idx then
                     -- make sure this is not affected by frecency
-                    item.score_offset = (#items - tonumber(idx)) * 9999
+                    item.score_offset = (#items - tonumber(idx) + 1) * 9999
                     item.kind = require('blink.cmp.types').CompletionItemKind.Value
                   end
                 end
