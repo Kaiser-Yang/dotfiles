@@ -1,5 +1,5 @@
 -- When input method is enabled, disable the following patterns
-vim.g.disable_rime_ls_pattern = {
+local disable_rime_ls_pattern = {
   -- disable in ``
   '`([%w%s%p]-)`',
   -- disable in ''
@@ -11,39 +11,8 @@ vim.g.disable_rime_ls_pattern = {
   -- disable in $$
   '%$+[%w%s%p]-%$+',
 }
+local util = require('util')
 
---- @param types string[]
---- @return boolean|nil
---- Returns true if the cursor is inside a block of the specified types,
---- false if not, or nil if unable to determine.
-local function inside_block(types)
-  local node_under_cursor = vim.treesitter.get_node()
-  local parser = vim.treesitter.get_parser(nil, nil, { error = false })
-  if not parser or not node_under_cursor then return nil end
-  local query = vim.treesitter.query.get(parser:lang(), 'highlights')
-  if not query then return nil end
-  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  row = row - 1
-  for id, node, _ in query:iter_captures(node_under_cursor, 0, row, row + 1) do
-    for _, t in ipairs(types) do
-      if query.captures[id]:find(t) then
-        local start_row, start_col, end_row, end_col = node:range()
-        if start_row <= row and row <= end_row then
-          if start_row == row and end_row == row then
-            if start_col <= col and col <= end_col then return true end
-          elseif start_row == row then
-            if start_col <= col then return true end
-          elseif end_row == row then
-            if col <= end_col then return true end
-          else
-            return true
-          end
-        end
-      end
-    end
-  end
-  return false
-end
 local function is_rime_item(item)
   if item == nil or item.source_name ~= 'LSP' then return false end
   local client = vim.lsp.get_client_by_id(item.client_id)
@@ -57,14 +26,14 @@ local function should_hack_select_or_punc()
   if
     content_before_cursor:match('[a-y][a-y][a-y][a-y][a-y]$') ~= nil -- wubi has a maximum of 4 characters
     or content_before_cursor:match('z[a-z][a-z][a-z][a-z]$') ~= nil -- reverse query can have a leading 'z'
-    or vim.bo.filetype ~= 'markdown' and inside_block({ 'comment', 'string', 'text' }) == false
+    or vim.bo.filetype ~= 'markdown' and util.inside_block({ 'comment', 'string', 'text' }) == false
     or content_before_cursor:match('%s$')
   then
     return false
   end
   local line = vim.api.nvim_get_current_line()
   local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
-  for _, pattern in ipairs(vim.g.disable_rime_ls_pattern) do
+  for _, pattern in ipairs(disable_rime_ls_pattern) do
     local start_pos = 1
     while true do
       local match_start, match_end = string.find(line, pattern, start_pos)
@@ -89,8 +58,6 @@ function _G.get_n_rime_item_index(n)
   end
   return result
 end
-
-local util = require('util')
 
 --- @alias key_generator string | fun():string
 
