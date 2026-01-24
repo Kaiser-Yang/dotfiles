@@ -7,7 +7,7 @@ end
 
 local function rime_on_attach(client, _)
   -- Toggle rime
-  vim.keymap.set({ 'n', 'i' }, '<m-space>', function()
+  vim.keymap.set({ 'n', 'i' }, '<c-space>', function()
     -- We must check the status before the toggle
     vim.g.rime_enabled = not vim.g.rime_enabled
     toggle_rime(client)
