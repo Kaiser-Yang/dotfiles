@@ -39,7 +39,6 @@ end, { expr = true, remap = true, desc = 'Jump to previous section or }' })
 util.key.set('n', '&', '<cmd>&&<cr>')
 util.key.set('i', ',t', function()
   if util.inside_block({ 'comment' }) ~= true then
-    vim.notify('Not inside comment block')
     return ',t'
   end
   return '<c-g>u``<++>' .. string.rep('<left>', 5)

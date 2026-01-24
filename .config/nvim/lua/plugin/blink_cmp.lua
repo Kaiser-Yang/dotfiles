@@ -1,16 +1,4 @@
 -- When input method is enabled, disable the following patterns
-local disable_rime_ls_pattern = {
-  -- disable in ``
-  '`([%w%s%p]-)`',
-  -- disable in ''
-  "'([%w%s%p]-)'",
-  -- disable in ""
-  '"([%w%s%p]-)"',
-  -- disable after ```
-  '```[%w%s%p]-',
-  -- disable in $$
-  '%$+[%w%s%p]-%$+',
-}
 local util = require('util')
 
 local function is_rime_item(item)
@@ -19,30 +7,129 @@ local function is_rime_item(item)
   return client ~= nil and client.name == 'rime_ls'
 end
 
-local function should_hack_select_or_punc()
-  if not vim.g.rime_enabled or vim.fn.mode('1') ~= 'i' then return false end
-  local content_before_cursor = string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
-  -- When the line is too long, not in comment or string, or there is a space before, we should not hack
-  if
-    content_before_cursor:match('[a-y][a-y][a-y][a-y][a-y]$') ~= nil -- wubi has a maximum of 4 characters
-    or content_before_cursor:match('z[a-z][a-z][a-z][a-z]$') ~= nil -- reverse query can have a leading 'z'
-    or vim.bo.filetype ~= 'markdown' and util.inside_block({ 'comment', 'string', 'text' }) == false
-    or content_before_cursor:match('%s$')
-  then
-    return false
+local function match_any_of_patterns(word, patterns)
+  for _, pattern in ipairs(patterns) do
+    if word:match(pattern) then return true end
   end
+  return false
+end
+
+--- @return string
+local function get_WORD()
+  local content_before_cursor = string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
+  return content_before_cursor:match('(%S+)$') or ''
+end
+
+--- @return boolean
+local function at_least_one_space_before_cursor()
+  local content_before_cursor = string.sub(vim.api.nvim_get_current_line(), 1, vim.api.nvim_win_get_cursor(0)[2])
+  return content_before_cursor:match('%s$') ~= nil
+end
+
+--- @return boolean
+local function non_markdown_and_non_comment()
+  return not vim.tbl_contains(vim.g.lightboat_opts.extra.markdown_fts, vim.bo.filetype)
+    and util.inside_block({ 'comment' }) == false
+end
+
+--- @return boolean
+local function word_contains_non_alpha_ascii()
+  local word = get_WORD()
+  return word:match('[\1-\96\123-\127]') ~= nil
+end
+
+--- @return boolean
+local function invalid_word_for_rime_ls()
+  local word = get_WORD()
+  return not match_any_of_patterns(word, {
+    '[^\1-\127][a-y]$',
+    '[^\1-\127][a-y][a-y]$',
+    '[^\1-\127][a-y][a-y][a-y]$',
+    '[^\1-\127][a-y][a-y][a-y][a-y]$',
+    '[^\1-\127]z[a-z]+$',
+    '[^\1-\127]b[a-y][a-y][a-y][a-y]b?$',
+    '[^\1-\127][ln][a-y][a-y][a-y][a-y]$',
+    '[^\1-\127]fdate$',
+    '[^\1-\127]ftime$',
+    '[^\1-\127]fdati$',
+    '^[a-y]$',
+    '^[a-y][a-y]$',
+    '^[a-y][a-y][a-y]$',
+    '^[a-y][a-y][a-y][a-y]$',
+    '^z[a-z]+$',
+    '^b[a-y][a-y][a-y][a-y]b?$',
+    '^[ln][a-y][a-y][a-y][a-y]$',
+    '^fdate$',
+    '^ftime$',
+    '^fdati$',
+  })
+end
+
+--- @return boolean
+local function in_special_context()
   local line = vim.api.nvim_get_current_line()
   local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
+  local disable_rime_ls_pattern = {
+    -- disable in ``
+    '`([%w%s%p]-)`',
+    -- disable in ''
+    "'([%w%s%p]-)'",
+    -- disable in ""
+    '"([%w%s%p]-)"',
+    -- disable after ```
+    '```[%w%s%p]-',
+    -- disable in $$
+    '%$+[%w%s%p]-%$+',
+  }
   for _, pattern in ipairs(disable_rime_ls_pattern) do
     local start_pos = 1
     while true do
       local match_start, match_end = string.find(line, pattern, start_pos)
       if not match_start then break end
-      if cursor_column >= match_start and cursor_column < match_end then return false end
+      if cursor_column >= match_start and cursor_column < match_end then return true end
       start_pos = match_end + 1
     end
   end
-  return true
+  return false
+end
+
+local function non_insert_mode() return vim.fn.mode('1') ~= 'i' end
+
+local function end_with_ascii()
+  local word = get_WORD()
+  if #word == 0 then return true end
+  local last_char = word:sub(-1)
+  return last_char:byte() >= 0 and last_char:byte() <= 127
+end
+
+--- @param chars string[]
+local function end_with(chars)
+  local word = get_WORD()
+  for _, char in ipairs(chars) do
+    if word:match(char .. '$') then return true end
+  end
+  return false
+end
+
+local function zh_punc_disabled()
+  if not end_with_ascii() or end_with({ '`' }) then return false end
+  return vim.g.rime_enabled ~= true
+    or non_insert_mode()
+    or at_least_one_space_before_cursor()
+    or non_markdown_and_non_comment()
+    or word_contains_non_alpha_ascii()
+    or end_with({ '[\1-\127]' })
+    or in_special_context()
+end
+
+local function zh_character_disabled()
+  if not end_with_ascii() then return false end
+  return vim.g.rime_enabled ~= true
+    or non_insert_mode()
+    or non_markdown_and_non_comment()
+    or word_contains_non_alpha_ascii()
+    or invalid_word_for_rime_ls()
+    or in_special_context()
 end
 
 --- @param n number
@@ -71,8 +158,16 @@ local rime_ls_keymap = {}
 --- @param succeeded_key? key_generator
 local function rime_select_item_wrapper(index, failed_key, succeeded_key)
   return function(cmp)
-    if trigger_by_empty or not should_hack_select_or_punc() then
+    if trigger_by_empty then
       trigger_by_empty = false
+      return false
+    end
+    if zh_character_disabled() then
+      local key = util.get(failed_key)
+      if #key > 1 then
+        util.key.feedkeys(key, 'nt')
+        return true
+      end
       return false
     end
     --- @param callback? fun()
@@ -113,7 +208,6 @@ local quotation_generator_wrap = function(opening, closing)
         cnt = cnt - 1
       end
     end
-    vim.notify(tostring(cnt))
     if cnt > 0 then
       return closing
     else
@@ -127,10 +221,10 @@ end
 ---@return key_generator
 local failed_key_generator_wrap = function(en_key, zh_key)
   return function()
-    if should_hack_select_or_punc() then
-      return util.get(zh_key)
-    else
+    if zh_punc_disabled() then
       return util.get(en_key)
+    else
+      return util.get(zh_key)
     end
   end
 end
@@ -219,7 +313,7 @@ return {
       providers = {
         lsp = {
           transform_items = function(context, items)
-            if not should_hack_select_or_punc() then
+            if zh_character_disabled() then
               items = vim.tbl_filter(function(item) return not is_rime_item(item) end, items)
             else
               for _, item in ipairs(items) do
