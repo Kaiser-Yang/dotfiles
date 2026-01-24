@@ -229,6 +229,11 @@ local failed_key_generator_wrap = function(en_key, zh_key)
   end
 end
 
+util.key.set('i', ',', function()
+  local res = rime_select_item_wrapper(1, failed_key_generator_wrap(',', '，'), '，')(require('blink.cmp'))
+  if not res then util.key.feedkeys(',', 'nt') end
+end, { nowait = false })
+
 rime_ls_keymap = {
   ['<space>'] = { rime_select_item_wrapper(1, '<space>'), 'fallback' },
   ['1'] = { rime_select_item_wrapper(1, '1'), 'fallback' },
@@ -245,7 +250,6 @@ rime_ls_keymap = {
   ['z'] = { rime_select_item_wrapper(3, 'z'), 'fallback' },
 
   [';'] = { rime_select_item_wrapper(2, failed_key_generator_wrap(';', '；')), 'fallback' },
-  [','] = { rime_select_item_wrapper(1, failed_key_generator_wrap(',', '，'), '，'), 'fallback' },
   ['.'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('.', '。'), '。'), 'fallback' },
   [':'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(':', '：'), '：'), 'fallback' },
   ['?'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('?', '？'), '？'), 'fallback' },
