@@ -234,8 +234,9 @@ local function rime_select_item_wrapper(index, failed_key, succeeded_key)
   end
 end
 
-local quotation_generator_wrap = function(opening, closing)
+local pair_generator_wrap = function(opening, closing, char_on_illegal)
   return function()
+    local illegal = false
     local line = vim.api.nvim_get_current_line()
     local cnt = 0
     for i = 1, #line do
@@ -244,7 +245,13 @@ local quotation_generator_wrap = function(opening, closing)
       elseif line:sub(i, i + #closing - 1) == closing then
         cnt = cnt - 1
       end
+      if cnt < 0 then
+        illegal = true
+        break
+      end
     end
+    local function is_closing(char) return char == ')' or char == ']' or char == '>' end
+    if illegal or (is_closing(char_on_illegal) and cnt == 0) then return char_on_illegal end
     if cnt > 0 then
       return closing
     else
@@ -292,25 +299,43 @@ rime_ls_keymap = {
   ['?'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('?', '？'), '？'), 'fallback' },
   ['\\'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('\\', '、'), '、'), 'fallback' },
   ['!'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('!', '！'), '！'), 'fallback' },
-  ['('] = { rime_select_item_wrapper(1, failed_key_generator_wrap('(', '（'), '（'), 'fallback' },
-  [')'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(')', '）'), '）'), 'fallback' },
-  ['['] = { rime_select_item_wrapper(1, failed_key_generator_wrap('[', '【'), '【'), 'fallback' },
-  [']'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(']', '】'), '】'), 'fallback' },
-  ['<'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('<', '《'), '《'), 'fallback' },
-  ['>'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('>', '》'), '》'), 'fallback' },
+  ['('] = {
+    rime_select_item_wrapper(1, failed_key_generator_wrap('(', pair_generator_wrap('（', '）', '(')), '（'),
+    'fallback',
+  },
+  [')'] = {
+    rime_select_item_wrapper(1, failed_key_generator_wrap(')', pair_generator_wrap('（', '）', ')')), '）'),
+    'fallback',
+  },
+  ['['] = {
+    rime_select_item_wrapper(1, failed_key_generator_wrap('[', pair_generator_wrap('【', '】', '[')), '【'),
+    'fallback',
+  },
+  [']'] = {
+    rime_select_item_wrapper(1, failed_key_generator_wrap(']', pair_generator_wrap('【', '】', ']')), '】'),
+    'fallback',
+  },
+  ['<'] = {
+    rime_select_item_wrapper(1, failed_key_generator_wrap('<', pair_generator_wrap('《', '》', '<')), '《'),
+    'fallback',
+  },
+  ['>'] = {
+    rime_select_item_wrapper(1, failed_key_generator_wrap('>', pair_generator_wrap('《', '》', '>')), '》'),
+    'fallback',
+  },
   ["'"] = {
     rime_select_item_wrapper(
       1,
-      failed_key_generator_wrap("'", quotation_generator_wrap('‘', '’')),
-      quotation_generator_wrap('‘', '’')
+      failed_key_generator_wrap("'", pair_generator_wrap('‘', '’', "'")),
+      pair_generator_wrap('‘', '’', "'")
     ),
     'fallback',
   },
   ['"'] = {
     rime_select_item_wrapper(
       1,
-      failed_key_generator_wrap('"', quotation_generator_wrap('“', '”')),
-      quotation_generator_wrap('“', '”')
+      failed_key_generator_wrap('"', pair_generator_wrap('“', '”', '"')),
+      pair_generator_wrap('“', '”', '"')
     ),
     'fallback',
   },
