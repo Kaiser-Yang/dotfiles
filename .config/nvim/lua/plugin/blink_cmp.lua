@@ -290,6 +290,7 @@ rime_ls_keymap = {
 
   [';'] = { rime_select_item_wrapper(2, failed_key_generator_wrap(';', '；')), 'fallback' },
   ['_'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('_', '——'), '——'), 'fallback' },
+  ['^'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('^', '……'), '……'), 'fallback' },
   ['.'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('.', '。'), '。'), 'fallback' },
   [':'] = { rime_select_item_wrapper(1, failed_key_generator_wrap(':', '：'), '：'), 'fallback' },
   ['?'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('?', '？'), '？'), 'fallback' },
