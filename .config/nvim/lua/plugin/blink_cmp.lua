@@ -46,7 +46,7 @@ local function invalid_word_for_rime_ls()
     '[^\1-\127][a-y][a-y]$',
     '[^\1-\127][a-y][a-y][a-y]$',
     '[^\1-\127][a-y][a-y][a-y][a-y]$',
-    '[^\1-\127]z[a-z]+$',
+    '[^\1-\127]z[a-z]*$',
     '[^\1-\127]b[a-y][a-y][a-y][a-y]b?$',
     '[^\1-\127][ln][a-y][a-y][a-y][a-y]$',
     '[^\1-\127]fdate$',
@@ -56,7 +56,7 @@ local function invalid_word_for_rime_ls()
     '^[a-y][a-y]$',
     '^[a-y][a-y][a-y]$',
     '^[a-y][a-y][a-y][a-y]$',
-    '^z[a-z]+$',
+    '^z[a-z]*$',
     '^b[a-y][a-y][a-y][a-y]b?$',
     '^[ln][a-y][a-y][a-y][a-y]$',
     '^fdate$',
@@ -152,13 +152,39 @@ end
 local key_on_empty = nil
 local trigger_by_empty = false
 local rime_ls_keymap = {}
+local last_selected_rime_text = nil
+local ignore_autocmd = false
 
 --- @param index number
 --- @param failed_key key_generator
 --- @param succeeded_key? key_generator
 local function rime_select_item_wrapper(index, failed_key, succeeded_key)
   return function(cmp)
+    local word = get_WORD()
+    if
+      not zh_character_disabled()
+      and (util.get(failed_key) == 'z' or util.get(failed_key) == ';')
+      and match_any_of_patterns(word, { '[^\1-\127]z[a-z]*$', '^z[a-z]*$' })
+    then
+      key_on_empty = nil
+      trigger_by_empty = false
+      ignore_autocmd = true
+      return false
+    end
+    if
+      not zh_character_disabled()
+      and last_selected_rime_text
+      and util.get(failed_key) == '<space>'
+      and match_any_of_patterns(word, { '^z$', '[^\1-\127]z$' })
+    then
+      key_on_empty = nil
+      trigger_by_empty = false
+      ignore_autocmd = true
+      util.key.feedkeys('<bs>' .. last_selected_rime_text, 'nt')
+      return true
+    end
     if trigger_by_empty then
+      key_on_empty = nil
       trigger_by_empty = false
       return false
     end
@@ -170,26 +196,37 @@ local function rime_select_item_wrapper(index, failed_key, succeeded_key)
       end
       return false
     end
+    local tmp = nil
     --- @param callback? fun()
     local select = function(callback)
       local rime_item_index = get_n_rime_item_index(index)
       if #rime_item_index ~= index then return false end
+      tmp = require('blink.cmp.completion.list').items[rime_item_index[index]].textEdit.newText
       return cmp.accept({ index = rime_item_index[index], callback = callback })
     end
     local callback = function()
       if succeeded_key then util.key.feedkeys(util.get(succeeded_key), 'nt') end
     end
-    if select(callback) then return true end
+    if select(callback) then
+      last_selected_rime_text = tmp
+      return true
+    end
     key_on_empty = failed_key
     require('blink.cmp').show({
       providers = { 'lsp' },
       callback = function()
         key_on_empty = nil
+        if ignore_autocmd then
+          ignore_autocmd = false
+          return
+        end
         local res = select(callback)
         if not res then
           local key = util.get(failed_key)
           util.key.feedkeys(key, 'mt')
           if vim.tbl_contains(vim.tbl_keys(rime_ls_keymap), key) then trigger_by_empty = true end
+        else
+          last_selected_rime_text = tmp
         end
       end,
     })
