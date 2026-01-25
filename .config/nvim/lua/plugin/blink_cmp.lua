@@ -39,9 +39,9 @@ local function word_contains_non_alpha_ascii()
 end
 
 --- @return boolean
-local function invalid_word_for_rime_ls()
+local function valid_word_for_rime_ls()
   local word = get_WORD()
-  return not match_any_of_patterns(word, {
+  return match_any_of_patterns(word, {
     '[^\1-\127][a-y]$',
     '[^\1-\127][a-y][a-y]$',
     '[^\1-\127][a-y][a-y][a-y]$',
@@ -95,25 +95,18 @@ end
 
 local function non_insert_mode() return vim.fn.mode('1') ~= 'i' end
 
-local function end_with_ascii()
+--- @param patterns string[]
+local function end_with(patterns)
   local word = get_WORD()
-  if #word == 0 then return true end
-  local last_char = word:sub(-1)
-  return last_char:byte() >= 0 and last_char:byte() <= 127
-end
-
---- @param chars string[]
-local function end_with(chars)
-  local word = get_WORD()
-  for _, char in ipairs(chars) do
-    if word:match(char .. '$') then return true end
+  for _, p in ipairs(patterns) do
+    if word:match(p .. '$') then return true end
   end
   return false
 end
 
 local function zh_punc_disabled()
   if vim.g.rime_enabled ~= true then return true end
-  if not end_with_ascii() or end_with({ '`' }) then return false end
+  if end_with({ '`', '[^\1-\127]' }) then return false end
   return non_insert_mode()
     or at_least_one_space_before_cursor()
     or non_markdown_and_non_comment()
@@ -124,11 +117,10 @@ end
 
 local function zh_character_disabled()
   if vim.g.rime_enabled ~= true then return true end
-  if not end_with_ascii() then return false end
+  if end_with({ '[^\1-\127]' }) or valid_word_for_rime_ls() then return false end
   return non_insert_mode()
     or non_markdown_and_non_comment()
     or word_contains_non_alpha_ascii()
-    or invalid_word_for_rime_ls()
     or in_special_context()
 end
 
