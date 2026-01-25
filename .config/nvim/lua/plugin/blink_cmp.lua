@@ -118,10 +118,7 @@ end
 local function zh_character_disabled()
   if vim.g.rime_enabled ~= true then return true end
   if end_with({ '[^\1-\127]' }) or valid_word_for_rime_ls() then return false end
-  return non_insert_mode()
-    or non_markdown_and_non_comment()
-    or word_contains_non_alpha_ascii()
-    or in_special_context()
+  return non_insert_mode() or non_markdown_and_non_comment() or word_contains_non_alpha_ascii() or in_special_context()
 end
 
 --- @param n number
@@ -155,8 +152,11 @@ local function rime_select_item_wrapper(index, failed_key, succeeded_key)
     local word = get_WORD()
     if
       not zh_character_disabled()
-      and (util.get(failed_key) == 'z' or util.get(failed_key) == ';')
-      and match_any_of_patterns(word, { '[^\1-\127]z[a-z]*$', '^z[a-z]*$' })
+      and (
+        util.get(failed_key) == 'z'
+          and match_any_of_patterns(word, { '[^\1-\127]$', '[^\1-\127]z[a-z]*$', '^z[a-z]*$' })
+        or util.get(failed_key) == ';' and match_any_of_patterns(word, { '[^\1-\127]z[a-z]*$', '^z[a-z]*$' })
+      )
     then
       key_on_empty = nil
       trigger_by_empty = false
@@ -181,6 +181,9 @@ local function rime_select_item_wrapper(index, failed_key, succeeded_key)
       return false
     end
     if zh_character_disabled() then
+      key_on_empty = nil
+      trigger_by_empty = false
+      ignore_autocmd = true
       local key = util.get(failed_key)
       if #key > 1 then
         util.key.feedkeys(key, 'nt')
