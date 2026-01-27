@@ -38,31 +38,32 @@ local function word_contains_non_alpha_ascii()
   return word:match('[\1-\96\123-\127]') ~= nil
 end
 
+--- @param allowed_before_patterns? string[]
 --- @return boolean
-local function valid_word_for_rime_ls()
+local function valid_word_for_rime_ls(allowed_before_patterns)
+  allowed_before_patterns = allowed_before_patterns or {}
+  allowed_before_patterns[#allowed_before_patterns + 1] = '^'
+  allowed_before_patterns[#allowed_before_patterns + 1] = ''
   local word = get_WORD()
-  return match_any_of_patterns(word, {
-    '[^\1-\127][a-y]$',
-    '[^\1-\127][a-y][a-y]$',
-    '[^\1-\127][a-y][a-y][a-y]$',
-    '[^\1-\127][a-y][a-y][a-y][a-y]$',
-    '[^\1-\127]z[a-z]*$',
-    '[^\1-\127]b[a-y][a-y][a-y][a-y]b?$',
-    '[^\1-\127][ln][a-y][a-y][a-y][a-y]$',
-    '[^\1-\127]fdate$',
-    '[^\1-\127]ftime$',
-    '[^\1-\127]fdati$',
-    '^[a-y]$',
-    '^[a-y][a-y]$',
-    '^[a-y][a-y][a-y]$',
-    '^[a-y][a-y][a-y][a-y]$',
-    '^z[a-z]*$',
-    '^b[a-y][a-y][a-y][a-y]b?$',
-    '^[ln][a-y][a-y][a-y][a-y]$',
-    '^fdate$',
-    '^ftime$',
-    '^fdati$',
-  })
+  local base_patterns = {
+    '[a-y]$',
+    '[a-y][a-y]$',
+    '[a-y][a-y][a-y]$',
+    '[a-y][a-y][a-y][a-y]$',
+    'z[a-z]*$',
+    'b[a-y][a-y][a-y][a-y]b?$',
+    '[ln][a-y][a-y][a-y][a-y]$',
+    'fdate$',
+    'ftime$',
+    'fdati$',
+  }
+  local patterns = {}
+  for _, p in pairs(allowed_before_patterns) do
+    for _, base_pattern in ipairs(base_patterns) do
+      patterns[#patterns + 1] = p .. base_pattern
+    end
+  end
+  return match_any_of_patterns(word, patterns)
 end
 
 --- @return boolean
@@ -107,7 +108,7 @@ end
 local function zh_punc_disabled()
   if vim.g.rime_enabled ~= true then return true end
   if in_special_context() then return true end
-  if end_with({ '`', '[^\1-\127]' }) then return false end
+  if end_with({ '&emsp;', '`', '[^\1-\127]' }) then return false end
   return non_insert_mode()
     or at_least_one_space_before_cursor()
     or non_markdown_and_non_comment()
@@ -117,7 +118,7 @@ end
 
 local function zh_character_disabled()
   if vim.g.rime_enabled ~= true then return true end
-  if end_with({ '[^\1-\127]' }) or valid_word_for_rime_ls() then return false end
+  if valid_word_for_rime_ls({ '&emsp', '[^\1-\127]' }) then return false end
   return non_insert_mode() or non_markdown_and_non_comment() or word_contains_non_alpha_ascii() or in_special_context()
 end
 
