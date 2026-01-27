@@ -106,13 +106,13 @@ end
 
 local function zh_punc_disabled()
   if vim.g.rime_enabled ~= true then return true end
+  if in_special_context() then return true end
   if end_with({ '`', '[^\1-\127]' }) then return false end
   return non_insert_mode()
     or at_least_one_space_before_cursor()
     or non_markdown_and_non_comment()
     or word_contains_non_alpha_ascii()
     or end_with({ '[\1-\127]' })
-    or in_special_context()
 end
 
 local function zh_character_disabled()
