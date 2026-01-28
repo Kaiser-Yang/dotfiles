@@ -150,42 +150,27 @@ local ignore_autocmd = false
 local function rime_select_item_wrapper(index, failed_key, succeeded_key)
   return function(cmp)
     local word = get_WORD()
-    if
-      not zh_character_disabled()
-      and (
-        util.get(failed_key) == 'z'
-          and match_any_of_patterns(word, { '[^\1-\127]$', '[^\1-\127]z[a-z]*$', '^z[a-z]*$' })
-        or util.get(failed_key) == ';' and match_any_of_patterns(word, { '[^\1-\127]z[a-z]*$', '^z[a-z]*$' })
-      )
-    then
-      key_on_empty = nil
-      trigger_by_empty = false
-      ignore_autocmd = true
-      return false
-    end
-    if
-      not zh_character_disabled()
+    local z = not zh_character_disabled()
+      and util.get(failed_key) == 'z'
+      and match_any_of_patterns(word, { '[^\1-\127]$', '[^\1-\127]z[a-z]*$', '^z[a-z]*$' })
+    local semi_colon = not zh_character_disabled()
+      and util.get(failed_key) == ';'
+      and match_any_of_patterns(word, { '[^\1-\127]z[a-z]*$', '^z[a-z]*$' })
+    local z_space = not zh_character_disabled()
       and last_selected_rime_text
       and util.get(failed_key) == '<space>'
       and match_any_of_patterns(word, { '^z$', '[^\1-\127]z$' })
-    then
+    if zh_character_disabled() or z or semi_colon or z_space or trigger_by_empty or z_space then
       key_on_empty = nil
       trigger_by_empty = false
       ignore_autocmd = true
-      util.key.feedkeys('<bs>' .. last_selected_rime_text, 'nt')
-      return true
-    end
-    if trigger_by_empty then
-      key_on_empty = nil
-      trigger_by_empty = false
-      return false
-    end
-    if zh_character_disabled() then
-      key_on_empty = nil
-      trigger_by_empty = false
-      ignore_autocmd = true
-      local key = util.get(failed_key)
-      if #key > 1 then
+      local key = nil
+      if zh_character_disabled() then
+        key = util.get(failed_key)
+        if #key <= 1 then key = nil end
+      end
+      if z_space then key = '<bs>' .. last_selected_rime_text end
+      if key then
         util.key.feedkeys(key, 'nt')
         return true
       end
