@@ -284,7 +284,7 @@ rime_ls_keymap = {
   ['7'] = { rime_select_item_wrapper(7, '7'), 'fallback' },
   ['8'] = { rime_select_item_wrapper(8, '8'), 'fallback' },
   ['9'] = { rime_select_item_wrapper(9, '9'), 'fallback' },
-  ['0'] = { rime_select_item_wrapper(0, '0'), 'fallback' },
+  ['0'] = { rime_select_item_wrapper(10, '0'), 'fallback' },
 
   ['z'] = { rime_select_item_wrapper(3, 'z'), 'fallback' },
 
