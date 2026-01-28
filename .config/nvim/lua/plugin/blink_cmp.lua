@@ -190,6 +190,8 @@ local function rime_select_item_wrapper(index, failed_key, succeeded_key)
     if select(callback) then
       last_selected_rime_text = tmp
       return true
+    elseif require('blink.cmp').is_visible() then
+      return false
     end
     key_on_empty = failed_key
     require('blink.cmp').show({
