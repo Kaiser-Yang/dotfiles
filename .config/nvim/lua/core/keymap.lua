@@ -6,15 +6,6 @@ util.key.set({ 'c' }, '<m-f>', '<s-right>', { silent = false })
 util.key.set({ 'c' }, '<c-b>', '<left>', { silent = false })
 util.key.set({ 'c' }, '<c-f>', '<right>', { silent = false })
 util.key.set({ 'i' }, '<c-h>', '<bs>', { remap = true })
-for _, ch in pairs({ '0', '^', '$' }) do
-  util.key.set({ 'n', 'x', 'v' }, ch, function()
-    if vim.v.virtnum ~= 0 then
-      return 'g' .. ch
-    else
-      return ch
-    end
-  end, { expr = true })
-end
 local function clear_hlsearch()
   local v = vim.o.hlsearch
   vim.o.hlsearch = false
