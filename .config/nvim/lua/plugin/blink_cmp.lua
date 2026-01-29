@@ -241,23 +241,41 @@ local pair_generator_wrap = function(opening, closing, char_on_illegal)
   end
 end
 
+local zh_punc = {
+  '，',
+  '。',
+  '！',
+  '？',
+  '；',
+  '：',
+  '、',
+  '——',
+  '……',
+  '（',
+  '）',
+  '【',
+  '】',
+  '《',
+  '》',
+  '‘',
+  '’',
+  '“',
+  '”',
+}
+
 ---@pram en_key key_generator
 ---@pram zh_key key_generator
 ---@return key_generator
 local failed_key_generator_wrap = function(en_key, zh_key)
   return function()
-    if zh_punc_disabled() then
-      return util.get(en_key)
+    local en_res = util.get(en_key)
+    if zh_punc_disabled() or en_res == ',' and end_with(zh_punc) then
+      return en_res
     else
       return util.get(zh_key)
     end
   end
 end
-
-util.key.set('i', ',', function()
-  local res = rime_select_item_wrapper(1, failed_key_generator_wrap(',', '，'), '，')(require('blink.cmp'))
-  if not res then util.key.feedkeys(',', 'nt') end
-end, { nowait = false })
 
 rime_ls_keymap = {
   ['<space>'] = { rime_select_item_wrapper(1, '<space>'), 'fallback' },
@@ -275,6 +293,7 @@ rime_ls_keymap = {
   ['z'] = { rime_select_item_wrapper(3, 'z'), 'fallback' },
 
   [';'] = { rime_select_item_wrapper(2, failed_key_generator_wrap(';', '；')), 'fallback' },
+  [','] = { rime_select_item_wrapper(1, failed_key_generator_wrap(',', '，'), '，'), 'fallback' },
   ['_'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('_', '——'), '——'), 'fallback' },
   ['^'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('^', '……'), '……'), 'fallback' },
   ['.'] = { rime_select_item_wrapper(1, failed_key_generator_wrap('.', '。'), '。'), 'fallback' },
