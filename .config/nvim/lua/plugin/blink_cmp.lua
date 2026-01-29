@@ -50,12 +50,11 @@ local function valid_word_for_rime_ls(allowed_before_patterns)
     '[a-y][a-y]$',
     '[a-y][a-y][a-y]$',
     '[a-y][a-y][a-y][a-y]$',
+    '[a-y][a-y][a-y][a-y][bln]$',
     'z[a-z]*$',
-    'b[a-y][a-y][a-y][a-y]b?$',
-    '[ln][a-y][a-y][a-y][a-y]$',
-    'fdate$',
-    'ftime$',
-    'fdati$',
+    'datef?$',
+    'timef?$',
+    'datif?$',
   }
   local patterns = {}
   for _, p in pairs(allowed_before_patterns) do
