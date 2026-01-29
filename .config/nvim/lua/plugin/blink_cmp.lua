@@ -159,12 +159,20 @@ local function rime_select_item_wrapper(index, failed_key, succeeded_key)
       and last_selected_rime_text
       and util.get(failed_key) == '<space>'
       and match_any_of_patterns(word, { '^z$', '[^\1-\127]z$' })
-    if zh_character_disabled() or z or semi_colon or z_space or trigger_by_empty or z_space then
+    if
+      not valid_word_for_rime_ls()
+      or zh_character_disabled()
+      or z
+      or semi_colon
+      or z_space
+      or trigger_by_empty
+      or z_space
+    then
       key_on_empty = nil
       trigger_by_empty = false
       ignore_autocmd = true
       local key = nil
-      if zh_character_disabled() then
+      if not valid_word_for_rime_ls() or zh_character_disabled() then
         key = util.get(failed_key)
         if #key <= 1 then key = nil end
       end
@@ -269,7 +277,7 @@ local zh_punc = {
 local failed_key_generator_wrap = function(en_key, zh_key)
   return function()
     local en_res = util.get(en_key)
-    if zh_punc_disabled() or en_res == ',' and end_with(zh_punc) then
+    if zh_punc_disabled() or en_res == ',' and (end_with(zh_punc) or end_with({ '^' })) then
       return en_res
     else
       return util.get(zh_key)
