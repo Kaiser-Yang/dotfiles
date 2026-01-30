@@ -1,4 +1,3 @@
--- When input method is enabled, disable the following patterns
 local util = require('util')
 
 local function is_rime_item(item)
@@ -26,16 +25,77 @@ local function at_least_one_space_before_cursor()
   return content_before_cursor:match('%s$') ~= nil
 end
 
+local rime_ls_enabled_pairs = {
+  lua = {
+    { "'", "'" },
+    { '"', '"' },
+  },
+  go = {
+    { '`', '`' },
+    { '"', '"' },
+  },
+  sql = {
+    { "'", "'" },
+    { '"', '"' },
+  },
+  ['*'] = {},
+}
+-- HACK:
+-- This function only checks the current line.
 --- @return boolean
-local function non_markdown_and_non_comment()
-  return not vim.tbl_contains(vim.g.lightboat_opts.extra.markdown_fts, vim.bo.filetype)
-    and util.inside_block({ 'comment' }) == false
+local function in_pairs()
+  local pairs = rime_ls_enabled_pairs[vim.bo.filetype] or rime_ls_enabled_pairs['*']
+  local line = vim.api.nvim_get_current_line()
+  local _, col = unpack(vim.api.nvim_win_get_cursor(0))
+  for _, pair in ipairs(pairs) do
+    local opening = pair[1]
+    local closing = pair[2]
+    local is_in = false
+    local cnt = 0
+    local i = 1
+    while i <= #line do
+      local char = line:sub(i, i + #opening - 1)
+      if char == opening then
+        cnt = cnt + 1
+        if i <= col then is_in = not is_in end
+        i = i + #opening
+        goto continue
+      end
+      char = line:sub(i, i + #closing - 1)
+      if char == closing then
+        cnt = cnt - 1
+        if i <= col then is_in = not is_in end
+        i = i + #closing
+        goto continue
+      end
+      if cnt < 0 then break end
+      i = i + 1
+      ::continue::
+    end
+    if is_in and (cnt == 0 or (opening == closing and cnt % 2 == 0)) then return true end
+  end
+  return false
 end
 
 --- @return boolean
+local function disable_non_markdown()
+  return not vim.tbl_contains(vim.g.lightboat_opts.extra.markdown_fts, vim.bo.filetype)
+    and util.inside_block({ 'comment' }) == false
+    and not in_pairs()
+end
+
+local disabled_anscii = {
+  markdown = {
+    '[\1-\96\123-\127]',
+  },
+  ['*'] = {
+    '[\1-\33\35-\38\40-\96\123-\127]',
+  },
+}
+--- @return boolean
 local function word_contains_non_alpha_ascii()
   local word = get_WORD()
-  return word:match('[\1-\96\123-\127]') ~= nil
+  return match_any_of_patterns(word, disabled_anscii[vim.bo.filetype] or disabled_anscii['*'])
 end
 
 --- @param allowed_before_patterns? string[]
@@ -65,21 +125,22 @@ local function valid_word_for_rime_ls(allowed_before_patterns)
   return match_any_of_patterns(word, patterns)
 end
 
+local disable_rime_ls_pattern = {
+  markdown = {
+    -- disable in ``
+    '`([%w%s%p]-)`',
+    -- disable after ```
+    '```[%w%s%p]-',
+    -- disable in $$
+    '%$+[%w%s%p]-%$+',
+  },
+}
 --- @return boolean
 local function in_special_context()
   local line = vim.api.nvim_get_current_line()
   local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
-  local disable_rime_ls_pattern = {
-    markdown = {
-      -- disable in ``
-      '`([%w%s%p]-)`',
-      -- disable after ```
-      '```[%w%s%p]-',
-      -- disable in $$
-      '%$+[%w%s%p]-%$+',
-    },
-  }
   if disable_rime_ls_pattern[vim.bo.filetype] == nil then return false end
+  for _, pattern in ipairs(disable_rime_ls_pattern[vim.bo.filetype]) do
     local start_pos = 1
     while true do
       local match_start, match_end = string.find(line, pattern, start_pos)
@@ -102,17 +163,25 @@ local function end_with(patterns)
   return false
 end
 
+local zh_disabled_ascii = {
+  markdown = {
+    '[\1-\127]',
+  },
+  ['*'] = {
+    '[\1-\33\35-\38\40-\127]',
+  },
+}
 local function zh_punc_disabled()
-  if vim.g.rime_enabled ~= true or in_special_context() or non_markdown_and_non_comment() then return true end
+  if vim.g.rime_enabled ~= true or in_special_context() or disable_non_markdown() then return true end
   if end_with({ '&emsp;', '`', '[^\1-\127]' }) then return false end
   return non_insert_mode()
     or at_least_one_space_before_cursor()
     or word_contains_non_alpha_ascii()
-    or end_with({ '[\1-\127]' })
+    or end_with(zh_disabled_ascii[vim.bo.filetype] or zh_disabled_ascii['*'])
 end
 
 local function zh_character_disabled()
-  if vim.g.rime_enabled ~= true or in_special_context() or non_markdown_and_non_comment() then return true end
+  if vim.g.rime_enabled ~= true or in_special_context() or disable_non_markdown() then return true end
   if valid_word_for_rime_ls({ '&emsp', '[^\1-\127]' }) then return false end
   return non_insert_mode() or word_contains_non_alpha_ascii()
 end
