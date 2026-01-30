@@ -70,18 +70,16 @@ local function in_special_context()
   local line = vim.api.nvim_get_current_line()
   local cursor_column = vim.api.nvim_win_get_cursor(0)[2]
   local disable_rime_ls_pattern = {
-    -- disable in ``
-    '`([%w%s%p]-)`',
-    -- disable in ''
-    "'([%w%s%p]-)'",
-    -- disable in ""
-    '"([%w%s%p]-)"',
-    -- disable after ```
-    '```[%w%s%p]-',
-    -- disable in $$
-    '%$+[%w%s%p]-%$+',
+    markdown = {
+      -- disable in ``
+      '`([%w%s%p]-)`',
+      -- disable after ```
+      '```[%w%s%p]-',
+      -- disable in $$
+      '%$+[%w%s%p]-%$+',
+    },
   }
-  for _, pattern in ipairs(disable_rime_ls_pattern) do
+  if disable_rime_ls_pattern[vim.bo.filetype] == nil then return false end
     local start_pos = 1
     while true do
       local match_start, match_end = string.find(line, pattern, start_pos)
