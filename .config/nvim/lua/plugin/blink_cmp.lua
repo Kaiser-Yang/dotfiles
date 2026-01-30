@@ -105,19 +105,18 @@ local function end_with(patterns)
 end
 
 local function zh_punc_disabled()
-  if vim.g.rime_enabled ~= true or in_special_context() then return true end
+  if vim.g.rime_enabled ~= true or in_special_context() or non_markdown_and_non_comment() then return true end
   if end_with({ '&emsp;', '`', '[^\1-\127]' }) then return false end
   return non_insert_mode()
     or at_least_one_space_before_cursor()
-    or non_markdown_and_non_comment()
     or word_contains_non_alpha_ascii()
     or end_with({ '[\1-\127]' })
 end
 
 local function zh_character_disabled()
-  if vim.g.rime_enabled ~= true or in_special_context() then return true end
+  if vim.g.rime_enabled ~= true or in_special_context() or non_markdown_and_non_comment() then return true end
   if valid_word_for_rime_ls({ '&emsp', '[^\1-\127]' }) then return false end
-  return non_insert_mode() or non_markdown_and_non_comment() or word_contains_non_alpha_ascii()
+  return non_insert_mode() or word_contains_non_alpha_ascii()
 end
 
 --- @param n number
