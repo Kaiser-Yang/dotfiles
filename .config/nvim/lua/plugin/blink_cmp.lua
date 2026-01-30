@@ -315,7 +315,7 @@ local pair_generator_wrap = function(opening, closing, char_on_illegal)
   end
 end
 
-local zh_punc = {
+local disable_zh_comma_after = {
   '，',
   '。',
   '！',
@@ -326,24 +326,18 @@ local zh_punc = {
   '——',
   '……',
   '（',
-  '）',
   '【',
-  '】',
   '《',
-  '》',
   '‘',
-  '’',
   '“',
-  '”',
 }
-
 ---@pram en_key key_generator
 ---@pram zh_key key_generator
 ---@return key_generator
 local failed_key_generator_wrap = function(en_key, zh_key)
   return function()
     local en_res = util.get(en_key)
-    if zh_punc_disabled() or en_res == ',' and (end_with(zh_punc) or end_with({ '^' })) then
+    if zh_punc_disabled() or en_res == ',' and (end_with(disable_zh_comma_after) or end_with({ '^' })) then
       return en_res
     else
       return util.get(zh_key)
