@@ -28,3 +28,15 @@ util.key.set('n', '[]', function()
   return 'k$][%?}<CR>'
 end, { expr = true, remap = true, desc = 'Jump to previous section or }' })
 util.key.set('n', '&', '<cmd>&&<cr>')
+util.key.set('i', '<tab>', function()
+  local lnum, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local content_before_cursor = vim.api.nvim_get_current_line():sub(1, col)
+  if not content_before_cursor:match('^%s*$') or lnum == 1 then return '<tab>' end
+  local last_line_indent = vim.fn.indent(vim.fn.line('.') - 1)
+  local current_line_indent = vim.fn.indent(vim.fn.line('.'))
+  if last_line_indent > current_line_indent then
+    return '<c-f>'
+  else
+    return '<tab>'
+  end
+end, { expr = true })
