@@ -1,3 +1,5 @@
+[merge]
+    conflictstyle = diff3
 [core]
     editor = nvim
 [alias]
