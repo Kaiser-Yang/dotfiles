@@ -46,10 +46,7 @@ return {
     default_prog = default_program(),
     disable_default_key_bindings = true,
     enable_tab_bar = false,
-    font = wezterm.font_with_fallback({
-        'CaskaydiaMono Nerd Font',
-        'JetBrains Mono',
-    }),
+    font = wezterm.font_with_fallback({ 'JetBrains Mono' }),
     font_size = 14,
     keys = {
         { key = 'z', mods = 'CTRL|ALT', action = 'Nop' },

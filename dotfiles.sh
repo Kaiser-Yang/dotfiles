@@ -795,19 +795,19 @@ install_fonts() {
             adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts
             noto-fonts-cjk
             wqy-microhei wqy-microhei-lite wqy-bitmapfont wqy-zenhei
-            ttf-arphic-ukai ttf-arphic-uming ttf-cascadia-mono-nerd
+            ttf-arphic-ukai ttf-arphic-uming ttf-jetbrains-mono-nerd
         )
     elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         log_error "Fonts installation for Ubuntu is not implemented yet. "
         command="$SUDO apt install -y"
-        fonts+=(fonts-cascadia-mono)
+        fonts+=(fonts-jetbrains-mono)
     elif [[ "$(uname)" == "Darwin" ]]; then
         if ! command -v brew &>/dev/null; then
             log_error "Homebrew is not installed. Please install Homebrew first."
             return 1
         fi
         command='brew install --cask'
-        fonts+=(font-caskaydia-mono-nerd-font)
+        fonts+=(font-jetbrains-mono-nerd-font)
     fi
     for font in "${fonts[@]}"; do
         check_and_install_package "$font" "$command $font" || {
