@@ -1,1 +1,0 @@
-../profile.nvim/lua/profile.lua
