@@ -55,6 +55,8 @@ return {
   },
   config = function(_, opts)
     require('resolve').setup(opts)
-    vim.cmd('DetectConflictAndLoad')
+    if require('lightboat.util').git.is_git_repository() then
+      vim.cmd('DetectConflictAndLoad')
+    end
   end,
 }
