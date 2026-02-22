@@ -6,7 +6,6 @@ local last_profile = nil
 local function check_and_switch_profile()
     local win = hs.application.frontmostApplication():focusedWindow()
     local title = win and win:title() or ''
-    print(title)
     if string.match(title, 'nvim') then
         if last_profile ~= nvim_profile then
             hs.execute(
@@ -34,4 +33,4 @@ local function check_and_switch_profile()
 end
 
 hs.window.filter.default:subscribe(hs.window.filter.windowFocused, check_and_switch_profile)
-hs.timer.doEvery(2, check_and_switch_profile)
+hs.timer.doEvery(1, check_and_switch_profile)
