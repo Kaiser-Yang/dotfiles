@@ -15,42 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 local on_mac = vim.fn.has('mac') == 1
 --- @type LightBoat.Opts
 vim.g.lightboat_opts = {
-  buffer_line = {
-    keys = {
-      ['H'] = false,
-      ['L'] = false,
-    },
-  },
-  mason = {
-    mason_bin_first = not on_mac,
-    ensure_installed = {
-      ['lemminx'] = false,
-      ['json-lsp'] = false,
-      ['eslint-lsp'] = false,
-      ['vue-language-server'] = false,
-      ['yaml-language-server'] = false,
-      ['typescript-language-server'] = false,
-      ['tailwindcss-language-server'] = false,
-    },
-  },
-  yanky = {
-    keys = {
-      ['<leader>y'] = false,
-      ['<leader>Y'] = false,
-    },
-  },
-  lsp = {
-    config = {
-      rime_ls = require('rime_ls'),
-      lemminx = false,
-      jsonls = false,
-      eslint = false,
-      vue_ls = false,
-      yamlls = false,
-      ts_ls = false,
-      tailwindcss = false,
-    },
-  },
+  lsp = { config = { rime_ls = require('rime_ls') } },
   snack = {
     keys = {
       ['<leader>r'] = {
@@ -69,25 +34,6 @@ vim.g.lightboat_opts = {
           end,
         },
       },
-    },
-  },
-  treesitter = {
-    keys = {
-      ['s'] = false,
-      ['snf'] = false,
-      ['snc'] = false,
-      ['snl'] = false,
-      ['snb'] = false,
-      ['snr'] = false,
-      ['snp'] = false,
-      ['sni'] = false,
-      ['spf'] = false,
-      ['spc'] = false,
-      ['spl'] = false,
-      ['spb'] = false,
-      ['spr'] = false,
-      ['spp'] = false,
-      ['spi'] = false,
     },
   },
   keymap = {

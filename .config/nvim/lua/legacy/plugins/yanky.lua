@@ -1,8 +1,4 @@
 -- TODO:
--- map_set({ 'n' }, ']p', '<plug>(YankyPutIndentAfterLinewise)')
--- map_set({ 'n' }, ']P', '<plug>(YankyPutIndentAfterLinewise)')
--- map_set({ 'n' }, '[p', '<plug>(YankyPutIndentBeforeLinewise)')
--- map_set({ 'n' }, '[P', '<plug>(YankyPutIndentBeforeLinewise)')
 -- map_set({ 'n' }, '>p', '<plug>(YankyPutIndentAfterShiftRight)')
 -- map_set({ 'n' }, '<p', '<plug>(YankyPutIndentAfterShiftLeft)')
 -- map_set({ 'n' }, '>P', '<plug>(YankyPutIndentBeforeShiftRight)')

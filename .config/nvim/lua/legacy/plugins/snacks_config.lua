@@ -1,23 +1,9 @@
--- FIX:
--- Use <c-p> to open file picker,
--- then use <c-f> to switch to grep picker,
--- then <c-p> can not switch back to file picker, unless you press <c-p> twice.
--- When there are more than one window before enterint pickers, and switch to another picker
--- and on confirm may enter the wrong window.
 return {
-    opts = {
-        input = { enabled = false },
-    },
     keys = {
         {
             'gD',
             function() Snacks.picker.lsp_declarations() end,
             desc = 'Goto Declaration',
-        },
-        {
-            '<leader>s/',
-            function() Snacks.picker.search_history() end,
-            desc = 'Search History',
         },
         {
             '<leader>sj',
@@ -39,12 +25,6 @@ return {
             big_file_check_wrapper(function() Snacks.picker.grep_word() end),
             desc = 'Visual selection or word',
             mode = { 'n', 'x' },
-        },
-        { '<leader>sm', function() Snacks.picker.marks() end, desc = 'Marks' },
-        {
-            '<leader>sM',
-            function() Snacks.picker.man() end,
-            desc = 'Man Pages',
         },
         {
             '<leader>su',
