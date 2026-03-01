@@ -1,26 +1,26 @@
-local mapping = {
-  { 'n', '[x' },
-  { 'n', ']x' },
-  { 'n', '<leader>xc' },
-  { 'n', '<leader>xi' },
-  { 'n', '<leader>xb' },
-  { 'n', '<leader>xB' },
-  { 'n', '<leader>xn' },
-  { 'n', '<leader>xa' },
-}
-if vim.fn.executable('delta') == 1 then
-  mapping = vim.list_extend(mapping, {
-    { 'n', '<leader>xdi' },
-    { 'n', '<leader>xdc' },
-    { 'n', '<leader>xdb' },
-    { 'n', '<leader>xdv' },
-    { 'n', '<leader>xdV' },
-  })
-end
 return {
   'Kaiser-Yang/resolve.nvim',
   opts = {
     on_conflict_detected = function(args)
+      local mapping = {
+        { 'n', '[x' },
+        { 'n', ']x' },
+        { 'n', '<leader>xc' },
+        { 'n', '<leader>xi' },
+        { 'n', '<leader>xb' },
+        { 'n', '<leader>xB' },
+        { 'n', '<leader>xn' },
+        { 'n', '<leader>xa' },
+      }
+      if vim.fn.executable('delta') == 1 then
+        mapping = vim.list_extend(mapping, {
+          { 'n', '<leader>xdi' },
+          { 'n', '<leader>xdc' },
+          { 'n', '<leader>xdb' },
+          { 'n', '<leader>xdv' },
+          { 'n', '<leader>xdV' },
+        })
+      end
       local h = require('lightboat.handler')
       local r = require('resolve')
       if #mapping[1] < 4 then
@@ -55,8 +55,6 @@ return {
   },
   config = function(_, opts)
     require('resolve').setup(opts)
-    if require('lightboat.util').git.is_git_repository() then
-      vim.cmd('DetectConflictAndLoad')
-    end
+    if require('lightboat.util').git.is_git_repository() then vim.cmd('DetectConflictAndLoad') end
   end,
 }

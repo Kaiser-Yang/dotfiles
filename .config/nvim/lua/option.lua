@@ -146,24 +146,23 @@ vim.o.winborder = 'rounded'
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.signcolumn = 'yes:1'
-vim.o.jumpoptions = 'stack'
+vim.opt.jumpoptions:append({ 'stack', 'view' })
 vim.o.termguicolors = true
 vim.o.scrolloff = 5
 vim.o.colorcolumn = '100'
 vim.o.cursorline = true
 vim.o.list = true
-vim.o.listchars = 'tab:»-,trail:·,lead:·'
+vim.o.listchars = 'tab:»-,trail:·,lead:·,nbsp:¤'
 vim.o.ignorecase = true
 vim.o.smartcase = true
-vim.o.foldopen = 'block,mark,percent,quickfix,search,tag,undo'
+vim.opt.foldopen:remove('hor')
 vim.o.foldlevel = 99999
 vim.o.foldcolumn = '1'
-vim.o.fillchars = 'fold: ,foldopen:,foldclose:,foldsep: '
+vim.o.fillchars = 'fold: ,foldopen:,foldclose:'
 vim.o.splitright = true
-vim.o.splitbelow = false
 vim.o.autowriteall = true
 vim.o.cmdwinheight = 10
-vim.o.nrformats = 'bin,hex,octal'
+vim.opt.nrformats:append('octal')
 
 local function fold_clickable()
   local lnum = vim.v.lnum
@@ -171,9 +170,3 @@ local function fold_clickable()
 end
 _G.get_statuscol = function() return '%s%l%=' .. (fold_clickable() and '%C' or ' ') .. ' ' end
 vim.o.statuscolumn = '%!v:lua.get_statuscol()'
-
-vim.filetype.add({ pattern = { ['.*.bazelrc'] = 'bazelrc' } })
-vim.treesitter.language.register('objc', { 'objcpp' })
-vim.diagnostic.config({
-  virtual_lines = { current_line = true },
-})

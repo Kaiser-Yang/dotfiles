@@ -1,22 +1,22 @@
--- WARN:
--- With those keys below,
--- we can not use something like "grn" to enter visual replace mode and change a character to "n"
--- gr not work
-local lsp_m = {
-  -- By default, "tagfunc" is set whne "LspAttach",
-  -- "<C-]>", "<C-W>]", and "<C-W>}" will work, you can use them to go to definition
-  { 'n', 'K', vim.lsp.buf.hover, { desc = 'Hover' } },
-  { 'n', 'grn', vim.lsp.buf.rename, { desc = 'Rename Symbol' } },
-  { 'n', 'gra', vim.lsp.buf.code_action, { desc = 'Code Action' } },
-  { 'n', 'grr', '<cmd>Telescope lsp_references<cr>', { desc = 'References' } },
-  { 'n', 'gri', '<cmd>Telescope lsp_implementations<cr>', { desc = 'Go to Implementation' } },
-  { 'n', 'grI', '<cmd>Telescope lsp_incoming_calls<cr>', { desc = 'Incoming Call' } },
-  { 'n', 'grO', '<cmd>Telescope lsp_outgoing_calls<cr>', { desc = 'Outgoint Call' } },
-  { 'n', 'grt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = 'Go to Type Definition' } },
-  { 'n', 'gO', '<cmd>Telescope lsp_document_symbols<cr>', { desc = 'Document Symbol' } },
-}
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(ev)
+    -- WARN:
+    -- With those keys below,
+    -- we can not use something like "grn" to enter visual replace mode and change a character to "n"
+    -- gr not work
+    local lsp_m = {
+      -- By default, "tagfunc" is set whne "LspAttach",
+      -- "<C-]>", "<C-W>]", and "<C-W>}" will work, you can use them to go to definition
+      { 'n', 'K', vim.lsp.buf.hover, { desc = 'Hover' } },
+      { 'n', 'grn', vim.lsp.buf.rename, { desc = 'Rename Symbol' } },
+      { 'n', 'gra', vim.lsp.buf.code_action, { desc = 'Code Action' } },
+      { 'n', 'grr', '<cmd>Telescope lsp_references<cr>', { desc = 'References' } },
+      { 'n', 'gri', '<cmd>Telescope lsp_implementations<cr>', { desc = 'Go to Implementation' } },
+      { 'n', 'grI', '<cmd>Telescope lsp_incoming_calls<cr>', { desc = 'Incoming Call' } },
+      { 'n', 'grO', '<cmd>Telescope lsp_outgoing_calls<cr>', { desc = 'Outgoint Call' } },
+      { 'n', 'grt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = 'Go to Type Definition' } },
+      { 'n', 'gO', '<cmd>Telescope lsp_document_symbols<cr>', { desc = 'Document Symbol' } },
+    }
     for _, m in ipairs(lsp_m) do
       m[4].buffer = ev.buf
       ---@diagnostic disable-next-line: param-type-mismatch
@@ -81,4 +81,9 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'QuitPre' }, {
       end)
     end
   end,
+})
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'VeryLazy',
+  once = true,
+  callback = function() vim.diagnostic.config({ virtual_lines = { current_line = true } }) end,
 })
