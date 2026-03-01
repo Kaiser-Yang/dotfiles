@@ -27,3 +27,6 @@
     rsr = restore
     ss = stash
     cm = commit
+[user]
+	email = kaiserqzyue@foxmail.com
+	name = Kaiser-Yang
