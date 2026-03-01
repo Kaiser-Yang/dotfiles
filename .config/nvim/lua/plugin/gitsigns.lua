@@ -1,7 +1,5 @@
 return {
   'lewis6991/gitsigns.nvim',
-  event = { { event = 'User', pattern = 'GitRepoDetected' } },
-  cond = not vim.g.vscode,
   opts = {
     on_attach = function(buffer)
       local g = require('gitsigns')
