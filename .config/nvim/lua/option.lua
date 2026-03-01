@@ -8,7 +8,20 @@ vim.g.lightboat_opt = {
   --- @type string[]
   treesitter_ensure_installed = { 'cpp', 'go', 'python', 'sql', 'json', 'javascript' },
   --- @type string[]
-  mason_ensure_installed = { 'lua-language-server', 'stylua', 'clangd', 'pyright', 'gopls', 'clang-format', 'goimports', 'black' },
+  mason_ensure_installed = {
+    'lua-language-server',
+    'clangd',
+    'pyright',
+    'gopls',
+    'typescript-language-server',
+    'sqls',
+    'stylua',
+    'clang-format',
+    'black',
+    'goimports',
+    'prettier',
+    'sql-formatter',
+  },
   override_ui_input = true,
   override_ui_select = true,
   ui_input_on_init = function(uiinput, opt, on_done)
