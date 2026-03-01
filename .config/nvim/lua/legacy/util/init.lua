@@ -1,15 +1,4 @@
-local M = {
-  key = require('util.key'),
-}
-
-function M.get(opt, ...)
-  if type(opt) == 'function' then
-    return opt(...)
-  else
-    return opt
-  end
-end
-
+local M = { }
 --- @param types string[]
 --- @return boolean|nil
 --- Returns true if the cursor is inside a block of the specified types,

@@ -1,6 +1,0 @@
-local util = require('util')
-util.key.set({ 'c' }, '<m-b>', '<s-left>', { silent = false })
-util.key.set({ 'c' }, '<m-f>', '<s-right>', { silent = false })
-util.key.set({ 'c' }, '<c-b>', '<left>', { silent = false })
-util.key.set({ 'c' }, '<c-f>', '<right>', { silent = false })
-util.key.set({ 'i' }, '<c-h>', '<bs>', { remap = true })

@@ -21,12 +21,6 @@ return {
             desc = 'Diagnostics',
         },
         {
-            '<leader>sw',
-            big_file_check_wrapper(function() Snacks.picker.grep_word() end),
-            desc = 'Visual selection or word',
-            mode = { 'n', 'x' },
-        },
-        {
             '<leader>su',
             function() Snacks.picker.undo() end,
             desc = 'Undo History',

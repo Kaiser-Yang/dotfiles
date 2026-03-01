@@ -1,5 +1,5 @@
 {
-  "LightBoat": { "branch": "master", "commit": "b0de9884c9c79cbe3d0c9aef649b98592d8b3dc7" },
+  "LightBoat": { "branch": "master", "commit": "f3bc21d201a9c502a62b2a60a89c0f32ebc64631" },
   "blink-cmp-dictionary": { "branch": "master", "commit": "47154665d66d09621f38aac53acc22dd833afe6a" },
   "blink.cmp": { "branch": "main", "commit": "4b18c32adef2898f95cdef6192cbd5796c1a332d" },
   "blink.download": { "branch": "main", "commit": "86361b98f3c8317904a08e3bd12cf3cdcbe3e925" },
@@ -10,7 +10,9 @@
   "gitsigns.nvim": { "branch": "main", "commit": "9f3c6dd7868bcc116e9c1c1929ce063b978fa519" },
   "gruvbox.nvim": { "branch": "main", "commit": "561126520034a1dac2f78ab063db025d12555998" },
   "guess-indent.nvim": { "branch": "main", "commit": "84a4987ff36798c2fc1169cbaff67960aed9776f" },
+  "hardtime.nvim": { "branch": "main", "commit": "b4e431934af1fe224a3a801f632c008278cb7628" },
   "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
+  "lualine.nvim": { "branch": "master", "commit": "47f91c416daef12db467145e16bed5bbfe00add8" },
   "maplayer.nvim": { "branch": "master", "commit": "77f99ad9954342e61476cfefe2becd9d4c67fe7a" },
   "mason.nvim": { "branch": "main", "commit": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65" },
   "nui.nvim": { "branch": "main", "commit": "de740991c12411b663994b2860f1a4fd0937c130" },
