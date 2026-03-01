@@ -6,7 +6,7 @@ vim.g.lightboat_opt = {
   --- @type string[]|string
   big_file_detection = { 'BufReadPre', 'FileType', 'BufReadPost' },
   --- @type string[]
-  treesitter_ensure_installed = { 'c', 'cpp', 'go', 'python', 'sql', 'json', 'javascript' },
+  treesitter_ensure_installed = { 'cpp', 'go', 'python', 'sql', 'json', 'javascript' },
   --- @type string[]
   mason_ensure_installed = { 'lua-language-server', 'stylua', 'clangd', 'pyright', 'gopls', 'clang-format', 'goimports', 'black' },
   override_ui_input = true,
