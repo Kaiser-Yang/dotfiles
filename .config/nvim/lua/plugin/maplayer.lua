@@ -40,7 +40,7 @@ return {
       { key = '<m-C>', desc = 'System Yank EOL', handler = h.system_yank_eol, expr = true, fallback = false },
       { key = '<m-V>', desc = 'System Put Before', handler = h.system_put_before, expr = true, fallback = false },
       { key = '<m-X>', desc = 'System Cut EOL', handler = h.system_cut_eol, expr = true, fallback = false },
-      { key = '<m-/>', mode = 'inx', desc = 'Toggle Comment', handler = h.toggle_comment, expr = true, fallback = false },
+      { key = '<m-/>', mode = 'inx', desc = 'Toggle Comment', handler = h.toggle_comment, fallback = false },
       { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.toggle_lazygit, fallback = false },
       { key = '<leader>ti', desc = 'Inlay Hint', handler = h.toggle_inlay_hint, fallback = false },
       { key = '<leader>ts', desc = 'Spell', handler = h.toggle_spell, fallback = false },
