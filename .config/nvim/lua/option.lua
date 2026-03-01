@@ -8,7 +8,7 @@ vim.g.lightboat_opt = {
   --- @type string[]
   treesitter_ensure_installed = { 'c', 'cpp', 'go', 'python', 'sql', 'json', 'javascript' },
   --- @type string[]
-  mason_ensure_installed = { 'lua-language-server', 'stylua' },
+  mason_ensure_installed = { 'lua-language-server', 'stylua', 'clangd', 'pyright', 'gopls', 'clang-format', 'goimports', 'black' },
   override_ui_input = true,
   override_ui_select = true,
   ui_input_on_init = function(uiinput, opt, on_done)
