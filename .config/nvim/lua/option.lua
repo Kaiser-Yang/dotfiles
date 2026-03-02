@@ -72,7 +72,7 @@ vim.g.lightboat_opt = {
     if ctx.mode == 'cmdline' then
       return { 'cmdline', 'path', 'buffer' }
     else
-      return { 'snippets', 'lsp', 'dictionary', 'buffer' }
+      return { 'snippets', 'lsp', 'buffer', 'dictionary' }
     end
   end,
 }
