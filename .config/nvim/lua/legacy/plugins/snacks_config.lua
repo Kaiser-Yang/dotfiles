@@ -16,24 +16,9 @@ return {
             desc = 'Buffer Diagnostics',
         },
         {
-            '<leader>sD',
-            function() Snacks.picker.diagnostics() end,
-            desc = 'Diagnostics',
-        },
-        {
             '<leader>su',
             function() Snacks.picker.undo() end,
             desc = 'Undo History',
-        },
-        {
-            '<leader>sl',
-            function() Snacks.picker.loclist() end,
-            desc = 'Location List',
-        },
-        {
-            '<leader>sq',
-            function() Snacks.picker.qflist() end,
-            desc = 'Quickfix List',
         },
         {
             '<leader>gb',
