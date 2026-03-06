@@ -162,6 +162,7 @@ vim.o.fillchars = 'fold: ,foldopen:,foldclose:'
 vim.o.splitright = true
 vim.o.autowriteall = true
 vim.o.cmdwinheight = 10
+vim.o.showmode = false
 vim.opt.nrformats:append('octal')
 
 local function fold_clickable()
