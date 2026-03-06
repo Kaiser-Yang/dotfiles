@@ -177,11 +177,11 @@ return {
 
       -- Picker
       { key = 'gy', desc = 'Search Register', handler = '<cmd>Telescope registers<cr>', fallback = false },
-      { key = '<c-f>', desc = 'Live Grep Frecency', handler = h.live_grep_frecency, fallback = false },
-      { key = '<c-p>', desc = 'Find File Frecency', handler = h.find_file_frecency, fallback = false },
+      { key = '<c-f>', desc = 'Live Grep Arg', handler = h.live_grep_arg, fallback = false },
+      { key = '<c-p>', desc = 'Find File', handler = h.find_file, fallback = false },
       { key = '<f1>', desc = 'Search Help', handler = h.help_tags, fallback = false },
       { key = '<m-r>', desc = 'Resume', handler = '<cmd>Telescope resume<cr>', fallback = false },
-      { key = '<m-f>', mode = 'nx', desc = 'Search Word', handler = h.grep_word, fallback = false },
+      { key = '<m-f>', mode = 'nx', desc = 'Find Word', handler = h.find_word, fallback = false },
       { key = '<m-e>', mode = 'n', desc = 'Open, Focus, or Reveal', handler = h.open_focus_reveal },
       { key = '<leader>sb', desc = 'Buffer', handler = '<cmd>Telescope buffers<cr>', fallback = false },
       { key = '<leader>scc', desc = 'Config Path', handler = '<cmd>Telescope live_grep_args cwd=' .. c_dir .. '<cr>', fallback = false },
