@@ -1,14 +1,10 @@
 auto-session
 bufferline.nvim
 img-clip.nvim
-nvim-dap
-nvim-dap-ui
-nvim-dap-virtual-text
 avante.nvim
 blink-cmp-avante
 diffview.nvim
 flash.nvim
-noice.nvim
 non-ascii.nvim
 nvim-highlight-colors
 nvim-jdtls
