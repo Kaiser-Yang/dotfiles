@@ -19,6 +19,7 @@ return {
         template = function(context)
           local res = '![$CURSOR]($FILE_PATH)'
           if vim.fn.expand('%:p'):find('Kaiser%-Yang.github.io') then
+            -- TODO: check this, maybe we should use a better way to insert image
             res = '![$CURSOR](' .. string.match(context.file_path, '^.*(assets/img/.*)$') .. '){: .img-fluid}'
           end
           return res

@@ -1,16 +1,15 @@
 auto-session
-avante.nvim
-blink-cmp-avante
 bufferline.nvim
-diffview.nvim
-flash.nvim
 img-clip.nvim
-lspsaga.nvim
-noice.nvim
-non-ascii.nvim
 nvim-dap
 nvim-dap-ui
 nvim-dap-virtual-text
+avante.nvim
+blink-cmp-avante
+diffview.nvim
+flash.nvim
+noice.nvim
+non-ascii.nvim
 nvim-highlight-colors
 nvim-jdtls
 nvim-nio
@@ -22,4 +21,3 @@ rainbow-delimiters.nvim
 render-markdown.nvim
 vim-interestingwords
 vim-matchup
-win-resizer.nvim
