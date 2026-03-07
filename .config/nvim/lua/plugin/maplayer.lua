@@ -226,6 +226,14 @@ return {
       { key = '<c-j>', desc = 'To Bottom', handler = h.to_bottom, expr = true, fallback = false },
       { key = '<c-k>', desc = 'To Above', handler = h.to_above, expr = true, fallback = false },
       { key = '<c-l>', desc = 'To Right', handler = h.to_right, expr = true, fallback = false },
+      { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = false },
+      { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = false },
+      { key = '<left>', desc = 'Resize Left', handler = h.resize_wrap('left'), fallback = false },
+      { key = '<right>', desc = 'Resize Right', handler = h.resize_wrap('right'), fallback = false },
+      { key = '<s-up>', desc = 'Resize Top', handler = h.resize_wrap('top', true), fallback = false },
+      { key = '<s-down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = false },
+      { key = '<s-left>', desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = false },
+      { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = false },
 
       -- Key with Multi Functionalities
       { key = '<c-e>', mode = 'ic', desc = 'Cancel Completion', handler = h.cancel_completion },
