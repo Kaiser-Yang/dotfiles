@@ -43,6 +43,7 @@ return {
       { key = '<m-/>', mode = 'inx', desc = 'Toggle Comment', handler = h.toggle_comment, fallback = false },
       { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.toggle_lazygit, fallback = false },
       { key = '<c-h>', mode = 'ci', desc = 'BS', handler = '<bs>', remap = true, fallback = false },
+      { key = '<c-w>T', desc = 'Tab Split', handler = '<cmd>tab split<cr>', fallback = false },
       { key = '<leader>r', mode = 'n', desc = 'Run Single File', handler = h.run_single_file, fallback = false },
       { key = '<leader>ti', desc = 'Inlay Hint', handler = h.toggle_inlay_hint, fallback = false },
       { key = '<leader>ts', desc = 'Spell', handler = h.toggle_spell, fallback = false },
