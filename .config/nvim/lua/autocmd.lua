@@ -99,7 +99,6 @@ vim.api.nvim_create_autocmd('VimEnter', {
 })
 vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
-    vim.notify('triggered')
     if vim.v.event.regname ~= '' and vim.v.event.regname ~= '"' then
       vim.fn.setreg('"', unnamed_reg_content, unnamed_reg_type)
     else

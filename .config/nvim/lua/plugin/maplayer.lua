@@ -1,3 +1,14 @@
+local function competi_test()
+  if not vim.fn.expand('%:p'):match('OJProblems') or vim.bo.filetype ~= 'cpp' then return false end
+  local file_dir = vim.fn.expand('%:p:h')
+  local file_name = vim.fn.expand('%:t:r')
+  if vim.fn.filereadable(file_dir .. '/' .. file_name .. '_0.in') == 0 then
+    vim.cmd('CompetiTest receive testcases')
+    return true
+  end
+  vim.cmd('CompetiTest run')
+  return true
+end
 return {
   'Kaiser-Yang/maplayer.nvim',
   event = 'VeryLazy',
@@ -44,7 +55,8 @@ return {
       { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.toggle_lazygit, fallback = false },
       { key = '<c-h>', mode = 'ci', desc = 'BS', handler = '<bs>', remap = true, fallback = false },
       { key = '<c-w>T', desc = 'Tab Split', handler = '<cmd>tab split<cr>', fallback = false },
-      { key = '<leader>r', mode = 'n', desc = 'Run Single File', handler = h.run_single_file, fallback = false },
+      { key = '<leader>r', desc = 'Competi Test', handler = competi_test, fallback = false  },
+      { key = '<leader>r', desc = 'Run Single File', handler = h.run_single_file, fallback = false },
       { key = '<leader>ti', desc = 'Inlay Hint', handler = h.toggle_inlay_hint, fallback = false },
       { key = '<leader>ts', desc = 'Spell', handler = h.toggle_spell, fallback = false },
       { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.toggle_treesitter },
