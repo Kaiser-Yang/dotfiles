@@ -50,8 +50,8 @@ return {
       { key = '&', desc = 'Last Substitute with Flag', handler = '<cmd>&&<cr>', fallback = false },
 
       -- Repmove Motion
-      { key = ';', mode = 'nx', desc = 'Repeat Last Motion Forward', handler = h.semicolon, fallback = false },
-      { key = ',', mode = 'nx', desc = 'Repeat Last Motion Backward', handler = h.comma, fallback = false },
+      { key = ';', mode = 'nx', desc = 'Repeat Last Motion Forward', handler = h.semicolon, count = true, fallback = false },
+      { key = ',', mode = 'nx', desc = 'Repeat Last Motion Backward', handler = h.comma, count = true, fallback = false },
       { key = 'f', mode = 'nxo', desc = 'Move to Next Character', handler = h.f, expr = true, fallback = false },
       { key = 'F', mode = 'nxo', desc = 'Move to Previous Character', handler = h.F, expr = true, fallback = false },
       { key = 't', mode = 'nxo', desc = 'Move till Next Character', handler = h.t, expr = true, fallback = false },
