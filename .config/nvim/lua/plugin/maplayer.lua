@@ -1,5 +1,10 @@
 local function competi_test()
-  if not vim.fn.expand('%:p'):match('OJProblems') or vim.bo.filetype ~= 'cpp' then return false end
+  if not vim.fn.getcwd():match('OJProblems') then return false end
+  if vim.bo.buftype == 'nofile' then
+    vim.cmd('CompetiTest receive problem')
+    return true
+  end
+  if not vim.fn.expand('%:p'):match('OJProblems') or vim.bo.filetype == 'cpp' then return false end
   local file_dir = vim.fn.expand('%:p:h')
   local file_name = vim.fn.expand('%:t:r')
   if vim.fn.filereadable(file_dir .. '/' .. file_name .. '_0.in') == 0 then
@@ -7,6 +12,11 @@ local function competi_test()
     return true
   end
   vim.cmd('CompetiTest run')
+  return true
+end
+local function competi_test_receive_file()
+  if not vim.fn.getcwd():match('OJProblems') then return false end
+  vim.cmd('CompetiTest receive problem')
   return true
 end
 return {
@@ -56,6 +66,7 @@ return {
       { key = '<c-h>', mode = 'ci', desc = 'BS', handler = '<bs>', remap = true, fallback = false },
       { key = '<c-w>T', desc = 'Tab Split', handler = '<cmd>tab split<cr>', fallback = false },
       { key = '<leader>r', desc = 'Competi Test', handler = competi_test, fallback = false  },
+      { key = '<leader>R', desc = 'Competi Test Receive File', handler = competi_test_receive_file, fallback = false  },
       { key = '<leader>r', desc = 'Run Single File', handler = h.run_single_file, fallback = false },
       { key = '<leader>ti', desc = 'Inlay Hint', handler = h.toggle_inlay_hint, fallback = false },
       { key = '<leader>ts', desc = 'Spell', handler = h.toggle_spell, fallback = false },

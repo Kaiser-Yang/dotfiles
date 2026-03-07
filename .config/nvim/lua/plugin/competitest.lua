@@ -51,5 +51,32 @@ return {
         close = { 'q', '<esc>' },
       },
     },
+    template_file = { cpp = vim.fn.stdpath('config') .. '/cp/template.cpp' },
+    evaluate_template_modifiers = true,
+    received_problems_path = function(task, file_ext)
+      local sub_dir
+      local filename = 'unknown'
+      if task.url:find('codeforces') then
+        sub_dir = 'CodeForces'
+        ---@diagnostic disable-next-line: unbalanced-assignments
+        local number, letter = task.url:match('/problemset/problem/(%d+)/([A-Z]+)')
+          or task.url:match('/contest/(%d+)/problem/([A-Z]+)')
+        if number and letter then filename = number .. letter end
+      elseif task.url:find('luogu') then
+        sub_dir = 'Luogu'
+        local id = task.url:match('/problem/([A-Za-z0-9]+)')
+        if id then filename = id end
+      elseif task.url:find('leetcode') then
+        sub_dir = 'LeetCode'
+      elseif task.url:find('uva') then
+        sub_dir = 'UVa'
+        local id = task.url:match('UVA%-?(%d+)')
+        if id then filename = id end
+      else
+        sub_dir = 'Other'
+      end
+
+      return vim.fn.getcwd() .. '/' .. sub_dir .. '/' .. filename .. '.' .. file_ext
+    end,
   },
 }
