@@ -256,6 +256,10 @@ return {
       -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
       { key = '<c-k>', mode = 'ic', desc = 'Select Previous Completion Item', handler = h.previous_completion_item },
       { key = '<c-k>', mode = 'ic', desc = 'Delete to EOL', handler = h.delete_to_eol },
+
+      -- Disable some keys
+      { key = '<c-p>', mode = 'ic', desc = 'Nop', handler = h.nop, fallback = false },
+      { key = '<c-n>', mode = 'ic', desc = 'Nop', handler = h.nop, fallback = false },
     })
     if u.plugin_available('which-key.nvim') then
       require('which-key').add({
