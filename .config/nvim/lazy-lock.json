@@ -1,5 +1,5 @@
 {
-  "LightBoat": { "branch": "master", "commit": "5e63dd1573929229b47fed3717d955297237da11" },
+  "LightBoat": { "branch": "master", "commit": "ee2250b072cd72fbcb63854b3774f8158a333e3b" },
   "blink-cmp-dictionary": { "branch": "master", "commit": "35142bba869b869715e91a99d2f46bcf93fca4ae" },
   "blink.cmp": { "branch": "main", "commit": "4b18c32adef2898f95cdef6192cbd5796c1a332d" },
   "blink.download": { "branch": "main", "commit": "86361b98f3c8317904a08e3bd12cf3cdcbe3e925" },
@@ -34,5 +34,6 @@
   "telescope.nvim": { "branch": "master", "commit": "5255aa27c422de944791318024167ad5d40aad20" },
   "todo-comments.nvim": { "branch": "main", "commit": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668" },
   "ultimate-autopair.nvim": { "branch": "v0.6", "commit": "72e160cb1ce8c0db2ac4315f77d97420a2f4223d" },
-  "which-key.nvim": { "branch": "main", "commit": "531ebec6370aff4ada619d48d6f26343ae7259a0" }
+  "which-key.nvim": { "branch": "main", "commit": "531ebec6370aff4ada619d48d6f26343ae7259a0" },
+  "win-resizer.nvim": { "branch": "master", "commit": "4d875697c07948efb53fdeb59dc7b61956e6bca1" }
 }
