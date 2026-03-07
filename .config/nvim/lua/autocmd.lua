@@ -11,9 +11,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
       { 'n', 'grn', vim.lsp.buf.rename, { desc = 'Rename Symbol' } },
       { 'n', 'gra', vim.lsp.buf.code_action, { desc = 'Code Action' } },
       { 'n', 'grr', '<cmd>Telescope lsp_references<cr>', { desc = 'References' } },
-      { 'n', 'gri', '<cmd>Telescope lsp_implementations<cr>', { desc = 'Go to Implementation' } },
-      { 'n', 'grI', '<cmd>Telescope lsp_incoming_calls<cr>', { desc = 'Incoming Call' } },
-      { 'n', 'grO', '<cmd>Telescope lsp_outgoing_calls<cr>', { desc = 'Outgoint Call' } },
+      { 'n', 'grI', '<cmd>Telescope lsp_implementations<cr>', { desc = 'Go to Implementation' } },
+      { 'n', 'gri', '<cmd>Telescope lsp_incoming_calls<cr>', { desc = 'Incoming Call' } },
+      { 'n', 'gro', '<cmd>Telescope lsp_outgoing_calls<cr>', { desc = 'Outgoint Call' } },
       { 'n', 'grt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = 'Go to Type Definition' } },
       { 'n', 'gO', '<cmd>Telescope lsp_document_symbols<cr>', { desc = 'Document Symbol' } },
     }
