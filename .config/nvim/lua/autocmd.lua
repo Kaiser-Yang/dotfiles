@@ -87,3 +87,23 @@ vim.api.nvim_create_autocmd('User', {
   once = true,
   callback = function() vim.diagnostic.config({ virtual_lines = { current_line = true } }) end,
 })
+local unnamed_reg_content
+local unnamed_reg_type
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    unnamed_reg_content = vim.fn.getreg('"')
+    unnamed_reg_type = vim.fn.getregtype('"')
+  end,
+  once = true,
+})
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    vim.notify('triggered')
+    if vim.v.event.regname ~= '' and vim.v.event.regname ~= '"' then
+      vim.fn.setreg('"', unnamed_reg_content, unnamed_reg_type)
+    else
+      unnamed_reg_content = vim.fn.getreg('"')
+      unnamed_reg_type = vim.fn.getregtype('"')
+    end
+  end,
+})
