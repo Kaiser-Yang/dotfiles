@@ -75,6 +75,39 @@ vim.g.lightboat_opt = {
       return { 'snippets', 'lsp', 'buffer', 'dictionary' }
     end
   end,
+  run_single_file_command = function(filetype, filepath)
+    if filetype == 'lua' and require('lightboat.util').in_config_dir() then
+      vim.cmd('%lua')
+      return true
+    end
+    local filename_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':t'))
+    local filename_noext_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':t:r'))
+    local directory = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':h'))
+    local command_map = {
+      c = string.format(
+        'gcc -g -Wall %s -o %s.out && echo RUNNING && time ./%s.out',
+        filename_escaped,
+        filename_noext_escaped,
+        filename_noext_escaped
+      ),
+      cpp = string.format(
+        'g++ -g -Wall -std=c++23 %s -o %s.out && echo RUNNING && time ./%s.out',
+        filename_escaped,
+        filename_noext_escaped,
+        filename_noext_escaped
+      ),
+      java = string.format('javac %s && echo RUNNING && time java %s', filename_escaped, filename_noext_escaped),
+      sh = string.format('time sh %s', filename_escaped),
+      bash = string.format('time bash %s', filename_escaped),
+      zsh = string.format('time zsh %s', filename_escaped),
+      python = string.format('time python %s', filename_escaped),
+      lua = string.format('time lua %s', filename_escaped),
+      go = string.format('go run %s', filename_escaped),
+    }
+    local res = command_map[filetype]
+    if res then res = 'cd ' .. directory .. ' && ' .. res end
+    return command_map[filetype]
+  end,
 }
 vim.g.highlight_on_yank = true
 vim.g.highlight_on_yank_limit = 1024 * 1024 -- 1 MB

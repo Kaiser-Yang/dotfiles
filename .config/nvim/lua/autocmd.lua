@@ -73,11 +73,12 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'QuitPre' }, {
     -- :bd was probably issued an only tree window is left
     -- Behave as if tree was closed (see `:h :bd`)
     if ev.event == 'BufEnter' and winCount == 0 then
+      local should_focus = vim.bo.filetype == 'NvimTree'
       vim.schedule(function()
         -- close nvim-tree: will go to the last buffer used before closing
-        tree.toggle({ find_file = true, focus = true })
+        tree.toggle()
         -- re-open nivm-tree
-        tree.toggle({ find_file = true, focus = false })
+        tree.toggle({ find_file = false, focus = should_focus })
       end)
     end
   end,

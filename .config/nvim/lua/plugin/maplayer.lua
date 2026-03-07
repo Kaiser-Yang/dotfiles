@@ -43,6 +43,7 @@ return {
       { key = '<m-/>', mode = 'inx', desc = 'Toggle Comment', handler = h.toggle_comment, fallback = false },
       { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.toggle_lazygit, fallback = false },
       { key = '<c-h>', mode = 'ci', desc = 'BS', handler = '<bs>', remap = true, fallback = false },
+      { key = '<leader>r', mode = 'n', desc = 'Run Single File', handler = h.run_single_file, fallback = false },
       { key = '<leader>ti', desc = 'Inlay Hint', handler = h.toggle_inlay_hint, fallback = false },
       { key = '<leader>ts', desc = 'Spell', handler = h.toggle_spell, fallback = false },
       { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.toggle_treesitter },
@@ -64,6 +65,10 @@ return {
       { key = ']A', mode = 'nox', desc = 'Argument End', handler = h.next_parameter_end, fallback = false },
       { key = '[b', desc = 'Buffer', handler = h.previous_buffer, fallback = false },
       { key = ']b', desc = 'Buffer', handler = h.next_buffer, fallback = false },
+      { key = '[l', desc = 'Location', handler = h.previous_location, fallback = false },
+      { key = ']l', desc = 'Location', handler = h.next_location, fallback = false },
+      { key = '[q', desc = 'Quickfix', handler = h.previous_quickfix, fallback = false },
+      { key = ']q', desc = 'Quickfix', handler = h.next_quickfix, fallback = false },
       -- By default, "[c" and "]c" are used to navigate changes in the buffer. In most caes, we cant use "[g" and "]g" to navigate between git hunks
       { key = '[c', mode = 'nox', desc = 'Class Start', handler = h.previous_class_start, fallback = false },
       { key = ']c', mode = 'nox', desc = 'Class Start', handler = h.next_class_start, fallback = false },
@@ -81,8 +86,6 @@ return {
       { key = ']f', mode = 'nox', desc = 'For Start', handler = h.next_loop_start, fallback = false },
       { key = '[F', mode = 'nox', desc = 'For End', handler = h.previous_loop_end, fallback = false },
       { key = ']F', mode = 'nox', desc = 'For End', handler = h.next_loop_end, fallback = false },
-      { key = '[l', desc = 'Location', handler = h.previous_location, fallback = false },
-      { key = ']l', desc = 'Location', handler = h.next_location, fallback = false },
       { key = '[m', mode = 'nox', desc = 'Method Start', handler = h.previous_function_start, fallback = false },
       { key = ']m', mode = 'nox', desc = 'Method Start', handler = h.next_function_start, fallback = false },
       { key = '[M', mode = 'nox', desc = 'Method End', handler = h.previous_function_end, fallback = false },
@@ -91,8 +94,6 @@ return {
       { key = ']o', mode = 'nox', desc = 'Call Start', handler = h.next_call_start, fallback = false },
       { key = '[O', mode = 'nox', desc = 'Call End', handler = h.previous_call_end, fallback = false },
       { key = ']O', mode = 'nox', desc = 'Call End', handler = h.next_call_end, fallback = false },
-      { key = '[q', desc = 'Quickfix', handler = h.previous_quickfix, fallback = false },
-      { key = ']q', desc = 'Quickfix', handler = h.next_quickfix, fallback = false },
       -- By default "[r" and "]r" are used to search "rare" words
       { key = '[r', mode = 'nox', desc = 'Return Start', handler = h.previous_return_start, fallback = false },
       { key = ']r', mode = 'nox', desc = 'Return Start', handler = h.next_return_start, fallback = false },
@@ -101,7 +102,7 @@ return {
       { key = '[s', mode = 'nox', desc = 'Misspelled Word', handler = h.previous_misspelled, fallback = false },
       { key = ']s', mode = 'nox', desc = 'Misspelled Word', handler = h.next_misspelled, fallback = false },
       -- By default "[t" and "]t" are mapped to ":tp" and ":tn"
-      -- TODO: Those two below do not support vim.v.count, maybe we should fort todo-comments to supported
+      -- Those two below do not support vim.v.count
       { key = '[t', mode = 'nox', desc = 'Todo', handler = h.previous_todo, fallback = false },
       { key = ']t', mode = 'nox', desc = 'Todo', handler = h.next_todo, fallback = false },
       { key = '[[', mode = 'nox', desc = 'Block Start', handler = h.previous_block_start, fallback = false },
@@ -150,7 +151,6 @@ return {
       -- Completion
       -- By default <C-J> is an alias of <CR>
       { key = '<c-j>', mode = 'ic', desc = 'Select Next Completion Item', handler = h.next_completion_item },
-      { key = '<c-x>', mode = 'ic', desc = 'Show Completion', handler = h.show_completion, fallback = false },
       { key = '<c-y>', mode = 'ic', desc = 'Accept Completion Item', handler = h.accept_completion_item },
       { key = '<c-s>', mode = 'i', desc = 'Toggle Signature Help', handler = h.toggle_signature, fallback = false },
 
