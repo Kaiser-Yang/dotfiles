@@ -142,7 +142,7 @@ vim.g.lightboat_opt = {
     }
     local res = command_map[filetype]
     if res then res = 'cd ' .. directory .. ' && ' .. res end
-    return command_map[filetype]
+    return res
   end,
   dap = {
     adapter = {
