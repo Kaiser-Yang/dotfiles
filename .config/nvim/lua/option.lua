@@ -1,3 +1,37 @@
+local c_cpp_rust_configuration = {
+  {
+    name = 'Launch File',
+    type = 'codelldb',
+    request = 'launch',
+    program = function()
+      if vim.g.dap_exe and vim.g.dap_exe ~= '' then return vim.g.dap_exe end
+      local default = vim.fn.getcwd() .. '/'
+      vim.g.dap_exe = vim.fn.input('Path to Executable: ', default, 'file')
+      return vim.g.dap_exe
+    end,
+    cwd = '${workspaceFolder}',
+  },
+  {
+    name = 'Attach to Process',
+    type = 'codelldb',
+    request = 'attach',
+    pid = function()
+      if type(vim.g.dap_pid) == 'number' then return vim.g.dap_pid end
+      local dap = require('dap')
+      if vim.g.dap_pname and vim.g.dap_pname ~= '' then return dap.utils.pick_process({ filter = vim.g.dap_pname }) end
+      local id_or_name = vim.fn.input('Process ID or Executable Name (Filter): ', vim.fn.getcwd() .. '/', 'file')
+      local pid = tonumber(id_or_name)
+      if pid then
+        vim.g.dap_pid = pid
+        return vim.g.dap_pid
+      else
+        vim.g.dap_pname = id_or_name
+      end
+      return dap.utils.pick_process({ filter = vim.g.dap_pname })
+    end,
+    cwd = '${workspaceFolder}',
+  },
+}
 --- @class LightBoat.Opt
 vim.g.lightboat_opt = {
   -- In most cases, we do not need to listen on "TextChanged" and "TextChangedI",
@@ -21,6 +55,9 @@ vim.g.lightboat_opt = {
     'goimports',
     'prettier',
     'sql-formatter',
+    'codelldb',
+    'delve',
+    'debugpy',
   },
   override_ui_input = true,
   override_ui_select = true,
@@ -109,6 +146,16 @@ vim.g.lightboat_opt = {
     if res then res = 'cd ' .. directory .. ' && ' .. res end
     return command_map[filetype]
   end,
+  dap = {
+    adapter = {
+      codelldb = { type = 'executable', command = 'codelldb' },
+    },
+    configuration = {
+      c = vim.deepcopy(c_cpp_rust_configuration),
+      cpp = vim.deepcopy(c_cpp_rust_configuration),
+      rust = vim.deepcopy(c_cpp_rust_configuration),
+    },
+  },
 }
 vim.g.highlight_on_yank = true
 vim.g.highlight_on_yank_limit = 1024 * 1024 -- 1 MB
