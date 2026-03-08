@@ -280,6 +280,22 @@ return {
       { key = '<c-k>', mode = 'ic', desc = 'Select Previous Completion Item', handler = h.previous_completion_item },
       { key = '<c-k>', mode = 'ic', desc = 'Delete to EOL', handler = h.delete_to_eol },
 
+      -- Debugger
+      { key = '<leader>tb', desc = 'Breakpoint', handler = '<cmd>DapToggleBreakpoint<cr>' },
+      { key = '<leader>td', desc = 'Dap UI', handler = h.toggle_dap_ui },
+      { key = '<leader>dl', desc = 'Set Log Point', handler = h.set_log_point },
+      { key = '<leader>dc', desc = 'Set Condition Breakpoint', handler = h.set_condition_breakpoint },
+      { key = '<leader>dC', desc = 'Clear Breakpoint', handler = '<cmd>DapClearBreakpoints<cr>' },
+      { key = '<leader>df', desc = 'Float Element', handler = function() require('dapui').float_element() end },
+      { key = '<leader>dr', desc = 'Run Last', handler = function() require('dap').run_last() end },
+      { key = '<f4>', desc = 'Dap Terminate', handler = '<cmd>DapTerminate<cr>' },
+      { key = '<f5>', desc = 'Dap Continue', handler = '<cmd>DapContinue<cr>' },
+      { key = '<f6>', handler = function() require('dap').restart() end },
+      { key = '<f9>', desc = 'Dap Step Back', handler = function() require('dap').step_back() end },
+      { key = '<f10>', desc = 'Dap Step Over', handler = '<cmd>DapStepOver<cr>' },
+      { key = '<f11>', desc = 'Dap Step Into', handler = '<cmd>DapStepInto<cr>' },
+      { key = '<f12>', desc = 'Dap Step Out', handler = '<cmd>DapStepOut<cr>' },
+
       -- Disable some keys
       { key = '<c-p>', mode = 'ic', desc = 'Nop', handler = h.nop, fallback = false },
       { key = '<c-n>', mode = 'ic', desc = 'Nop', handler = h.nop, fallback = false },

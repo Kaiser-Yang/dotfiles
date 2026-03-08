@@ -7,7 +7,7 @@ return {
         {
           '%=',
           cond = function() return vim.bo.filetype == 'CompetiTest' end,
-          color = { bg = 'gray' },
+          color = 'WinBarNC',
         },
         {
           function() return vim.b.competitest_title or 'CompetiTest' end,
@@ -17,7 +17,7 @@ return {
         {
           '%=',
           cond = function() return vim.bo.filetype == 'CompetiTest' end,
-          color = { bg = 'gray' },
+          color = 'WinBarNC',
         },
       },
     },
