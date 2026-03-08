@@ -1,3 +1,17 @@
+local function get_pid()
+  if type(vim.g.dap_pid) == 'number' then return vim.g.dap_pid end
+  local dap = require('dap')
+  if vim.g.dap_pname and vim.g.dap_pname ~= '' then return dap.utils.pick_process({ filter = vim.g.dap_pname }) end
+  local id_or_name = vim.fn.input('Process ID or Executable Name (Filter): ', vim.fn.getcwd() .. '/', 'file')
+  local pid = tonumber(id_or_name)
+  if pid then
+    vim.g.dap_pid = pid
+    return vim.g.dap_pid
+  else
+    vim.g.dap_pname = id_or_name
+  end
+  return dap.utils.pick_process({ filter = vim.g.dap_pname })
+end
 local c_cpp_rust_configuration = {
   {
     name = 'Launch File',
@@ -15,20 +29,7 @@ local c_cpp_rust_configuration = {
     name = 'Attach to Process',
     type = 'codelldb',
     request = 'attach',
-    pid = function()
-      if type(vim.g.dap_pid) == 'number' then return vim.g.dap_pid end
-      local dap = require('dap')
-      if vim.g.dap_pname and vim.g.dap_pname ~= '' then return dap.utils.pick_process({ filter = vim.g.dap_pname }) end
-      local id_or_name = vim.fn.input('Process ID or Executable Name (Filter): ', vim.fn.getcwd() .. '/', 'file')
-      local pid = tonumber(id_or_name)
-      if pid then
-        vim.g.dap_pid = pid
-        return vim.g.dap_pid
-      else
-        vim.g.dap_pname = id_or_name
-      end
-      return dap.utils.pick_process({ filter = vim.g.dap_pname })
-    end,
+    pid = get_pid,
     cwd = '${workspaceFolder}',
   },
 }
@@ -147,11 +148,58 @@ vim.g.lightboat_opt = {
   dap = {
     adapter = {
       codelldb = { type = 'executable', command = 'codelldb' },
+      delve = function(callback, config)
+        if config.mode == 'remote' and config.request == 'attach' then
+          callback({
+            type = 'server',
+            host = config.host or '127.0.0.1',
+            port = config.port or '38697',
+          })
+        else
+          callback({
+            type = 'server',
+            port = '${port}',
+            executable = {
+              command = 'dlv',
+              args = { 'dap', '-l', '127.0.0.1:${port}', '--log', '--log-output=dap' },
+            },
+          })
+        end
+      end,
     },
     configuration = {
       c = vim.deepcopy(c_cpp_rust_configuration),
       cpp = vim.deepcopy(c_cpp_rust_configuration),
       rust = vim.deepcopy(c_cpp_rust_configuration),
+      go = {
+        {
+          type = 'delve',
+          name = 'Debug',
+          request = 'launch',
+          program = '${file}',
+        },
+        {
+          type = 'delve',
+          name = 'Debug Test',
+          request = 'launch',
+          mode = 'test',
+          program = '${file}',
+        },
+        {
+          type = 'delve',
+          name = 'Debug Test (go.mod)',
+          request = 'launch',
+          mode = 'test',
+          program = './${relativeFileDirname}',
+        },
+        {
+          type = 'delve',
+          name = 'Attach to Process',
+          request = 'attach',
+          pid = get_pid,
+          cwd = '${workspaceFolder}',
+        },
+      },
     },
   },
 }
