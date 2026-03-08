@@ -1,4 +1,4 @@
-local c_cpp_rust_configuration = {
+local c_cpp_configuration = {
   {
     name = 'Launch File',
     type = 'codelldb',
@@ -22,9 +22,8 @@ return {
     local dap = require('dap')
     dap.adapters = { codelldb = { type = 'executable', command = 'codelldb' } }
     dap.configurations = {
-      c = c_cpp_rust_configuration,
-      cpp = c_cpp_rust_configuration,
-      rust = c_cpp_rust_configuration,
+      c = c_cpp_configuration,
+      cpp = c_cpp_configuration,
     }
   end,
 }
