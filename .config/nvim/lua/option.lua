@@ -41,6 +41,7 @@ vim.g.lightboat_opt = {
     uiinput:map('n', '<Esc>', function() on_done(nil) end, { noremap = true, nowait = true })
     uiinput:map('n', '<c-c>', function() on_done(nil) end, { noremap = true, nowait = true })
     uiinput:map('i', '<c-c>', function() on_done(nil) end, { noremap = true, nowait = true })
+    uiinput:map('i', '<c-w>', '<c-s-w>', { noremap = true, nowait = true })
     uiinput:on(event.BufEnter, function()
       if should_be_normal then
         vim.cmd('stopinsert | norm! 0')
