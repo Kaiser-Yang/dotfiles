@@ -50,7 +50,6 @@ return {
     -- stylua: ignore start
     local insert_and_normal = {
       ['<cr>'] = { a.select_default, type = 'action', opts = { desc = 'Select Default' } },
-      ['<c-c>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
       ['<c-s>'] = { a.select_horizontal, type = 'action', opts = { desc = 'Select Horizontal' } },
       ['<c-v>'] = { a.select_vertical, type = 'action', opts = { desc = 'Select Vertical' } },
       ['<c-t>'] = { a.select_tab, type = 'action', opts = { desc = 'Select Tab' } },
@@ -88,6 +87,7 @@ return {
       -- Used to delete one word before
       -- See https://github.com/nvim-telescope/telescope.nvim/issues/1579#issuecomment-989767519
       ['<c-w>'] = { '<c-s-w>', type = 'command' },
+      ['<c-c>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
       ['<c-r><c-w>'] = { a.insert_original_cword, type = 'action', opts = { desc = 'Insert Cword' } },
       ['<c-r><c-a>'] = { a.insert_original_cWORD, type = 'action', opts = { desc = 'Insert CWORD' } },
       ['<c-r><c-f>'] = { a.insert_original_cfile, type = 'action', opts = { desc = 'Insert Cfile' } },

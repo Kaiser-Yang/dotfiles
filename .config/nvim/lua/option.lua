@@ -76,7 +76,6 @@ vim.g.lightboat_opt = {
     uiinput:on(event.BufLeave, function() on_done(nil) end, { once = true })
     uiinput:map('n', 'q', function() on_done(nil) end, { noremap = true, nowait = true })
     uiinput:map('n', '<Esc>', function() on_done(nil) end, { noremap = true, nowait = true })
-    uiinput:map('n', '<c-c>', function() on_done(nil) end, { noremap = true, nowait = true })
     uiinput:map('i', '<c-c>', function() on_done(nil) end, { noremap = true, nowait = true })
     uiinput:map('i', '<c-w>', '<c-s-w>', { noremap = true, nowait = true })
     uiinput:on(event.BufEnter, function()
@@ -99,7 +98,6 @@ vim.g.lightboat_opt = {
     uiselect:on(event.BufLeave, function() on_done(nil, nil) end, { once = true })
     uiselect:map('n', 'q', function() on_done(nil, nil) end, { noremap = true, nowait = true })
     uiselect:map('n', '<Esc>', function() on_done(nil, nil) end, { noremap = true, nowait = true })
-    uiselect:map('n', '<c-c>', function() on_done(nil, nil) end, { noremap = true, nowait = true })
     if #items <= 10 then
       for i = 1, math.min(10, #items) do
         uiselect:map('n', tostring(i % 10), function() on_done(items[i], i) end, { noremap = true, nowait = true })
