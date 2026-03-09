@@ -1,4 +1,13 @@
 local command = {
+  DapClearCache = {
+    callback = function()
+      vim.g.dap_exe = nil
+      vim.g.dap_pid = nil
+      vim.g.dap_pname = nil
+      vim.g.dap_server = nil
+    end,
+    opt = { nargs = 0, bar = true },
+  },
   DetectConflictAndLoad = {
     callback = function()
       local conflicts = {}
@@ -14,7 +23,11 @@ local command = {
         { text = true, cwd = vim.fn.getcwd() },
         function(result)
           if result.code ~= 0 then
-            vim.schedule_wrap(vim.notify)('Error running git command: ' .. result.stderr, vim.log.levels.ERROR, { title = 'Light Boat' })
+            vim.schedule_wrap(vim.notify)(
+              'Error running git command: ' .. result.stderr,
+              vim.log.levels.ERROR,
+              { title = 'Light Boat' }
+            )
             return
           end
           local files = vim.split(result.stdout, '\n', { trimempty = true })
