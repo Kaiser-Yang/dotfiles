@@ -39,7 +39,7 @@ vim.g.lightboat_opt = {
       or prompt:find('New Name')
     ) and default:sub(-1) ~= '/'
     local should_map_y_and_n = prompt:find('[yY]es/[nN]o') or prompt:find('[yY]/[nN]')
-    uiinput:on(event.BufLeave, function() on_done(nil) end, { once = true })
+    uiinput:on(event.BufLeave, function() uiinput:unmount() end, { once = true })
     uiinput:map('n', 'q', function() on_done(nil) end, { noremap = true, nowait = true })
     uiinput:map('n', '<Esc>', function() on_done(nil) end, { noremap = true, nowait = true })
     uiinput:map('i', '<c-c>', function() on_done(nil) end, { noremap = true, nowait = true })
@@ -61,7 +61,7 @@ vim.g.lightboat_opt = {
   ---@diagnostic disable-next-line: unused-local
   ui_select_on_init = function(uiselect, items, opts, on_done)
     local event = require('nui.utils.autocmd').event
-    uiselect:on(event.BufLeave, function() on_done(nil, nil) end, { once = true })
+    uiselect:on(event.BufLeave, function() uiselect:unmount() end, { once = true })
     uiselect:map('n', 'q', function() on_done(nil, nil) end, { noremap = true, nowait = true })
     uiselect:map('n', '<Esc>', function() on_done(nil, nil) end, { noremap = true, nowait = true })
     if #items <= 10 then
