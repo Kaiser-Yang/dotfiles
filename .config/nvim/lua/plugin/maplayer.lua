@@ -282,7 +282,7 @@ return {
 
       -- Debugger
       { key = '<leader>tb', desc = 'Breakpoint', handler = '<cmd>DapToggleBreakpoint<cr>' },
-      { key = '<leader>td', desc = 'Dap UI', handler = h.toggle_dap_ui },
+      { key = '<leader>td', desc = 'Dap View', handler = h.toggle_dap_view },
       { key = '<leader>dl', desc = 'Set Log Point', handler = h.set_log_point },
       { key = '<leader>dc', desc = 'Set Condition Breakpoint', handler = h.set_condition_breakpoint },
       { key = '<leader>dC', desc = 'Clear Breakpoint', handler = '<cmd>DapClearBreakpoints<cr>' },

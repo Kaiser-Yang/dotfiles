@@ -1,5 +1,5 @@
 {
-  "LightBoat": { "branch": "master", "commit": "7798b1177f9a230fc633cc8f583591b8a6bcd218" },
+  "LightBoat": { "branch": "master", "commit": "419205ca2e09c06330e95b89fbcc1b2981fcf7e7" },
   "blink-cmp-dictionary": { "branch": "master", "commit": "35142bba869b869715e91a99d2f46bcf93fca4ae" },
   "blink.cmp": { "branch": "main", "commit": "4b18c32adef2898f95cdef6192cbd5796c1a332d" },
   "blink.download": { "branch": "main", "commit": "86361b98f3c8317904a08e3bd12cf3cdcbe3e925" },
@@ -22,9 +22,9 @@
   "nvim-dap-go": { "branch": "main", "commit": "b4421153ead5d726603b02743ea40cf26a51ed5f" },
   "nvim-dap-python": { "branch": "master", "commit": "1808458eba2b18f178f990e01376941a42c7f93b" },
   "nvim-dap-ui": { "branch": "master", "commit": "cf91d5e2d07c72903d052f5207511bf7ecdb7122" },
+  "nvim-dap-view": { "branch": "main", "commit": "4f9069096f5616f12a73b9287586d21eb1e4fdb0" },
   "nvim-dap-virtual-text": { "branch": "master", "commit": "fbdb48c2ed45f4a8293d0d483f7730d24467ccb6" },
   "nvim-lspconfig": { "branch": "master", "commit": "2b87d107942b9eebef768512f5849330335a9493" },
-  "nvim-nio": { "branch": "master", "commit": "21f5324bfac14e22ba26553caf69ec76ae8a7662" },
   "nvim-surround": { "branch": "main", "commit": "5553dd1fbb3559abb176a8227a12e8f1cab07e93" },
   "nvim-tree.lua": { "branch": "master", "commit": "4b30847c91d498446cb8440c03031359b045e050" },
   "nvim-treesitter": { "branch": "main", "commit": "1970f0d3bbb99c7659e58914948749437c7b7398" },
