@@ -1,13 +1,4 @@
 local command = {
-  DapClearCache = {
-    callback = function()
-      vim.g.dap_exe = nil
-      vim.g.dap_pid = nil
-      vim.g.dap_pname = nil
-      vim.g.dap_server = nil
-    end,
-    opt = { nargs = 0, bar = true },
-  },
   DetectConflictAndLoad = {
     callback = function()
       local conflicts = {}

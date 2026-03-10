@@ -1,31 +1,33 @@
 local function get_exe()
-  if type(vim.g.dap_exe) == 'string' and vim.g.dap_exe ~= '' then return vim.g.dap_exe end
-  local default = vim.fn.getcwd() .. '/'
-  vim.g.dap_exe = vim.fn.input('Path to Executable', default, 'file')
-  return vim.g.dap_exe
+  return coroutine.create(function(dap_run_co)
+    vim.ui.input({
+      prompt = 'Path to Executable',
+      default = vim.fn.getcwd() .. '/',
+    }, function(input) coroutine.resume(dap_run_co, input) end)
+  end)
 end
+
 local function get_pid()
-  if type(vim.g.dap_pid) == 'number' then return vim.g.dap_pid end
-  local dap = require('dap')
-  if vim.g.dap_pname and vim.g.dap_pname ~= '' then return dap.utils.pick_process({ filter = vim.g.dap_pname }) end
-  local default = vim.fn.getcwd() .. '/'
-  local id_or_name = vim.fn.input('Process ID or Executable Name (Filter)', default, 'file')
-  local pid = tonumber(id_or_name)
-  if pid then
-    vim.g.dap_pid = pid
-    return vim.g.dap_pid
-  else
-    vim.g.dap_pname = id_or_name
-  end
-  return dap.utils.pick_process({ filter = vim.g.dap_pname })
+  return coroutine.create(function(dap_run_co)
+    vim.ui.input({
+      prompt = 'Process ID',
+    }, function(input)
+      local pid = tonumber(input)
+      coroutine.resume(dap_run_co, pid)
+    end)
+  end)
 end
-local function get_server()
-  if type(vim.g.dap_server) == 'string' and vim.g.dap_server ~= '' then return vim.g.dap_server end
-  local default = 'localhost:1234'
-  vim.g.dap_server = vim.fn.input('Server IP and Host', default)
-  return vim.g.dap_server
+
+local function get_arg()
+  return coroutine.create(function(dap_run_co)
+    vim.ui.input({ prompt = 'Arg' }, function(input)
+      local args = vim.split(input or '', ' ')
+      coroutine.resume(dap_run_co, args)
+    end)
+  end)
 end
-local c_cpp_configuration = {
+
+local c_cpp_rust_configuration = {
   {
     name = 'Launch (codelldb)',
     type = 'codelldb',
@@ -34,13 +36,23 @@ local c_cpp_configuration = {
     cwd = '${workspaceFolder}',
   },
   {
+    name = 'Launch with Arg (codelldb)',
+    type = 'codelldb',
+    request = 'launch',
+    program = get_exe,
+    args = get_arg,
+    cwd = '${workspaceFolder}',
+  },
+  {
     name = 'Attach (codelldb)',
     type = 'codelldb',
     request = 'attach',
     pid = get_pid,
-    program = get_exe,
     cwd = '${workspaceFolder}',
   },
+  -- NOTE:
+  -- For gdb, we can not input or output to terminal
+  -- https://sourceware.org/gdb/current/onlinedocs/gdb.html/Debugger-Adapter-Protocol.html#Debugger-Adapter-Protocol
   {
     name = 'Launch (gdb)',
     type = 'gdb',
@@ -50,19 +62,19 @@ local c_cpp_configuration = {
     stopAtBeginningOfMainSubprogram = false,
   },
   {
+    name = 'Launch with Arg (gdb)',
+    type = 'gdb',
+    request = 'launch',
+    program = get_exe,
+    args = get_arg,
+    cwd = '${workspaceFolder}',
+    stopAtBeginningOfMainSubprogram = false,
+  },
+  {
     name = 'Attach (gdb)',
     type = 'gdb',
     request = 'attach',
     pid = get_pid,
-    program = get_exe,
-    cwd = '${workspaceFolder}',
-  },
-  {
-    name = 'Remote (gdb)',
-    type = 'gdb',
-    request = 'attach',
-    target = get_server,
-    program = get_exe,
     cwd = '${workspaceFolder}',
   },
 }
@@ -118,8 +130,9 @@ return {
       end,
     }
     dap.configurations = {
-      c = c_cpp_configuration,
-      cpp = c_cpp_configuration,
+      c = c_cpp_rust_configuration,
+      cpp = c_cpp_rust_configuration,
+      rust = c_cpp_rust_configuration,
       python = {
         {
           name = 'Launch',

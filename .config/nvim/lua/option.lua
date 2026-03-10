@@ -48,7 +48,7 @@ vim.g.lightboat_opt = {
       if should_be_normal then
         vim.cmd('stopinsert | norm! 0')
       else
-        vim.cmd('startinsert')
+        vim.cmd('startinsert!')
       end
     end, { once = true })
     if should_map_y_and_n then
