@@ -11,18 +11,32 @@ local function get_pid()
   return coroutine.create(function(dap_run_co)
     vim.ui.input({
       prompt = 'Process ID',
-    }, function(input)
-      local pid = tonumber(input)
-      coroutine.resume(dap_run_co, pid)
-    end)
+    }, function(input) coroutine.resume(dap_run_co, tonumber(input)) end)
   end)
 end
 
 local function get_arg()
   return coroutine.create(function(dap_run_co)
-    vim.ui.input({ prompt = 'Arg' }, function(input)
-      local args = vim.split(input or '', ' ')
-      coroutine.resume(dap_run_co, args)
+    vim.ui.input({ prompt = 'Arg' }, function(input) coroutine.resume(dap_run_co, vim.split(input or '', ' ')) end)
+  end)
+end
+
+local function get_connect()
+  return coroutine.create(function(dap_run_co)
+    vim.ui.input({
+      prompt = 'Attach to Server',
+      default = 'localhost:1234',
+    }, function(input)
+      local res = nil
+      if input then
+        local parts = vim.split(input, ':')
+        if #parts == 2 then
+          local host = parts[1]
+          local port = tonumber(parts[2])
+          if port then res = { host = host, port = port } end
+        end
+      end
+      coroutine.resume(dap_run_co, res)
     end)
   end)
 end
@@ -143,14 +157,19 @@ return {
           pythonPath = 'python',
         },
         {
+          name = 'Launch with Arg',
+          type = 'debugpy',
+          request = 'launch',
+          program = get_exe,
+          args = get_arg,
+          console = 'integratedTerminal',
+          pythonPath = 'python',
+        },
+        {
           name = 'Attach to Server',
           type = 'debugpy',
           request = 'attach',
-          connect = function()
-            get_server()
-            local host, port = unpack(vim.split(vim.g.dap_server, ':'))
-            return { host = host, port = port }
-          end,
+          connect = get_connect,
         },
       },
       go = {
