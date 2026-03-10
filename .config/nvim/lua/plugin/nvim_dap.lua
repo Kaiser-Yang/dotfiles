@@ -124,23 +124,26 @@ return {
           cb(adapter)
         end
       end,
-      delve = function(cb, config)
-        if config.mode == 'remote' and config.request == 'attach' then
-          cb({
-            type = 'server',
-            host = config.host or '127.0.0.1',
-            port = config.port or '38697',
-          })
-        else
-          cb({
-            type = 'server',
-            port = '${port}',
-            executable = {
-              command = 'dlv',
-              args = { 'dap', '-l', '127.0.0.1:${port}', '--log', '--log-output=dap' },
-            },
-          })
+      delve = function(callback, client_config)
+        local delve_config = {
+          type = 'server',
+          port = '${port}',
+          executable = { command = 'dlv', args = { 'dap', '-l', '127.0.0.1:${port}' } },
+          options = { initialize_timeout_sec = 20 },
+        }
+
+        if client_config.port == nil then
+          callback(delve_config)
+          return
         end
+
+        local host = client_config.host
+        if host == nil then host = '127.0.0.1' end
+
+        local listener_addr = host .. ':' .. client_config.port
+        delve_config.port = client_config.port
+        delve_config.executable.args = { 'dap', '-l', listener_addr }
+        callback(delve_config)
       end,
     }
     dap.configurations = {
@@ -178,12 +181,22 @@ return {
           type = 'delve',
           request = 'launch',
           program = '${file}',
+          outputMode = 'remote',
+        },
+        {
+          name = 'Launch with Arg',
+          type = 'delve',
+          request = 'launch',
+          program = '${file}',
+          args = get_arg,
+          outputMode = 'remote',
         },
         {
           name = 'Launch (Package)',
           type = 'delve',
           request = 'launch',
           program = '${fileDirname}',
+          outputMode = 'remote',
         },
         {
           name = 'Launch (Test)',
@@ -191,6 +204,7 @@ return {
           request = 'launch',
           mode = 'test',
           program = '${file}',
+          outputMode = 'remote',
         },
         {
           name = 'Launch (Test go.mod)',
@@ -198,6 +212,7 @@ return {
           request = 'launch',
           mode = 'test',
           program = './${relativeFileDirname}',
+          outputMode = 'remote',
         },
         {
           name = 'Attach',
