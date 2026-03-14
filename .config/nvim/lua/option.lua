@@ -138,6 +138,7 @@ vim.g.big_file_callback = function(data)
   end
   if data.new_status == data.old_status then return end
   if data.new_status then
+    vim.b.blink_pairs = false
     vim.b.conform_on_save = false
     vim.b.treesitter_foldexpr_auto_set = false
     vim.b.treesitter_indentexpr_auto_set = false
@@ -157,6 +158,7 @@ vim.g.big_file_callback = function(data)
     -- Using enable here will automatically disable context for big files
     if _G.plugin_loaded['nvim-treesitter-context'] then require('treesitter-context').enable() end
   else
+    vim.b.blink_pairs = nil
     vim.b.conform_on_save = nil
     vim.b.treesitter_foldexpr_auto_set = nil
     vim.b.treesitter_indentexpr_auto_set = nil
