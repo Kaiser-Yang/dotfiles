@@ -46,6 +46,9 @@ return {
     local h = require('lightboat.handler')
     local l_dir = vim.fn.fnameescape(u.lazy_path())
     local c_dir = vim.fn.fnameescape(vim.fn.stdpath('config'))
+    local record_jump_position_wrap = function(key)
+      return function() return (vim.v.count > 5 and 'm`' .. vim.v.count1 or '') .. key end
+    end
     -- stylua: ignore start
     require('maplayer').setup({
       -- Basic
@@ -73,6 +76,8 @@ return {
       { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.toggle_treesitter },
       { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.select_file, fallback = false },
       { key = '&', desc = 'Last Substitute with Flag', handler = '<cmd>&&<cr>', fallback = false },
+      { key = 'j', desc = 'Record Position Before Movement', handler = record_jump_position_wrap('j') },
+      { key = 'k', desc = 'Record Position Before Movement', handler = record_jump_position_wrap('k') },
 
       -- Repmove Motion
       { key = ';', mode = 'nx', desc = 'Repeat Last Motion Forward', handler = h.semicolon, count = true, fallback = false },

@@ -15,6 +15,7 @@ vim.g.lightboat_opt = {
     'gopls',
     'typescript-language-server',
     'sqls',
+    'thriftls',
     'stylua',
     'clang-format',
     'black',
@@ -121,18 +122,9 @@ vim.g.treesitter_indentexpr_auto_set = true
 vim.g.treesitter_highlight_auto_start = true
 vim.g.treesitter_foldexpr_auto_set = true
 vim.g.nohlsearch_auto_run = true
-vim.g.big_file_limit = 1024 * 1024 -- 1 MB
+vim.g.big_file_limit = 2 * 1024 * 1024 -- 2 MB
 vim.g.big_file_average_every_line = 200 -- Unit: B
-local original = {}
 vim.g.big_file_callback = function(data)
-  if not original[data.buffer] then original[data.buffer] = {} end
-  if
-    not original[data.buffer].indentexpr
-    and vim.bo.indentexpr ~= ''
-    and vim.bo.indentexpr ~= "v:lua.require'nvim-treesitter'.indentexpr()"
-  then
-    original[data.buffer].indentexpr = vim.bo.indentexpr
-  end
   if data.new_status and vim.bo.filetype ~= '' and not vim.bo.filetype:find('bigfile') then
     vim.cmd('noautocmd setlocal filetype=' .. vim.bo.filetype .. 'bigfile')
   end
@@ -143,7 +135,6 @@ vim.g.big_file_callback = function(data)
     vim.b.treesitter_foldexpr_auto_set = false
     vim.b.treesitter_indentexpr_auto_set = false
     vim.b.treesitter_highlight_auto_start = false
-    vim.bo.indentexpr = original[data.buffer].indentexpr or ''
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == data.buffer then
         vim.wo[win][0].foldmethod = 'manual'
