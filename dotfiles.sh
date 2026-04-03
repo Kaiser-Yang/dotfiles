@@ -61,6 +61,7 @@ fi
 if [[ "$(uname)" == "Darwin" ]]; then
     DIRS+=("./.hammerspoon/init.lua")
     COMMANDS_AFTER_INSTALLATION+=(
+        "defaults write -g ApplePressAndHoldEnabled -bool false"
         "defaults write com.apple.dock autohide-delay 0"
         "cp .config/karabiner/karabiner.json ~/.config/karabiner/"
     )

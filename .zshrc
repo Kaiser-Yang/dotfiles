@@ -116,17 +116,6 @@ alias tmls='tmux ls'
 alias tmatc='tmux attach -t'
 alias tmksv='tmux kill-server'
 alias tmkss='tmux kill-session -t'
-# alias tmlsbf='tmux list-buffers'
-# alias tmlscli='tmux list-clients'
-# alias tmlscmd='tmux list-commands'
-# alias tmlsk='tmux list-keys'
-# alias tmlspn='tmux list-panes'
-# alias tmlsss='tmux list-session'
-# alias tmlswd='tmux list-window'
-# alias tmnss='tmux new-session -s'
-# alias tmswt='tmux switch -t'
-# alias tmrnss='tmux rename-session -t'
-# alias tmrnwd='tmux rename-window -t'
 
 export EDITOR=nvim
 
@@ -161,10 +150,3 @@ if [ -d "$HOME/opt/miniconda3" ]; then
       source $HOME/.config/tmux/plugins/conda_inherit.sh
     fi
 fi
-
-# export FZF_DEFAULT_OPTS=" \
-# --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
-# --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
-# --color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
-# --color=selected-bg:#45475a \
-# --multi"
