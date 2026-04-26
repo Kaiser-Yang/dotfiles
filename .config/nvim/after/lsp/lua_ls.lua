@@ -1,9 +1,8 @@
 return {
   on_init = function(client)
     if not client.workspace_folders then return end
-    local util = require('lightboat.util')
-    if not util.in_config_dir() then return end
-    local lazy_path = util.lazy_path()
+    local u = require('utils')
+    if not u.in_config_dir() then return end
     client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
       runtime = {
         version = 'LuaJIT',
@@ -13,7 +12,6 @@ return {
         checkThirdParty = false,
         library = {
           vim.env.VIMRUNTIME,
-          lazy_path .. '/LightBoat',
           '${3rd}/luv/library',
         },
       },
