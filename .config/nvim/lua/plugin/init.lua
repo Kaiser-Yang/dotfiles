@@ -65,7 +65,7 @@ vim.schedule(function()
     u.gh('saghen/blink.indent'),
     u.gh('neovim/nvim-lspconfig'),
     u.gh('mason-org/mason.nvim'),
-  })
+  }, { confirm = false })
   require('plugin.dap')
   require('plugin.edit')
   require('plugin.git')
