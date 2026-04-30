@@ -30,8 +30,8 @@ local first_to_second = {
   right = 'left',
 }
 --- @param border 'top' | 'bottom' | 'left' | 'right'
---- @param reverse boolean
---- @param abs_delta integer
+--- @param reverse? boolean
+--- @param abs_delta? integer
 --- @param first 'top' | 'bottom' | 'left' | 'right' | nil
 function M.resize_wrap(border, reverse, abs_delta, first)
   abs_delta = abs_delta or 3
