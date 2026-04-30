@@ -34,5 +34,5 @@ vim.g.big_file_limit = 3 * 1024 * 1024 -- 3 MB
 vim.g.big_file_average_every_line = nil -- Unit: B, nil for no limit
 
 require('vim._core.ui2').enable()
-require('plugin')
 require('config')
+require('plugin')
