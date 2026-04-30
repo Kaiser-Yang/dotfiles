@@ -145,6 +145,7 @@ local function load_pair()
     },
     highlights = {
       enabled = true,
+      cmdline = true,
       groups = {
         'BlinkPairsRed',
         'BlinkPairsOrange',
@@ -157,7 +158,7 @@ local function load_pair()
       unmatched_group = 'BlinkPairsUnmatched',
       matchparen = {
         enabled = true,
-        cmdline = pcall(require, 'vim._extui'),
+        cmdline = true,
         include_surrounding = false,
         group = 'BlinkPairsMatchParen',
         priority = 250,
