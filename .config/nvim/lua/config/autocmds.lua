@@ -6,7 +6,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
     local old_status = vim.b.big_file_status or false
     vim.b.big_file_status = u.buffer.big(ev.buf, ev.event)
     local new_status = vim.b.big_file_status
-    local buffer = ev.buf
+    local bufnr = ev.buf
     if new_status and vim.bo.filetype ~= '' and not vim.bo.filetype:find('bigfile') then
       vim.cmd('noautocmd setlocal filetype=' .. vim.bo.filetype .. 'bigfile')
     end
@@ -17,26 +17,29 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
       vim.b.treesitter_foldexpr_auto_set = false
       vim.b.treesitter_highlight_auto_start = false
       for _, win in ipairs(vim.api.nvim_list_wins()) do
-        if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == buffer then
+        if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == bufnr then
           vim.wo[win][0].foldmethod = 'manual'
           vim.wo[win][0].foldexpr = '0'
         end
       end
-      for _, client in pairs(vim.lsp.get_clients({ bufnr = buffer })) do
-        vim.lsp.buf_detach_client(buffer, client.id)
+      for _, client in pairs(vim.lsp.get_clients({ bufnr = bufnr })) do
+        vim.lsp.buf_detach_client(bufnr, client.id)
       end
-      if vim.treesitter.highlighter.active[buffer] ~= nil then vim.treesitter.stop(buffer) end
-      require('nvim-treesitter.endwise').detach(buffer)
+      if vim.treesitter.highlighter.active[bufnr] ~= nil then vim.treesitter.stop(bufnr) end
+      local ok, plugin = pcall(require, 'nvim-treesitter.endwise')
+      if ok then plugin.detach(bufnr) end
+      ok, plugin = pcall(require, 'treesitter-context')
       -- Using enable here will automatically disable context for big files
-      require('treesitter-context').enable()
+      if ok then plugin.enable() end
     else
       vim.b.blink_pairs = nil
       vim.b.conform_on_save = nil
       vim.b.treesitter_foldexpr_auto_set = nil
       vim.b.treesitter_highlight_auto_start = nil
       -- Trigger the FileType autocommand to let LSP, indentexpr, endwise and foldexpr set up
-      if vim.bo.filetype ~= '' then vim.bo.filetype = vim.bo.filetype:gsub('bigfile', '') end
-      require('treesitter-context').enable()
+      vim.bo.filetype = vim.bo.filetype:gsub('bigfile', '')
+      local ok, plugin = pcall(require, 'treesitter-context')
+      if ok then plugin.enable() end
     end
   end,
 })
@@ -76,10 +79,10 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
 
 vim.api.nvim_create_autocmd('FileType', {
   callback = function()
-    if u.treesitter_available('highlights') and u.enabled('treesitter_highlight_auto_start') then
+    if u.enabled('treesitter_highlight_auto_start') and u.treesitter_available('highlights') then
       vim.treesitter.start()
     end
-    if u.treesitter_available('folds') and u.enabled('treesitter_foldexpr_auto_set') then
+    if u.enabled('treesitter_foldexpr_auto_set') and u.treesitter_available('folds') then
       vim.wo[0][0].foldmethod = 'expr'
       vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     end
@@ -136,7 +139,6 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
   once = true,
 })
-
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
   callback = function()
     if vim.v.event.regname ~= '' and vim.v.event.regname ~= '"' then
