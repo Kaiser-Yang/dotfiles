@@ -22,6 +22,7 @@ local function load_blink()
         lsp = { fallbacks = {} },
         path = { opts = { show_hidden_files_by_default = true } },
         snippets = { name = 'Snip' },
+        cmdline = { name = 'CMD' },
         buffer = {
           name = 'Buf',
           score_offset = -10,
@@ -49,7 +50,6 @@ local function load_blink()
             return out
           end,
         },
-        cmdline = { name = 'CMD' },
         dictionary = {
           name = 'Dict',
           score_offset = -10,
