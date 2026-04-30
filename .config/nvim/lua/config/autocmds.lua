@@ -98,7 +98,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
       { 'n', 'K', vim.lsp.buf.hover, { desc = 'Hover' } },
       { 'n', 'grn', vim.lsp.buf.rename, { desc = 'Rename Symbol' } },
       { 'n', 'gra', vim.lsp.buf.code_action, { desc = 'Code Action' } },
-      { 'n', 'grx', vim.lsp.codelens.run(), { desc = 'Codelens' } },
+      { 'n', 'grx', vim.lsp.codelens.run, { desc = 'Codelens' } },
       { 'n', 'grr', '<cmd>Telescope lsp_references<cr>', { desc = 'References' } },
       { 'n', 'grI', '<cmd>Telescope lsp_implementations<cr>', { desc = 'Go to Implementation' } },
       { 'n', 'gri', '<cmd>Telescope lsp_incoming_calls<cr>', { desc = 'Incoming Call' } },
