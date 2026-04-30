@@ -29,6 +29,7 @@ vim.o.autowriteall = true
 vim.o.cmdwinheight = 10
 vim.o.showmode = false
 vim.o.ttimeout = false
+vim.o.cmdheight = 0
 
 local function fold_clickable()
   local lnum = vim.v.lnum

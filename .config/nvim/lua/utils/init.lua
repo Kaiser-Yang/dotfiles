@@ -90,7 +90,6 @@ function M.update_selection(start_row, start_col, end_row, end_col, selection_mo
   vim.api.nvim_win_set_cursor(0, { end_row + 1, end_col })
 end
 
-local original_cmdheight = nil
 --- @param cmd string
 --- @param bufnr integer|nil
 --- @param border string|nil
@@ -133,18 +132,6 @@ function M.terminal(cmd, bufnr, border)
     vim.bo[term_buf].swapfile = false
     vim.bo[term_buf].bufhidden = 'hide'
   end
-  original_cmdheight = vim.o.cmdheight
-  vim.o.cmdheight = 0
-  vim.api.nvim_create_autocmd('BufLeave', {
-    buffer = term_buf,
-    once = true,
-    callback = function()
-      if original_cmdheight ~= nil then
-        vim.o.cmdheight = original_cmdheight
-        original_cmdheight = nil
-      end
-    end,
-  })
   vim.cmd('startinsert')
   vim.cmd('nohlsearch')
   return term_buf, term_win
