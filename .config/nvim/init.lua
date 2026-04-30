@@ -28,7 +28,7 @@ vim.g.conform_formatexpr_auto_set = true
 vim.g.treesitter_highlight_auto_start = true
 vim.g.treesitter_foldexpr_auto_set = true
 vim.g.big_file_limit = 3 * 1024 * 1024 -- 3 MB
-vim.g.big_file_average_every_line = 1000 -- Unit: B
+vim.g.big_file_average_every_line = nil -- Unit: B, nil for no limit
 
 require('plugin')
 require('config')
