@@ -66,8 +66,22 @@ local command = {
     opt = { nargs = 0, bar = true },
   },
   BuildPlugin = {
-    callback = u.build_plugin,
-    opt = { nargs = 0, bar = true },
+    callback = function(args)
+      local list = nil
+      if args.args ~= '' then list = vim.split(args.args, '%s+', { trimempty = true }) end
+      u.build_plugin(list)
+    end,
+    opt = {
+      nargs = '?',
+      bar = true,
+      complete = function()
+        return {
+          'telescope-fzf-native.nvim',
+          'nvim-treesitter',
+          'blink.cmp',
+        }
+      end,
+    },
   },
 }
 for name, c in pairs(command) do

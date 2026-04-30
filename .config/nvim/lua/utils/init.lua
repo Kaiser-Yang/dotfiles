@@ -141,12 +141,24 @@ function M.in_macro_executing() return vim.fn.reg_executing() ~= '' end
 
 function M.lazy_path() return vim.fn.stdpath('data') .. '/site/pack/core/opt' end
 
-function M.build_plugin(name)
+local function build_plugin_internal(name)
   if name == nil or name == 'telescope-fzf-native.nvim' then
-    vim.system({ 'make' }, { cwd = M.lazy_path() .. '/' .. name })
+    vim.system({ 'make' }, { cwd = M.lazy_path() .. '/telescope-fzf-native.nvim' })
   end
   if name == nil or name == 'nvim-treesitter' then vim.cmd('TSUpdate') end
   if name == nil or name == 'blink.cmp' then require('blink.cmp').build():wait(60000) end
+end
+
+function M.build_plugin(names)
+  -- empty table to build all plugins
+  if type(names) == 'table' and #names == 0 then names = nil end
+  if type(names) == 'table' then
+    for _, name in ipairs(names) do
+      build_plugin_internal(name)
+    end
+  else
+    build_plugin_internal(names)
+  end
 end
 
 return M
