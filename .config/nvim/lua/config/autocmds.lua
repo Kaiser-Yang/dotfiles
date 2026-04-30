@@ -1,5 +1,4 @@
 local u = require('utils')
-local h = require('handler')
 
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
   callback = function(ev)
@@ -26,11 +25,11 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
         vim.lsp.buf_detach_client(bufnr, client.id)
       end
       if vim.treesitter.highlighter.active[bufnr] ~= nil then vim.treesitter.stop(bufnr) end
-      local ok, plugin = pcall(require, 'nvim-treesitter.endwise')
-      if ok then plugin.detach(bufnr) end
-      ok, plugin = pcall(require, 'treesitter-context')
+      local plugin = vim.pack.get({ 'nvim-treesitter-endwise' })
+      if #plugin > 0 and plugin[1].active then require('nvim-treesitter.endwise').detach(bufnr) end
+      plugin = vim.pack.get({ 'nvim-treesitter-context' })
       -- Using enable here will automatically disable context for big files
-      if ok then plugin.enable() end
+      if #plugin > 0 and plugin[1].active then require('treesitter-context').enable() end
     else
       vim.b.blink_pairs = nil
       vim.b.conform_on_save = nil
@@ -38,8 +37,8 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
       vim.b.treesitter_highlight_auto_start = nil
       -- Trigger the FileType autocommand to let LSP, indentexpr, endwise and foldexpr set up
       vim.bo.filetype = vim.bo.filetype:gsub('bigfile', '')
-      local ok, plugin = pcall(require, 'treesitter-context')
-      if ok then plugin.enable() end
+      local plugin = vim.pack.get({ 'nvim-treesitter-context' })
+      if #plugin > 0 and plugin[1].active then require('treesitter-context').enable() end
     end
   end,
 })
@@ -143,6 +142,91 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
     else
       unnamed_reg_content = vim.fn.getreg('"')
       unnamed_reg_type = vim.fn.getregtype('"')
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('PackChanged', {
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    if name ~= 'nvim-treesitter' or kind == 'update' then
+      if not ev.data.active then vim.cmd.packadd(name) end
+      u.build_plugin(name)
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  callback = function(ev)
+    if not u.buffer.normal(ev.buf) then return end
+    local plugin = vim.pack.get({ 'guess-indent.nvim' })
+    if #plugin > 0 and plugin[1].active then require('guess-indent').set_from_buffer(ev.buf, true, true) end
+  end,
+})
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
+  callback = function(ev)
+    if not u.enabled('conform_on_save') then return end
+    local buffer = ev.buf
+    local plugin = vim.pack.get({ 'conform.nvim' })
+    if #plugin > 0 and plugin[1].active then
+      require('conform').format({ bufnr = buffer }, function(err)
+        if err then return end
+        plugin = vim.pack.get({ 'guess-indent.nvim' })
+        if #plugin > 0 and plugin[1].active then require('guess-indent').set_from_buffer(ev.buf, true, true) end
+      end)
+    end
+  end,
+})
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
+  callback = function()
+    local plugin = vim.pack.get({ 'conform.nvim' })
+    if #plugin > 0 and plugin[1].active then vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end
+  end,
+})
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('User', {
+  pattern = 'TelescopePreviewerLoaded',
+  callback = function() vim.wo.wrap = true end,
+})
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufEnter', 'QuitPre' }, {
+  nested = false,
+  callback = function(ev)
+    local plugin = vim.pack.get({ 'nvim-tree.lua' })
+    if #plugin == 0 or not plugin[1].active then return end
+    local tree = require('nvim-tree.api').tree
+    if not tree.is_visible() then return end
+
+    -- How many focusable windows do we have? (excluding e.g. incline status window)
+    local winCount = 0
+    local lastWinId
+    for _, winId in ipairs(vim.api.nvim_list_wins()) do
+      if vim.api.nvim_win_get_config(winId).focusable then
+        local buf = vim.api.nvim_win_get_buf(winId)
+        if vim.bo[buf].filetype ~= 'NvimTree' then
+          lastWinId = winId
+          winCount = winCount + 1
+        end
+      end
+    end
+
+    -- We want to quit and only one window besides tree is left
+    if ev.event == 'QuitPre' and winCount == 1 and lastWinId == vim.api.nvim_get_current_win() then
+      vim.api.nvim_cmd({ cmd = 'qall' }, {})
+    end
+
+    -- :bd was probably issued an only tree window is left
+    -- Behave as if tree was closed (see `:h :bd`)
+    if ev.event == 'BufEnter' and winCount == 0 then
+      local should_focus = vim.bo.filetype == 'NvimTree'
+      vim.schedule(function()
+        -- close nvim-tree: will go to the last buffer used before closing
+        tree.toggle()
+        -- re-open nivm-tree
+        tree.toggle({ find_file = false, focus = should_focus })
+      end)
     end
   end,
 })

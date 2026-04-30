@@ -101,12 +101,6 @@ end
 local function load_guess_indent()
   local g = require('guess-indent')
   g.setup({ on_tab_options = { expandtab = false, shiftwidth = 0, softtabstop = 0, tabstop = 8 } })
-  vim.api.nvim_create_autocmd('FileType', {
-    callback = function(ev)
-      if not u.buffer.normal(ev.buf) then return end
-      g.set_from_buffer(ev.buf, true, true)
-    end,
-  })
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if u.buffer.normal(buf) then g.set_from_buffer(buf, true, true) end
   end

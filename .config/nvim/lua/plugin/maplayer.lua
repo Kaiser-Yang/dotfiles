@@ -1,5 +1,6 @@
+local u = require('utils')
+
 local function load_maplayer()
-  local u = require('utils')
   -- We have provide another key binding for commenting current line
   -- We must remove this to make "gc" work
   vim.api.nvim_del_keymap('n', 'gcc')

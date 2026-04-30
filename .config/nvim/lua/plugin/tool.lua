@@ -15,22 +15,7 @@ local function load_conform()
     },
     default_format_opts = { lsp_format = 'fallback', stop_after_first = true },
   })
-
-  vim.api.nvim_create_autocmd('BufWritePre', {
-    callback = function(ev)
-      if not u.enabled('conform_on_save') then return end
-      local buffer = ev.buf
-      require('conform').format({ bufnr = buffer }, function(err)
-        if err then return end
-        vim.schedule_wrap(require('guess-indent').set_from_buffer)(buffer, true, true)
-      end)
-    end,
-  })
-
-  local function setup_conform_expr() vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end
-
-  setup_conform_expr()
-  vim.api.nvim_create_autocmd('LspAttach', { callback = setup_conform_expr })
+  vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 end
 
 local function load_treesitter()
@@ -213,43 +198,6 @@ local function load_nvim_tree()
       },
     },
   })
-  vim.api.nvim_create_autocmd({ 'BufEnter', 'QuitPre' }, {
-    nested = false,
-    callback = function(ev)
-      local tree = require('nvim-tree.api').tree
-      if not tree.is_visible() then return end
-
-      -- How many focusable windows do we have? (excluding e.g. incline status window)
-      local winCount = 0
-      local lastWinId
-      for _, winId in ipairs(vim.api.nvim_list_wins()) do
-        if vim.api.nvim_win_get_config(winId).focusable then
-          local buf = vim.api.nvim_win_get_buf(winId)
-          if vim.bo[buf].filetype ~= 'NvimTree' then
-            lastWinId = winId
-            winCount = winCount + 1
-          end
-        end
-      end
-
-      -- We want to quit and only one window besides tree is left
-      if ev.event == 'QuitPre' and winCount == 1 and lastWinId == vim.api.nvim_get_current_win() then
-        vim.api.nvim_cmd({ cmd = 'qall' }, {})
-      end
-
-      -- :bd was probably issued an only tree window is left
-      -- Behave as if tree was closed (see `:h :bd`)
-      if ev.event == 'BufEnter' and winCount == 0 then
-        local should_focus = vim.bo.filetype == 'NvimTree'
-        vim.schedule(function()
-          -- close nvim-tree: will go to the last buffer used before closing
-          tree.toggle()
-          -- re-open nivm-tree
-          tree.toggle({ find_file = false, focus = should_focus })
-        end)
-      end
-    end,
-  })
 end
 
 local function find_command()
@@ -410,10 +358,6 @@ local function load_telescope()
   t.load_extension('fzf')
   t.load_extension('live_grep_args')
   require('telescope-all-recent').setup({})
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'TelescopePreviewerLoaded',
-    callback = function() vim.wo.wrap = true end,
-  })
 end
 
 local function load_cp()

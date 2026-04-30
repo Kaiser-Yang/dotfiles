@@ -1,3 +1,5 @@
+local u = require('utils')
+
 local function load_win_resizer()
   require('win-resizer').setup({ ignore_filetypes = { 'neo-tree', 'NvimTree', 'Avante', 'AvanteInput' } })
 end

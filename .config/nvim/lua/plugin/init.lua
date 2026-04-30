@@ -1,11 +1,5 @@
 vim.schedule(function()
   local u = require('utils')
-  vim.api.nvim_create_autocmd('PackChanged', {
-    callback = function(ev)
-      local name, kind = ev.data.spec.name, ev.data.kind
-      if name ~= 'nvim-treesitter' or kind == 'update' then u.build_plugin(name) end
-    end,
-  })
   vim.pack.add({
     -- deps
     u.gh('nvim-lua/plenary.nvim'),

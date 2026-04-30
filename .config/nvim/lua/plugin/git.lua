@@ -1,3 +1,5 @@
+local u = require('utils')
+
 local function load_gitsigns()
   require('gitsigns').setup({
     attach_to_untracked = true,
