@@ -3,21 +3,26 @@ vim.g.lightboat_opt = {
   treesitter_ensure_installed = { 'c', 'cpp', 'diff', 'go', 'javascript', 'json', 'python', 'sql' },
   --- @type string[]
   mason_ensure_installed = {
-    'lua-language-server',
+    -- LSP
     'clangd',
-    'pyright',
     'gopls',
-    'typescript-language-server',
+    'lua-language-server',
+    'pyright',
     'thriftls',
-    'stylua',
-    'clang-format',
+    'typescript-language-server',
+
+    -- Formatters
     'black',
+    'clang-format',
     'goimports',
     'prettier',
     'sql-formatter',
+    'stylua',
+
+    -- Debuggers
     'codelldb',
-    'delve',
     'debugpy',
+    'delve',
   },
 }
 vim.g.highlight_on_yank_limit = 1024 * 1024 -- 1 MB
