@@ -27,10 +27,7 @@ local function load_conform()
     end,
   })
 
-  local function setup_conform_expr()
-    if not u.enabled('conform_formatexpr_auto_set') then return end
-    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-  end
+  local function setup_conform_expr() vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end
 
   setup_conform_expr()
   vim.api.nvim_create_autocmd('LspAttach', { callback = setup_conform_expr })
