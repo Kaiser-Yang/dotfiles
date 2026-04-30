@@ -16,7 +16,7 @@ M = vim.tbl_deep_extend('error', M, require('handler.dap'))
 function M.async_format()
   local buf = vim.api.nvim_get_current_buf()
   local res = require('conform').format({ async = true }, function(err)
-    if not u.enabled('conform_on_save_reguess_indent') or err then return end
+    if err then return end
     vim.schedule_wrap(require('guess-indent').set_from_buffer)(buf, true, true)
   end)
   if res ~= nil then return res end

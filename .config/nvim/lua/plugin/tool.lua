@@ -21,7 +21,7 @@ local function load_conform()
       if not u.enabled('conform_on_save') then return end
       local buffer = ev.buf
       require('conform').format({ bufnr = buffer }, function(err)
-        if not u.enabled('conform_on_save_reguess_indent') or err then return end
+        if err then return end
         vim.schedule_wrap(require('guess-indent').set_from_buffer)(buffer, true, true)
       end)
     end,
