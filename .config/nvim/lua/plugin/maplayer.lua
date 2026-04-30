@@ -40,7 +40,6 @@ local function load_maplayer()
     { key = '<m-X>', desc = 'System Cut EOL', handler = h.system_cut_eol, expr = true, fallback = false },
     { key = '<m-/>', mode = 'inx', desc = 'Toggle Comment', handler = h.toggle_comment, fallback = false },
     { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.toggle_lazygit, fallback = false },
-    { key = '<c-h>', mode = 'ci', desc = 'BS', handler = '<bs>', remap = true, fallback = false },
     { key = '<c-w>T', desc = 'Tab Split', handler = '<cmd>tab split<cr>', fallback = false },
     { key = '<leader>R', desc = 'Competi Test Receive File', handler = h.competi_test_receive_file, fallback = false  },
     { key = '<leader>r', desc = 'Competi Test', handler = h.competi_test, fallback = false  },
