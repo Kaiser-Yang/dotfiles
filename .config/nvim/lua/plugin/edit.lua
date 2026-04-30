@@ -10,9 +10,7 @@ end
 
 local function load_blink()
   local sql_sources = { inherit_defaults = false, 'snippets', 'buffer', 'dadbod' }
-  local cmp = require('blink.cmp')
-  cmp.build():wait(60000)
-  cmp.setup({
+  require('blink.cmp').setup({
     sources = {
       default = { 'snippets', 'lsp', 'path', 'buffer', 'dictionary' },
       per_filetype = {

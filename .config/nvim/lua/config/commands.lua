@@ -1,3 +1,4 @@
+local u = require('utils')
 local command = {
   DetectConflictAndLoad = {
     callback = function()
@@ -62,6 +63,10 @@ local command = {
         end
       )
     end,
+    opt = { nargs = 0, bar = true },
+  },
+  BuildPlugin = {
+    callback = u.build_plugin,
     opt = { nargs = 0, bar = true },
   },
 }

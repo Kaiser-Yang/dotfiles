@@ -3,11 +3,7 @@ vim.schedule(function()
   vim.api.nvim_create_autocmd('PackChanged', {
     callback = function(ev)
       local name, kind = ev.data.spec.name, ev.data.kind
-      if name == 'telescope-fzf-native.nvim' then
-        vim.system({ 'make' }, { cwd = ev.data.path })
-      elseif name == 'nvim-treesitter' and kind == 'update' then
-        vim.cmd('TSUpdate')
-      end
+      if name ~= 'nvim-treesitter' or kind == 'update' then u.build_plugin(name) end
     end,
   })
   vim.pack.add({

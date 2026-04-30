@@ -154,4 +154,12 @@ function M.in_macro_executing() return vim.fn.reg_executing() ~= '' end
 
 function M.lazy_path() return vim.fn.stdpath('data') .. '/site/pack/core/opt' end
 
+function M.build_plugin(name)
+  if name == nil or name == 'telescope-fzf-native.nvim' then
+    vim.system({ 'make' }, { cwd = M.lazy_path() .. '/' .. name })
+  end
+  if name == nil or name == 'nvim-treesitter' then vim.cmd('TSUpdate') end
+  if name == nil or name == 'blink.cmp' then require('blink.cmp').build():wait(60000) end
+end
+
 return M
