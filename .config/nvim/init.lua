@@ -1,6 +1,6 @@
 vim.g.lightboat_opt = {
   --- @type string[]
-  treesitter_ensure_installed = { 'cpp', 'go', 'python', 'sql', 'json', 'javascript' },
+  treesitter_ensure_installed = { 'c', 'cpp', 'diff', 'go', 'javascript', 'json', 'python', 'sql' },
   --- @type string[]
   mason_ensure_installed = {
     'lua-language-server',
