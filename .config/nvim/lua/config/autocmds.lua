@@ -54,20 +54,20 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
   end,
 })
 
+local limit = 1024 * 1024 -- 1 MB
+local timeout = 300 -- Unit: ms
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
   callback = function()
-    local limit = vim.b.highlight_on_yank_limit or vim.g.highlight_on_yank_limit
-    local timeout = vim.b.highlight_on_yank_duration or vim.g.highlight_on_yank_duration
     assert(vim.v.event.regcontents)
     local size = 0
     local should_hl = nil
     ---@diagnostic disable-next-line: param-type-mismatch
     for _, line in ipairs(vim.v.event.regcontents) do
       size = size + #line
-      if type(limit) ~= 'number' and size > 0 then
+      if size > 0 then
         should_hl = true
         break
-      elseif type(limit) == 'number' and size > limit then
+      elseif size > limit then
         should_hl = false
         break
       end
