@@ -57,6 +57,10 @@ require('blink.cmp').setup({
       },
       dadbod = {
         name = 'Dadbod',
+        enabled = function()
+          local plugin = vim.pack.get({ 'vim-dadbod-completion' })
+          return #plugin > 0 and plugin[1].active
+        end,
         module = 'vim_dadbod_completion.blink',
       },
     },
