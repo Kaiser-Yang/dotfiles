@@ -1,10 +1,3 @@
-local u = require('utils')
-
-local function load_win_resizer()
-  require('win-resizer').setup({ ignore_filetypes = { 'neo-tree', 'NvimTree', 'Avante', 'AvanteInput' } })
-end
-
-local function load_which_key()
   -- BUG:
   -- this plugin has many bugs
   -- In insert mode, <C-O> with some other keys may not work as expected
@@ -64,7 +57,3 @@ local function load_which_key()
     { ']', desc = 'Next', mode = 'nxo', icon = { icon = ' ', color = 'green' } },
     { 'gr', desc = 'LSP', mode = 'nx', icon = { icon = ' ', color = 'orange' } },
   })
-end
-
-load_win_resizer()
-load_which_key()

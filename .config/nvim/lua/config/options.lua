@@ -30,7 +30,7 @@ vim.o.cmdwinheight = 10
 vim.o.showmode = false
 vim.o.ttimeout = false
 vim.o.cmdheight = 0
-
+vim.o.timeoutlen = 0
 local function fold_clickable()
   local lnum = vim.v.lnum
   return vim.fn.foldlevel(lnum) > vim.fn.foldlevel(lnum - 1) and vim.v.virtnum == 0

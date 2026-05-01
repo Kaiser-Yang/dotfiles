@@ -1,12 +1,3 @@
-local u = require('utils')
-
-local function load_context()
-  require('treesitter-context').setup({
-    max_liens = math.max(vim.o.scrolloff, 5),
-    on_attach = function(buffer) return not u.buffer.big(buffer) end,
-  })
-end
-
 local function ui_input_on_init(uiinput, opt, on_done)
   local event = require('nui.utils.autocmd').event
   local prompt = opt.prompt or ''
@@ -53,102 +44,54 @@ local function ui_select_on_init(uiselect, items, opts, on_done)
   end
 end
 
-local function load_lualine()
-  require('lualine').setup({
-    options = {
-      globalstatus = true,
-      always_divide_middle = true,
-      disabled_filetypes = {
-        winbar = {
-          'dapui_console',
-          'dapui_stacks',
-          'dapui_watches',
-          'dapui_breakpoints',
-          'dapui_hover',
-          'dap-repl',
-          'dap-view',
-          'dap-view-term',
-          'dap-view-help',
-        },
-      },
-      ignore_focus = { 'CompetiTest' },
-    },
-    inactive_winbar = {
-      lualine_a = {
-        {
-          '%=',
-          cond = function() return vim.bo.filetype == 'CompetiTest' end,
-          color = 'WinBarNC',
-        },
-        {
-          function() return vim.b.competitest_title or 'CompetiTest' end,
-          cond = function() return vim.bo.filetype == 'CompetiTest' end,
-          color = 'lualine_a_normal',
-        },
-        {
-          '%=',
-          cond = function() return vim.bo.filetype == 'CompetiTest' end,
-          color = 'WinBarNC',
-        },
-      },
-    },
-    sections = {
-      lualine_c = { 'filename', 'filesize' },
-      lualine_x = { 'lsp_status', 'encoding', 'fileformat', 'filetype' },
-    },
-  })
-end
-
-local function load_todo_comments() require('todo-comments').setup({ sign_priority = 1 }) end
-
-local function load_blink_indent()
-  -- BUG: https://github.com/saghen/blink.indent/issues/47
-  require('blink.indent').setup({
-    mappings = {
-      object_scope = '',
-      object_scope_with_border = '',
-      goto_top = '',
-      goto_bottom = '',
-    },
-    static = {
-      whitespace_char = '·',
-      char = '│',
-    },
-    scope = {
-      enabled = true,
-      char = '│',
-      priority = 1000,
-      highlights = {
-        'BlinkIndentRed',
-        'BlinkIndentOrange',
-        'BlinkIndentYellow',
-        'BlinkIndentGreen',
-        'BlinkIndentBlue',
-        'BlinkIndentCyan',
-        'BlinkIndentViolet',
-      },
-      underline = {
-        enabled = true,
-        highlights = {
-          'BlinkIndentRedUnderline',
-          'BlinkIndentOrangeUnderline',
-          'BlinkIndentYellowUnderline',
-          'BlinkIndentGreenUnderline',
-          'BlinkIndentBlueUnderline',
-          'BlinkIndentCyanUnderline',
-          'BlinkIndentVioletUnderline',
-        },
-      },
-    },
-  })
-end
-
 local function get_prompt_text(prompt, default_prompt)
   local prompt_text = prompt or default_prompt
   if prompt_text:sub(-1) == ':' then prompt_text = '[' .. prompt_text:sub(1, -2) .. ']' end
   return prompt_text
 end
 
+local function override_ui_input()
+  local Input = require('nui.input')
+  local UIInput = Input:extend('UIInput')
+  function UIInput:init(opts, on_done)
+    local border_top_text = get_prompt_text(opts.prompt, '[Input]')
+    local default_value = tostring(opts.default or '')
+    UIInput.super.init(self, {
+      relative = 'cursor',
+      position = { row = 2, col = 0 },
+      size = { width = math.floor(math.max(40, 1.5 * vim.api.nvim_strwidth(default_value))) },
+      border = { style = vim.o.winborder, text = { top = border_top_text, top_align = 'left' } },
+      win_options = { winhighlight = 'NormalFloat:Normal,FloatBorder:Normal' },
+    }, {
+      default_value = default_value,
+      on_close = function() on_done(nil) end,
+      on_submit = function(value) on_done(value) end,
+    })
+    ui_input_on_init(self, opts, on_done)
+  end
+  local input_ui
+  vim.ui.input = function(opts, on_confirm)
+    assert(type(on_confirm) == 'function', 'missing on_confirm function')
+
+    if input_ui then
+      vim.notify('Another input is pending, please finish it first.', vim.log.levels.ERROR, { title = 'Light Boat' })
+      return
+    end
+
+    input_ui = UIInput(opts, function(value)
+      if input_ui then
+        -- if it's still mounted, unmount it
+        input_ui:unmount()
+      end
+      -- pass the input value
+      on_confirm(value)
+      -- indicate the operation is done
+      input_ui = nil
+    end)
+
+    input_ui:mount()
+  end
+end
 local function override_ui_select()
   local Menu = require('nui.menu')
   local UISelect = Menu:extend('UISelect')
@@ -224,56 +167,5 @@ local function override_ui_select()
   end
 end
 
-local function override_ui_input()
-  local Input = require('nui.input')
-  local UIInput = Input:extend('UIInput')
-  function UIInput:init(opts, on_done)
-    local border_top_text = get_prompt_text(opts.prompt, '[Input]')
-    local default_value = tostring(opts.default or '')
-    UIInput.super.init(self, {
-      relative = 'cursor',
-      position = { row = 2, col = 0 },
-      size = { width = math.floor(math.max(40, 1.5 * vim.api.nvim_strwidth(default_value))) },
-      border = { style = vim.o.winborder, text = { top = border_top_text, top_align = 'left' } },
-      win_options = { winhighlight = 'NormalFloat:Normal,FloatBorder:Normal' },
-    }, {
-      default_value = default_value,
-      on_close = function() on_done(nil) end,
-      on_submit = function(value) on_done(value) end,
-    })
-    ui_input_on_init(self, opts, on_done)
-  end
-  local input_ui
-  vim.ui.input = function(opts, on_confirm)
-    assert(type(on_confirm) == 'function', 'missing on_confirm function')
-
-    if input_ui then
-      vim.notify('Another input is pending, please finish it first.', vim.log.levels.ERROR, { title = 'Light Boat' })
-      return
-    end
-
-    input_ui = UIInput(opts, function(value)
-      if input_ui then
-        -- if it's still mounted, unmount it
-        input_ui:unmount()
-      end
-      -- pass the input value
-      on_confirm(value)
-      -- indicate the operation is done
-      input_ui = nil
-    end)
-
-    input_ui:mount()
-  end
-end
-
-local function load_nui()
-  override_ui_input()
-  override_ui_select()
-end
-
-load_context()
-load_lualine()
-load_todo_comments()
-load_blink_indent()
-load_nui()
+override_ui_input()
+override_ui_select()
