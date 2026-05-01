@@ -96,6 +96,12 @@ local function load_blink()
     end
     return original(ctx, items_by_source)
   end
+  local lsp_path = vim.fn.stdpath('config')
+  if lsp_path:sub(-1) ~= '/' then lsp_path = lsp_path .. '/' end
+  lsp_path = lsp_path .. 'after/lsp'
+  local servers = vim.fn.glob(lsp_path .. '/**/*.lua', true, true)
+  servers = vim.tbl_map(function(path) return vim.fn.fnamemodify(path, ':t:r') end, servers)
+  if #servers > 0 then vim.lsp.enable(servers) end
 end
 
 local function load_guess_indent()

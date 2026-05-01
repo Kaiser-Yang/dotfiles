@@ -1,8 +1,39 @@
+---@brief
+---
+--- https://github.com/luals/lua-language-server
+---
+--- Lua language server.
+---
+--- `lua-language-server` can be installed by following the instructions [here](https://luals.github.io/#neovim-install).
+---
+--- The default `cmd` assumes that the `lua-language-server` binary can be found in `$PATH`.
+---
+--- See `lua-language-server`'s [documentation](https://luals.github.io/wiki/settings/) for an explanation of the above fields:
+--- * [Lua.runtime.path](https://luals.github.io/wiki/settings/#runtimepath)
+--- * [Lua.workspace.library](https://luals.github.io/wiki/settings/#workspacelibrary)
+
+local root_markers1 = {
+  '.emmyrc.json',
+  '.luarc.json',
+  '.luarc.jsonc',
+}
+local root_markers2 = {
+  '.luacheckrc',
+  '.stylua.toml',
+  'stylua.toml',
+  'selene.toml',
+  'selene.yml',
+}
+
+---@type vim.lsp.Config
 return {
+  cmd = { 'lua-language-server' },
+  filetypes = { 'lua' },
+  root_markers = { root_markers1, root_markers2, { '.git' } },
   on_init = function(client)
-    if not client.workspace_folders then return end
     local u = require('utils')
-    if not u.in_config_dir() then return end
+    if not client.workspace_folders or not u.in_config_dir() then return end
+    ---@diagnostic disable-next-line: param-type-mismatch
     client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
       runtime = {
         version = 'LuaJIT',
@@ -13,9 +44,20 @@ return {
         library = {
           vim.env.VIMRUNTIME,
           '${3rd}/luv/library',
+          '${3rd}/busted/library',
         },
+        -- Or pull in all of 'runtimepath'.
+        -- NOTE: this is a lot slower and will cause issues when working on
+        -- your own configuration.
+        -- See https://github.com/neovim/nvim-lspconfig/issues/3189
+        -- library = vim.api.nvim_get_runtime_file('', true),
       },
     })
   end,
-  settings = { Lua = {} },
+  settings = {
+    Lua = {
+      codeLens = { enable = true },
+      hint = { enable = true, semicolon = 'Disable' },
+    },
+  },
 }

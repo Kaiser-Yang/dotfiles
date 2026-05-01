@@ -30,61 +30,6 @@ local function load_treesitter()
   end
 end
 
-local function load_lspconfig()
-  -- HACK:
-  -- This should be checked when blink.cmp updates
-  -- Copied from blink.cmp: lua/blink/cmp/sources/lib/init.lua
-  local capabilities = {
-    textDocument = {
-      completion = {
-        completionItem = {
-          snippetSupport = true,
-          commitCharactersSupport = false, -- todo:
-          documentationFormat = { 'markdown', 'plaintext' },
-          deprecatedSupport = true,
-          preselectSupport = false, -- todo:
-          tagSupport = { valueSet = { 1 } }, -- deprecated
-          insertReplaceSupport = true, -- todo:
-          resolveSupport = {
-            properties = {
-              'documentation',
-              'detail',
-              'additionalTextEdits',
-              'command',
-              'data',
-              -- todo: support more properties? should test if it improves latency
-            },
-          },
-          insertTextModeSupport = {
-            -- todo: support adjustIndentation
-            valueSet = { 1 }, -- asIs
-          },
-          labelDetailsSupport = true,
-        },
-        completionList = {
-          itemDefaults = {
-            'commitCharacters',
-            'editRange',
-            'insertTextFormat',
-            'insertTextMode',
-            'data',
-          },
-        },
-
-        contextSupport = true,
-        insertTextMode = 1, -- asIs
-      },
-    },
-  }
-  vim.lsp.config('*', vim.tbl_deep_extend('force', capabilities, vim.lsp.config['*'].capabilities or {}))
-  local lsp_path = vim.fn.stdpath('config')
-  if lsp_path:sub(-1) ~= '/' then lsp_path = lsp_path .. '/' end
-  lsp_path = lsp_path .. 'after/lsp'
-  local servers = vim.fn.glob(lsp_path .. '/**/*.lua', true, true)
-  servers = vim.tbl_map(function(path) return vim.fn.fnamemodify(path, ':t:r') end, servers)
-  if #servers > 0 then vim.lsp.enable(servers) end
-end
-
 local function load_mason()
   require('mason').setup()
   local mason_registry = require('mason-registry')
@@ -435,7 +380,6 @@ end
 
 load_conform()
 if vim.fn.executable('tree-sitter') == 1 then load_treesitter() end
-load_lspconfig()
 load_mason()
 load_treesitter_textobjects()
 load_nvim_tree()

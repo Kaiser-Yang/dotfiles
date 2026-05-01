@@ -73,10 +73,6 @@
       "rev": "fbdb48c2ed45f4a8293d0d483f7730d24467ccb6",
       "src": "https://github.com/theHamsta/nvim-dap-virtual-text"
     },
-    "nvim-lspconfig": {
-      "rev": "f7e89f3d19fb436e1fbeff3bf4291eef35da94e3",
-      "src": "https://github.com/neovim/nvim-lspconfig"
-    },
     "nvim-surround": {
       "rev": "9291040de8cd8a4439eb64c441e8d5d2bf884a5a",
       "src": "https://github.com/kylechui/nvim-surround"
