@@ -40,12 +40,13 @@ vim.schedule(function()
     -- show key mappings as you type
     'Kaiser-Yang/which-key.nvim',
   }
-  for _, spec in ipairs(specs) do
-    if type(spec) == 'table' then
-      ---@diagnostic disable-next-line: param-type-mismatch
-      table.insert(specs, u.gh(unpack(spec)))
+  for i = 1, #specs do
+    if type(specs[i]) == 'table' then
+      ---@diagnostic disable-next-line: assign-type-mismatch, param-type-mismatch
+      specs[i] = u.gh(unpack(specs[i]))
     else
-      table.insert(specs, u.gh(spec))
+      ---@diagnostic disable-next-line: assign-type-mismatch
+      specs[i] = u.gh(specs[i])
     end
   end
   vim.pack.add(specs, { confirm = false })
