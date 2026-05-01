@@ -17,7 +17,11 @@
             {
                 "language": "lua",
                 "path": "./lua/luadoc.json"
-            }
+            },
+            {
+                "language": "go",
+                "path": "./go.json"
+            },
         ]
     }
 }
