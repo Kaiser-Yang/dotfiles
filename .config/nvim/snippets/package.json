@@ -3,6 +3,14 @@
     "contributes": {
         "snippets": [
             {
+                "language": "c",
+                "path": "./c/c.json"
+            },
+            {
+                "language": "c",
+                "path": "./c/cdoc.json"
+            },
+            {
                 "language": "cpp",
                 "path": "./cpp/cpp.json"
             },
