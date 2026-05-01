@@ -349,9 +349,6 @@ usage() {
     echo "  -f, --fonts      Install optional fonts."
     echo "  -r, --restore    Restore the original files from backup."
     echo "  -s, --change     Change the default shell to zsh."
-    echo "  -e, --extract    Extract files from directories. When use this with -c,"
-    echo "                   it will create symbolic links for every file in directories."
-    echo "                   You should use this with -r when you use it with -c."
     echo "  -v, --verbose    Enable verbose output."
     echo "  -h, --help       Show this help message."
 }
@@ -375,7 +372,6 @@ init_options() {
     VERBOSE=false
     INSTALL_PACKAGES=false
     CREATE_LINKS=false
-    EXTRACT=false
     INSTALL_FONTS=false
     CHANGE_SHELL=false
     while [[ $# -gt 0 ]]; do
@@ -400,10 +396,6 @@ init_options() {
                 CREATE_LINKS=true
                 shift
                 ;;
-            --extract)
-                EXTRACT=true
-                shift
-                ;;
             --fonts)
                 INSTALL_FONTS=true
                 shift
@@ -421,7 +413,6 @@ init_options() {
                         v) VERBOSE=true ;;
                         i) INSTALL_PACKAGES=true ;;
                         c) CREATE_LINKS=true ;;
-                        e) EXTRACT=true ;;
                         f) INSTALL_FONTS=true ;;
                         s) CHANGE_SHELL=true ;;
                         *) log_error "Unknown option: -${short_opts:$i:1}"; usage; return 1 ;;
@@ -688,19 +679,7 @@ find_files() {
     log_verbose "Start to find files in directories."
     files=()
     for dir_or_file in "${DIRS[@]}"; do
-        if [[ -d "$dir_or_file" && "$EXTRACT" = true ]]; then
-            if ! mapfile -t tmp < <(
-                find "$dir_or_file" \
-                    \( -name ".git" -o -name ".github" \) -type d -prune -o \
-                    -type f ! -name '*.md'
-            ); then
-                log_error "Failed to find files in $dir_or_file. "\
-                    "Please check the directory path."
-                return 1
-            fi
-            log_verbose "Found ${#tmp[@]} files in $dir_or_file."
-            files+=("${tmp[@]}")
-        elif [[ -d "$dir_or_file" && "$EXTRACT" = false ]]; then
+        if [[ -d "$dir_or_file" ]]; then
             files+=("$dir_or_file")
             log_verbose "Found the directory: $dir_or_file"
         elif [ -f "$dir_or_file" ]; then
