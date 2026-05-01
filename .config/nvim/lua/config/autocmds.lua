@@ -120,7 +120,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'FocusLost', 'BufLeave' }, {
   callback = function()
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
       if u.buffer.normal(bufnr) and vim.bo[bufnr].modified then
-        vim.api.nvim_buf_call(bufnr, function() vim.cmd('update') end)
+        vim.api.nvim_buf_call(bufnr, function() vim.cmd('silent update') end)
       end
     end
   end,
