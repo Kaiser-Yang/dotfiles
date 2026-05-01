@@ -1,89 +1,91 @@
-local u = require('utils')
-local command = {
-  DetectConflictAndLoad = {
-    callback = function()
-      local conflicts = {}
-      local function extend(bufnr, new_conflicts)
-        for _, conflict in ipairs(new_conflicts) do
-          conflict.bufnr = bufnr
-          table.insert(conflicts, conflict)
-        end
-      end
-      local r = require('resolve')
-      vim.system(
-        { 'git', 'diff', '--name-only', '--diff-filter=U' },
-        { text = true, cwd = vim.fn.getcwd() },
-        function(result)
-          if result.code ~= 0 then
-            vim.schedule_wrap(vim.notify)(
-              'Error running git command: ' .. result.stderr,
-              vim.log.levels.ERROR,
-              { title = 'Light Boat' }
-            )
-            return
+vim.schedule(function()
+  local u = require('utils')
+  local command = {
+    DetectConflictAndLoad = {
+      callback = function()
+        local conflicts = {}
+        local function extend(bufnr, new_conflicts)
+          for _, conflict in ipairs(new_conflicts) do
+            conflict.bufnr = bufnr
+            table.insert(conflicts, conflict)
           end
-          local files = vim.split(result.stdout, '\n', { trimempty = true })
-          vim.schedule(function()
-            for _, file in ipairs(files) do
-              file = vim.fn.fnamemodify(file, ':p')
-              local bufnr = vim.fn.bufadd(file)
-              vim.bo[bufnr].buflisted = true
-              if not vim.api.nvim_buf_is_loaded(bufnr) then
-                vim.api.nvim_create_autocmd('BufReadPost', {
-                  buffer = bufnr,
-                  once = true,
-                  callback = function()
-                    if vim.api.nvim_buf_is_valid(bufnr) then extend(bufnr, r.detect_conflicts(bufnr, true)) end
-                  end,
-                })
-                vim.fn.bufload(bufnr)
-              else
-                extend(bufnr, r.detect_conflicts(bufnr, true))
-              end
-            end
-            local qf_list = {}
-            vim.notify(
-              string.format(
-                'Detected %d conflict(s) in current repository, they have been added to quickfix list.',
-                #conflicts
-              ),
-              vim.log.levels.INFO,
-              { title = 'Resolve' }
-            )
-            for i, conflict in ipairs(conflicts) do
-              table.insert(qf_list, {
-                bufnr = conflict.bufnr,
-                filename = vim.api.nvim_buf_get_name(conflict.bufnr),
-                lnum = conflict.start,
-                text = string.format('Conflict %d/%d', i, #conflicts),
-              })
-            end
-            vim.fn.setqflist(qf_list)
-          end)
         end
-      )
-    end,
-    opt = { nargs = 0, bar = true },
-  },
-  BuildPlugin = {
-    callback = function(args)
-      local list = nil
-      if args.args ~= '' then list = vim.split(args.args, '%s+', { trimempty = true }) end
-      u.build_plugin(list)
-    end,
-    opt = {
-      nargs = '?',
-      bar = true,
-      complete = function()
-        return {
-          'telescope-fzf-native.nvim',
-          'nvim-treesitter',
-          'blink.cmp',
-        }
+        local r = require('resolve')
+        vim.system(
+          { 'git', 'diff', '--name-only', '--diff-filter=U' },
+          { text = true, cwd = vim.fn.getcwd() },
+          function(result)
+            if result.code ~= 0 then
+              vim.schedule_wrap(vim.notify)(
+                'Error running git command: ' .. result.stderr,
+                vim.log.levels.ERROR,
+                { title = 'Light Boat' }
+              )
+              return
+            end
+            local files = vim.split(result.stdout, '\n', { trimempty = true })
+            vim.schedule(function()
+              for _, file in ipairs(files) do
+                file = vim.fn.fnamemodify(file, ':p')
+                local bufnr = vim.fn.bufadd(file)
+                vim.bo[bufnr].buflisted = true
+                if not vim.api.nvim_buf_is_loaded(bufnr) then
+                  vim.api.nvim_create_autocmd('BufReadPost', {
+                    buffer = bufnr,
+                    once = true,
+                    callback = function()
+                      if vim.api.nvim_buf_is_valid(bufnr) then extend(bufnr, r.detect_conflicts(bufnr, true)) end
+                    end,
+                  })
+                  vim.fn.bufload(bufnr)
+                else
+                  extend(bufnr, r.detect_conflicts(bufnr, true))
+                end
+              end
+              local qf_list = {}
+              vim.notify(
+                string.format(
+                  'Detected %d conflict(s) in current repository, they have been added to quickfix list.',
+                  #conflicts
+                ),
+                vim.log.levels.INFO,
+                { title = 'Resolve' }
+              )
+              for i, conflict in ipairs(conflicts) do
+                table.insert(qf_list, {
+                  bufnr = conflict.bufnr,
+                  filename = vim.api.nvim_buf_get_name(conflict.bufnr),
+                  lnum = conflict.start,
+                  text = string.format('Conflict %d/%d', i, #conflicts),
+                })
+              end
+              vim.fn.setqflist(qf_list)
+            end)
+          end
+        )
       end,
+      opt = { nargs = 0, bar = true },
     },
-  },
-}
-for name, c in pairs(command) do
-  vim.api.nvim_create_user_command(name, c.callback, c.opt)
-end
+    BuildPlugin = {
+      callback = function(args)
+        local list = nil
+        if args.args ~= '' then list = vim.split(args.args, '%s+', { trimempty = true }) end
+        u.build_plugin(list)
+      end,
+      opt = {
+        nargs = '?',
+        bar = true,
+        complete = function()
+          return {
+            'telescope-fzf-native.nvim',
+            'nvim-treesitter',
+            'blink.cmp',
+          }
+        end,
+      },
+    },
+  }
+  for name, c in pairs(command) do
+    vim.api.nvim_create_user_command(name, c.callback, c.opt)
+  end
+end)

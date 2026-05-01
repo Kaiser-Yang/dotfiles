@@ -1,6 +1,4 @@
 require('config.autocmds')
-vim.schedule(function()
-  require('config.commands')
-  require('config.diagnostics')
-end)
+require('config.commands')
+require('config.diagnostics')
 require('config.options')
