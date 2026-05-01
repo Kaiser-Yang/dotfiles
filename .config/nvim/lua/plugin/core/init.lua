@@ -39,6 +39,12 @@ vim.schedule(function()
     'Kaiser-Yang/maplayer.nvim',
     -- show key mappings as you type
     'Kaiser-Yang/which-key.nvim',
+    -- beautiful status line
+    'nvim-lualine/lualine.nvim',
+    -- highlight the "TODO" comments
+    'folke/todo-comments.nvim',
+    -- indent line
+    'saghen/blink.indent',
   }
   for i = 1, #specs do
     if type(specs[i]) == 'table' then
@@ -51,15 +57,18 @@ vim.schedule(function()
   end
   vim.pack.add(specs, { confirm = false })
   require('plugin.core.blink_cmp')
+  require('plugin.core.blink_indent')
   require('plugin.core.conform')
   require('plugin.core.gitsigns')
   require('plugin.core.guess_indent')
+  require('plugin.core.lualine')
   require('plugin.core.maplayer')
   require('plugin.core.nui')
   require('plugin.core.nvim_tree')
   require('plugin.core.resolve')
   require('plugin.core.surround')
   require('plugin.core.telescope')
+  require('plugin.core.todo_comments')
   require('plugin.core.treesitter')
   require('plugin.core.treesitter_context')
   require('plugin.core.treesitter_textobjects')

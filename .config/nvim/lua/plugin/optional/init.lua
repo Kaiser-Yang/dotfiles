@@ -9,12 +9,6 @@ vim.schedule(function()
     'igorlfs/nvim-dap-view',
     'theHamsta/nvim-dap-virtual-text',
     'mfussenegger/nvim-dap',
-    -- beautiful status line
-    'nvim-lualine/lualine.nvim',
-    -- highlight the "TODO" comments
-    'folke/todo-comments.nvim',
-    -- indent line
-    'saghen/blink.indent',
     -- competition test tool
     'xeluxee/competitest.nvim',
     -- easy way to resize windows
@@ -38,14 +32,11 @@ vim.schedule(function()
   end
   vim.pack.add(specs, { confirm = false })
 
-  require('plugin.optional.blink_indent')
   require('plugin.optional.blink_pairs')
   require('plugin.optional.competitest')
   require('plugin.optional.dadbod')
   require('plugin.optional.dap')
   require('plugin.optional.endwise')
-  require('plugin.optional.lualine')
-  require('plugin.optional.todo_comments')
   require('plugin.optional.ultimate_autopair')
   require('plugin.optional.win_resizer')
 end)
