@@ -53,6 +53,7 @@ require('blink.cmp').setup({
         module = 'blink-cmp-dictionary',
         min_keyword_length = 3,
         opts = { dictionary_files = { vim.fn.stdpath('config') .. '/dict/en_dict.txt' } },
+        score_offset = -3,
       },
       dadbod = {
         name = 'Dadbod',
