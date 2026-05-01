@@ -47,6 +47,14 @@
                 "path": "./python/pydoc.json"
             },
             {
+                "language": ["shellscript", "shell", "sh", "zsh"],
+                "path": "./shell/shell.json"
+            },
+            {
+                "language": "shelldoc",
+                "path": "./shell/shelldoc.json"
+            },
+            {
                 "language": "go",
                 "path": "./go.json"
             },
