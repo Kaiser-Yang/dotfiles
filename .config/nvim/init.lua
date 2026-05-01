@@ -9,7 +9,6 @@ vim.g.lightboat_opt = {
     'lua-language-server',
     'pyright',
     'thriftls',
-    'typescript-language-server',
 
     -- Formatters
     'black',
