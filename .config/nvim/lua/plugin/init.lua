@@ -57,7 +57,6 @@ vim.schedule(function()
     u.gh('Kaiser-Yang/which-key.nvim'),
     u.gh('folke/todo-comments.nvim'),
     u.gh('saghen/blink.indent'),
-    u.gh('mason-org/mason.nvim'),
   }, { confirm = false })
   require('plugin.dap')
   require('plugin.edit')

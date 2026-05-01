@@ -30,17 +30,6 @@ local function load_treesitter()
   end
 end
 
-local function load_mason()
-  require('mason').setup()
-  local mason_registry = require('mason-registry')
-  local installed = mason_registry.get_installed_package_names()
-  local not_installed = vim.tbl_filter(
-    function(pack) return not vim.tbl_contains(installed, pack) end,
-    vim.g.lightboat_opt.mason_ensure_installed
-  )
-  if #not_installed > 0 then vim.cmd('MasonInstall ' .. table.concat(not_installed, ' ')) end
-end
-
 local function load_treesitter_textobjects() require('nvim-treesitter-textobjects').setup() end
 
 local function load_nvim_tree()
@@ -380,7 +369,6 @@ end
 
 load_conform()
 if vim.fn.executable('tree-sitter') == 1 then load_treesitter() end
-load_mason()
 load_treesitter_textobjects()
 load_nvim_tree()
 load_telescope()
