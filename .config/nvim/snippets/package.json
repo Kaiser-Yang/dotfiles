@@ -4,7 +4,11 @@
         "snippets": [
             {
                 "language": "cpp",
-                "path": "./cpp.json"
+                "path": "./cpp/cpp.json"
+            },
+            {
+                "language": "cpp",
+                "path": "./cpp/cppdoc.json"
             },
             {
                 "language": "markdown",
