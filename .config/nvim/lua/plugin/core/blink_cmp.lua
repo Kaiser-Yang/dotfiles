@@ -1,4 +1,9 @@
 local u = require('utils')
+vim.pack.add({
+  u.gh('Kaiser-Yang/blink-cmp-dictionary'),
+  u.gh('saghen/blink.lib'),
+  u.gh('saghen/blink.cmp'),
+}, { confirm = false })
 
 local blink_cmp_unique_priority = function(ctx)
   if ctx.mode == 'cmdline' then

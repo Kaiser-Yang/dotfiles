@@ -1,42 +1,16 @@
 vim.schedule(function()
-  local u = require('utils')
-  local specs = {
-    -- dadbod works as a database client
-    'tpope/vim-dadbod',
-    'kristijanhusak/vim-dadbod-completion',
-    'kristijanhusak/vim-dadbod-ui',
-    -- DAP for debugging
-    'igorlfs/nvim-dap-view',
-    'theHamsta/nvim-dap-virtual-text',
-    'mfussenegger/nvim-dap',
-    -- competition test tool
-    'xeluxee/competitest.nvim',
-    -- easy way to resize windows
-    'Kaiser-Yang/win-resizer.nvim',
-    -- auto insert "end" for some languages
-    'RRethy/nvim-treesitter-endwise',
-    -- highlight pairs
-    'saghen/blink.download',
-    { 'saghen/blink.pairs', vim.version.range('*') },
-    -- pairs plugin
-    'altermo/ultimate-autopair.nvim',
-  }
-  for i = 1, #specs do
-    if type(specs[i]) == 'table' then
-      ---@diagnostic disable-next-line: assign-type-mismatch, param-type-mismatch
-      specs[i] = u.gh(unpack(specs[i]))
-    else
-      ---@diagnostic disable-next-line: assign-type-mismatch
-      specs[i] = u.gh(specs[i])
-    end
-  end
-  vim.pack.add(specs, { confirm = false })
-
+  -- highlight pairs
   require('plugin.optional.blink_pairs')
+  -- competition test tool
   require('plugin.optional.competitest')
+  -- dadbod works as a database client
   require('plugin.optional.dadbod')
+  -- DAP for debugging
   require('plugin.optional.dap')
+  -- auto insert "end" for some languages
   require('plugin.optional.endwise')
+  -- pairs plugin
   require('plugin.optional.ultimate_autopair')
+  -- easy way to resize windows
   require('plugin.optional.win_resizer')
 end)

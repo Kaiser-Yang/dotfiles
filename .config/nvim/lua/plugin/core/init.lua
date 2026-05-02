@@ -1,76 +1,38 @@
 vim.schedule(function()
-  local u = require('utils')
-  local specs = {
-    -- deps
-    'nvim-lua/plenary.nvim',
-    'MunifTanjim/nui.nvim',
-    'nvim-tree/nvim-web-devicons',
-    -- blink for completion
-    'Kaiser-Yang/blink-cmp-dictionary',
-    'saghen/blink.lib',
-    'saghen/blink.cmp',
-    -- telescope for pickers
-    'nvim-telescope/telescope-live-grep-args.nvim',
-    'nvim-telescope/telescope-fzf-native.nvim',
-    'nvim-telescope/telescope.nvim',
-    'kkharji/sqlite.lua',
-    'prochri/telescope-all-recent.nvim',
-    -- git status for buffers
-    'lewis6991/gitsigns.nvim',
-    -- git conflicts resolver
-    'Kaiser-Yang/resolve.nvim',
-    -- treesitter installer
-    { 'nvim-treesitter/nvim-treesitter', 'main' },
-    -- treesitter context window
-    'nvim-treesitter/nvim-treesitter-context',
-    -- treesitter based motion and swap
-    { 'nvim-treesitter/nvim-treesitter-textobjects', 'main' },
-    -- formatter
-    'stevearc/conform.nvim',
-    -- file explorer
-    'nvim-tree/nvim-tree.lua',
-    -- add, delete, and change pairs
-    'kylechui/nvim-surround',
-    -- auto guess indent style for buffers
-    'NMAC427/guess-indent.nvim',
-    -- ";" and "," can be used to repeat last motion
-    'Kaiser-Yang/repmove.nvim',
-    -- global key mappings manager
-    'Kaiser-Yang/maplayer.nvim',
-    -- show key mappings as you type
-    'Kaiser-Yang/which-key.nvim',
-    -- beautiful status line
-    'nvim-lualine/lualine.nvim',
-    -- highlight the "TODO" comments
-    'folke/todo-comments.nvim',
-    -- indent line
-    'saghen/blink.indent',
-  }
-  for i = 1, #specs do
-    if type(specs[i]) == 'table' then
-      ---@diagnostic disable-next-line: assign-type-mismatch, param-type-mismatch
-      specs[i] = u.gh(unpack(specs[i]))
-    else
-      ---@diagnostic disable-next-line: assign-type-mismatch
-      specs[i] = u.gh(specs[i])
-    end
-  end
-  vim.pack.add(specs, { confirm = false })
+  -- blink for completion
   require('plugin.core.blink_cmp')
+  -- indent line
   require('plugin.core.blink_indent')
+  -- formatter
   require('plugin.core.conform')
+  -- git status for buffers
   require('plugin.core.gitsigns')
+  -- guess indent style for buffers
   require('plugin.core.guess_indent')
+  -- beautiful status line
   require('plugin.core.lualine')
+  -- global key mappings manager
   require('plugin.core.maplayer')
+  -- better vim.ui.input and vim.ui.select
   require('plugin.core.nui')
+  -- file explorer
   require('plugin.core.nvim_tree')
+  -- ";" and "," can be used to repeat last motion
+  require('plugin.core.repmove')
+  -- git conflicts resolver
   require('plugin.core.resolve')
+  -- add, delete, and change pairs
   require('plugin.core.surround')
+  -- telescope for pickers
   require('plugin.core.telescope')
+  -- highlight the "TODO" comments
   require('plugin.core.todo_comments')
+  -- treesitter installer
   require('plugin.core.treesitter')
+  -- treesitter context window
   require('plugin.core.treesitter_context')
+  -- treesitter based motion and swap
   require('plugin.core.treesitter_textobjects')
+  -- show key mappings as you type
   require('plugin.core.which_key')
 end)

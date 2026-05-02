@@ -1,3 +1,6 @@
+local u = require('utils')
+vim.pack.add({ u.gh('MunifTanjim/nui.nvim'), u.gh('xeluxee/competitest.nvim') }, { confirm = false })
+
 require('competitest').setup({
   testcases_input_file_format = '$(FNOEXT)_$(TCNUM).in',
   testcases_output_file_format = '$(FNOEXT)_$(TCNUM).out',

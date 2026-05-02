@@ -1,3 +1,10 @@
+local u = require('utils')
+vim.pack.add({
+  u.gh('igorlfs/nvim-dap-view'),
+  u.gh('theHamsta/nvim-dap-virtual-text'),
+  u.gh('mfussenegger/nvim-dap'),
+}, { confirm = false })
+
 local function get_exe()
   return coroutine.create(function(dap_run_co)
     vim.ui.input({

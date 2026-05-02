@@ -1,3 +1,6 @@
+local u = require('utils')
+vim.pack.add({ u.gh('lewis6991/gitsigns.nvim') }, { confirm = false })
+
 require('gitsigns').setup({
   attach_to_untracked = true,
   current_line_blame = true,

@@ -1,3 +1,6 @@
+local u = require('utils')
+vim.pack.add({ u.gh('Kaiser-Yang/resolve.nvim') }, { confirm = false })
+
 -- TODO: when will this be merged?
 local mapping = {
   { 'n', '[x' },

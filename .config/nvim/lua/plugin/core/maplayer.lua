@@ -1,4 +1,5 @@
 local u = require('utils')
+vim.pack.add({ u.gh('Kaiser-Yang/maplayer.nvim') }, { confirm = false })
 
 local function insert_undo_point()
   u.key.feedkeys('<c-g>u', 'n')

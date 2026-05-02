@@ -1,3 +1,9 @@
+local u = require('utils')
+vim.pack.add({
+  u.gh('nvim-tree/nvim-web-devicons'),
+  u.gh('nvim-lualine/lualine.nvim'),
+}, { confirm = false })
+
 require('lualine').setup({
   options = {
     globalstatus = true,

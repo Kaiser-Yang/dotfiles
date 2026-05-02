@@ -1,3 +1,9 @@
+local u = require('utils')
+vim.pack.add({
+  u.gh('saghen/blink.download'),
+  u.gh('saghen/blink.pairs', vim.version.range('*')),
+}, { confirm = false })
+
 require('blink.pairs').setup({
   mappings = {
     enabled = false,

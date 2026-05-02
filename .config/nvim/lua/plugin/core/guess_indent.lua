@@ -1,4 +1,5 @@
 local u = require('utils')
+vim.pack.add({ u.gh('NMAC427/guess-indent.nvim') }, { confirm = false })
 local g = require('guess-indent')
 g.setup({ on_tab_options = { expandtab = false, shiftwidth = 0, softtabstop = 0, tabstop = 8 } })
 for _, buf in ipairs(vim.api.nvim_list_bufs()) do

@@ -1,4 +1,5 @@
 local u = require('utils')
+vim.pack.add({ u.gh('nvim-treesitter/nvim-treesitter-context') }, { confirm = false })
 
 require('treesitter-context').setup({
   max_liens = math.max(vim.o.scrolloff, 5),

@@ -1,3 +1,6 @@
+local u = require('utils')
+vim.pack.add({ u.gh('Kaiser-Yang/which-key.nvim') }, { confirm = false })
+
   -- BUG:
   -- this plugin has many bugs
   -- In insert mode, <C-O> with some other keys may not work as expected

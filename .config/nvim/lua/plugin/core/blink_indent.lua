@@ -1,3 +1,6 @@
+local u = require('utils')
+vim.pack.add({ u.gh('saghen/blink.indent') }, { confirm = false })
+
 -- BUG: https://github.com/saghen/blink.indent/issues/47
 require('blink.indent').setup({
   mappings = {
