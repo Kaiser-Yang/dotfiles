@@ -23,7 +23,13 @@ vim.o.smartcase = true
 vim.opt.foldopen:remove('hor')
 vim.o.foldlevel = 99999
 vim.o.foldcolumn = '1'
-vim.o.fillchars = 'fold: ,foldopen:,foldclose:'
+vim.opt.fillchars = {
+  fold = ' ',
+  foldopen = '',
+  foldclose = '',
+  foldsep = ' ',
+  foldinner = ' ',
+}
 vim.o.splitright = true
 vim.o.autowriteall = true
 vim.o.cmdwinheight = 10
@@ -31,9 +37,4 @@ vim.o.showmode = false
 vim.o.ttimeout = false
 vim.o.cmdheight = 0
 vim.o.timeoutlen = 0
-local function fold_clickable()
-  local lnum = vim.v.lnum
-  return vim.fn.foldlevel(lnum) > vim.fn.foldlevel(lnum - 1) and vim.v.virtnum == 0
-end
-_G.get_statuscol = function() return '%s%l%=' .. (fold_clickable() and '%C' or ' ') .. ' ' end
-vim.o.statuscolumn = '%!v:lua.get_statuscol()'
+vim.o.statuscolumn = '%s%l%=%C '
