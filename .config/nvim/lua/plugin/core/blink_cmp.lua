@@ -18,12 +18,13 @@ require('blink.cmp').setup({
       plsql = sql_sources,
     },
     providers = {
-      lsp = { fallbacks = { 'buffer', 'dictionary' } },
+      lsp = { fallbacks = {} },
       path = { opts = { show_hidden_files_by_default = true } },
       snippets = { name = 'Snip' },
       cmdline = { name = 'CMD' },
       buffer = {
         name = 'Buf',
+        score_offset = -10,
         transform_items = function(context, items)
           -- Do not convert case when searching
           if context.mode == 'cmdline' then return items end
@@ -53,7 +54,7 @@ require('blink.cmp').setup({
         module = 'blink-cmp-dictionary',
         min_keyword_length = 3,
         opts = { dictionary_files = { vim.fn.stdpath('config') .. '/dict/en_dict.txt' } },
-        score_offset = -3,
+        score_offset = -13,
       },
       dadbod = {
         name = 'Dadbod',
