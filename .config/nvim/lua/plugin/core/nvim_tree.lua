@@ -82,6 +82,7 @@ require('nvim-tree').setup({
   actions = {
     file_popup = { open_win_config = { border = vim.o.winborder } },
     open_file = {
+      resize_window = false,
       window_picker = {
         exclude = {
           filetype = {
