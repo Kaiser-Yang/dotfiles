@@ -5,23 +5,25 @@ vim.pack.add({
   u.gh('saghen/blink.cmp'),
 }, { confirm = false })
 
+local function default_sources()
+  local res = { 'snippets', 'path', 'buffer', 'dictionary' }
+  local sql_file = vim.tbl_contains({ 'sql', 'mysql', 'plsql' }, vim.bo.filetype)
+  if sql_file then table.insert(res, 'dadbod') end
+  if not sql_file then table.insert(res, 'lsp') end
+  return res
+end
+
 local blink_cmp_unique_priority = function(ctx)
   if ctx.mode == 'cmdline' then
     return { 'cmdline', 'path', 'buffer' }
   else
-    return { 'snippets', 'lsp', 'buffer', 'dictionary' }
+    return default_sources()
   end
 end
 
-local sql_sources = { inherit_defaults = false, 'snippets', 'buffer', 'dadbod' }
 require('blink.cmp').setup({
   sources = {
-    default = { 'snippets', 'lsp', 'path', 'buffer', 'dictionary' },
-    per_filetype = {
-      sql = sql_sources,
-      mysql = sql_sources,
-      plsql = sql_sources,
-    },
+    default = default_sources,
     providers = {
       lsp = {
         transform_items = function(_, items)
