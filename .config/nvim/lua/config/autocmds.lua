@@ -107,7 +107,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
   end,
 })
 
-vim.api.nvim_create_autocmd('FileType', {
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('FileType', {
   callback = function()
     if u.enabled('treesitter_highlight_auto_start') and u.treesitter_available('highlights') then
       vim.treesitter.start()
@@ -157,7 +157,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'FocusLost', 'BufLeave' }, {
   end,
 })
 
-vim.api.nvim_create_autocmd('FileType', {
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('FileType', {
   callback = function(ev)
     if not u.buffer.normal(ev.buf) then return end
     local plugin = vim.pack.get({ 'guess-indent.nvim' })
