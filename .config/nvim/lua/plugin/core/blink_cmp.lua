@@ -23,7 +23,16 @@ require('blink.cmp').setup({
       plsql = sql_sources,
     },
     providers = {
-      lsp = { fallbacks = {} },
+      lsp = {
+        transform_items = function(_, items)
+          -- Remove keywords
+          return vim.tbl_filter(
+            function(item) return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword end,
+            items
+          )
+        end,
+        fallbacks = {},
+      },
       path = { opts = { show_hidden_files_by_default = true } },
       snippets = { name = 'Snip' },
       cmdline = { name = 'CMD' },
