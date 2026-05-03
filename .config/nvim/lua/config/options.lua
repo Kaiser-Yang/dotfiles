@@ -38,3 +38,4 @@ vim.o.ttimeout = false
 vim.o.cmdheight = 0
 vim.o.timeoutlen = 0
 vim.o.statuscolumn = '%s%l%=%C '
+vim.o.undofile = true
