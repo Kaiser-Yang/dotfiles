@@ -12,6 +12,7 @@ require('conform').setup({
     javascript = { 'prettier' },
     sql = { 'sql-formatter' },
     typescript = { 'prettier' },
+    markdown = { 'prettier', 'cbfmt' },
   },
   default_format_opts = { lsp_format = 'fallback', stop_after_first = true },
 })
