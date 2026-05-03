@@ -10,6 +10,7 @@ local function default_sources()
   local sql_file = vim.tbl_contains({ 'sql', 'mysql', 'plsql' }, vim.bo.filetype)
   if sql_file then table.insert(res, 'dadbod') end
   if not sql_file then table.insert(res, 'lsp') end
+  if vim.bo.filetype == 'dap-repl' then table.insert(res, 'dap') end
   return res
 end
 
@@ -77,6 +78,14 @@ require('blink.cmp').setup({
           return #plugin > 0 and plugin[1].active
         end,
         module = 'vim_dadbod_completion.blink',
+      },
+      dap = {
+        name = 'DAP',
+        module = 'blink-cmp-dap',
+        enabled = function()
+          local plugin = vim.pack.get({ 'blink-cmp-dap' })
+          return #plugin > 0 and plugin[1].active
+        end,
       },
     },
   },

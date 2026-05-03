@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "blink-cmp-dap": {
+      "rev": "772c51ff57025b0a02fcee31d1a3bd369ae370d5",
+      "src": "https://github.com/mayromr/blink-cmp-dap"
+    },
     "blink-cmp-dictionary": {
       "rev": "35142bba869b869715e91a99d2f46bcf93fca4ae",
       "src": "https://github.com/Kaiser-Yang/blink-cmp-dictionary"

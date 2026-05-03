@@ -1,5 +1,6 @@
 local u = require('utils')
 vim.pack.add({
+  u.gh('mayromr/blink-cmp-dap'),
   u.gh('igorlfs/nvim-dap-view'),
   u.gh('theHamsta/nvim-dap-virtual-text'),
   u.gh('mfussenegger/nvim-dap'),
