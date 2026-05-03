@@ -48,17 +48,14 @@ require('blink.cmp').setup({
         transform_items = function(context, items)
           -- Do not convert case when searching
           if context.mode == 'cmdline' then return items end
-          local keyword = context.get_keyword()
-          if not keyword:match('^%u') then return items end
           local out = {}
           for _, item in ipairs(items) do
+            table.insert(out, vim.deepcopy(item))
             --- @type string
             local raw = item.insertText
-            if raw:match('^%l+$') then
-              local text = string.upper(raw:sub(1, 1)) .. raw:sub(2)
-              item.insertText = text
-              item.label = text
-            end
+            local text = string.upper(raw:sub(1, 1)) .. raw:sub(2)
+            item.insertText = text
+            item.label = text
             table.insert(out, item)
           end
           return out
