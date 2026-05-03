@@ -1,16 +1,16 @@
 vim.schedule(function()
-  -- highlight pairs
+  -- Highlight matching pairs (brackets/quotes, etc.)
   require('plugin.optional.blink_pairs')
-  -- competition test tool
+  -- Competitive programming test runner
   require('plugin.optional.competitest')
-  -- dadbod works as a database client
+  -- Database client (vim-dadbod)
   require('plugin.optional.dadbod')
-  -- DAP for debugging
+  -- Debug Adapter Protocol (DAP) integration
   require('plugin.optional.dap')
-  -- auto insert "end" for some languages
+  -- Auto-insert `end` for some languages
   require('plugin.optional.endwise')
-  -- pairs plugin
+  -- Auto pairs plugin
   require('plugin.optional.ultimate_autopair')
-  -- easy way to resize windows
+  -- Easy window resizing
   require('plugin.optional.win_resizer')
 end)

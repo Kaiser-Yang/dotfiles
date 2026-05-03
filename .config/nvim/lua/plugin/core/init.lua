@@ -1,38 +1,38 @@
 vim.schedule(function()
-  -- blink for completion
+  -- Completion engine (blink)
   require('plugin.core.blink_cmp')
-  -- indent line
+  -- Indent guides (indent lines)
   require('plugin.core.blink_indent')
-  -- formatter
+  -- Code formatter
   require('plugin.core.conform')
-  -- git status for buffers
+  -- Git signs in the gutter + hunk actions (per buffer)
   require('plugin.core.gitsigns')
-  -- guess indent style for buffers
+  -- Detect/guess indentation style per buffer
   require('plugin.core.guess_indent')
-  -- beautiful status line
+  -- Statusline
   require('plugin.core.lualine')
-  -- global key mappings manager
+  -- Global keymaps manager / layer system
   require('plugin.core.maplayer')
-  -- better vim.ui.input and vim.ui.select
+  -- Better UI for vim.ui.input / vim.ui.select
   require('plugin.core.nui')
-  -- file explorer
+  -- File explorer
   require('plugin.core.nvim_tree')
-  -- ";" and "," can be used to repeat last motion
+  -- Repeat last motion with `;` and `,`
   require('plugin.core.repmove')
-  -- git conflicts resolver
+  -- Git conflict resolver
   require('plugin.core.resolve')
-  -- add, delete, and change pairs
+  -- Add/delete/change surrounding pairs
   require('plugin.core.surround')
-  -- telescope for pickers
+  -- Fuzzy finder / pickers (Telescope)
   require('plugin.core.telescope')
-  -- highlight the "TODO" comments
+  -- Highlight and manage TODO/FIXME comments
   require('plugin.core.todo_comments')
-  -- treesitter installer
+  -- Treesitter (parser installer)
   require('plugin.core.treesitter')
-  -- treesitter context window
+  -- Treesitter context window
   require('plugin.core.treesitter_context')
-  -- treesitter based motion and swap
+  -- Treesitter textobjects (motions / swap / select)
   require('plugin.core.treesitter_textobjects')
-  -- show key mappings as you type
+  -- Show keybindings as you type (which-key)
   require('plugin.core.which_key')
 end)
