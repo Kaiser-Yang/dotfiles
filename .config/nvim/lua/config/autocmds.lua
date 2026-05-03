@@ -1,5 +1,15 @@
 local u = require('utils')
 
+vim.api.nvim_create_autocmd('PackChanged', {
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    if name ~= 'nvim-treesitter' or kind == 'update' then
+      if not ev.data.active then vim.cmd.packadd(name) end
+      u.build_plugin(name)
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
   callback = function(ev)
     local old_status = vim.b.big_file_status or false
@@ -39,6 +49,27 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
       vim.bo.filetype = vim.bo.filetype:gsub('bigfile', '')
       local plugin = vim.pack.get({ 'nvim-treesitter-context' })
       if #plugin > 0 and plugin[1].active then require('treesitter-context').enable() end
+    end
+  end,
+})
+
+local unnamed_reg_content
+local unnamed_reg_type
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    unnamed_reg_content = vim.fn.getreg('"')
+    unnamed_reg_type = vim.fn.getregtype('"')
+  end,
+  once = true,
+})
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
+  callback = function()
+    if vim.v.event.regname ~= '' and vim.v.event.regname ~= '"' then
+      vim.fn.setreg('"', unnamed_reg_content, unnamed_reg_type)
+    else
+      unnamed_reg_content = vim.fn.getreg('"')
+      unnamed_reg_type = vim.fn.getregtype('"')
     end
   end,
 })
@@ -122,36 +153,6 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'FocusLost', 'BufLeave' }, {
       if u.buffer.normal(bufnr) and vim.bo[bufnr].modified then
         vim.api.nvim_buf_call(bufnr, function() vim.cmd('silent update') end)
       end
-    end
-  end,
-})
-
-local unnamed_reg_content
-local unnamed_reg_type
-vim.api.nvim_create_autocmd('VimEnter', {
-  callback = function()
-    unnamed_reg_content = vim.fn.getreg('"')
-    unnamed_reg_type = vim.fn.getregtype('"')
-  end,
-  once = true,
-})
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
-  callback = function()
-    if vim.v.event.regname ~= '' and vim.v.event.regname ~= '"' then
-      vim.fn.setreg('"', unnamed_reg_content, unnamed_reg_type)
-    else
-      unnamed_reg_content = vim.fn.getreg('"')
-      unnamed_reg_type = vim.fn.getregtype('"')
-    end
-  end,
-})
-
-vim.api.nvim_create_autocmd('PackChanged', {
-  callback = function(ev)
-    local name, kind = ev.data.spec.name, ev.data.kind
-    if name ~= 'nvim-treesitter' or kind == 'update' then
-      if not ev.data.active then vim.cmd.packadd(name) end
-      u.build_plugin(name)
     end
   end,
 })
