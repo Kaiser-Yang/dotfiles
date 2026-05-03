@@ -30,6 +30,12 @@ require('blink.cmp').setup({
       buffer = {
         name = 'Buf',
         score_offset = -10,
+        get_bufnrs = function()
+          return vim.tbl_filter(
+            function(bufnr) return vim.bo[bufnr].filetype == 'help' or vim.bo[bufnr].buftype == '' end,
+            vim.api.nvim_list_bufs()
+          )
+        end,
         transform_items = function(context, items)
           -- Do not convert case when searching
           if context.mode == 'cmdline' then return items end
