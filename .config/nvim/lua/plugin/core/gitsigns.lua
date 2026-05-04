@@ -24,6 +24,8 @@ require('gitsigns').setup({
       { 'n', '<leader>gR', g.reset_buffer, { desc = 'Reset Buffer' } },
       { 'n', '<leader>gd', g.preview_hunk, { desc = 'Diff' } },
       { 'n', '<leader>gD', g.preview_hunk_inline, { desc = 'Diff Inline' } },
+      { 'n', '<leader>gq', g.setqflist, { desc = 'Hunk Quickfix This File' } },
+      { 'n', '<leader>gQ', function() g.setqflist('all') end, { desc = 'Hunk Quickfix All Files' } },
       { 'n', '<leader>gt', h.diff_this, { desc = 'Diff This' } },
       { 'n', '<leader>gb', g.blame_line, { desc = 'Blame Line' } },
       { 'n', '<leader>gq', h.quickfix_all_hunk, { desc = 'Quickfix All Hunk' } },
