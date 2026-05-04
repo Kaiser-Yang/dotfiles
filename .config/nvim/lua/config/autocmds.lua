@@ -128,6 +128,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
     local lsp_m = {
       -- By default, "tagfunc" is set whne "LspAttach",
       -- "<C-]>", "<C-W>]", and "<C-W>}" will work, you can use them to go to definition
+      -- You can use "<C-T>" to go back
       { 'n', 'K', vim.lsp.buf.hover, { desc = 'Hover' } },
       { 'n', 'grn', vim.lsp.buf.rename, { desc = 'Rename Symbol' } },
       { 'n', 'gra', vim.lsp.buf.code_action, { desc = 'Code Action' } },

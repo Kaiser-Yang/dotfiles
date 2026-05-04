@@ -370,10 +370,18 @@ M.nop = ''
 -- stylua: ignore end
 
 function M.toggle_inlay_hint()
-  local status = vim.lsp.inlay_hint.is_enabled() == false
-  u.toggle_notify('Inlay Hint', status, { title = 'LSP' })
-  vim.lsp.inlay_hint.enable(status)
-  return true
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+  if #clients == 0 then return false end
+  for _, client in ipairs(clients) do
+    if client and client:supports_method('textDocument/inlayHint', bufnr) then
+      local status = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }) == false
+      u.toggle_notify('Inlay Hint', status, { title = 'LSP' })
+      vim.lsp.inlay_hint.enable(status)
+      return true
+    end
+  end
+  return false
 end
 
 function M.toggle_spell()

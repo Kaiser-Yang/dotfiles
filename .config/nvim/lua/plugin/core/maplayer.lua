@@ -33,8 +33,8 @@ local opts = {
   { key = '<c-a>', mode = 'ci', desc = 'Cursor to BOL', handler = h.cursor_to_bol, fallback = false },
   { key = '<m-c>', mode = 'nox', desc = 'System Yank', handler = h.system_yank, expr = true, fallback = false },
   { key = '<m-d>', mode = 'ci', desc = 'Delete to EOW', handler = h.delete_to_eow, fallback = false },
-  { key = '<m-n>', mode = 'c', desc = 'Next Commend History', handler = '<down>', fallback = false },
-  { key = '<m-p>', mode = 'c', desc = 'Previous Commend History', handler = '<up>', fallback = false },
+  { key = '<m-n>', mode = 'c', desc = 'Next Commend History', handler = '<down>' },
+  { key = '<m-p>', mode = 'c', desc = 'Previous Commend History', handler = '<up>' },
   { key = '<m-v>', mode = 'cinx', desc = 'System Put', handler = h.system_put, expr = true, fallback = false },
   { key = '<m-x>', mode = 'nox', desc = 'System Cut', handler = h.system_cut, expr = true, fallback = false },
   { key = '<m-C>', desc = 'System Yank EOL', handler = h.system_yank_eol, expr = true, fallback = false },
@@ -50,7 +50,7 @@ local opts = {
   { key = '<leader>ts', desc = 'Spell', handler = h.toggle_spell, fallback = false },
   { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.toggle_treesitter },
   { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.select_file, fallback = false },
-  { key = '&', desc = 'Last Substitute with Flag', handler = '<cmd>&&<cr>', fallback = false },
+  { key = '&', desc = 'Last Substitute with Flag', handler = '<cmd>&&<cr>' },
 
   -- Repmove Motion
   { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.semicolon, count = true, fallback = false },

@@ -17,7 +17,7 @@ vim.o.termguicolors = true
 vim.o.colorcolumn = '100'
 vim.o.cursorline = true
 vim.o.list = true
-vim.o.listchars = 'tab:»-,trail:·,lead:·,nbsp:¤'
+vim.opt.listchars = { tab = '» ', trail = '·', lead = '·', nbsp = '␣' }
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.opt.foldopen:remove('hor')
@@ -37,5 +37,7 @@ vim.o.showmode = false
 vim.o.ttimeout = false
 vim.o.cmdheight = 0
 vim.o.timeoutlen = 0
+vim.o.updatetime = 300
 vim.o.statuscolumn = '%s%l%=%C '
 vim.o.undofile = true
+vim.o.scrolloff = 5
