@@ -208,7 +208,7 @@ function M.toggle_lazygit()
 end
 
 local function run_single_file_command(filetype, filepath)
-  if filetype == 'lua' and require('util').in_config_dir() then
+  if filetype == 'lua' and u.in_config_dir() then
     vim.cmd('%lua')
     return true
   end

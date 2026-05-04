@@ -25,7 +25,7 @@ require('blink.indent').setup({
       'BlinkIndentGreen',
       'BlinkIndentBlue',
       'BlinkIndentCyan',
-      'BlinkIndentViolet',
+      'BlinkIndentPurple',
     },
     underline = {
       enabled = true,
@@ -36,7 +36,7 @@ require('blink.indent').setup({
         'BlinkIndentGreenUnderline',
         'BlinkIndentBlueUnderline',
         'BlinkIndentCyanUnderline',
-        'BlinkIndentVioletUnderline',
+        'BlinkIndentPurpleUnderline',
       },
     },
   },

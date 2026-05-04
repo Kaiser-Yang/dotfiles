@@ -53,6 +53,10 @@
       "rev": "7cb092e4a92115074a3e05e775fe5c51b67a3347",
       "src": "https://github.com/Kaiser-Yang/maplayer.nvim"
     },
+    "nordic.nvim": {
+      "rev": "9fb62116b891184049c50ca6ffb0d3bc100a1a6e",
+      "src": "https://github.com/AlexvZyl/nordic.nvim"
+    },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",
       "src": "https://github.com/MunifTanjim/nui.nvim"
