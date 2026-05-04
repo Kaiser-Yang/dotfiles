@@ -53,18 +53,6 @@ local opts = {
     lsp_outgoing_calls = cursor(),
     lsp_type_definitions = cursor(),
     lsp_document_symbols = ivy(),
-    lsp_dynamic_workspace_symbols = {
-      attach_mappings = function(buffer)
-        vim.keymap.del('i', '<c-space>', { buffer = buffer })
-        return true
-      end,
-    },
-    live_grep = {
-      attach_mappings = function(buffer)
-        vim.keymap.del('i', '<c-space>', { buffer = buffer })
-        return true
-      end,
-    },
     registers = cursor({
       attach_mappings = function(buffer, map)
         vim.keymap.del({ 'i', 'n' }, '<c-e>', { buffer = buffer })
@@ -124,6 +112,9 @@ local ag = require('telescope.actions.generate')
     ['<m-a>'] = { h.smart_select_all, type = 'action', opts = { desc = 'Smart Select All' } },
     ['<m-p>'] = { a.cycle_history_prev, type = 'action', opts = { desc = 'Previous Search History' } },
     ['<m-n>'] = { a.cycle_history_next, type = 'action', opts = { desc = 'Next Search History' } },
+    ['<m-s>'] = { h.toggle_quotation_wrap(), type = 'action', opts = { desc = 'Toggle Quotation' } },
+    ['<m-i>'] = { h.toggle_quotation_wrap({ postfix = ' --iglob=' }), type = 'action', opts = { desc = 'Toggle iglob' } },
+    ['<c-space>'] = { a.to_fuzzy_refine, type = 'action', opts = { desc = 'Freeze for Fuzzy Refine' } }
   }
   opts.defaults.mappings.n = {
     ['<esc>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
@@ -150,16 +141,6 @@ local ag = require('telescope.actions.generate')
 -- stylua: ignore end
 opts.defaults.mappings.n = vim.tbl_deep_extend('error', opts.defaults.mappings.n, insert_and_normal)
 opts.defaults.mappings.i = vim.tbl_deep_extend('error', opts.defaults.mappings.i, insert_and_normal)
-local lm = {
-  ['<m-s>'] = { h.toggle_quotation_wrap(), type = 'action', opts = { desc = 'Toggle Quotation' } },
-  ['<m-i>'] = {
-    h.toggle_quotation_wrap({ postfix = ' --iglob=' }),
-    type = 'action',
-    opts = { desc = 'Toggle iglob' },
-  },
-}
-opts.extensions.live_grep_args.mappings.i = lm
-opts.extensions.live_grep_args.mappings.n = lm
 t.setup(opts)
 t.load_extension('fzf')
 t.load_extension('live_grep_args')
