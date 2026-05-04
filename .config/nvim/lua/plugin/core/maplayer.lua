@@ -58,6 +58,7 @@ local opts = {
   { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.toggle_treesitter },
   { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.select_file, fallback = false },
   { key = '&', desc = 'Last Substitute with Flag', handler = '<cmd>&&<cr>' },
+  { key = '<esc>', desc = 'No Highlight Search', handler = '<cmd>nohlsearch<cr>' },
 
   -- Repmove Motion
   { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.semicolon, count = true, fallback = false },
