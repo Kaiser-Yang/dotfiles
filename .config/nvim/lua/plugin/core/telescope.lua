@@ -53,6 +53,7 @@ local opts = {
     lsp_outgoing_calls = cursor(),
     lsp_type_definitions = cursor(),
     lsp_document_symbols = ivy(),
+    lsp_dynamic_workspace_symbols = ivy(),
     registers = cursor({
       attach_mappings = function(buffer, map)
         vim.keymap.del({ 'i', 'n' }, '<c-e>', { buffer = buffer })
