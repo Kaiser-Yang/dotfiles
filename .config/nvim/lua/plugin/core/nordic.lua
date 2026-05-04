@@ -3,6 +3,7 @@ vim.pack.add({ u.gh('AlexvZyl/nordic.nvim') }, { confirm = false })
 local n = require('nordic')
 n.setup({
   transparent = { bg = true, float = true },
+  after_palette = function(p) p.hint = p.blue1 end,
   on_highlight = function(h, p)
     h.Folded.bg = 'none'
     h.FoldColumn.bg = 'none'
