@@ -59,6 +59,8 @@ local opts = {
   { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.select_file, fallback = false },
   { key = '&', desc = 'Last Substitute with Flag', handler = '<cmd>&&<cr>' },
   { key = '<esc>', desc = 'No Highlight Search', handler = '<cmd>nohlsearch<cr>' },
+  { key = '<leader>q', desc = 'Diagnostic Quickfix', handler = vim.diagnostic.setqflist, fallback = false },
+  { key = '<leader>l', desc = 'Diagnostic Loclist', handler = vim.diagnostic.setloclist, fallback = false },
 
   -- Repmove Motion
   { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.semicolon, count = true, fallback = false },
