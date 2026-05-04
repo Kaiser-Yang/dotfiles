@@ -25,6 +25,13 @@ local live_grep_c_dir = '<cmd>Telescope live_grep_args cwd=' .. c_dir .. '<cr>'
 local live_grep_l_dir = '<cmd>Telescope live_grep_args cwd=' .. l_dir .. '<cr>'
 local find_files_c_dir = '<cmd>Telescope find_files cwd=' .. c_dir .. '<cr>'
 local find_files_l_dir = '<cmd>Telescope find_files cwd=' .. l_dir .. '<cr>'
+local function live_grep_open_file()
+  require('telescope.builtin').live_grep({
+    grep_open_files = true,
+    prompt_title = 'Live Grep in Open Files',
+  })
+  return true
+end
 -- stylua: ignore start
 local opts = {
   -- Basic
@@ -197,7 +204,10 @@ local opts = {
   { key = '<leader>sk', desc = 'Key Mapping', handler = '<cmd>Telescope keymaps<cr>' },
   { key = '<leader>sm', desc = 'Man Page', handler = '<cmd>Telescope man_pages<cr>' },
   { key = '<leader>sp', desc = 'Picker', handler = '<cmd>Telescope<cr>' },
+  { key = '<leader>sr', desc = 'Recent Files', handler = '<cmd>Telescope oldfiles<cr>' },
   { key = '<leader>st', desc = 'Todo', handler = '<cmd>Telescope todo-comments todo<cr>' },
+  { key = '<leader>/', desc = 'Current Buffer Fuzzy Search', handler = '<cmd>Telescope current_buffer_fuzzy_find<cr>' },
+  { key = '<leader>s/', desc = 'Search in Open Files', handler = live_grep_open_file },
 
   -- Autopair
   { key = '(', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('(') },
