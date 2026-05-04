@@ -106,7 +106,7 @@ require('blink.cmp').setup({
         components = { source_name = { text = function(ctx) return '[' .. ctx.source_name .. ']' end } },
       },
     },
-    documentation = { auto_show = true },
+    documentation = { auto_show = true, auto_show_delay_ms = vim.o.updatetime },
   },
   cmdline = {
     keymap = { preset = 'none' },
