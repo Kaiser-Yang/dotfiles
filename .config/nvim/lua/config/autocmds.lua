@@ -125,6 +125,23 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
     -- With those keys below,
     -- we can not use something like "grn" to enter visual replace mode and change a character to "n"
     -- gr not work
+    local grr = vim.lsp.buf.references --- @type string|function()
+    local grI = vim.lsp.buf.implementation --- @type string|function()
+    local gri = vim.lsp.buf.incoming_calls --- @type string|function()
+    local gro = vim.lsp.buf.outgoing_calls --- @type string|function()
+    local grt = vim.lsp.buf.type_definition --- @type string|function()
+    local gO = vim.lsp.buf.document_symbol --- @type string|function()
+    local gW = vim.lsp.buf.document_symbol --- @type string|function()
+    local plugin = vim.pack.get({ 'telescope.nvim' })
+    if #plugin > 0 and plugin[1].active then
+      grr = '<cmd>Telescope lsp_references<cr>'
+      grI = '<cmd>Telescope lsp_implementations<cr>'
+      gri = '<cmd>Telescope lsp_incoming_calls<cr>'
+      gro = '<cmd>Telescope lsp_outgoing_calls<cr>'
+      grt = '<cmd>Telescope lsp_type_definitions<cr>'
+      gO = '<cmd>Telescope lsp_document_symbols<cr>'
+      gW = '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>'
+    end
     local lsp_m = {
       -- By default, "tagfunc" is set whne "LspAttach",
       -- "<C-]>", "<C-W>]", and "<C-W>}" will work, you can use them to go to definition
@@ -135,13 +152,13 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
       -- This will go to header files for "C" or "CPP" files
       { 'n', 'grD', vim.lsp.buf.declaration, { desc = 'Goto Declaration' } },
       { 'n', 'grx', vim.lsp.codelens.run, { desc = 'Codelens' } },
-      { 'n', 'grr', '<cmd>Telescope lsp_references<cr>', { desc = 'References' } },
-      { 'n', 'grI', '<cmd>Telescope lsp_implementations<cr>', { desc = 'Go to Implementation' } },
-      { 'n', 'gri', '<cmd>Telescope lsp_incoming_calls<cr>', { desc = 'Incoming Call' } },
-      { 'n', 'gro', '<cmd>Telescope lsp_outgoing_calls<cr>', { desc = 'Outgoint Call' } },
-      { 'n', 'grt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = 'Go to Type Definition' } },
-      { 'n', 'gO', '<cmd>Telescope lsp_document_symbols<cr>', { desc = 'Document Symbol' } },
-      { 'n', 'gW', '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>', { desc = 'Dynamic Workspace Symbols' } },
+      { 'n', 'grr', grr, { desc = 'References' } },
+      { 'n', 'grI', grI, { desc = 'Go to Implementation' } },
+      { 'n', 'gri', gri, { desc = 'Incoming Call' } },
+      { 'n', 'gro', gro, { desc = 'Outgoint Call' } },
+      { 'n', 'grt', grt, { desc = 'Go to Type Definition' } },
+      { 'n', 'gO', gO, { desc = 'Document Symbol' } },
+      { 'n', 'gW', gW, { desc = 'Dynamic Workspace Symbols' } },
     }
     for _, m in ipairs(lsp_m) do
       m[4].buffer = ev.buf
