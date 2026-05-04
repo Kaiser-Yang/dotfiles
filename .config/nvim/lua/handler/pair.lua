@@ -57,7 +57,7 @@ local function hack(suffix)
   local cnt = (op == 'g@' and last_count or vim.v.count1)
   local key = cnt ~= 1 and cnt or '' .. res()
   vim.schedule_wrap(u.key.feedkeys)(key, 'n')
-  return '<esc>' .. (op == 'c' and 'l' or '')
+  return '<esc>' .. (op == 'c' and vim.api.nvim_win_get_cursor(0)[2] ~= 0 and 'l' or '')
 end
 
 --- @param key string
