@@ -1,6 +1,12 @@
 vim.schedule(function()
   local sev = vim.diagnostic.severity
   vim.diagnostic.config({
+    jump = {
+      on_jump = function(diagnostic, bufnr)
+        if not diagnostic then return end
+        vim.diagnostic.open_float({ bufnr = bufnr, scope = 'cursor' })
+      end,
+    },
     virtual_lines = { current_line = true },
     severity_sort = true,
     signs = {
