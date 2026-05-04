@@ -56,10 +56,12 @@ require('blink.cmp').setup({
             table.insert(out, vim.deepcopy(item))
             --- @type string
             local raw = item.insertText
-            local text = string.upper(raw:sub(1, 1)) .. raw:sub(2)
-            item.insertText = text
-            item.label = text
-            table.insert(out, item)
+            if raw:match('^[%a%d]+$') then
+              local text = string.upper(raw:sub(1, 1)) .. raw:sub(2)
+              item.insertText = text
+              item.label = text
+              table.insert(out, item)
+            end
           end
           return out
         end,
