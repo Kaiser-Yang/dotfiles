@@ -15,6 +15,6 @@ require('conform').setup({
     markdown = { 'prettier', 'cbfmt' },
     sh = { 'shfmt' },
   },
-  default_format_opts = { lsp_format = 'fallback', stop_after_first = true },
+  default_format_opts = { lsp_format = 'fallback' },
 })
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
