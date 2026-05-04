@@ -58,6 +58,10 @@ n.setup({
     h.TelescopeSelection = { link = 'Visual' }
 
     h.GitSignsCurrentLineBlame = { link = 'Comment' }
+
+    h.LspReferenceTarget = { bg = p.gray3 }
+    h.LspReferenceRead = { link = 'LspReferenceTarget' }
+    h.LspReferenceWrite = { link = 'LspReferenceTarget' }
   end,
   telescope = { style = 'classic' },
 })

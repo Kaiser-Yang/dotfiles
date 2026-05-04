@@ -165,6 +165,29 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
       ---@diagnostic disable-next-line: param-type-mismatch
       vim.keymap.set(unpack(m))
     end
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client and client:supports_method('textDocument/documentHighlight', ev.buf) then
+      local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+      vim.api.nvim_create_autocmd('CursorHold', {
+        buffer = ev.buf,
+        group = highlight_augroup,
+        callback = vim.lsp.buf.document_highlight,
+      })
+
+      vim.api.nvim_create_autocmd({ 'CursorMoved', 'ModeChanged', 'BufLeave' }, {
+        buffer = ev.buf,
+        group = highlight_augroup,
+        callback = vim.lsp.buf.clear_references,
+      })
+
+      vim.api.nvim_create_autocmd('LspDetach', {
+        group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+        callback = function(ev2)
+          vim.lsp.buf.clear_references()
+          vim.api.nvim_clear_autocmds({ group = 'kickstart-lsp-highlight', buffer = ev2.buf })
+        end,
+      })
+    end
   end,
 })
 
