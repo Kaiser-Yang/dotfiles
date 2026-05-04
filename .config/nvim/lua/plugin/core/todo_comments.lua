@@ -4,4 +4,4 @@ vim.pack.add({
   u.gh('folke/todo-comments.nvim'),
 }, { confirm = false })
 
-require('todo-comments').setup({ sign_priority = 1 })
+require('todo-comments').setup({ signs = false })
