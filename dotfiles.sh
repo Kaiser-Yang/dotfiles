@@ -42,6 +42,7 @@ REQUIRED_EXECUTABLES=(
     "rg"
     "rime_ls"
     "wn"
+    "delta"
 )
 declare -A INSTALLATION_COMMANDS
 COMMANDS_AFTER_INSTALLATION=("$SUDO npm install -g tree-sitter-cli")
@@ -111,6 +112,7 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         [wezterm]="$SUDO pacman -Sy --noconfirm wezterm"
         [wl-paste]="$SUDO pacman -Sy --noconfirm wl-clipboard"
         [xclip]="$SUDO pacman -Sy --noconfirm xclip"
+        [delta]="$SUDO pacman -Sy --noconfirm git-delta"
     )
     DIRS+=(
         ".config/fontconfig/fonts_arch.conf"
@@ -172,6 +174,7 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
             cd .. && rm -rf keyd"
         [wl-paste]="$SUDO apt install -y wl-clipboard"
         [xclip]="$SUDO apt install -y xclip"
+        [delta]="$SUDO apt install -y git-delta"
     )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
@@ -206,6 +209,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [squirrel]="brew install --cask squirrel"
         [pngpaste]="brew install pngpaste"
         [hammerspoon]="brew install --cask hammerspoon"
+        [delta]="brew install git-delta"
     )
 fi
 # Configurations for all Linux distributions
