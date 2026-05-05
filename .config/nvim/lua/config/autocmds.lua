@@ -296,13 +296,22 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufEnter', 'QuitPre' }, {
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('WinNew', {
-  callback = function()
+vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWinEnter', 'BufEnter' }, {
+  callback = function(ev)
+    if vim.bo[ev.buf].filetype ~= 'CompetiTest' then return end
     for _, win in ipairs(vim.api.nvim_list_wins()) do
-      local buf = vim.api.nvim_win_get_buf(win)
-      if vim.bo[buf].filetype == 'CompetiTest' then
+      if vim.api.nvim_win_get_buf(win) == ev.buf then
         vim.wo[win][0].signcolumn = 'no'
         vim.wo[win][0].statuscolumn = '%l '
+        vim.wo[win][0].winbar = table.concat({
+          '%#WinBarNC#',
+          '%=',
+          '%#lualine_a_normal#',
+          vim.b[ev.buf].competitest_title or 'CompetiTest',
+          '%#WinBarNC#',
+          '%=',
+          '%*',
+        })
       end
     end
   end,
