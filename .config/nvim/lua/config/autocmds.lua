@@ -295,3 +295,15 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufEnter', 'QuitPre' }, {
     end
   end,
 })
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('WinNew', {
+  callback = function()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      if vim.bo[buf].filetype == 'CompetiTest' then
+        vim.wo[win][0].signcolumn = 'no'
+        vim.wo[win][0].statuscolumn = '%l '
+      end
+    end
+  end,
+})
