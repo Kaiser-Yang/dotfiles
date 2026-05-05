@@ -44,6 +44,6 @@ require('lualine').setup({
   },
   sections = {
     lualine_c = { 'filename', 'filesize' },
-    lualine_x = { 'lsp_status', 'encoding', 'fileformat', 'filetype' },
+    lualine_x = { 'searchcount', 'lsp_status', 'encoding', 'fileformat', 'filetype' },
   },
 })
