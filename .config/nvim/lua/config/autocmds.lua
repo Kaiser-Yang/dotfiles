@@ -166,28 +166,48 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
       vim.keymap.set(unpack(m))
     end
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    local highlight_augroup, lightbulb_augroup
     if client and client:supports_method('textDocument/documentHighlight', ev.buf) then
-      local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+      highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
       vim.api.nvim_create_autocmd('CursorHold', {
         buffer = ev.buf,
         group = highlight_augroup,
         callback = vim.lsp.buf.document_highlight,
       })
-
       vim.api.nvim_create_autocmd({ 'CursorMoved', 'ModeChanged', 'BufLeave' }, {
         buffer = ev.buf,
         group = highlight_augroup,
         callback = vim.lsp.buf.clear_references,
       })
-
-      vim.api.nvim_create_autocmd('LspDetach', {
-        group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-        callback = function(ev2)
-          vim.lsp.buf.clear_references()
-          vim.api.nvim_clear_autocmds({ group = 'kickstart-lsp-highlight', buffer = ev2.buf })
-        end,
+    end
+    if client and client:supports_method('textDocument/codeAction', ev.buf) then
+      plugin = vim.pack.get({ 'nvim-lightbulb' })
+      if #plugin == 0 or not plugin[1].active then return end
+      lightbulb_augroup = vim.api.nvim_create_augroup('nvim-lightbulb', { clear = false })
+      vim.api.nvim_create_autocmd('CursorHold', {
+        buffer = ev.buf,
+        group = lightbulb_augroup,
+        callback = require('nvim-lightbulb').update_lightbulb,
+      })
+      vim.api.nvim_create_autocmd({ 'CursorMoved', 'ModeChanged', 'BufLeave' }, {
+        buffer = ev.buf,
+        group = lightbulb_augroup,
+        callback = function(ev2) require('nvim-lightbulb').clear_lightbulb(ev2.buf) end,
       })
     end
+    vim.api.nvim_create_autocmd('LspDetach', {
+      group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
+      callback = function(ev2)
+        if highlight_augroup then
+          vim.lsp.buf.clear_references()
+          vim.api.nvim_clear_autocmds({ group = highlight_augroup, buffer = ev2.buf })
+        end
+        if lightbulb_augroup then
+          require('nvim-lightbulb').clear_lightbulb(ev2.buf)
+          vim.api.nvim_clear_autocmds({ group = lightbulb_augroup, buffer = ev2.buf })
+        end
+      end,
+    })
   end,
 })
 

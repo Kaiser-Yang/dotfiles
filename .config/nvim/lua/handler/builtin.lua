@@ -212,6 +212,7 @@ local function run_single_file_command(filetype, filepath)
     vim.cmd('%lua')
     return true
   end
+  if filetype == 'markdown' and _G.loaded['render-markdown.nvim'] then vim.cmd('RenderMarkdown buf_toggle') end
   local filename_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':t'))
   local filename_noext_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':t:r'))
   local directory = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':h'))
