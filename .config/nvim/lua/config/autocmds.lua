@@ -35,11 +35,9 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
         vim.lsp.buf_detach_client(bufnr, client.id)
       end
       if vim.treesitter.highlighter.active[bufnr] ~= nil then vim.treesitter.stop(bufnr) end
-      local plugin = vim.pack.get({ 'nvim-treesitter-endwise' })
-      if #plugin > 0 and plugin[1].active then require('nvim-treesitter.endwise').detach(bufnr) end
-      plugin = vim.pack.get({ 'nvim-treesitter-context' })
+      if _G.loaded['nvim-treesitter-endwise'] then require('nvim-treesitter.endwise').detach(bufnr) end
       -- Using enable here will automatically disable context for big files
-      if #plugin > 0 and plugin[1].active then require('treesitter-context').enable() end
+      if _G.loaded['nvim-treesitter-context'] then require('treesitter-context').enable() end
     else
       vim.b.blink_pairs = nil
       vim.b.conform_on_save = nil
@@ -47,8 +45,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
       vim.b.treesitter_highlight_auto_start = nil
       -- Trigger the FileType autocommand to let LSP, indentexpr, endwise and foldexpr set up
       vim.bo.filetype = vim.bo.filetype:gsub('bigfile', '')
-      local plugin = vim.pack.get({ 'nvim-treesitter-context' })
-      if #plugin > 0 and plugin[1].active then require('treesitter-context').enable() end
+      if _G.loaded['nvim-treesitter-context'] then require('treesitter-context').enable() end
     end
   end,
 })
@@ -132,8 +129,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
     local grt = vim.lsp.buf.type_definition --- @type string|function()
     local gO = vim.lsp.buf.document_symbol --- @type string|function()
     local gW = vim.lsp.buf.document_symbol --- @type string|function()
-    local plugin = vim.pack.get({ 'telescope.nvim' })
-    if #plugin > 0 and plugin[1].active then
+    if _G.loaded['telescope.nvim'] then
       grr = '<cmd>Telescope lsp_references<cr>'
       grI = '<cmd>Telescope lsp_implementations<cr>'
       gri = '<cmd>Telescope lsp_incoming_calls<cr>'
@@ -181,8 +177,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
       })
     end
     if client and client:supports_method('textDocument/codeAction', ev.buf) then
-      plugin = vim.pack.get({ 'nvim-lightbulb' })
-      if #plugin == 0 or not plugin[1].active then return end
+      if not _G.loaded['nvim-lightbulb'] then return end
       lightbulb_augroup = vim.api.nvim_create_augroup('nvim-lightbulb', { clear = false })
       vim.api.nvim_create_autocmd('CursorHold', {
         buffer = ev.buf,
@@ -195,8 +190,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
         callback = function(ev2) require('nvim-lightbulb').clear_lightbulb(ev2.buf) end,
       })
     end
-    plugin = vim.pack.get({ 'conform.nvim' })
-    if #plugin > 0 and plugin[1].active then vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end
+    if _G.loaded['conform.nvim'] then vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end
     vim.api.nvim_create_autocmd('LspDetach', {
       group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
       callback = function(ev2)
@@ -225,24 +219,19 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'FocusLost', 'BufLeave' }, {
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('FileType', {
   callback = function(ev)
-    if not u.buffer.normal(ev.buf) then return end
-    local plugin = vim.pack.get({ 'guess-indent.nvim' })
-    if #plugin > 0 and plugin[1].active then require('guess-indent').set_from_buffer(ev.buf, true, true) end
+    if not u.buffer.normal(ev.buf) or not _G.loaded['guess-indent.nvim'] then return end
+    require('guess-indent').set_from_buffer(ev.buf, true, true)
   end,
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
   callback = function(ev)
-    if not u.enabled('conform_on_save') then return end
+    if not u.enabled('conform_on_save') or not _G.loaded['conform.nvim'] then return end
     local buffer = ev.buf
-    local plugin = vim.pack.get({ 'conform.nvim' })
-    if #plugin > 0 and plugin[1].active then
-      require('conform').format({ bufnr = buffer }, function(err)
-        if err then return end
-        plugin = vim.pack.get({ 'guess-indent.nvim' })
-        if #plugin > 0 and plugin[1].active then require('guess-indent').set_from_buffer(ev.buf, true, true) end
-      end)
-    end
+    require('conform').format({ bufnr = buffer }, function(err)
+      if err then return end
+      if _G.loaded['guess-indent.nvim'] then require('guess-indent').set_from_buffer(ev.buf, true, true) end
+    end)
   end,
 })
 
@@ -254,8 +243,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('User', {
 vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufEnter', 'QuitPre' }, {
   nested = false,
   callback = function(ev)
-    local plugin = vim.pack.get({ 'nvim-tree.lua' })
-    if #plugin == 0 or not plugin[1].active then return end
+    if not _G.loaded['nvim-tree.lua'] then return end
+
     local tree = require('nvim-tree.api').tree
     if not tree.is_visible() then return end
 

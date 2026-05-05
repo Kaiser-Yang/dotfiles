@@ -19,7 +19,10 @@ function M.get(v, ...)
   return v
 end
 
+--- @param suffix string
 function M.gh(suffix, version, name)
+  suffix = suffix:gsub('/+$', '')
+  _G.loaded[suffix:match('([^/]+)$')] = true
   return {
     src = 'https://github.com/' .. suffix,
     version = version,

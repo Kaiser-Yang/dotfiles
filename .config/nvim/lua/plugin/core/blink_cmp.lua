@@ -75,22 +75,13 @@ require('blink.cmp').setup({
       },
       dadbod = {
         name = 'Dadbod',
-        enabled = function()
-          local plugin = vim.pack.get({ 'vim-dadbod-completion' })
-          return #plugin > 0 and plugin[1].active
-        end,
+        enabled = function() return _G.loaded['vim-dadbod-completion'] end,
         module = 'vim_dadbod_completion.blink',
       },
       dap = {
         name = 'DAP',
         module = 'blink-cmp-dap',
-        enabled = function()
-          local plugin = vim.pack.get({ 'blink-cmp-dap' })
-          if #plugin == 0 or not plugin[1].active then return false end
-          plugin = vim.pack.get({ 'nvim-dap' })
-          if #plugin == 0 or not plugin[1].active or not require('dap').session() then return false end
-          return true
-        end,
+        enabled = function() return _G.loaded['blink-cmp-dap'] and _G.loaded['nvim-dap'] and require('dap').session() end,
       },
     },
   },
