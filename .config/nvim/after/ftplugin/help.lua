@@ -11,3 +11,4 @@ vim.schedule(function()
     vim.keymap.set(unpack(m))
   end
 end)
+vim.cmd('setlocal number relativenumber')
