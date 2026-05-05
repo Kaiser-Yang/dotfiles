@@ -195,6 +195,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
         callback = function(ev2) require('nvim-lightbulb').clear_lightbulb(ev2.buf) end,
       })
     end
+    plugin = vim.pack.get({ 'conform.nvim' })
+    if #plugin > 0 and plugin[1].active then vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end
     vim.api.nvim_create_autocmd('LspDetach', {
       group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
       callback = function(ev2)
@@ -241,13 +243,6 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
         if #plugin > 0 and plugin[1].active then require('guess-indent').set_from_buffer(ev.buf, true, true) end
       end)
     end
-  end,
-})
-
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
-  callback = function()
-    local plugin = vim.pack.get({ 'conform.nvim' })
-    if #plugin > 0 and plugin[1].active then vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end
   end,
 })
 
