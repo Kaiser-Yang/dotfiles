@@ -25,7 +25,7 @@ require('resolve').setup({
   default_keymaps = false,
   auto_detect_enabled = false,
   on_conflict_detected = function(args)
-    local h = require('lightboat.handler')
+    local h = require('handler')
     local r = require('resolve')
     if #mapping[1] < 4 then
       vim.list_extend(mapping[1], { h.previous_conflict, { desc = 'Previous Conflict' } })
