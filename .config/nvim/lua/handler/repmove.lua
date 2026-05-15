@@ -14,6 +14,22 @@ local function next_todo()
   return true
 end
 
+local function previous_plugin()
+  if vim.bo.filetype ~= 'nvim-pack' then return false end
+  for _ = 1, vim.v.count1 do
+    vim.fn.search('^## ', 'bsw')
+  end
+  return true
+end
+
+local function next_plugin()
+  if vim.bo.filetype ~= 'nvim-pack' then return false end
+  for _ = 1, vim.v.count1 do
+    vim.fn.search('^## ', 'sw')
+  end
+  return true
+end
+
 -- HACK:
 -- Those below do not support vim.v.count
 local function next_section_start()
@@ -170,6 +186,7 @@ function M.next_statement_start() return u.ensure_repmove(previous_statement_sta
 function M.next_statement_end() return u.ensure_repmove(previous_statement_end, next_statement_end)[2]() end
 function M.next_call_start() return u.ensure_repmove(previous_call_start, next_call_start)[2]() end
 function M.next_call_end() return u.ensure_repmove(previous_call_end, next_call_end)[2]() end
+function M.next_plugin() return u.ensure_repmove(previous_plugin, next_plugin)[2]() end
 function M.previous_todo() return u.ensure_repmove(previous_todo, next_todo)[1]() end
 function M.previous_misspelled() return u.ensure_repmove('[s', ']s')[1]() end
 function M.previous_section_start() return u.ensure_repmove(previous_section_start, next_section_start)[1]() end
@@ -192,6 +209,7 @@ function M.previous_statement_start() return u.ensure_repmove(previous_statement
 function M.previous_statement_end() return u.ensure_repmove(previous_statement_end, next_statement_end)[1]() end
 function M.previous_call_start() return u.ensure_repmove(previous_call_start, next_call_start)[1]() end
 function M.previous_call_end() return u.ensure_repmove(previous_call_end, next_call_end)[1]() end
+function M.previous_plugin() return u.ensure_repmove(previous_plugin, next_plugin)[1]() end
 -- stylua: ignore end
 
 return M
