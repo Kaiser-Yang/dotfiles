@@ -18,6 +18,7 @@ require('blink.indent').setup({
     enabled = true,
     char = '│',
     priority = 1000,
+    indent_at_cursor = true,
     highlights = {
       'BlinkIndentRed',
       'BlinkIndentOrange',
