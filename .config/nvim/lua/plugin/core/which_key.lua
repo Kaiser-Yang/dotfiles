@@ -6,7 +6,7 @@ vim.pack.add({ u.gh('Kaiser-Yang/which-key.nvim') }, { confirm = false })
 -- In insert mode, <C-O> with some other keys may not work as expected
 require('which-key').setup({
   preset = 'helix',
-  delay = function() return vim.o.timeoutlen end,
+  delay = 0,
   sort = { 'order', 'group', 'desc', 'mod' },
   keys = { scroll_down = '', scroll_up = '' },
   icons = { rules = false },

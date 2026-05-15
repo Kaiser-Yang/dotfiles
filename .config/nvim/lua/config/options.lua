@@ -36,7 +36,6 @@ vim.o.cmdwinheight = 10
 vim.o.showmode = false
 vim.o.ttimeout = false
 vim.o.cmdheight = 0
-vim.o.timeoutlen = 0
 vim.o.updatetime = 300
 vim.o.statuscolumn = '%s%l%=%C '
 vim.o.undofile = true
