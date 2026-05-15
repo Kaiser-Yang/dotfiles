@@ -56,6 +56,7 @@ local opts = {
   { key = '<leader>ti', desc = 'Inlay Hint', handler = h.toggle_inlay_hint, fallback = false },
   { key = '<leader>ts', desc = 'Spell', handler = h.toggle_spell, fallback = false },
   { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.toggle_treesitter },
+  { key = '<leader>tc', desc = 'Context', handler = h.toggle_context },
   { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.select_file, fallback = false },
   { key = '&', desc = 'Last Substitute with Flag', handler = '<cmd>&&<cr>' },
   { key = '<esc>', desc = 'No Highlight Search', handler = '<cmd>nohlsearch<cr>' },
