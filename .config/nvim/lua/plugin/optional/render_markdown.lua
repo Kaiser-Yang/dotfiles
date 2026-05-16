@@ -20,13 +20,8 @@ local function ts_context_wrap(status)
 end
 
 require('render-markdown').setup({
-  enabled = false,
-  anti_conceal = { enabled = false },
   win_options = { concealcursor = { rendered = 'nvic' } },
   on = {
-    attach = function()
-      if vim.bo.filetype == 'Avante' then vim.cmd('RenderMarkdown buf_enable') end
-    end,
     render = ts_context_wrap(true),
     clear = ts_context_wrap(false),
   },
