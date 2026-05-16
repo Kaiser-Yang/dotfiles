@@ -144,18 +144,28 @@ function M.in_macro_executing() return vim.fn.reg_executing() ~= '' end
 
 function M.lazy_path() return vim.fn.stdpath('data') .. '/site/pack/core/opt' end
 
+local builders = {}
+local function register_build(name, fn) builders[name] = fn end
+local function build_telescope_fzf_native()
+  vim.system({ 'make' }, { cwd = M.lazy_path() .. '/telescope-fzf-native.nvim' })
+end
+local function build_nvim_treesitter() vim.cmd('TSUpdate') end
+local function build_blink_cmp() require('blink.cmp').build():wait(60000) end
+register_build('telescope-fzf-native.nvim', build_telescope_fzf_native)
+register_build('nvim-treesitter', build_nvim_treesitter)
+register_build('blink.cmp', build_blink_cmp)
 local function build_plugin_internal(name)
-  if name == nil or name == 'telescope-fzf-native.nvim' then
-    vim.system({ 'make' }, { cwd = M.lazy_path() .. '/telescope-fzf-native.nvim' })
-  end
-  if name == nil or name == 'nvim-treesitter' then vim.cmd('TSUpdate') end
-  if name == nil or name == 'blink.cmp' then require('blink.cmp').build():wait(60000) end
+  local fn = builders[name]
+  if not fn then return end
+  fn()
 end
 
 function M.build_plugin(names)
-  -- empty table to build all plugins
-  if type(names) == 'table' and #names == 0 then names = nil end
-  if type(names) == 'table' then
+  if names == nil then
+    for name in pairs(builders) do
+      build_plugin_internal(name)
+    end
+  elseif type(names) == 'table' then
     for _, name in ipairs(names) do
       build_plugin_internal(name)
     end

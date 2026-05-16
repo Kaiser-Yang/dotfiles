@@ -69,7 +69,10 @@ vim.schedule(function()
     BuildPlugin = {
       callback = function(args)
         local list = nil
-        if args.args ~= '' then list = vim.split(args.args, '%s+', { trimempty = true }) end
+        if args.args ~= '' then
+          list = vim.split(args.args, '%s+', { trimempty = true })
+          if #list == 0 then list = nil end
+        end
         u.build_plugin(list)
       end,
       opt = {
