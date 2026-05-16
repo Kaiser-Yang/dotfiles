@@ -106,8 +106,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('FileType', {
-  callback = function()
+vim.api.nvim_create_autocmd('FileType', {
+  callback = vim.schedule_wrap(function()
     if u.enabled('treesitter_highlight_auto_start') and u.treesitter_available('highlights') then
       vim.treesitter.start()
     end
@@ -115,7 +115,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('FileType', {
       vim.wo[0][0].foldmethod = 'expr'
       vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     end
-  end,
+  end),
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
@@ -219,11 +219,11 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'FocusLost', 'BufLeave' }, {
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('FileType', {
-  callback = function(ev)
+vim.api.nvim_create_autocmd('FileType', {
+  callback = vim.schedule_wrap(function(ev)
     if not u.buffer.normal(ev.buf) or not _G.loaded['guess-indent.nvim'] then return end
     require('guess-indent').set_from_buffer(ev.buf, true, true)
-  end,
+  end),
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
