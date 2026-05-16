@@ -43,14 +43,6 @@ vim.schedule(function()
                 end
               end
               local qf_list = {}
-              vim.notify(
-                string.format(
-                  'Detected %d conflict(s) in current repository, they have been added to quickfix list.',
-                  #conflicts
-                ),
-                vim.log.levels.INFO,
-                { title = 'Resolve' }
-              )
               for i, conflict in ipairs(conflicts) do
                 table.insert(qf_list, {
                   bufnr = conflict.bufnr,
@@ -60,6 +52,14 @@ vim.schedule(function()
                 })
               end
               vim.fn.setqflist(qf_list)
+              vim.notify(
+                string.format(
+                  'Detected %d conflict(s) in current repository, they have been added to quickfix list.',
+                  #conflicts
+                ),
+                vim.log.levels.INFO,
+                { title = 'Resolve' }
+              )
             end)
           end
         )

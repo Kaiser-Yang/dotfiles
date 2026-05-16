@@ -166,7 +166,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     local highlight_augroup, lightbulb_augroup
     if client and client:supports_method('textDocument/documentHighlight', ev.buf) then
-      highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+      highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
       vim.api.nvim_create_autocmd('CursorHold', {
         buffer = ev.buf,
         group = highlight_augroup,
@@ -178,8 +178,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
         callback = vim.lsp.buf.clear_references,
       })
     end
-    if client and client:supports_method('textDocument/codeAction', ev.buf) then
-      if not _G.loaded['nvim-lightbulb'] then return end
+    if _G.loaded['nvim-lightbulb'] and client and client:supports_method('textDocument/codeAction', ev.buf) then
       lightbulb_augroup = vim.api.nvim_create_augroup('nvim-lightbulb', { clear = false })
       vim.api.nvim_create_autocmd('CursorHold', {
         buffer = ev.buf,
