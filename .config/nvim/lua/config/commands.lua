@@ -147,12 +147,17 @@ vim.schedule(function()
       opt = {
         nargs = '?',
         bar = true,
-        complete = function()
-          return {
+        complete = function(_, CmdLine, CursorPos)
+          local items = {
             'telescope-fzf-native.nvim',
             'nvim-treesitter',
             'blink.cmp',
           }
+          local used = {}
+          for _, token in ipairs(vim.split(CmdLine:sub(1, CursorPos), '%s+', { trimempty = true })) do
+            used[token] = true
+          end
+          return vim.tbl_filter(function(item) return not used[item] end, items)
         end,
       },
     },
