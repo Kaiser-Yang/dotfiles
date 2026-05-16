@@ -1,8 +1,6 @@
 vim.schedule(function()
   local h = require('handler')
   local mapping = {
-    { { 'n', 'x', 'o' }, '[]', h.previous_section_end, { desc = 'Block End' } },
-    { { 'n', 'x', 'o' }, '][', h.next_section_end, { desc = 'Block End' } },
     { { 'n', 'x', 'o' }, '[[', h.previous_section_start, { desc = 'Section Start' } },
     { { 'n', 'x', 'o' }, ']]', h.next_section_start, { desc = 'Section Start' } },
   }

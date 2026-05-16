@@ -2,7 +2,7 @@ vim.schedule(function()
   local h = require('handler')
   local u = require('utils')
 
-  local function last_key()
+  local function comma_typed()
     local key = u.key.last_key()
     if key == nil then return false end
     return key:match(',$') ~= nil
@@ -31,13 +31,12 @@ vim.schedule(function()
     local rhs = m[3]
     m[3] = function()
       local res = m[2]
-      if last_key() then
-        if type(rhs) == 'function' then
-          res = rhs()
-          if not res then res = m[2] end
-        else
-          res = rhs
-        end
+      if not comma_typed() then return res end
+      if type(rhs) == 'function' then
+        res = rhs()
+        if not res then res = m[2] end
+      else
+        res = rhs
       end
       return res
     end
