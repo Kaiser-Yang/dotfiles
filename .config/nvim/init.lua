@@ -21,6 +21,13 @@ vim.g.treesitter_ensure_installed = {
 --- @type table<string, boolean>
 _G.loaded = {}
 
+vim.filetype.add({
+  extension = {
+    gotmpl = 'gotmpl',
+    gotmplhtml = 'gotmplhtml',
+  },
+})
+vim.treesitter.language.register('html', 'gotmplhtml')
 require('vim._core.ui2').enable({ msg = { targets = 'msg' } })
 require('config')
 require('plugin')
