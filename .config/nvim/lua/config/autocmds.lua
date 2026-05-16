@@ -50,6 +50,9 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
   end,
 })
 
+-- INFO:
+-- In vim, copying with named registers will change the unnamed registers
+-- We use these two auto commands here to prevent this.
 local unnamed_reg_content
 local unnamed_reg_type
 vim.api.nvim_create_autocmd('VimEnter', {
@@ -59,7 +62,6 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
   once = true,
 })
-
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
   callback = function()
     if vim.v.event.regname ~= '' and vim.v.event.regname ~= '"' then
@@ -91,7 +93,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
     ---@diagnostic disable-next-line: param-type-mismatch
     for _, line in ipairs(vim.v.event.regcontents) do
       size = size + #line
-      if size > 0 then
+      if limit == nil and size > 0 then
         should_hl = true
         break
       elseif size > limit then
