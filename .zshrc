@@ -47,6 +47,36 @@ autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
 
+paste-from-clipboard() {
+  local clip=""
+
+  # macOS
+  if command -v pbpaste >/dev/null 2>&1; then
+    clip="$(pbpaste)"
+
+  # Wayland
+  elif command -v wl-paste >/dev/null 2>&1; then
+    clip="$(wl-paste --no-newline 2>/dev/null)"
+
+  # X11
+  elif command -v xclip >/dev/null 2>&1; then
+    clip="$(xclip -o -selection clipboard 2>/dev/null)"
+  elif command -v xsel >/dev/null 2>&1; then
+    clip="$(xsel --clipboard --output 2>/dev/null)"
+
+  # WSL / Windows
+  elif grep -qi microsoft /proc/version 2>/dev/null; then
+    if command -v powershell.exe >/dev/null 2>&1; then
+      clip="$(powershell.exe -NoProfile -Command Get-Clipboard 2>/dev/null | tr -d '\r')"
+    elif command -v clip.exe >/dev/null 2>&1; then
+      clip="$(clip.exe < /dev/null 2>/dev/null)"
+    fi
+  fi
+
+  LBUFFER+="$clip"
+}
+zle -N paste-from-clipboard
+bindkey 'v' paste-from-clipboard
 # Make Alt+f move the cursor forward by a word
 bindkey 'f' forward-word
 # Make Alt+d delete the word after the cursor
