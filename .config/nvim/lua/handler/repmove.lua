@@ -155,8 +155,8 @@ function M.next_hunk() return u.ensure_repmove(previous_hunk, next_hunk)[2]() en
 function M.previous_hunk() return u.ensure_repmove(previous_hunk, next_hunk)[1]() end
 
 -- stylua: ignore start
-function M.comma() return require('repmove').comma() end
-function M.semicolon() return require('repmove').semicolon() end
+function M.comma() if not _G.loaded['repmove.nvim'] then return ',' else return require('repmove').comma() end end
+function M.semicolon() if not _G.loaded['repmove.nvim'] then return ';' else return require('repmove').semicolon() end end
 function M.F() return u.ensure_repmove('F', 'f', ',', ';')[1]() end
 function M.f() return u.ensure_repmove('F', 'f', ',', ';')[2]() end
 function M.T() return u.ensure_repmove('T', 't', ',', ';')[1]() end
