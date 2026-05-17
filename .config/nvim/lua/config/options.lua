@@ -7,7 +7,7 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 vim.g.mapleader = ' '
-vim.o.numberwidth = 1
+vim.o.numberwidth = 3
 vim.o.winborder = 'rounded'
 vim.o.number = true
 vim.o.relativenumber = true
