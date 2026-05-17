@@ -43,8 +43,6 @@ local function previous_section_start()
   return true
 end
 
-local previous_section_end = previous_section_start
-local next_section_end = next_section_start
 local go_to = require('handler.treesitter').go_to
 local indent_goto = require('handler.blink_indent').indent_goto
 
@@ -107,8 +105,8 @@ local next_conflict = require('handler.git')._next_conflict
 local previous_conflict = require('handler.git')._previous_conflict
 local next_hunk = require('handler.git')._next_hunk
 local previous_hunk = require('handler.git')._previous_hunk
-local next_diagnostic = function() return vim.diagnostic.jump({ count = 1 }) end
-local previous_diagnostic = function() return vim.diagnostic.jump({ count = -1 }) end
+local next_diagnostic = function() return vim.diagnostic.jump({ count = vim.v.count1 }) end
+local previous_diagnostic = function() return vim.diagnostic.jump({ count = -vim.v.count1 }) end
 local cprevious = '<cmd>cprevious<cr>'
 local cnext = '<cmd>cnext<cr>'
 local lprevious = '<cmd>lprevious<cr>'
@@ -169,7 +167,6 @@ function M.t() return u.ensure_repmove('T', 't', ',', ';')[2]() end
 function M.next_todo() return u.ensure_repmove(previous_todo, next_todo)[2]() end
 function M.next_misspelled() return u.ensure_repmove('[s', ']s')[2]() end
 function M.next_section_start() return u.ensure_repmove(previous_section_start, next_section_start)[2]() end
-function M.next_section_end() return u.ensure_repmove(previous_section_end, next_section_end)[2]() end
 function M.next_function_start() return u.ensure_repmove(previous_function_start, next_function_start)[2]() end
 function M.next_function_end() return u.ensure_repmove(previous_function_end, next_function_end)[2]() end
 function M.next_class_start() return u.ensure_repmove(previous_class_start, next_class_start)[2]() end
@@ -192,7 +189,6 @@ function M.next_plugin() return u.ensure_repmove(previous_plugin, next_plugin)[2
 function M.previous_todo() return u.ensure_repmove(previous_todo, next_todo)[1]() end
 function M.previous_misspelled() return u.ensure_repmove('[s', ']s')[1]() end
 function M.previous_section_start() return u.ensure_repmove(previous_section_start, next_section_start)[1]() end
-function M.previous_section_end() return u.ensure_repmove(previous_section_end, next_section_end)[1]() end
 function M.previous_function_start() return u.ensure_repmove(previous_function_start, next_function_start)[1]() end
 function M.previous_function_end() return u.ensure_repmove(previous_function_end, next_function_end)[1]() end
 function M.previous_class_start() return u.ensure_repmove(previous_class_start, next_class_start)[1]() end
