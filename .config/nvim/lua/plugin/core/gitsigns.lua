@@ -3,7 +3,7 @@ vim.pack.add({ u.gh('lewis6991/gitsigns.nvim') }, { confirm = false })
 
 require('gitsigns').setup({
   attach_to_untracked = true,
-  current_line_blame = true,
+  current_line_blame = false,
   current_line_blame_opts = { delay = 300 },
   preview_config = { border = vim.o.winborder or nil },
   on_attach = function(buffer)
