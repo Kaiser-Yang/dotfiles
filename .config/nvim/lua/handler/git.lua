@@ -1,11 +1,19 @@
 local u = require('utils')
 local M = {}
 M._previous_conflict = function()
-  require('resolve').prev_conflict()
+  local cnt1 = vim.v.count1
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
+  for _ = 1, cnt1 do
+    require('resolve').prev_conflict()
+  end
   return true
 end
 M._next_conflict = function()
-  require('resolve').next_conflict()
+  local cnt1 = vim.v.count1
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
+  for _ = 1, cnt1 do
+    require('resolve').next_conflict()
+  end
   return true
 end
 M._previous_hunk = function()

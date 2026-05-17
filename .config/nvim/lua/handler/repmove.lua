@@ -1,43 +1,52 @@
 local M = {}
 local u = require('utils')
 
--- HACK: Those two do not support vim.v.count
--- HACK: Those two will always return true
 local function previous_todo()
+  local cnt1 = vim.v.count1
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
-  require('todo-comments').jump_prev()
+  for _ = 1, cnt1 do
+    require('todo-comments').jump_prev()
+  end
   return true
 end
 local function next_todo()
+  local cnt1 = vim.v.count1
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
-  require('todo-comments').jump_next()
-  return true
-end
-
-local function previous_plugin()
-  if vim.bo.filetype ~= 'nvim-pack' then return false end
-  for _ = 1, vim.v.count1 do
-    vim.fn.search('^## ', 'bsw')
+  for _ = 1, cnt1 do
+    require('todo-comments').jump_next()
   end
   return true
 end
 
+local function previous_plugin()
+  local cnt1 = vim.v.count1
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
+  for _ = 1, cnt1 do
+    vim.fn.search('^## ', 'bsw')
+  end
+  return true
+end
 local function next_plugin()
-  if vim.bo.filetype ~= 'nvim-pack' then return false end
-  for _ = 1, vim.v.count1 do
+  local cnt1 = vim.v.count1
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
+  for _ = 1, cnt1 do
     vim.fn.search('^## ', 'sw')
   end
   return true
 end
 
 local function next_section_start()
-  for _ = 1, vim.v.count1 do
+  local cnt1 = vim.v.count1
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
+  for _ = 1, cnt1 do
     require('vim.treesitter._headings').jump({ count = 1 })
   end
   return true
 end
 local function previous_section_start()
-  for _ = 1, vim.v.count1 do
+  local cnt1 = vim.v.count1
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
+  for _ = 1, cnt1 do
     require('vim.treesitter._headings').jump({ count = -1 })
   end
   return true
@@ -46,18 +55,6 @@ end
 local go_to = require('handler.treesitter').go_to
 local indent_goto = require('handler.blink_indent').indent_goto
 
-local urp = {}
-function M.repmove_wrap(previous, next, idx, comma, semicolon)
-  local res = u.ensure_repmove(previous, next, comma, semicolon, urp)
-  if idx == 1 or idx == 2 then
-    return res[idx]
-  else
-    return res
-  end
-end
-
--- HACK:
--- Those below can not cycle
 local function next_loop_start() return go_to('next', 'start', '@loop.outer') end
 local function next_loop_end() return go_to('next', 'end', '@loop.outer') end
 local function next_class_start() return go_to('next', 'start', '@class.outer') end
