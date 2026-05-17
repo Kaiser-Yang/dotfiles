@@ -136,7 +136,6 @@ function M.terminal(cmd, bufnr, border)
 
   vim.wo[term_win].cursorcolumn = false
   vim.wo[term_win].signcolumn = 'no'
-  vim.wo[term_win].winhl = 'NormalFloat:Normal'
 
   if vim.bo[term_buf].buftype ~= 'terminal' then
     vim.cmd('terminal ' .. cmd)
