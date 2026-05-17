@@ -241,7 +241,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('User', {
   callback = function() vim.wo.wrap = true end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufEnter', 'QuitPre' }, {
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('QuitPre', {
   nested = false,
   callback = function(ev)
     if not _G.loaded['nvim-tree.lua'] then return end
@@ -249,10 +249,9 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufEnter', 'QuitPre' }, {
     local tree = require('nvim-tree.api').tree
     if not tree.is_visible() then return end
 
-    -- How many focusable windows do we have? (excluding e.g. incline status window)
     local winCount = 0
     local lastWinId
-    for _, winId in ipairs(vim.api.nvim_list_wins()) do
+    for _, winId in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
       if vim.api.nvim_win_get_config(winId).focusable then
         local buf = vim.api.nvim_win_get_buf(winId)
         if vim.bo[buf].filetype ~= 'NvimTree' then
@@ -262,21 +261,12 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufEnter', 'QuitPre' }, {
       end
     end
 
-    -- We want to quit and only one window besides tree is left
     if ev.event == 'QuitPre' and winCount == 1 and lastWinId == vim.api.nvim_get_current_win() then
-      vim.api.nvim_cmd({ cmd = 'qall' }, {})
-    end
-
-    -- :bd was probably issued an only tree window is left
-    -- Behave as if tree was closed (see `:h :bd`)
-    if ev.event == 'BufEnter' and winCount == 0 then
-      local should_focus = vim.bo.filetype == 'NvimTree'
-      vim.schedule(function()
-        -- close nvim-tree: will go to the last buffer used before closing
-        tree.toggle()
-        -- re-open nivm-tree
-        tree.toggle({ find_file = false, focus = should_focus })
-      end)
+      if #vim.api.nvim_list_tabpages() == 1 then
+        vim.api.nvim_cmd({ cmd = 'qall' }, {})
+      else
+        vim.api.nvim_cmd({ cmd = 'tabclose' }, {})
+      end
     end
   end,
 })
