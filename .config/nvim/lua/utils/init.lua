@@ -30,6 +30,12 @@ function M.gh(suffix, version, name)
   }
 end
 
+--- @return function
+function M.ensure_function(v)
+  if type(v) == 'function' then return v end
+  return function() return v end
+end
+
 --- @type table<string, function>
 local repmove = {}
 --- @param previous string|function
@@ -40,7 +46,11 @@ local repmove = {}
 function M.ensure_repmove(previous, next, comma, semicolon, rp)
   rp = rp or repmove
   if not rp[previous] or not rp[next] then
-    rp[previous], rp[next] = require('repmove').make(previous, next, comma, semicolon)
+    if _G.loaded['repmove.nvim'] then
+      rp[previous], rp[next] = require('repmove').make(previous, next, comma, semicolon)
+    else
+      rp[previous], rp[next] = M.ensure_function(previous), M.ensure_function(next)
+    end
   end
   return { rp[previous], rp[next] }
 end
