@@ -22,7 +22,7 @@
             "$0"
         ],
         "description": "github io page template"
-    }
+    },
     "header 1": {
         "prefix": "h1",
         "body": ["# ${0}"],
