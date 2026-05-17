@@ -151,12 +151,12 @@ end
 
 function M.in_macro_executing() return vim.fn.reg_executing() ~= '' end
 
-function M.lazy_path() return vim.fn.stdpath('data') .. '/site/pack/core/opt' end
+function M.plugin_path() return vim.fn.stdpath('data') .. '/site/pack/core/opt' end
 
 local builders = {}
 local function register_build(name, fn) builders[name] = fn end
 local function build_telescope_fzf_native()
-  vim.system({ 'make' }, { cwd = M.lazy_path() .. '/telescope-fzf-native.nvim' })
+  vim.system({ 'make' }, { cwd = M.plugin_path() .. '/telescope-fzf-native.nvim' })
 end
 local function build_nvim_treesitter() vim.cmd('TSUpdate') end
 local function build_blink_cmp() require('blink.cmp').build():wait(60000) end

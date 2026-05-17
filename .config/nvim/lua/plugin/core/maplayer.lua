@@ -19,7 +19,7 @@ vim.api.nvim_del_keymap('n', 'grt')
 vim.api.nvim_del_keymap('n', 'gO')
 vim.api.nvim_del_keymap('i', '<c-s>')
 local h = require('handler')
-local l_dir = vim.fn.fnameescape(u.lazy_path())
+local l_dir = vim.fn.fnameescape(u.plugin_path())
 local c_dir = vim.fn.fnameescape(vim.fn.stdpath('config'))
 local live_grep_c_dir = '<cmd>Telescope live_grep_args cwd=' .. c_dir .. '<cr>'
 local live_grep_l_dir = '<cmd>Telescope live_grep_args cwd=' .. l_dir .. '<cr>'
