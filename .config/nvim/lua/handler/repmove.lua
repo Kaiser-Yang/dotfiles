@@ -30,14 +30,16 @@ local function next_plugin()
   return true
 end
 
--- HACK:
--- Those below do not support vim.v.count
 local function next_section_start()
-  require('vim.treesitter._headings').jump({ count = 1 })
+  for _ = 1, vim.v.count1 do
+    require('vim.treesitter._headings').jump({ count = 1 })
+  end
   return true
 end
 local function previous_section_start()
-  require('vim.treesitter._headings').jump({ count = -1 })
+  for _ = 1, vim.v.count1 do
+    require('vim.treesitter._headings').jump({ count = -1 })
+  end
   return true
 end
 
