@@ -4,7 +4,7 @@ vim.schedule(function()
     jump = {
       on_jump = function(diagnostic, bufnr)
         if not diagnostic then return end
-        vim.diagnostic.open_float({ bufnr = bufnr, scope = 'cursor' })
+        vim.diagnostic.open_float({ bufnr = bufnr, scope = 'cursor', focus = false })
       end,
     },
     virtual_lines = { severity = { min = sev.WARN }, current_line = true },
