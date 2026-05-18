@@ -191,41 +191,49 @@ function M.delete_to_eol()
   end
 end
 
+local command_templates = {
+  c = function(filename_escaped)
+    return string.format('gcc -g -Wall %s -o a.out && echo RUNNING && time ./a.out', filename_escaped)
+  end,
+  cpp = function(filename_escaped)
+    return string.format('g++ -g -Wall -std=c++23 %s -o a.out && echo RUNNING && time ./a.out', filename_escaped)
+  end,
+  java = function(filename_escaped, filename_noext_escaped)
+    return string.format('javac %s && echo RUNNING && time java %s', filename_escaped, filename_noext_escaped)
+  end,
+  sh = function(filename_escaped) return string.format('time sh %s', filename_escaped) end,
+  bash = function(filename_escaped) return string.format('time bash %s', filename_escaped) end,
+  zsh = function(filename_escaped) return string.format('time zsh %s', filename_escaped) end,
+  python = function(filename_escaped) return string.format('time python %s', filename_escaped) end,
+  lua = function(filename_escaped) return string.format('time lua %s', filename_escaped) end,
+  go = function(filename_escaped) return string.format('time go run %s', filename_escaped) end,
+}
 local function run_single_file_command(filetype, filepath)
-  if filetype == 'lua' and u.in_config_dir() then
-    vim.cmd('%lua')
-    return true
-  elseif filetype == 'markdown' and _G.loaded['render-markdown.nvim'] then
-    vim.cmd('RenderMarkdown buf_toggle')
-    return true
-  end
   local filename_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':t'))
   local filename_noext_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':t:r'))
   local directory_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':h'))
-  local command_map = {
-    c = string.format(
-      'gcc -g -Wall %s -o %s.out && echo RUNNING && time ./%s.out',
-      filename_escaped,
-      filename_noext_escaped,
-      filename_noext_escaped
-    ),
-    cpp = string.format(
-      'g++ -g -Wall -std=c++23 %s -o %s.out && echo RUNNING && time ./%s.out',
-      filename_escaped,
-      filename_noext_escaped,
-      filename_noext_escaped
-    ),
-    java = string.format('javac %s && echo RUNNING && time java %s', filename_escaped, filename_noext_escaped),
-    sh = string.format('time sh %s', filename_escaped),
-    bash = string.format('time bash %s', filename_escaped),
-    zsh = string.format('time zsh %s', filename_escaped),
-    python = string.format('time python %s', filename_escaped),
-    lua = string.format('time lua %s', filename_escaped),
-    go = string.format('go run %s', filename_escaped),
-  }
-  local res = command_map[filetype]
-  if res then res = 'cd ' .. directory_escaped .. ' && ' .. res end
-  return res
+  local template_fn = command_templates[filetype]
+  if not template_fn then return nil end
+  return 'cd '
+    .. directory_escaped
+    .. ' && '
+    .. template_fn(filename_escaped, filename_noext_escaped)
+end
+
+local function make_system_op(name, op, normal_cmd)
+  return function()
+    local mode = vim.api.nvim_get_mode().mode
+
+    if mode:sub(1, 2) == 'no' then
+      if vim.v.operator ~= op or vim.v.register ~= '+' then return false end
+      return op
+    elseif vim.tbl_contains({ 'n', 'v', 'V', '' }, mode:sub(1, 1)) then
+      return normal_cmd
+    else
+      vim.notify('Unsupported mode for ' .. name .. ': ' .. mode, vim.log.levels.WARN, { title = 'Light Boat' })
+      return false
+    end
+  end
 end
 
 function M.cursor_to_eol()
@@ -264,7 +272,34 @@ function M.cursor_to_bol()
   end
 end
 
+local function competi_test()
+  if not vim.fn.getcwd():match('OJProblems') or not _G.loaded['competitest.nvim'] then return false end
+  if vim.api.nvim_buf_get_name(0) == '' then
+    vim.cmd('CompetiTest receive problem')
+    return true
+  end
+  if not vim.fn.expand('%:p'):match('OJProblems') then return false end
+  local file_dir = vim.fn.expand('%:p:h')
+  local file_name = vim.fn.expand('%:t:r')
+  if vim.fn.filereadable(file_dir .. '/' .. file_name .. '_0.in') == 0 then
+    vim.cmd('CompetiTest receive testcases')
+  else
+    vim.cmd('CompetiTest run')
+  end
+  return true
+end
+
 function M.run_single_file()
+  if competi_test() then return true end
+  local filetype = vim.bo.filetype
+  if filetype == 'lua' and u.in_config_dir() then
+    vim.cmd('%lua')
+    return true
+  elseif filetype == 'markdown' and _G.loaded['render-markdown.nvim'] then
+    vim.notify('111')
+    vim.cmd('RenderMarkdown buf_toggle')
+    return true
+  end
   local cmd = run_single_file_command(vim.bo.filetype, vim.fn.expand('%:p'))
   if not cmd or type(cmd) ~= 'string' then
     vim.notify('Unsupported filetype: ' .. vim.inspect(vim.bo.filetype), vim.log.levels.WARN, { title = 'Light Boat' })
@@ -290,43 +325,8 @@ function M.toggle_lazygit()
   return true
 end
 
-function M.system_yank()
-  local mode = vim.api.nvim_get_mode().mode
-  if mode:sub(1, 2) == 'no' then
-    if vim.v.operator ~= 'y' or vim.v.register ~= '+' then return false end
-    return 'y'
-  elseif vim.tbl_contains({ 'n', 'v', 'V', '' }, mode:sub(1, 1)) then
-    return '"+y'
-  else
-    vim.notify('Unsupported mode for system_yank: ' .. mode, vim.log.levels.WARN, { title = 'Light Boat' })
-    return false
-  end
-end
-
-function M.system_cut()
-  local mode = vim.api.nvim_get_mode().mode
-  if mode:sub(1, 2) == 'no' then
-    if vim.v.operator ~= 'd' or vim.v.register ~= '+' then return false end
-    return 'd'
-  elseif vim.tbl_contains({ 'n', 'v', 'V', '' }, mode:sub(1, 1)) then
-    return '"+d'
-  else
-    vim.notify('Unsupported mode for system_cut: ' .. mode, vim.log.levels.WARN, { title = 'Light Boat' })
-    return false
-  end
-end
-
-function M.auto_indent()
-  if vim.bo.indentexpr == '' then return false end
-  local row = vim.api.nvim_win_get_cursor(0)[1]
-  local cur_indent = vim.fn.indent(row)
-  vim.v.lnum = row
-  local ok, correct_indent = pcall(vim.fn.eval, vim.bo.indentexpr)
-  if not ok or cur_indent == correct_indent or correct_indent == -1 then return false end
-  -- TODO: this does not work
-  -- return '<c-f>'
-  return false
-end
+M.system_yank = make_system_op('system_yank', 'y', '"+y')
+M.system_cut = make_system_op('system_cut', 'd', '"+d')
 
 local system_put_command = '<c-r><c-r>+'
 local system_put_insert = '<cmd>set paste<cr><c-g>u<c-r><c-r>+<cmd>set nopaste<cr>'
@@ -362,8 +362,11 @@ function M.toggle_comment()
     return false
   end
 end
--- stylua: ignore start
-function M.select_file() u.update_selection(0, 0, vim.api.nvim_buf_line_count(0), 0, 'V') return true end
+
+function M.select_file()
+  u.update_selection(0, 0, vim.api.nvim_buf_line_count(0), 0, 'V')
+  return true
+end
 M.system_put_before = '"+P'
 M.system_yank_eol = '"+y$'
 M.system_cut_eol = '"+d$'
@@ -372,7 +375,6 @@ M.to_bottom = '<c-w><c-j>'
 M.to_above = '<c-w><c-k>'
 M.to_right = '<c-w><c-l>'
 M.nop = ''
--- stylua: ignore end
 
 function M.toggle_inlay_hint()
   local bufnr = vim.api.nvim_get_current_buf()
@@ -381,8 +383,8 @@ function M.toggle_inlay_hint()
   for _, client in ipairs(clients) do
     if client and client:supports_method('textDocument/inlayHint', bufnr) then
       local status = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }) == false
-      u.toggle_notify('Inlay Hint', status, { title = 'LSP' })
       vim.lsp.inlay_hint.enable(status)
+      u.toggle_notify('Inlay Hint', status, { title = 'LSP' })
       return true
     end
   end
@@ -391,8 +393,8 @@ end
 
 function M.toggle_spell()
   local status = vim.wo.spell == false
-  u.toggle_notify('Spell', status, { title = 'Neovim' })
   vim.wo.spell = status
+  u.toggle_notify('Spell', status, { title = 'Neovim' })
   return true
 end
 
@@ -410,6 +412,28 @@ function M.toggle_treesitter()
   end
   u.toggle_notify('Treesitter Highlight', status, { title = 'Treesitter' })
   return true
+end
+
+local function diagnostic_cnt()
+  local cnt = 0
+  for _, c in ipairs(vim.diagnostic.count()) do
+    cnt = cnt + c
+  end
+  return cnt
+end
+
+M.up = '<up>'
+M.down = '<down>'
+M.last_s_cmd = '<cmd>&&<cr>'
+M.no_hl_search = '<cmd>nohlsearch<cr>'
+M.tab_split = '<cmd>tab split<cr>'
+M.diagnostic_qflist = function()
+  vim.diagnostic.setqflist()
+  return diagnostic_cnt() > 0
+end
+M.diagnostic_loclist = function()
+  vim.diagnostic.setloclist()
+  return diagnostic_cnt() > 0
 end
 
 return M

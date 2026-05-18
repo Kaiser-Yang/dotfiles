@@ -34,42 +34,45 @@ local function live_grep_open_file()
 end
 -- stylua: ignore start
 local opts = {
-  -- Basic
+  -- Builtin
   -- By default "<C-A>" is used to insert all commands in command mode
   -- and is used to insert previously inserted text in insert mode
-  { key = '<c-a>', mode = 'ci', desc = 'Cursor to BOL', handler = h.cursor_to_bol, fallback = false },
-  { key = '<m-c>', mode = 'nox', desc = 'System Yank', handler = h.system_yank, expr = true, fallback = false },
-  { key = '<m-d>', mode = 'ci', desc = 'Delete to EOW', handler = h.delete_to_eow, fallback = false },
-  { key = '<m-n>', mode = 'c', desc = 'Next Commend History', handler = '<down>' },
-  { key = '<m-p>', mode = 'c', desc = 'Previous Commend History', handler = '<up>' },
-  { key = '<m-v>', mode = 'cinx', desc = 'System Put', handler = h.system_put, expr = true, fallback = false },
-  { key = '<m-x>', mode = 'nox', desc = 'System Cut', handler = h.system_cut, expr = true, fallback = false },
-  { key = '<m-C>', desc = 'System Yank EOL', handler = h.system_yank_eol, expr = true, fallback = false },
-  { key = '<m-V>', desc = 'System Put Before', handler = h.system_put_before, expr = true, fallback = false },
-  { key = '<m-X>', desc = 'System Cut EOL', handler = h.system_cut_eol, expr = true, fallback = false },
-  { key = '<m-/>', mode = 'inx', desc = 'Toggle Comment', handler = h.toggle_comment, fallback = false },
-  { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.toggle_lazygit, fallback = false },
-  { key = '<c-w>T', desc = 'Tab Split', handler = '<cmd>tab split<cr>', fallback = false },
-  { key = '<leader>R', desc = 'Competi Test Receive File', handler = h.competi_test_receive_file, fallback = false },
-  { key = '<leader>r', desc = 'Competi Test', handler = h.competi_test, fallback = false },
-  { key = '<leader>r', desc = 'Run Single File', handler = h.run_single_file, fallback = false },
-  { key = '<leader>ti', desc = 'Inlay Hint', handler = h.toggle_inlay_hint, fallback = false },
-  { key = '<leader>ts', desc = 'Spell', handler = h.toggle_spell, fallback = false },
-  { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.toggle_treesitter },
-  { key = '<leader>tc', desc = 'Context', handler = h.toggle_context },
-  { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.select_file, fallback = false },
-  { key = '&', desc = 'Last Substitute with Flag', handler = '<cmd>&&<cr>' },
-  { key = '<esc>', desc = 'No Highlight Search', handler = '<cmd>nohlsearch<cr>' },
-  { key = '<leader>q', desc = 'Diagnostic Quickfix', handler = vim.diagnostic.setqflist, fallback = false },
-  { key = '<leader>l', desc = 'Diagnostic Loclist', handler = vim.diagnostic.setloclist, fallback = false },
+  { key = '<m-x>', mode = 'nox', desc = 'System Cut', handler = h.builtin.system_cut, expr = true },
+  { key = '<m-c>', mode = 'nox', desc = 'System Yank', handler = h.builtin.system_yank, expr = true },
+  { key = '<m-v>', mode = 'cinx', desc = 'System Put', handler = h.builtin.system_put, expr = true },
+  { key = '<m-X>', desc = 'System Cut EOL', handler = h.builtin.system_cut_eol, expr = true },
+  { key = '<m-C>', desc = 'System Yank EOL', handler = h.builtin.system_yank_eol, expr = true },
+  { key = '<m-V>', mode = 'nx', desc = 'System Put Before', handler = h.builtin.system_put_before, expr = true },
+  { key = '<m-d>', mode = 'ci', desc = 'Delete to EOW', handler = h.builtin.delete_to_eow },
+  { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.builtin.toggle_lazygit },
+  { key = '<m-/>', mode = 'inx', desc = 'Toggle Line Comment', handler = h.builtin.toggle_comment, expr = true },
+  { key = '<c-h>', desc = 'To Left', handler = h.builtin.to_left, expr = true },
+  { key = '<c-j>', desc = 'To Bottom', handler = h.builtin.to_bottom, expr = true },
+  { key = '<c-k>', desc = 'To Above', handler = h.builtin.to_above, expr = true },
+  { key = '<c-l>', desc = 'To Right', handler = h.builtin.to_right, expr = true },
+  { key = '<c-w>T', desc = 'Tab Split', handler = h.builtin.tab_split },
+  { key = '<c-a>', mode = 'ci', desc = 'Cursor to BOL', handler = h.builtin.cursor_to_bol },
+  { key = '<c-p>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
+  { key = '<c-n>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
+  { key = '&', desc = 'Last Substitute with Flag', handler = h.builtin.last_s_cmd },
+  { key = '<m-n>', mode = 'c', desc = 'Next Commend History', handler = h.builtin.down },
+  { key = '<m-p>', mode = 'c', desc = 'Previous Commend History', handler = h.builtin.up },
+  { key = '<leader>r', desc = 'Run Single File', handler = h.builtin.run_single_file },
+  { key = '<leader>ts', desc = 'Spell', handler = h.builtin.toggle_spell },
+  { key = '<leader>ti', desc = 'Inlay Hint', handler = h.builtin.toggle_inlay_hint },
+  { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.builtin.toggle_treesitter },
+  { key = '<leader>q', desc = 'Diagnostic Quickfix', handler = h.builtin.diagnostic_qflist },
+  { key = '<leader>l', desc = 'Diagnostic Loclist', handler = h.builtin.diagnostic_loclist },
+  { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.builtin.select_file },
+  { key = { '<esc>', '<c-[>' }, desc = 'No Highlight Search', handler = h.builtin.no_hl_search },
 
   -- Repmove Motion
-  { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.semicolon, count = true, fallback = false },
-  { key = ',', mode = 'nx', desc = 'Last Motion Backward', handler = h.comma, count = true, fallback = false },
-  { key = 'f', mode = 'nxo', desc = 'Move to Next Character', handler = h.f, expr = true, fallback = false },
-  { key = 'F', mode = 'nxo', desc = 'Move to Previous Character', handler = h.F, expr = true, fallback = false },
-  { key = 't', mode = 'nxo', desc = 'Move till Next Character', handler = h.t, expr = true, fallback = false },
-  { key = 'T', mode = 'nxo', desc = 'Move till Previous Character', handler = h.T, expr = true, fallback = false },
+  { key = ';', mode = 'nxo', desc = 'Last Motion Forward', handler = h.repmove.semicolon, expr = true },
+  { key = ',', mode = 'nxo', desc = 'Last Motion Backward', handler = h.repmove.comma, expr = true },
+  { key = 'f', mode = 'nxo', desc = 'Move to Next Character', handler = h.repmove.f, expr = true },
+  { key = 'F', mode = 'nxo', desc = 'Move to Previous Character', handler = h.repmove.F, expr = true },
+  { key = 't', mode = 'nxo', desc = 'Move till Next Character', handler = h.repmove.t, expr = true },
+  { key = 'T', mode = 'nxo', desc = 'Move till Previous Character', handler = h.repmove.T, expr = true },
   -- By deafault, "[a" and "]a" are mapped to ":prevvious" and ":next"
   { key = '[a', mode = 'nox', desc = 'Argument Start', handler = h.previous_parameter_start, fallback = false },
   { key = ']a', mode = 'nox', desc = 'Argument Start', handler = h.next_parameter_start, fallback = false },
@@ -237,10 +240,6 @@ local opts = {
   { key = '<m-s>', mode = 'i', desc = 'Autopair Surround', handler = h.auto_pair_wrap('<m-)>') },
 
   -- Window
-  { key = '<c-h>', desc = 'To Left', handler = h.to_left, expr = true, fallback = false },
-  { key = '<c-j>', desc = 'To Bottom', handler = h.to_bottom, expr = true, fallback = false },
-  { key = '<c-k>', desc = 'To Above', handler = h.to_above, expr = true, fallback = false },
-  { key = '<c-l>', desc = 'To Right', handler = h.to_right, expr = true, fallback = false },
   { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = false },
   { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = false },
   { key = '<left>', desc = 'Resize Left', handler = h.resize_wrap('left'), fallback = false },
@@ -254,7 +253,7 @@ local opts = {
   { key = '<c-e>', mode = 'ic', desc = 'Cancel Completion', handler = h.cancel_completion },
   -- By default, "<c-e>" is used to insert content below the cursor
   -- This hack will make it still work as default when the cusor is already at the end of the line in insert mode
-  { key = '<c-e>', mode = 'ic', desc = 'Cursor to EOL', handler = h.cursor_to_eol },
+  { key = '<c-e>', mode = 'ic', desc = 'Cursor to EOL', handler = h.builtin.cursor_to_eol },
   -- By default, "<c-u>" are used to delete content before
   { key = '<c-u>', mode = 'i', desc = 'Scroll Documentation Up', handler = h.scroll_documentation_up },
   { key = '<c-u>', mode = 'i', desc = 'Scroll Signature Up', handler = h.scroll_signature_up },
@@ -264,11 +263,10 @@ local opts = {
   { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = insert_undo_point },
   { key = '<cr>', mode = 'i', desc = 'Autopair CR', handler = h.auto_pair_wrap('<cr>'), expr = true },
   { key = '<tab>', mode = 'i', desc = 'Snippet Forward', handler = h.snippet_forward },
-  { key = '<tab>', mode = 'i', desc = 'Auto Indent', handler = h.auto_indent },
   { key = '<s-tab>', mode = 'i', desc = 'Snippet Backward', handler = h.snippet_backward },
   -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
   { key = '<c-k>', mode = 'ic', desc = 'Select Previous Completion Item', handler = h.previous_completion_item },
-  { key = '<c-k>', mode = 'ic', desc = 'Delete to EOL', handler = h.delete_to_eol },
+  { key = '<c-k>', mode = 'ic', desc = 'Delete to EOL', handler = h.builtin.delete_to_eol },
 
   -- Debugger
   { key = '<leader>tb', desc = 'Breakpoint', handler = '<cmd>DapToggleBreakpoint<cr>' },
@@ -285,8 +283,6 @@ local opts = {
   { key = '<f12>', desc = 'Dap Step Out', handler = '<cmd>DapStepOut<cr>' },
 
   -- Disable some keys
-  { key = '<c-p>', mode = 'ic', desc = 'Nop', handler = h.nop, fallback = false },
-  { key = '<c-n>', mode = 'ic', desc = 'Nop', handler = h.nop, fallback = false },
   { key = '<tab>', mode = 'c', handler = '<c-v><tab>' },
   { key = '<s-tab>', mode = 'c', handler = '<c-v><s-tab>' },
 }

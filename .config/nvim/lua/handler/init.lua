@@ -1,7 +1,18 @@
-local M = {}
 local u = require('utils')
 
-M = vim.tbl_deep_extend('error', M, require('handler.builtin'))
+local M = {
+  builtin = require('handler.builtin'),
+  completion = require('handler.completion'),
+  dap = require('handler.dap'),
+  git = require('handler.git'),
+  markdown = require('handler.markdown'),
+  nvim_tree = require('handler.nvim_tree'),
+  pair = require('handler.pair'),
+  repmove = require('handler.repmove'),
+  telescope = require('handler.telescope'),
+  treesitter = require('handler.treesitter'),
+}
+
 M = vim.tbl_deep_extend('error', M, require('handler.completion'))
 M = vim.tbl_deep_extend('error', M, require('handler.markdown'))
 M = vim.tbl_deep_extend('error', M, require('handler.pair'))
@@ -53,29 +64,6 @@ function M.resize_wrap(border, reverse, abs_delta, first)
         or resize(0, second, -actual_delta, false)
     end
   end
-end
-
-function M.competi_test()
-  if not vim.fn.getcwd():match('OJProblems') then return false end
-  if vim.bo.buftype == 'nofile' then
-    vim.cmd('CompetiTest receive problem')
-    return true
-  end
-  if not vim.fn.expand('%:p'):match('OJProblems') or vim.bo.filetype ~= 'cpp' then return false end
-  local file_dir = vim.fn.expand('%:p:h')
-  local file_name = vim.fn.expand('%:t:r')
-  if vim.fn.filereadable(file_dir .. '/' .. file_name .. '_0.in') == 0 then
-    vim.cmd('CompetiTest receive testcases')
-    return true
-  end
-  vim.cmd('CompetiTest run')
-  return true
-end
-
-function M.competi_test_receive_file()
-  if not vim.fn.getcwd():match('OJProblems') then return false end
-  vim.cmd('CompetiTest receive problem')
-  return true
 end
 
 function M.toggle_context()
