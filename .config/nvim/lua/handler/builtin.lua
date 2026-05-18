@@ -191,34 +191,17 @@ function M.delete_to_eol()
   end
 end
 
-local lazygit_win = nil
-local lazygit_buf = nil
-function M.toggle_lazygit()
-  if vim.fn.executable('lazygit') == 0 then
-    vim.notify('lazygit is not installed or not in PATH', vim.log.levels.WARN, { title = 'Light Boat' })
-    return false
-  end
-  if lazygit_win and vim.api.nvim_win_is_valid(lazygit_win) then
-    vim.api.nvim_win_hide(lazygit_win)
-  else
-    lazygit_buf, lazygit_win = u.terminal('lazygit', lazygit_buf, 'none')
-    return lazygit_buf and lazygit_win
-  end
-  return true
-end
-
 local function run_single_file_command(filetype, filepath)
   if filetype == 'lua' and u.in_config_dir() then
     vim.cmd('%lua')
     return true
-  end
-  if filetype == 'markdown' and _G.loaded['render-markdown.nvim'] then
+  elseif filetype == 'markdown' and _G.loaded['render-markdown.nvim'] then
     vim.cmd('RenderMarkdown buf_toggle')
     return true
   end
   local filename_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':t'))
   local filename_noext_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':t:r'))
-  local directory = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':h'))
+  local directory_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':h'))
   local command_map = {
     c = string.format(
       'gcc -g -Wall %s -o %s.out && echo RUNNING && time ./%s.out',
@@ -241,18 +224,8 @@ local function run_single_file_command(filetype, filepath)
     go = string.format('go run %s', filename_escaped),
   }
   local res = command_map[filetype]
-  if res then res = 'cd ' .. directory .. ' && ' .. res end
+  if res then res = 'cd ' .. directory_escaped .. ' && ' .. res end
   return res
-end
-
-function M.run_single_file()
-  local cmd = run_single_file_command(vim.bo.filetype, vim.fn.expand('%:p'))
-  if not cmd then
-    vim.notify('Unsupported filetype: ' .. vim.inspect(vim.bo.filetype), vim.log.levels.WARN, { title = 'Light Boat' })
-    return false
-  end
-  local buf, win = u.terminal(cmd)
-  return buf and win
 end
 
 function M.cursor_to_eol()
@@ -291,6 +264,32 @@ function M.cursor_to_bol()
   end
 end
 
+function M.run_single_file()
+  local cmd = run_single_file_command(vim.bo.filetype, vim.fn.expand('%:p'))
+  if not cmd or type(cmd) ~= 'string' then
+    vim.notify('Unsupported filetype: ' .. vim.inspect(vim.bo.filetype), vim.log.levels.WARN, { title = 'Light Boat' })
+    return false
+  end
+  local buf, win = u.terminal(cmd)
+  return buf and win
+end
+
+local lazygit_win = nil
+local lazygit_buf = nil
+function M.toggle_lazygit()
+  if vim.fn.executable('lazygit') == 0 then
+    vim.notify('"lazygit" is not installed or not in PATH', vim.log.levels.WARN, { title = 'Light Boat' })
+    return false
+  end
+  if lazygit_win and vim.api.nvim_win_is_valid(lazygit_win) then
+    vim.api.nvim_win_hide(lazygit_win)
+  else
+    lazygit_buf, lazygit_win = u.terminal('lazygit', lazygit_buf, 'none')
+    return lazygit_buf ~= nil and lazygit_win ~= nil
+  end
+  return true
+end
+
 function M.system_yank()
   local mode = vim.api.nvim_get_mode().mode
   if mode:sub(1, 2) == 'no' then
@@ -323,8 +322,10 @@ function M.auto_indent()
   local cur_indent = vim.fn.indent(row)
   vim.v.lnum = row
   local ok, correct_indent = pcall(vim.fn.eval, vim.bo.indentexpr)
-  if not ok or cur_indent == correct_indent then return false end
-  return '<c-f>'
+  if not ok or cur_indent == correct_indent or correct_indent == -1 then return false end
+  -- TODO: this does not work
+  -- return '<c-f>'
+  return false
 end
 
 local system_put_command = '<c-r><c-r>+'
