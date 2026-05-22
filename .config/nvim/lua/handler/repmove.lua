@@ -2,6 +2,7 @@ local M = {}
 local u = require('utils')
 
 local function previous_todo()
+  if not _G.loaded('todo-comments.nvim') then return false end
   local cnt1 = vim.v.count1
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   for _ = 1, cnt1 do
@@ -10,6 +11,7 @@ local function previous_todo()
   return true
 end
 local function next_todo()
+  if not _G.loaded('todo-comments.nvim') then return false end
   local cnt1 = vim.v.count1
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   for _ = 1, cnt1 do
@@ -52,8 +54,19 @@ local function previous_section_start()
   return true
 end
 
-local go_to = require('handler.treesitter').go_to
-local indent_goto = require('handler.blink_indent').indent_goto
+local function previous_misspelled() return vim.v.count1 .. '[s' end
+local function next_misspelled() return vim.v.count1 .. ']s' end
+
+local function comma_with_count() return vim.v.count1 .. ',' end
+local function semicolon_with_count() return vim.v.count1 .. ';' end
+
+--- @param direction 'next'|'previous'
+--- @param position 'start'|'end'
+local function go_to(direction, position, query_string, query_group)
+  if not _G.loaded['nvim-treesitter-textobjects'] then return false end
+  require('nvim-treesitter-textobjects.move')['goto_' .. direction .. '_' .. position](query_string, query_group)
+  return true
+end
 
 local function next_loop_start() return go_to('next', 'start', '@loop.outer') end
 local function next_loop_end() return go_to('next', 'end', '@loop.outer') end
@@ -92,51 +105,88 @@ local function previous_statement_end() return go_to('previous', 'end', '@statem
 local function previous_call_start() return go_to('previous', 'start', '@call.outer') end
 local function previous_call_end() return go_to('previous', 'end', '@call.outer') end
 
+-- BUG:
+-- https://github.com/saghen/blink.indent/issues/46
+local function indent_goto(direction)
+  if not _G.loaded['blink.indent'] then return false end
+  local add_to_jumplist = vim.fn.mode('1') == 'n'
+  require('blink.indent.motion').operator(direction, add_to_jumplist)()
+  return true
+end
 local function indent_top() return indent_goto('top') end
 local function indent_bottom() return indent_goto('bottom') end
 
-function M.indent_top() return u.ensure_repmove(indent_top, indent_bottom)[1]() end
-function M.indent_bottom() return u.ensure_repmove(indent_top, indent_bottom)[2]() end
+local previous_conflict = function()
+  if not _G.loaded['resolve.nvim'] then return false end
+  local cnt1 = vim.v.count1
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
+  for _ = 1, cnt1 do
+    require('resolve').prev_conflict()
+  end
+  return true
+end
+local next_conflict = function()
+  if not _G.loaded['resolve.nvim'] then return false end
+  local cnt1 = vim.v.count1
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
+  for _ = 1, cnt1 do
+    require('resolve').next_conflict()
+  end
+  return true
+end
 
-local next_conflict = require('handler.git')._next_conflict
-local previous_conflict = require('handler.git')._previous_conflict
-local next_hunk = require('handler.git')._next_hunk
-local previous_hunk = require('handler.git')._previous_hunk
+local previous_hunk = function()
+  if not _G.loaded['gitsigns.nvim'] then return false end
+  require('gitsigns').nav_hunk('prev')
+  return true
+end
+local next_hunk = function()
+  if not _G.loaded['gitsigns.nvim'] then return false end
+  require('gitsigns').nav_hunk('next')
+  return true
+end
+
 local next_diagnostic = function() return vim.diagnostic.jump({ count = vim.v.count1 }) end
 local previous_diagnostic = function() return vim.diagnostic.jump({ count = -vim.v.count1 }) end
-local cprevious = '<cmd>cprevious<cr>'
-local cnext = '<cmd>cnext<cr>'
-local lprevious = '<cmd>lprevious<cr>'
-local lnext = '<cmd>lnext<cr>'
-local bprevious = '<cmd>bprevious<cr>'
-local bnext = '<cmd>bnext<cr>'
-local previous_file = '<cmd>previous<cr>'
-local next_file = '<cmd>next<cr>'
+local cprevious = function() return '<cmd>' .. vim.v.count1 .. 'cprevious<cr>' end
+local cnext = function() return '<cmd>' .. vim.v.count1 .. 'cnext<cr>' end
+local lprevious = function() return '<cmd>' .. vim.v.count1 .. 'lprevious<cr>' end
+local lnext = function() return '<cmd>' .. vim.v.count1 .. 'lnext<cr>' end
+local bprevious = function() return '<cmd>' .. vim.v.count1 .. 'bprevious<cr>' end
+local bnext = function() return '<cmd>' .. vim.v.count1 .. 'bnext<cr>' end
+local previous_file = function() return '<cmd>' .. vim.v.count1 .. 'previous<cr>' end
+local next_file = function() return '<cmd>' .. vim.v.count1 .. 'next<cr>' end
 
 function M.nvim_tree_previous_git()
+  if not _G.loaded['nvim-tree.lua'] then return false end
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   return u.ensure_repmove(
-    require('nvim-tree.api').node.navigate.git.prev,
-    require('nvim-tree.api').node.navigate.git.next
-  )
-    [1]()
+    require('nvim-tree.api').node.navigate.git.prev_recursive,
+    require('nvim-tree.api').node.navigate.git.next_recursive
+  )[1]()
 end
 function M.nvim_tree_next_git()
+  if not _G.loaded['nvim-tree.lua'] then return false end
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   return u.ensure_repmove(
-    require('nvim-tree.api').node.navigate.git.prev,
-    require('nvim-tree.api').node.navigate.git.next
-  )
-    [2]()
+    require('nvim-tree.api').node.navigate.git.prev_recursive,
+    require('nvim-tree.api').node.navigate.git.next_recursive
+  )[2]()
 end
 function M.nvim_tree_previous_diagnostic()
+  if not _G.loaded['nvim-tree.lua'] then return false end
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   return u.ensure_repmove(
-    require('nvim-tree.api').node.navigate.diagnostics.prev,
-    require('nvim-tree.api').node.navigate.diagnostics.next
+    require('nvim-tree.api').node.navigate.diagnostics.prev_recursive,
+    require('nvim-tree.api').node.navigate.diagnostics.next_recursive
   )[1]()
 end
 function M.nvim_tree_next_diagnostic()
+  if not _G.loaded['nvim-tree.lua'] then return false end
+  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   return u.ensure_repmove(
-    require('nvim-tree.api').node.navigate.diagnostics.prev,
-    require('nvim-tree.api').node.navigate.diagnostics.next
+    require('nvim-tree.api').node.navigate.diagnostics.prev_recursive,
+    require('nvim-tree.api').node.navigate.diagnostics.next_recursive
   )[2]()
 end
 function M.next_diagnostic() return u.ensure_repmove(previous_diagnostic, next_diagnostic)[2]() end
@@ -153,16 +203,18 @@ function M.next_conflict() return u.ensure_repmove(previous_conflict, next_confl
 function M.previous_conflict() return u.ensure_repmove(previous_conflict, next_conflict)[1]() end
 function M.next_hunk() return u.ensure_repmove(previous_hunk, next_hunk)[2]() end
 function M.previous_hunk() return u.ensure_repmove(previous_hunk, next_hunk)[1]() end
+function M.indent_top() return u.ensure_repmove(indent_top, indent_bottom)[1]() end
+function M.indent_bottom() return u.ensure_repmove(indent_top, indent_bottom)[2]() end
 
 -- stylua: ignore start
 function M.comma() if not _G.loaded['repmove.nvim'] then return ',' else return require('repmove').comma() end end
 function M.semicolon() if not _G.loaded['repmove.nvim'] then return ';' else return require('repmove').semicolon() end end
-function M.F() return u.ensure_repmove('F', 'f', ',', ';')[1]() end
-function M.f() return u.ensure_repmove('F', 'f', ',', ';')[2]() end
-function M.T() return u.ensure_repmove('T', 't', ',', ';')[1]() end
-function M.t() return u.ensure_repmove('T', 't', ',', ';')[2]() end
+function M.F() return vim.v.count1 .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[1]() end
+function M.f() return vim.v.count1 .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[2]() end
+function M.T() return vim.v.count1 .. u.ensure_repmove('T', 't', comma_with_count, semicolon_with_count)[1]() end
+function M.t() return vim.v.count1 .. u.ensure_repmove('T', 't', comma_with_count, semicolon_with_count)[2]() end
 function M.next_todo() return u.ensure_repmove(previous_todo, next_todo)[2]() end
-function M.next_misspelled() return u.ensure_repmove('[s', ']s')[2]() end
+function M.next_misspelled() return u.ensure_repmove(previous_misspelled, next_misspelled)[2]() end
 function M.next_section_start() return u.ensure_repmove(previous_section_start, next_section_start)[2]() end
 function M.next_function_start() return u.ensure_repmove(previous_function_start, next_function_start)[2]() end
 function M.next_function_end() return u.ensure_repmove(previous_function_end, next_function_end)[2]() end
@@ -184,7 +236,7 @@ function M.next_call_start() return u.ensure_repmove(previous_call_start, next_c
 function M.next_call_end() return u.ensure_repmove(previous_call_end, next_call_end)[2]() end
 function M.next_plugin() return u.ensure_repmove(previous_plugin, next_plugin)[2]() end
 function M.previous_todo() return u.ensure_repmove(previous_todo, next_todo)[1]() end
-function M.previous_misspelled() return u.ensure_repmove('[s', ']s')[1]() end
+function M.previous_misspelled() return u.ensure_repmove(previous_misspelled, next_misspelled)[1]() end
 function M.previous_section_start() return u.ensure_repmove(previous_section_start, next_section_start)[1]() end
 function M.previous_function_start() return u.ensure_repmove(previous_function_start, next_function_start)[1]() end
 function M.previous_function_end() return u.ensure_repmove(previous_function_end, next_function_end)[1]() end

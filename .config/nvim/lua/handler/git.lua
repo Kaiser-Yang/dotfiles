@@ -1,29 +1,5 @@
 local u = require('utils')
 local M = {}
-M._previous_conflict = function()
-  local cnt1 = vim.v.count1
-  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
-  for _ = 1, cnt1 do
-    require('resolve').prev_conflict()
-  end
-  return true
-end
-M._next_conflict = function()
-  local cnt1 = vim.v.count1
-  if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
-  for _ = 1, cnt1 do
-    require('resolve').next_conflict()
-  end
-  return true
-end
-M._previous_hunk = function()
-  require('gitsigns').nav_hunk('prev')
-  return true
-end
-M._next_hunk = function()
-  require('gitsigns').nav_hunk('next')
-  return true
-end
 
 M.stage_selection = function()
   require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })

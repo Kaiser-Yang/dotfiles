@@ -10,8 +10,8 @@ require('gitsigns').setup({
     local g = require('gitsigns')
     local h = require('handler')
     local mapping = {
-      { { 'n', 'x' }, '[g', h.previous_hunk, { desc = 'Git Hunk' } },
-      { { 'n', 'x' }, ']g', h.next_hunk, { desc = 'Git Hunk' } },
+      { { 'n', 'x' }, '[g', h.repmove.previous_hunk, { desc = 'Git Hunk' } },
+      { { 'n', 'x' }, ']g', h.repmove.next_hunk, { desc = 'Git Hunk' } },
       { { 'x', 'o' }, 'ah', g.select_hunk, { desc = 'Git Hunk' } },
       { { 'x', 'o' }, 'ih', g.select_hunk, { desc = 'Git Hunk' } },
       { 'x', '<leader>ga', h.stage_selection, { desc = 'Add' } },

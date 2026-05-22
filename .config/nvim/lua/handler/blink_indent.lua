@@ -13,12 +13,6 @@ function M.around_indent()
   require('blink.indent.motion').textobject({ border = maps.border })()
   return true
 end
--- BUG:
--- https://github.com/saghen/blink.indent/issues/46
-function M.indent_goto(direction)
-  require('blink.indent.motion').operator(direction, vim.fn.mode('1') == 'n')()
-  return true
-end
 
 function M.toggle_indent_line()
   local indent = require('blink.indent')

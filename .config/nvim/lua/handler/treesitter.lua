@@ -25,16 +25,6 @@ local function swap(direction, query_string)
   return true
 end
 
---- @param direction 'next'|'previous'
---- @param position 'start'|'end'
-function M.go_to(direction, position, query_string, query_group)
-  if not check_big() then return false end
-  require('nvim-treesitter-textobjects.move')['goto_' .. direction .. '_' .. position](query_string, query_group)
-  -- HACK:
-  -- We do not know if the operation is successful or not, so just return true
-  return true
-end
-
 -- stylua: ignore start
 -- HACK:
 -- Those below do not support vim.v.count
