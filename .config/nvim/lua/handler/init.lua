@@ -22,6 +22,7 @@ M = vim.tbl_deep_extend('error', M, require('handler.nvim_tree'))
 M = vim.tbl_deep_extend('error', M, require('handler.dap'))
 
 function M.async_format()
+  if not _G.loaded['conform.nvim'] then return false end
   local buf = vim.api.nvim_get_current_buf()
   local res = require('conform').format({ async = true }, function(err)
     if err then return end
