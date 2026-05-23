@@ -1,7 +1,8 @@
 local u = require('utils')
 local M = {}
 
-local function check_big()
+local function check()
+  if not _G.loaded['nvim-treesitter-textobjects'] then return false end
   if u.buffer.big() then
     vim.notify('Buffer is too big for nvim-treesitter-textobjects', vim.log.levels.WARN, { title = 'Light Boat' })
     return false
@@ -9,19 +10,15 @@ local function check_big()
   return true
 end
 local function select(query_string, query_group)
-  if not check_big() then return false end
+  if not check() then return false end
   require('nvim-treesitter-textobjects.select').select_textobject(query_string, query_group)
-  -- HACK:
-  -- We do not know if the operation is successful or not, so just return true
   return true
 end
 
 --- @param direction 'next'|'previous'
 local function swap(direction, query_string)
-  if not check_big() then return false end
+  if not check() then return false end
   require('nvim-treesitter-textobjects.swap')['swap_' .. direction](query_string)
-  -- HACK:
-  -- We do not know if the operation is successful or not, so just return true
   return true
 end
 
