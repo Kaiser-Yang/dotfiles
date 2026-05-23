@@ -20,8 +20,8 @@ function M.toggle()
   if not _G.loaded['blink.indent'] then return false end
   local indent = require('blink.indent')
   local status = indent.is_enabled() == false
-  u.toggle_notify('Indent Line', status, { title = 'Blink Indent' })
   indent.enable(status)
+  u.toggle_notify('Indent Line', status, { title = 'Blink Indent' })
   return true
 end
 

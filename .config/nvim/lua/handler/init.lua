@@ -63,8 +63,8 @@ end
 function M.toggle_context()
   local c = require('treesitter-context')
   local status = not c.enabled()
-  u.toggle_notify('Treesitter Context', status, { title = 'Context' })
   c.toggle()
+  u.toggle_notify('Treesitter Context', status, { title = 'Context' })
   return true
 end
 

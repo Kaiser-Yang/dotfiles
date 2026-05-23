@@ -62,6 +62,7 @@ local opts = {
   { key = '<leader>r', desc = 'Run Single File', handler = h.builtin.run_single_file },
   { key = '<leader>ts', desc = 'Spell', handler = h.builtin.toggle_spell },
   { key = '<leader>ti', desc = 'Inlay Hint', handler = h.builtin.toggle_inlay_hint },
+  { key = '<leader>tc', desc = 'Code Lens', handler = h.builtin.toogle_codelens },
   { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.builtin.toggle_treesitter },
   { key = '<leader>q', desc = 'Diagnostic Quickfix', handler = h.builtin.diagnostic_qflist },
   { key = '<leader>l', desc = 'Diagnostic Loclist', handler = h.builtin.diagnostic_loclist },
@@ -293,7 +294,7 @@ local opts = {
   { key = '<m-e>', mode = 'n', desc = 'Open, Focus, or Reveal', handler = h.tree.open_focus_reveal },
 
   -- Context
-  { key = '<leader>tc', desc = 'Context', handler = h.toggle_context },
+  { key = '<leader>tC', desc = 'Context', handler = h.toggle_context },
 
   -- Window Resizer
   { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = true, expr = true },

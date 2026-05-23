@@ -214,10 +214,7 @@ local function run_single_file_command(filetype, filepath)
   local directory_escaped = vim.fn.shellescape(vim.fn.fnamemodify(filepath, ':h'))
   local template_fn = command_templates[filetype]
   if not template_fn then return nil end
-  return 'cd '
-    .. directory_escaped
-    .. ' && '
-    .. template_fn(filename_escaped, filename_noext_escaped)
+  return 'cd ' .. directory_escaped .. ' && ' .. template_fn(filename_escaped, filename_noext_escaped)
 end
 
 local function make_system_op(name, op, normal_cmd)
@@ -439,6 +436,12 @@ end
 function M.insert_undo_point()
   u.key.feed('<c-g>u', 'n')
   return false
+end
+
+function M.toogle_codelens()
+  local status = not vim.lsp.codelens.is_enabled()
+  vim.lsp.codelens.enable(status)
+  u.toggle_notify('Code Lens', status, { title = 'LSP' })
 end
 
 return M
