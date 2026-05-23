@@ -123,15 +123,19 @@ local autopair_keycode = {
   vim.keycode('<m-tab>'),
 }
 local autopair_first_keycode = {
+  '(',
   ')',
-  '}',
+  '[',
   ']',
+  '{',
+  '}',
   '"',
   "'",
   '`',
   -- BUG: this can not go out for "<!-- | -->" with "-"
   '-',
   vim.keycode('<bs>'),
+  vim.keycode('<cr>'),
   vim.keycode('<space>'),
   vim.keycode('<m-e>'),
   vim.keycode('<m-E>'),

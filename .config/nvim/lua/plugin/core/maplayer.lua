@@ -206,39 +206,20 @@ local opts = {
   { key = '<tab>', mode = 'i', desc = 'Snippet Forward', handler = h.completion.snippet_forward, fallback = true },
   { key = '<s-tab>', mode = 'i', desc = 'Snippet Backward', handler = h.completion.snippet_backward },
   -- By default <C-J> is an alias of <CR>
-  {
-    key = '<c-j>',
-    mode = 'ci',
-    desc = 'Select Next Completion Item',
-    handler = h.completion.next_completion_item,
-    fallback = true,
-  },
+  { key = '<c-j>', mode = 'ci', desc = 'Select Next', handler = h.completion.select_next, fallback = true },
   -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
   {
     key = '<c-k>',
     mode = 'ci',
-    desc = 'Select Previous Completion Item',
-    handler = h.completion.previous_completion_item,
+    desc = 'Select Previous',
+    handler = h.completion.select_previous,
     fallback = true,
     priority = 1,
   },
   -- By default "<c-y>" is used to insert content above the cursor
-  {
-    key = '<c-y>',
-    mode = 'ci',
-    desc = 'Accept Completion Item',
-    handler = h.completion.accept_completion_item,
-    fallback = true,
-  },
+  { key = '<c-y>', mode = 'ci', desc = 'Accept', handler = h.completion.accept, fallback = true },
   -- By default, "<c-e>" is used to insert content below the cursor
-  {
-    key = '<c-e>',
-    mode = 'ci',
-    desc = 'Cancel Completion',
-    handler = h.completion.cancel_completion,
-    fallback = true,
-    priority = 1,
-  },
+  { key = '<c-e>', mode = 'ci', desc = 'Cancel', handler = h.completion.cancel, fallback = true, priority = 1 },
 
   -- Format
   -- We will format automatically on save, therefore this one is not used frequently.
@@ -280,9 +261,9 @@ local opts = {
   { key = '<c-l>', mode = 'i', desc = 'Autopair Tabout', handler = h.pair.auto_pair_wrap('<m-tab>'), fallback = true },
 
   -- Indent
-  { key = 'i|', mode = 'ox', desc = 'Indent Line', handler = h.blink_indent.inside_indent },
-  { key = 'a|', mode = 'ox', desc = 'Indent Line', handler = h.blink_indent.around_indent },
-  { key = '<leader>tI', desc = 'Indent Line', handler = h.blink_indent.toggle_indent_line },
+  { key = 'i|', mode = 'ox', desc = 'Indent', handler = h.indent.inside },
+  { key = 'a|', mode = 'ox', desc = 'Indent', handler = h.indent.around },
+  { key = '<leader>tI', desc = 'Indent', handler = h.indent.toggle },
 
   -- Picker
   { key = 'gy', desc = 'Search Register', handler = h.telescope.registers },
@@ -309,7 +290,7 @@ local opts = {
   { key = '<leader>s/', desc = 'Search in Open Files', handler = h.telescope.live_grep_open_file },
 
   -- Nvim Tree
-  { key = '<m-e>', mode = 'n', desc = 'Open, Focus, or Reveal', handler = h.nvim_tree.open_focus_reveal },
+  { key = '<m-e>', mode = 'n', desc = 'Open, Focus, or Reveal', handler = h.tree.open_focus_reveal },
 
   -- Context
   { key = '<leader>tc', desc = 'Context', handler = h.toggle_context },

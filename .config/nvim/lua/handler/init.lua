@@ -1,16 +1,16 @@
 local u = require('utils')
 
 local M = {
-  blink_indent = require('handler.blink_indent'),
   builtin = require('handler.builtin'),
   completion = require('handler.completion'),
   dap = require('handler.dap'),
   git = require('handler.git'),
+  indent = require('handler.indent'),
   markdown = require('handler.markdown'),
-  nvim_tree = require('handler.nvim_tree'),
   pair = require('handler.pair'),
   repmove = require('handler.repmove'),
   telescope = require('handler.telescope'),
+  tree = require('handler.tree'),
   treesitter = require('handler.treesitter'),
 }
 

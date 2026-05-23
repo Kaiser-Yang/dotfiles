@@ -1,30 +1,26 @@
 local M = {}
 
-function M.next_completion_item()
+function M.select_next()
   if not _G.loaded['blink.cmp'] then return false end
   return require('blink.cmp').select_next()
 end
-function M.previous_completion_item()
+function M.select_previous()
   if not _G.loaded['blink.cmp'] then return false end
   return require('blink.cmp').select_prev()
 end
-function M.accept_completion_item()
+function M.accept()
   if not _G.loaded['blink.cmp'] then return false end
   return require('blink.cmp').accept()
 end
-function M.cancel_completion()
+function M.cancel()
   if not _G.loaded['blink.cmp'] then return false end
   return require('blink.cmp').cancel()
 end
-function M.show_completion()
+function M.show()
   if not _G.loaded['blink.cmp'] then return false end
   return require('blink.cmp').show()
 end
-function M.show_completion_wrap(opts)
-  if not _G.loaded['blink.cmp'] then return false end
-  return function() require('blink.cmp').show(opts) end
-end
-function M.hide_completion()
+function M.hide()
   if not _G.loaded['blink.cmp'] then return false end
   return require('blink.cmp').hide()
 end
