@@ -133,6 +133,8 @@ local autopair_first_keycode = {
   '-',
   vim.keycode('<bs>'),
   vim.keycode('<space>'),
+  vim.keycode('<m-e>'),
+  vim.keycode('<m-E>'),
   vim.keycode('<m-)>'),
   vim.keycode('<m-tab>'),
 }
