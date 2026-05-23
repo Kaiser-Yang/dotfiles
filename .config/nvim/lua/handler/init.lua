@@ -14,7 +14,6 @@ local M = {
   treesitter = require('handler.treesitter'),
 }
 
-M = vim.tbl_deep_extend('error', M, require('handler.git'))
 M = vim.tbl_deep_extend('error', M, require('handler.dap'))
 
 function M.async_format()
