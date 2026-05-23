@@ -1,8 +1,6 @@
 local u = require('utils')
-vim.pack.add({
-  u.gh('nvim-tree/nvim-web-devicons'),
-  u.gh('nvim-lualine/lualine.nvim'),
-}, { confirm = false })
+  u.gh('nvim-tree/nvim-web-devicons')
+  u.gh('nvim-lualine/lualine.nvim')
 
 local function recording()
   local reg = vim.fn.reg_recording()

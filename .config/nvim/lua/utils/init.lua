@@ -23,11 +23,7 @@ end
 function M.gh(suffix, version, name)
   suffix = suffix:gsub('/+$', '')
   _G.loaded[suffix:match('([^/]+)$')] = true
-  return {
-    src = 'https://github.com/' .. suffix,
-    version = version,
-    name = name,
-  }
+  vim.pack.add({ { src = 'https://github.com/' .. suffix, version = version, name = name } }, { confirm = false })
 end
 
 --- @return function

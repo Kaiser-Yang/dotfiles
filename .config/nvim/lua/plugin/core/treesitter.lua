@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('nvim-treesitter/nvim-treesitter', 'main') }, { confirm = false })
+u.gh('nvim-treesitter/nvim-treesitter', 'main')
 
 if vim.fn.executable('tree-sitter') == 0 then return end
 if #vim.g.treesitter_ensure_installed > 0 then

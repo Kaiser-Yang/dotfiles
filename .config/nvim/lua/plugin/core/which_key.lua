@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('Kaiser-Yang/which-key.nvim') }, { confirm = false })
+u.gh('Kaiser-Yang/which-key.nvim')
 
 -- BUG:
 -- this plugin has many bugs

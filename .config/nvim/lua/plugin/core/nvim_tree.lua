@@ -1,8 +1,6 @@
 local u = require('utils')
-vim.pack.add({
-  u.gh('nvim-tree/nvim-web-devicons'),
-  u.gh('nvim-tree/nvim-tree.lua'),
-}, { confirm = false })
+u.gh('nvim-tree/nvim-web-devicons')
+u.gh('nvim-tree/nvim-tree.lua')
 require('nvim-tree').setup({
   on_attach = function(buffer)
     local a = require('nvim-tree.api')

@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('altermo/ultimate-autopair.nvim') }, { confirm = false })
+u.gh('altermo/ultimate-autopair.nvim')
 
 require('ultimate-autopair.core').modes = {}
 require('ultimate-autopair').setup({

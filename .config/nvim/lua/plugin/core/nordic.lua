@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('AlexvZyl/nordic.nvim') }, { confirm = false })
+u.gh('AlexvZyl/nordic.nvim')
 local n = require('nordic')
 n.setup({
   transparent = { bg = true, float = true },

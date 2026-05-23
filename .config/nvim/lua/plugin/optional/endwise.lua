@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('RRethy/nvim-treesitter-endwise') }, { confirm = false })
+u.gh('RRethy/nvim-treesitter-endwise')
 
 require('nvim-treesitter-endwise').init()
 for _, buf in ipairs(vim.api.nvim_list_bufs()) do

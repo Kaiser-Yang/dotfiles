@@ -1,8 +1,6 @@
 local u = require('utils')
-vim.pack.add({
-  u.gh('nvim-tree/nvim-web-devicons'),
-  u.gh('stevearc/aerial.nvim'),
-}, { confirm = false })
+u.gh('nvim-tree/nvim-web-devicons')
+u.gh('stevearc/aerial.nvim')
 require('aerial').setup({
   layout = {
     win_opts = { number = true, relativenumber = true, signcolumn = 'no', statuscolumn = '%l ' },

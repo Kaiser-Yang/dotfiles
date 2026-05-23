@@ -1,9 +1,7 @@
 local u = require('utils')
-vim.pack.add({
-  u.gh('Kaiser-Yang/blink-cmp-dictionary'),
-  u.gh('saghen/blink.lib'),
-  u.gh('saghen/blink.cmp'),
-}, { confirm = false })
+u.gh('Kaiser-Yang/blink-cmp-dictionary')
+u.gh('saghen/blink.lib')
+u.gh('saghen/blink.cmp')
 
 local function default_sources()
   local res = { 'snippets', 'path', 'buffer', 'dictionary' }

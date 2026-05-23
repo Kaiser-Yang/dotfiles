@@ -1,12 +1,10 @@
 local u = require('utils')
-vim.pack.add({
-  u.gh('nvim-lua/plenary.nvim'),
-  u.gh('nvim-telescope/telescope-live-grep-args.nvim'),
-  u.gh('nvim-telescope/telescope-fzf-native.nvim'),
-  u.gh('nvim-telescope/telescope.nvim'),
-  u.gh('kkharji/sqlite.lua'),
-  u.gh('prochri/telescope-all-recent.nvim'),
-}, { confirm = false })
+u.gh('nvim-lua/plenary.nvim')
+u.gh('nvim-telescope/telescope-live-grep-args.nvim')
+u.gh('nvim-telescope/telescope-fzf-native.nvim')
+u.gh('nvim-telescope/telescope.nvim')
+u.gh('kkharji/sqlite.lua')
+u.gh('prochri/telescope-all-recent.nvim')
 
 local function find_command()
   local res = { 'rg', '--files', '--color', 'never', '-g', '!.git' }

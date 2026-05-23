@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('Kaiser-Yang/maplayer.nvim') }, { confirm = false })
+u.gh('Kaiser-Yang/maplayer.nvim')
 
 -- We have provide another key binding for commenting current line
 -- We must remove this to make "gc" work

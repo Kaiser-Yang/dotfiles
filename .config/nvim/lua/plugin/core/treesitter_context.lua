@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('nvim-treesitter/nvim-treesitter-context') }, { confirm = false })
+u.gh('nvim-treesitter/nvim-treesitter-context')
 
 require('treesitter-context').setup({
   max_lines = math.max(vim.o.scrolloff, 5),

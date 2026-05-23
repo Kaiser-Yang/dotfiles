@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('kylechui/nvim-surround') }, { confirm = false })
+u.gh('kylechui/nvim-surround')
 
 vim.g.nvim_surround_no_mappings = true
 require('nvim-surround').setup({

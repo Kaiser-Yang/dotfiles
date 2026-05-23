@@ -1,8 +1,6 @@
 local u = require('utils')
-vim.pack.add(
-  { u.gh('nvim-tree/nvim-web-devicons'), u.gh('MeanderingProgrammer/render-markdown.nvim') },
-  { confirm = false }
-)
+u.gh('nvim-tree/nvim-web-devicons')
+u.gh('MeanderingProgrammer/render-markdown.nvim')
 
 local function ts_context_wrap(status)
   return function()

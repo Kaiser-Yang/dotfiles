@@ -1,7 +1,5 @@
 local u = require('utils')
-vim.pack.add({
-  u.gh('nvim-lua/plenary.nvim'),
-  u.gh('folke/todo-comments.nvim'),
-}, { confirm = false })
+u.gh('nvim-lua/plenary.nvim')
+u.gh('folke/todo-comments.nvim')
 
 require('todo-comments').setup({ signs = false })

@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('MunifTanjim/nui.nvim') }, { confirm = false })
+u.gh('MunifTanjim/nui.nvim')
 
 local function ui_input_on_init(uiinput, opt, on_done)
   local event = require('nui.utils.autocmd').event

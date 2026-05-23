@@ -1,5 +1,5 @@
 local u = require('utils')
-vim.pack.add({ u.gh('stevearc/conform.nvim') }, { confirm = false })
+u.gh('stevearc/conform.nvim')
 
 require('conform').setup({
   notify_no_formatters = false,

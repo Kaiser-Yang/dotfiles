@@ -1,4 +1,4 @@
 local u = require('utils')
-vim.pack.add({ u.gh('nvim-treesitter/nvim-treesitter-textobjects', 'main') }, { confirm = false })
+u.gh('nvim-treesitter/nvim-treesitter-textobjects', 'main')
 
 require('nvim-treesitter-textobjects').setup()
