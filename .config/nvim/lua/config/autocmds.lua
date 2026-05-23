@@ -170,9 +170,12 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
       vim.api.nvim_create_autocmd('CursorHold', {
         buffer = ev.buf,
         group = highlight_augroup,
-        callback = vim.lsp.buf.document_highlight,
+        callback = function()
+          vim.lsp.buf.clear_references()
+          vim.lsp.buf.document_highlight()
+        end,
       })
-      vim.api.nvim_create_autocmd({ 'CursorMoved', 'ModeChanged', 'BufLeave' }, {
+      vim.api.nvim_create_autocmd({ 'CursorMovedI', 'CursorMovedC', 'CursorMoved', 'ModeChanged', 'BufLeave' }, {
         buffer = ev.buf,
         group = highlight_augroup,
         callback = vim.lsp.buf.clear_references,
