@@ -13,7 +13,6 @@ local M = {
   treesitter = require('handler.treesitter'),
 }
 
-M = vim.tbl_deep_extend('error', M, require('handler.completion'))
 M = vim.tbl_deep_extend('error', M, require('handler.markdown'))
 M = vim.tbl_deep_extend('error', M, require('handler.pair'))
 M = vim.tbl_deep_extend('error', M, require('handler.treesitter'))

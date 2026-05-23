@@ -168,10 +168,21 @@ local opts = {
   { key = '<m-s>nr', desc = 'Return', handler = h.swap_with_next_return, fallback = false },
 
   -- Completion
+  { key = '<c-s>', mode = 'i', desc = 'Toggle Signature Help', handler = h.completion.toggle_signature },
+  -- By default, "<c-u>" are used to delete content before
+  { key = '<c-u>', mode = 'i', desc = 'Scroll Documentation Up', handler = h.completion.scroll_documentation_up, fallback = true },
+  { key = '<c-u>', mode = 'i', desc = 'Scroll Signature Up', handler = h.completion.scroll_signature_up, fallback = true },
+  -- By default, "<c-d>" and "<c-t>" are used to delete or add indent in insert mode
+  { key = '<c-d>', mode = 'i', desc = 'Scroll Documentation Down', handler = h.completion.scroll_documentation_down, expr = true, fallback = true },
+  { key = '<c-d>', mode = 'i', desc = 'Scroll Signature Down', handler = h.completion.scroll_signature_down, expr = true, fallback = true },
+  { key = '<tab>', mode = 'i', desc = 'Snippet Forward', handler = h.completion.snippet_forward, fallback = true },
+  { key = '<s-tab>', mode = 'i', desc = 'Snippet Backward', handler = h.completion.snippet_backward },
   -- By default <C-J> is an alias of <CR>
-  { key = '<c-j>', mode = 'ic', desc = 'Select Next Completion Item', handler = h.next_completion_item },
-  { key = '<c-y>', mode = 'ic', desc = 'Accept Completion Item', handler = h.accept_completion_item },
-  { key = '<c-s>', mode = 'i', desc = 'Toggle Signature Help', handler = h.toggle_signature, fallback = false },
+  { key = '<c-j>', mode = 'ic', desc = 'Select Next Completion Item', handler = h.completion.next_completion_item, fallback = true },
+  -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
+  { key = '<c-k>', mode = 'ic', desc = 'Select Previous Completion Item', handler = h.completion.previous_completion_item, fallback = true },
+  { key = '<c-y>', mode = 'ic', desc = 'Accept Completion Item', handler = h.completion.accept_completion_item, fallback = true },
+  { key = '<c-e>', mode = 'ic', desc = 'Cancel Completion', handler = h.completion.cancel_completion, fallback = true },
 
   -- Format
   -- We will format automatically on save, therefore this one is not used frequently.
@@ -251,22 +262,11 @@ local opts = {
   { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = false },
 
   -- Key with Multi Functionalities
-  { key = '<c-e>', mode = 'ic', desc = 'Cancel Completion', handler = h.cancel_completion },
   -- By default, "<c-e>" is used to insert content below the cursor
   -- This hack will make it still work as default when the cusor is already at the end of the line in insert mode
   { key = '<c-e>', mode = 'ic', desc = 'Cursor to EOL', handler = h.builtin.cursor_to_eol },
-  -- By default, "<c-u>" are used to delete content before
-  { key = '<c-u>', mode = 'i', desc = 'Scroll Documentation Up', handler = h.scroll_documentation_up },
-  { key = '<c-u>', mode = 'i', desc = 'Scroll Signature Up', handler = h.scroll_signature_up },
-  -- By default, "<c-d>" and "<c-t>" are used to delete or add indent in insert mode
-  { key = '<c-d>', mode = 'i', desc = 'Scroll Documentation Down', handler = h.scroll_documentation_down, expr = true },
-  { key = '<c-d>', mode = 'i', desc = 'Scroll Signature Down', handler = h.scroll_signature_down, expr = true },
   { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = insert_undo_point },
   { key = '<cr>', mode = 'i', desc = 'Autopair CR', handler = h.auto_pair_wrap('<cr>'), expr = true },
-  { key = '<tab>', mode = 'i', desc = 'Snippet Forward', handler = h.snippet_forward },
-  { key = '<s-tab>', mode = 'i', desc = 'Snippet Backward', handler = h.snippet_backward },
-  -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
-  { key = '<c-k>', mode = 'ic', desc = 'Select Previous Completion Item', handler = h.previous_completion_item },
   { key = '<c-k>', mode = 'ic', desc = 'Delete to EOL', handler = h.builtin.delete_to_eol },
 
   -- Debugger
