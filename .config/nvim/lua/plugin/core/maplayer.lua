@@ -306,6 +306,9 @@ local opts = {
   { key = '<leader>/', desc = 'Current Buffer Fuzzy Search', handler = h.telescope.current_buffer_fuzzy_find },
   { key = '<leader>s/', desc = 'Search in Open Files', handler = h.telescope.live_grep_open_file },
 
+  -- Nvim Tree
+  { key = '<m-e>', mode = 'n', desc = 'Open, Focus, or Reveal', handler = h.nvim_tree.open_focus_reveal },
+
   -- Window Resizer
   { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = true, expr = true },
   { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = true, expr = true },

@@ -309,3 +309,10 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('WinNew', {
     if normal_win_count == 2 then vim.cmd('NvimTreeResize 35') end
   end,
 })
+
+vim.api.nvim_create_autocmd('BufEnter', {
+  callback = function()
+    if vim.bo.filetype == 'NvimTree' or vim.api.nvim_buf_get_name(0) == '' then return end
+    _G.last_filename = vim.api.nvim_buf_get_name(0)
+  end,
+})

@@ -15,7 +15,6 @@ local M = {
 }
 
 M = vim.tbl_deep_extend('error', M, require('handler.git'))
-M = vim.tbl_deep_extend('error', M, require('handler.nvim_tree'))
 M = vim.tbl_deep_extend('error', M, require('handler.dap'))
 
 function M.async_format()
