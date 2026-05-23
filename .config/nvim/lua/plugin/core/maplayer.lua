@@ -1,11 +1,6 @@
 local u = require('utils')
 vim.pack.add({ u.gh('Kaiser-Yang/maplayer.nvim') }, { confirm = false })
 
-local function insert_undo_point()
-  u.key.feedkeys('<c-g>u', 'n')
-  return false
-end
-
 -- We have provide another key binding for commenting current line
 -- We must remove this to make "gc" work
 vim.api.nvim_del_keymap('n', 'gcc')
@@ -35,8 +30,6 @@ end
 -- stylua: ignore start
 local opts = {
   -- Builtin
-  -- By default "<C-A>" is used to insert all commands in command mode
-  -- and is used to insert previously inserted text in insert mode
   { key = '<m-x>', mode = 'nox', desc = 'System Cut', handler = h.builtin.system_cut, expr = true },
   { key = '<m-c>', mode = 'nox', desc = 'System Yank', handler = h.builtin.system_yank, expr = true },
   { key = '<m-v>', mode = 'cinx', desc = 'System Put', handler = h.builtin.system_put, expr = true },
@@ -51,9 +44,13 @@ local opts = {
   { key = '<c-k>', desc = 'To Above', handler = h.builtin.to_above, expr = true },
   { key = '<c-l>', desc = 'To Right', handler = h.builtin.to_right, expr = true },
   { key = '<c-w>T', desc = 'Tab Split', handler = h.builtin.tab_split },
+  -- By default "<C-A>" is used to insert all commands in command mode
+  -- and is used to insert previously inserted text in insert mode
   { key = '<c-a>', mode = 'ci', desc = 'Cursor to BOL', handler = h.builtin.cursor_to_bol },
-  { key = '<c-e>', mode = 'ci', desc = 'Cursor to EOL', handler = h.builtin.cursor_to_eol, priority = 0 },
-  { key = '<c-k>', mode = 'ci', desc = 'Delete to EOL', handler = h.builtin.delete_to_eol, priority = 0 },
+  -- By default, "<c-e>" is used to insert content below the cursor
+  -- This hack will make it still work as default when the cusor is already at the end of the line in insert mode
+  { key = '<c-e>', mode = 'ci', desc = 'Cursor to EOL', handler = h.builtin.cursor_to_eol, fallback = true, priority = 0 },
+  { key = '<c-k>', mode = 'ci', desc = 'Delete to EOL', handler = h.builtin.delete_to_eol, fallback = true, priority = 0 },
   { key = '<c-p>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '<c-n>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '&', desc = 'Last Substitute with Flag', handler = h.builtin.last_s_cmd },
@@ -183,7 +180,9 @@ local opts = {
   { key = '<c-j>', mode = 'ci', desc = 'Select Next Completion Item', handler = h.completion.next_completion_item, fallback = true },
   -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
   { key = '<c-k>', mode = 'ci', desc = 'Select Previous Completion Item', handler = h.completion.previous_completion_item, fallback = true, priority = 1 },
+  -- By default "<c-y>" is used to insert content above the cursor
   { key = '<c-y>', mode = 'ci', desc = 'Accept Completion Item', handler = h.completion.accept_completion_item, fallback = true },
+  -- By default, "<c-e>" is used to insert content below the cursor
   { key = '<c-e>', mode = 'ci', desc = 'Cancel Completion', handler = h.completion.cancel_completion, fallback = true, priority = 1 },
 
   -- Format
