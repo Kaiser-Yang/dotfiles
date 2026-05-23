@@ -9,5 +9,13 @@ require('nvim-surround').setup({
     ['>'] = { change = { target = '^(. ?)().-( ?.)()$' } },
     [']'] = { change = { target = '^(. ?)().-( ?.)()$' } },
   },
+  aliases = {
+    a = '>', -- angle
+    b = ')',
+    B = '}',
+    s = ']', -- square
+    q = { '"', "'", '`' },
+    r = false,
+  },
   move_cursor = 'sticky',
 })
