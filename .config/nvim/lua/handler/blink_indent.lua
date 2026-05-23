@@ -4,17 +4,20 @@ local M = {}
 -- BUG:
 -- https://github.com/saghen/blink.indent/issues/45
 function M.inside_indent()
+  if not _G.loaded['blink.indent'] then return false end
   require('blink.indent.motion').textobject()()
   return true
 end
 
 function M.around_indent()
+  if not _G.loaded['blink.indent'] then return false end
   local maps = require('blink.indent.config').mappings
   require('blink.indent.motion').textobject({ border = maps.border })()
   return true
 end
 
 function M.toggle_indent_line()
+  if not _G.loaded['blink.indent'] then return false end
   local indent = require('blink.indent')
   local status = indent.is_enabled() == false
   u.toggle_notify('Indent Line', status, { title = 'Blink Indent' })

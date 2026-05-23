@@ -201,9 +201,9 @@ local opts = {
   { key = 'S', mode = 'o', desc = 'Surround Line Mode', handler = h.hack_wrap('_line'), fallback = false },
 
   -- Indent
-  { key = 'i|', mode = 'ox', desc = 'Indent Line', handler = h.inside_indent },
-  { key = 'a|', mode = 'ox', desc = 'Indent Line', handler = h.around_indent },
-  { key = '<leader>tI', desc = 'Indent Line', handler = h.toggle_indent_line },
+  { key = 'i|', mode = 'ox', desc = 'Indent Line', handler = h.blink_indent.inside_indent },
+  { key = 'a|', mode = 'ox', desc = 'Indent Line', handler = h.blink_indent.around_indent },
+  { key = '<leader>tI', desc = 'Indent Line', handler = h.blink_indent.toggle_indent_line },
 
   -- Picker
   { key = 'gy', desc = 'Search Register', handler = '<cmd>Telescope registers<cr>' },

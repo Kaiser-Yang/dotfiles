@@ -2,6 +2,7 @@ local u = require('utils')
 vim.pack.add({ u.gh('saghen/blink.indent') }, { confirm = false })
 
 -- BUG: https://github.com/saghen/blink.indent/issues/47
+-- BUG: https://github.com/saghen/blink.indent/issues/52
 require('blink.indent').setup({
   -- BUG: The default mappings can not be disabled, this is a bug
   mappings = {
