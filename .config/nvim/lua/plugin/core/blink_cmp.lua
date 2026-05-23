@@ -34,7 +34,16 @@ require('blink.cmp').setup({
         end,
         fallbacks = {},
       },
-      path = { opts = { show_hidden_files_by_default = true } },
+      path = {
+        opts = {
+          show_hidden_files_by_default = true,
+          get_cwd = function(ctx)
+            if vim.bo[ctx.bufnr].buftype == 'nofile' then return vim.fn.getcwd() end
+            return vim.fn.expand(('#%d:p:h'):format(ctx.bufnr))
+          end,
+        },
+        fallbacks = {},
+      },
       snippets = { name = 'Snip' },
       cmdline = { name = 'CMD' },
       buffer = {
