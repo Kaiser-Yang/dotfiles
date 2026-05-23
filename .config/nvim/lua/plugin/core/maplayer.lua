@@ -30,6 +30,7 @@ end
 -- stylua: ignore start
 local opts = {
   -- Builtin
+  { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = h.builtin.insert_undo_point, priority = 0 },
   { key = '<m-x>', mode = 'nox', desc = 'System Cut', handler = h.builtin.system_cut, expr = true },
   { key = '<m-c>', mode = 'nox', desc = 'System Yank', handler = h.builtin.system_yank, expr = true },
   { key = '<m-v>', mode = 'cinx', desc = 'System Put', handler = h.builtin.system_put, expr = true },
@@ -198,6 +199,24 @@ local opts = {
   -- We do not recommend to update those mappings
   { key = 's', mode = 'o', desc = 'Surround', handler = h.pair.hack_wrap() },
   { key = 'S', mode = 'o', desc = 'Surround Line Mode', handler = h.pair.hack_wrap('_line') },
+  -- Autopair
+  { key = '(', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('(') },
+  { key = ')', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap(')') },
+  { key = '[', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('[') },
+  { key = ']', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap(']') },
+  { key = '{', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('{') },
+  { key = '}', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('}') },
+  { key = '!', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('!') },
+  { key = '-', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('-') },
+  { key = '"', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('"') },
+  { key = "'", mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap("'") },
+  { key = '`', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('`') },
+  { key = '<bs>', mode = 'i', desc = 'Autopair BS', handler = h.pair.auto_pair_wrap('<bs>') },
+  { key = '<space>', mode = 'i', desc = 'Autopair Space', handler = h.pair.auto_pair_wrap('<space>') },
+  { key = '<cr>', mode = 'i', desc = 'Autopair CR', handler = h.pair.auto_pair_wrap('<cr>'), priority = 1 },
+  { key = '<m-e>', mode = 'i', desc = 'Autopair Fastwarp', handler = h.pair.auto_pair_wrap('<m-e>'), expr = true },
+  { key = '<m-E>', mode = 'i', desc = 'Autopair Reverse Fastwarp', handler = h.pair.auto_pair_wrap('<m-E>'), expr = true },
+  { key = '<m-s>', mode = 'i', desc = 'Autopair Close', handler = h.pair.auto_pair_wrap('<m-)>') },
 
   -- Indent
   { key = 'i|', mode = 'ox', desc = 'Indent Line', handler = h.blink_indent.inside_indent },
@@ -229,29 +248,6 @@ local opts = {
   { key = '<leader>/', desc = 'Current Buffer Fuzzy Search', handler = '<cmd>Telescope current_buffer_fuzzy_find<cr>' },
   { key = '<leader>s/', desc = 'Search in Open Files', handler = live_grep_open_file },
 
-  -- Autopair
-  { key = '(', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('(') },
-  { key = ')', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap(')') },
-  { key = '[', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('[') },
-  { key = ']', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap(']') },
-  { key = '{', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('{') },
-  { key = '}', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('}') },
-  { key = '<', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('<') },
-  { key = '>', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('>') },
-  { key = '!', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('!') },
-  { key = '-', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('-') },
-  { key = '_', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('_') },
-  { key = '*', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('*') },
-  { key = '$', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('$') },
-  { key = '"', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('"') },
-  { key = "'", mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap("'") },
-  { key = '`', mode = 'i', desc = 'Autopair', handler = h.auto_pair_wrap('`') },
-  { key = '<bs>', mode = 'i', desc = 'Autopair BS', handler = h.auto_pair_wrap('<bs>') },
-  { key = '<space>', mode = 'i', desc = 'Autopair Space', handler = h.auto_pair_wrap('<space>') },
-  { key = '<m-e>', mode = 'i', desc = 'Autopair Fastwarp', handler = h.auto_pair_wrap('<m-e>') },
-  { key = '<m-E>', mode = 'i', desc = 'Autopair Reverse Fastwarp', handler = h.auto_pair_wrap('<m-E>') },
-  { key = '<m-s>', mode = 'i', desc = 'Autopair Surround', handler = h.auto_pair_wrap('<m-)>') },
-
   -- Window Resizer
   { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = true, expr = true },
   { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = true, expr = true },
@@ -261,13 +257,6 @@ local opts = {
   { key = '<s-down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = true, expr = true },
   { key = '<s-left>', desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = true, expr = true },
   { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = true, expr = true },
-
-  -- Key with Multi Functionalities
-  -- By default, "<c-e>" is used to insert content below the cursor
-  -- This hack will make it still work as default when the cusor is already at the end of the line in insert mode
-  { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = insert_undo_point },
-  { key = '<cr>', mode = 'i', desc = 'Autopair CR', handler = h.auto_pair_wrap('<cr>'), expr = true },
-  { key = '<c-k>', mode = 'ic', desc = 'Delete to EOL', handler = h.builtin.delete_to_eol },
 
   -- Debugger
   { key = '<leader>tb', desc = 'Breakpoint', handler = '<cmd>DapToggleBreakpoint<cr>' },

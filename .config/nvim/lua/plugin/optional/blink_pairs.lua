@@ -8,7 +8,6 @@ require('blink.pairs').setup({
   mappings = {
     enabled = false,
     cmdline = false,
-    disabled_filetypes = { 'TelescopePrompt' },
     pairs = {},
   },
   highlights = {
