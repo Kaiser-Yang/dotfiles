@@ -15,7 +15,6 @@ local M = {
 }
 
 M = vim.tbl_deep_extend('error', M, require('handler.markdown'))
-M = vim.tbl_deep_extend('error', M, require('handler.pair'))
 M = vim.tbl_deep_extend('error', M, require('handler.telescope'))
 M = vim.tbl_deep_extend('error', M, require('handler.git'))
 M = vim.tbl_deep_extend('error', M, require('handler.nvim_tree'))

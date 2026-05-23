@@ -192,12 +192,12 @@ local opts = {
 
   -- Surround
   -- By default "s" and "S" in visual mode are aliases of "c"
-  { key = 's', mode = 'x', desc = 'Surround', handler = h.surround_visual, expr = true, fallback = false },
-  { key = 'S', mode = 'x', desc = 'Surround Line Mode', handler = h.surround_visual_line, expr = true, fallback = false },
+  { key = 's', mode = 'x', desc = 'Surround', handler = h.pair.surround_visual, expr = true },
+  { key = 'S', mode = 'x', desc = 'Surround Line Mode', handler = h.pair.surround_visual_line, expr = true },
   -- We use this tricky way to make "ys", "cs", "ds", "yS", "cS", "dS", "yss", "ysS", "ySs" and "ySS" work
   -- We do not recommend to update those mappings
-  { key = 's', mode = 'o', desc = 'Surround', handler = h.hack_wrap(), fallback = false },
-  { key = 'S', mode = 'o', desc = 'Surround Line Mode', handler = h.hack_wrap('_line'), fallback = false },
+  { key = 's', mode = 'o', desc = 'Surround', handler = h.pair.hack_wrap() },
+  { key = 'S', mode = 'o', desc = 'Surround Line Mode', handler = h.pair.hack_wrap('_line') },
 
   -- Indent
   { key = 'i|', mode = 'ox', desc = 'Indent Line', handler = h.blink_indent.inside_indent },

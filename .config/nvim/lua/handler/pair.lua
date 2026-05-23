@@ -2,43 +2,18 @@ local u = require('utils')
 local M = {}
 
 local last_count = 1
-local l = {}
-function l.surround_normal()
-  require('nvim-surround')
-  return '<plug>(nvim-surround-normal)'
-end
-function l.surround_normal_current()
-  require('nvim-surround')
-  return '<plug>(nvim-surround-normal-cur)'
-end
-function l.surround_normal_line()
-  require('nvim-surround')
-  return '<plug>(nvim-surround-normal-line)'
-end
-function l.surround_normal_current_line()
-  require('nvim-surround')
-  return '<plug>(nvim-surround-normal-cur-line)'
-end
-function l.surround_insert()
-  require('nvim-surround')
-  return '<plug>(nvim-surround-insert)'
-end
-function l.surround_insert_line()
-  require('nvim-surround')
-  return '<plug>(nvim-surround-insert-line)'
-end
-function l.surround_delete()
-  require('nvim-surround')
-  return '<plug>(nvim-surround-delete)'
-end
-function l.surround_change()
-  require('nvim-surround')
-  return '<plug>(nvim-surround-change)'
-end
-function l.surround_change_line()
-  require('nvim-surround')
-  return '<plug>(nvim-surround-change-line)'
-end
+--- @type table<string, string>
+local l = {
+  surround_normal = '<plug>(nvim-surround-normal)',
+  surround_normal_current = '<plug>(nvim-surround-normal-cur)',
+  surround_normal_line = '<plug>(nvim-surround-normal-line)',
+  surround_normal_current_line = '<plug>(nvim-surround-normal-cur-line)',
+  surround_insert = '<plug>(nvim-surround-insert)',
+  surround_insert_line = '<plug>(nvim-surround-insert-line)',
+  surround_delete = '<plug>(nvim-surround-delete)',
+  surround_change = '<plug>(nvim-surround-change)',
+  surround_change_line = '<plug>(nvim-surround-change-line)',
+}
 local function hack(suffix)
   suffix = suffix or ''
   local op = vim.v.operator
@@ -55,9 +30,9 @@ local function hack(suffix)
   end
   if not res then return false end
   local cnt = (op == 'g@' and last_count or vim.v.count1)
-  local key = cnt ~= 1 and cnt or '' .. res()
+  local key = (cnt ~= 1 and cnt or '') .. res
   vim.schedule_wrap(u.key.feedkeys)(key, 'n')
-  return '<esc>' .. (op == 'c' and vim.api.nvim_win_get_cursor(0)[2] ~= 0 and 'l' or '')
+  return '<esc>'
 end
 
 --- @param key string
@@ -298,16 +273,22 @@ function M.auto_pair_wrap(key)
     return false
   end
 end
+
 function M.surround_visual()
-  require('nvim-surround')
+  if not _G.loaded['nvim-surround'] then return false end
   return '<plug>(nvim-surround-visual)'
 end
+
 function M.surround_visual_line()
-  require('nvim-surround')
+  if not _G.loaded['nvim-surround'] then return false end
   return '<plug>(nvim-surround-visual-line)'
 end
+
 function M.hack_wrap(suffix)
-  return function() return hack(suffix) end
+  return function()
+    if not _G.loaded['nvim-surround'] then return false end
+    return hack(suffix)
+  end
 end
 
 return M
