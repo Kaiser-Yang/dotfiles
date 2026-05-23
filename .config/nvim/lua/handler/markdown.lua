@@ -34,7 +34,7 @@ function M.goto_placeholder()
     else
       vim.schedule(function()
         vim.api.nvim_win_set_cursor(0, { match.lnum, match.byteidx })
-        u.key.feedkeys(string.rep('<del>', #pattern), 'n')
+        u.key.feed(string.rep('<del>', #pattern), 'n')
       end)
       return prefix
     end

@@ -2,7 +2,7 @@ local M = {}
 
 function M.big(buffer, event)
   buffer = M.normalize_buf(buffer)
-  local _size = M.buffer_size(buffer)
+  local _size = M.size(buffer)
   local line_count = vim.api.nvim_buf_line_count(0)
   local limit = type(vim.b[buffer].big_file_limit) == 'number' and vim.b[buffer].big_file_limit
     or type(vim.g.big_file_limit) == 'number' and vim.g.big_file_limit
@@ -26,7 +26,7 @@ end
 --- Return the size of the buffer in bytes.
 --- @param buffer? integer The buffer number, defaults to the current buffer.
 --- @return integer
-function M.buffer_size(buffer)
+function M.size(buffer)
   buffer = M.normalize_buf(buffer)
   local file_name = vim.api.nvim_buf_get_name(buffer)
   local res

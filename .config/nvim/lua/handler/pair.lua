@@ -31,7 +31,7 @@ local function hack(suffix)
   if not res then return false end
   local cnt = (op == 'g@' and last_count or vim.v.count1)
   local key = (cnt ~= 1 and cnt or '') .. res
-  vim.schedule_wrap(u.key.feedkeys)(key, 'n')
+  vim.schedule_wrap(u.key.feed)(key, 'n')
   return '<esc>'
 end
 
@@ -40,7 +40,7 @@ end
 local function autopair(keycode)
   local core = require('ultimate-autopair.core')
   core.get_run(keycode)
-  u.key.feedkeys(core.run_run(keycode), 'n', false)
+  u.key.feed(core.run_run(keycode), 'n', false)
   return true
 end
 

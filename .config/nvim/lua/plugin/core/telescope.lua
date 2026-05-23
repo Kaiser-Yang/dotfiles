@@ -63,7 +63,7 @@ local opts = {
         for _, key in ipairs(r) do
           map('n', key, {
             function()
-              vim.schedule_wrap(u.key.feedkeys)('<cr>', 'm')
+              vim.schedule_wrap(u.key.feed)('<cr>', 'm')
               return 'i' .. key
             end,
             type = 'command',

@@ -437,7 +437,7 @@ M.diagnostic_loclist = function()
 end
 
 function M.insert_undo_point()
-  u.key.feedkeys('<c-g>u', 'n')
+  u.key.feed('<c-g>u', 'n')
   return false
 end
 

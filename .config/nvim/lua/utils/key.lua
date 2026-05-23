@@ -8,7 +8,7 @@ function M.last_key() return last_key end
 --- @param keys string
 --- @param mode string
 --- @param replace_keycodes boolean?
-function M.feedkeys(keys, mode, replace_keycodes)
+function M.feed(keys, mode, replace_keycodes)
   local termcodes = keys
   if replace_keycodes or replace_keycodes == nil then termcodes = vim.keycode(keys) end
   vim.api.nvim_feedkeys(termcodes, mode, false)
