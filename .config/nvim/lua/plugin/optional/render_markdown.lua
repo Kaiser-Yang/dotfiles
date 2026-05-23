@@ -18,7 +18,6 @@ local function ts_context_wrap(status)
 end
 
 require('render-markdown').setup({
-  win_options = { concealcursor = { rendered = 'nvic' } },
   on = {
     render = ts_context_wrap(true),
     clear = ts_context_wrap(false),
