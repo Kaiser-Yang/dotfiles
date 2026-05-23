@@ -36,6 +36,7 @@ require('gitsigns').setup({
     }
     for _, m in ipairs(mapping) do
       m[4].buffer = buffer
+      ---@diagnostic disable-next-line: param-type-mismatch
       vim.keymap.set(unpack(m))
     end
   end,

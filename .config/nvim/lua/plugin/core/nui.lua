@@ -95,6 +95,7 @@ local function override_ui_input()
     input_ui:mount()
   end
 end
+
 local function override_ui_select()
   local Menu = require('nui.menu')
   local UISelect = Menu:extend('UISelect')
