@@ -79,7 +79,7 @@ function M.update_selection(start_row, start_col, end_row, end_col, selection_mo
   --   If your operator-pending mapping ends with some text visually selected, Vim will operate on that text.
   --   Otherwise, Vim will operate on the text between the original cursor position and the new position.
   local mode = vim.api.nvim_get_mode()
-  selection_mode = vim.api.nvim_replace_termcodes(selection_mode, true, true, true)
+  selection_mode = vim.keycode(selection_mode)
   if mode.mode ~= selection_mode then vim.cmd.normal({ selection_mode, bang = true }) end
 
   -- end positions with `col=0` mean "up to the end of the previous line, including the newline character"
