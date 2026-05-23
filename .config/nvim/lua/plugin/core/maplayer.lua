@@ -14,19 +14,6 @@ vim.api.nvim_del_keymap('n', 'grt')
 vim.api.nvim_del_keymap('n', 'gO')
 vim.api.nvim_del_keymap('i', '<c-s>')
 local h = require('handler')
-local l_dir = vim.fn.fnameescape(u.plugin_path())
-local c_dir = vim.fn.fnameescape(vim.fn.stdpath('config'))
-local live_grep_c_dir = '<cmd>Telescope live_grep_args cwd=' .. c_dir .. '<cr>'
-local live_grep_l_dir = '<cmd>Telescope live_grep_args cwd=' .. l_dir .. '<cr>'
-local find_files_c_dir = '<cmd>Telescope find_files cwd=' .. c_dir .. '<cr>'
-local find_files_l_dir = '<cmd>Telescope find_files cwd=' .. l_dir .. '<cr>'
-local function live_grep_open_file()
-  require('telescope.builtin').live_grep({
-    grep_open_files = true,
-    prompt_title = 'Live Grep in Open Files',
-  })
-  return true
-end
 local opts = {
   -- Builtin
   { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = h.builtin.insert_undo_point, priority = 0 },
@@ -296,29 +283,28 @@ local opts = {
   { key = '<leader>tI', desc = 'Indent Line', handler = h.blink_indent.toggle_indent_line },
 
   -- Picker
-  { key = 'gy', desc = 'Search Register', handler = '<cmd>Telescope registers<cr>' },
-  { key = '<c-f>', desc = 'Live Grep Arg', handler = h.live_grep_arg, fallback = false },
-  { key = '<c-p>', desc = 'Find File', handler = h.find_file, fallback = false },
-  { key = '<f1>', desc = 'Search Help', handler = h.help_tags, fallback = false },
-  { key = '<m-r>', desc = 'Resume', handler = '<cmd>Telescope resume<cr>' },
-  { key = '<m-f>', mode = 'nx', desc = 'Find Word', handler = h.find_word, fallback = false },
-  { key = '<m-e>', mode = 'n', desc = 'Open, Focus, or Reveal', handler = h.open_focus_reveal, fallback = false },
-  { key = '<leader>sb', desc = 'Buffer', handler = '<cmd>Telescope buffers<cr>' },
-  { key = '<leader>scc', desc = 'Config Path', handler = live_grep_c_dir },
-  { key = '<leader>scl', desc = 'Lazy Path', handler = live_grep_l_dir },
-  { key = '<leader>sfc', desc = 'Config Path', handler = find_files_c_dir },
-  { key = '<leader>sfl', desc = 'Lazy Path', handler = find_files_l_dir },
-  { key = '<leader>sd', desc = 'Diagnostics', handler = '<cmd>Telescope diagnostics<cr>' },
-  { key = '<leader>sq', desc = 'Quickfix', handler = '<cmd>Telescope quickfix<cr>' },
-  { key = '<leader>sl', desc = 'Loclist', handler = '<cmd>Telescope loclist<cr>' },
-  { key = '<leader>sh', desc = 'Highlight', handler = '<cmd>Telescope highlights<cr>' },
-  { key = '<leader>sk', desc = 'Key Mapping', handler = '<cmd>Telescope keymaps<cr>' },
-  { key = '<leader>sm', desc = 'Man Page', handler = '<cmd>Telescope man_pages<cr>' },
-  { key = '<leader>sp', desc = 'Picker', handler = '<cmd>Telescope<cr>' },
-  { key = '<leader>sr', desc = 'Recent Files', handler = '<cmd>Telescope oldfiles<cr>' },
-  { key = '<leader>st', desc = 'Todo', handler = '<cmd>Telescope todo-comments todo<cr>' },
-  { key = '<leader>/', desc = 'Current Buffer Fuzzy Search', handler = '<cmd>Telescope current_buffer_fuzzy_find<cr>' },
-  { key = '<leader>s/', desc = 'Search in Open Files', handler = live_grep_open_file },
+  { key = 'gy', desc = 'Search Register', handler = h.telescope.registers },
+  { key = '<m-r>', desc = 'Resume', handler = h.telescope.resume },
+  { key = '<c-f>', desc = 'Live Grep', handler = h.telescope.live_grep },
+  { key = '<c-p>', desc = 'Find File', handler = h.telescope.find_file },
+  { key = '<f1>', desc = 'Search Help', handler = h.telescope.help_tags },
+  { key = '<m-f>', mode = 'nx', desc = 'Find Word', handler = h.telescope.find_word },
+  { key = '<leader>sd', desc = 'Diagnostics', handler = h.telescope.diagnostics },
+  { key = '<leader>sq', desc = 'Quickfix', handler = h.telescope.quickfix },
+  { key = '<leader>sl', desc = 'Loclist', handler = h.telescope.loclist },
+  { key = '<leader>sh', desc = 'Highlight', handler = h.telescope.highlights },
+  { key = '<leader>sk', desc = 'Key Mapping', handler = h.telescope.keymaps },
+  { key = '<leader>sm', desc = 'Man Page', handler = h.telescope.man_pages },
+  { key = '<leader>sp', desc = 'Picker', handler = h.telescope.pickers },
+  { key = '<leader>sr', desc = 'Recent Files', handler = h.telescope.oldfiles },
+  { key = '<leader>st', desc = 'Todo', handler = h.telescope.todo },
+  { key = '<leader>sb', desc = 'Buffer', handler = h.telescope.buffers },
+  { key = '<leader>scc', desc = 'Config Path', handler = h.telescope.live_grep_config },
+  { key = '<leader>scl', desc = 'Plugin Path', handler = h.telescope.live_grep_plugin },
+  { key = '<leader>sfc', desc = 'Config Path', handler = h.telescope.find_file_config },
+  { key = '<leader>sfl', desc = 'Plugin Path', handler = h.telescope.find_file_plugin },
+  { key = '<leader>/', desc = 'Current Buffer Fuzzy Search', handler = h.telescope.current_buffer_fuzzy_find },
+  { key = '<leader>s/', desc = 'Search in Open Files', handler = h.telescope.live_grep_open_file },
 
   -- Window Resizer
   { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = true, expr = true },

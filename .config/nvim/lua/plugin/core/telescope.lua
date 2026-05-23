@@ -31,6 +31,7 @@ local function ivy(opts)
     layout_config = { height = 0.4 },
   }, opts or {})
 end
+
 local opts = {
   defaults = {
     mappings = { n = {}, i = {} },
@@ -45,13 +46,13 @@ local opts = {
     cache_picker = { ignore_empty_prompt = true },
   },
   pickers = {
+    lsp_document_symbols = ivy(),
+    lsp_dynamic_workspace_symbols = ivy(),
     lsp_references = cursor(),
     lsp_implementations = cursor(),
     lsp_incoming_calls = cursor(),
     lsp_outgoing_calls = cursor(),
     lsp_type_definitions = cursor(),
-    lsp_document_symbols = ivy(),
-    lsp_dynamic_workspace_symbols = ivy(),
     registers = cursor({
       attach_mappings = function(buffer, map)
         vim.keymap.del({ 'i', 'n' }, '<c-e>', { buffer = buffer })
@@ -107,38 +108,39 @@ local insert_and_normal = {
     type = 'action',
     opts = { desc = 'Send Selected to Loclist' },
   },
-  ['<c-f>'] = { h.toggle_live_grep_arg, type = 'action', opts = { desc = 'Toggle Live Grep Arg' } },
-  ['<c-p>'] = { h.toggle_find_file, type = 'action', opts = { desc = 'Toggle Find File' } },
-  ['<m-f>'] = { h.toggle_find_word, type = 'action', opts = { desc = 'Toogle Find Word' } },
+  ['<c-f>'] = { h.telescope.toggle_live_grep, type = 'action', opts = { desc = 'Toggle Live Grep Arg' } },
+  ['<c-p>'] = { h.telescope.toggle_find_file, type = 'action', opts = { desc = 'Toggle Find File' } },
+  ['<m-f>'] = { h.telescope.toggle_find_word, type = 'action', opts = { desc = 'Toogle Find Word' } },
+  ['<m-a>'] = { h.telescope.smart_select_all, type = 'action', opts = { desc = 'Smart Select All' } },
+  ['<m-s>'] = { h.telescope.toggle_quotation_wrap(), type = 'action', opts = { desc = 'Toggle Quotation' } },
+  ['<m-i>'] = {
+    h.telescope.toggle_quotation_wrap({ postfix = ' --iglob=' }),
+    type = 'action',
+    opts = { desc = 'Toggle iglob' },
+  },
   ['<tab>'] = { a.toggle_selection + a.move_selection_worse, type = 'action', opts = { desc = 'Toggle Selection' } },
   ['<s-tab>'] = { a.move_selection_better + a.toggle_selection, type = 'action', opts = { desc = 'Toggle Selection' } },
-  ['<f1>'] = { ag.which_key({ keybind_width = 14, max_height = 0.25 }), type = 'action', opts = { desc = 'Which Key' } },
   ['<leftmouse>'] = { a.mouse_click, type = 'action', opts = { desc = 'Mouse Click' } },
   ['<2-leftmouse>'] = { a.double_mouse_click, type = 'action', opts = { desc = 'Mouse Double Click' } },
-  ['<m-a>'] = { h.smart_select_all, type = 'action', opts = { desc = 'Smart Select All' } },
   ['<m-p>'] = { a.cycle_history_prev, type = 'action', opts = { desc = 'Previous Search History' } },
   ['<m-n>'] = { a.cycle_history_next, type = 'action', opts = { desc = 'Next Search History' } },
-  ['<m-s>'] = { h.toggle_quotation_wrap(), type = 'action', opts = { desc = 'Toggle Quotation' } },
-  ['<m-i>'] = { h.toggle_quotation_wrap({ postfix = ' --iglob=' }), type = 'action', opts = { desc = 'Toggle iglob' } },
   ['<c-space>'] = { a.to_fuzzy_refine, type = 'action', opts = { desc = 'Freeze for Fuzzy Refine' } },
+  ['<c-c>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
+  ['<f1>'] = { ag.which_key({ keybind_width = 14, max_height = 0.25 }), type = 'action', opts = { desc = 'Which Key' } },
 }
 opts.defaults.mappings.n = {
-  ['<esc>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
-  ['q'] = { a.close, type = 'action', opts = { desc = 'Close' } },
   ['j'] = { a.move_selection_next, type = 'action', opts = { desc = 'Move Selection Next' } },
   ['k'] = { a.move_selection_previous, type = 'action', opts = { desc = 'Move Selection Previous' } },
   ['H'] = { a.move_to_top, type = 'action', opts = { desc = 'Move to Top' } },
+  ['gg'] = { a.move_to_top, type = 'action', opts = { desc = 'Move to Top' } },
   ['M'] = { a.move_to_middle, type = 'action', opts = { desc = 'Move to Middle' } },
   ['L'] = { a.move_to_bottom, type = 'action', opts = { desc = 'Move to Bottom' } },
   ['G'] = { a.move_to_bottom, type = 'action', opts = { desc = 'Move to Bottom' } },
-  ['gg'] = { a.move_to_top, type = 'action', opts = { desc = 'Move to Top' } },
+  ['q'] = { a.close, type = 'action', opts = { desc = 'Close' } },
+  ['<esc>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
 }
 opts.defaults.mappings.i = {
-  -- INFO:
-  -- Used to delete one word before
-  -- See https://github.com/nvim-telescope/telescope.nvim/issues/1579#issuecomment-989767519
   ['<c-w>'] = { '<c-s-w>', type = 'command' },
-  ['<c-c>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
   ['<c-r><c-w>'] = { a.insert_original_cword, type = 'action', opts = { desc = 'Insert Cword' } },
   ['<c-r><c-a>'] = { a.insert_original_cWORD, type = 'action', opts = { desc = 'Insert CWORD' } },
   ['<c-r><c-f>'] = { a.insert_original_cfile, type = 'action', opts = { desc = 'Insert Cfile' } },

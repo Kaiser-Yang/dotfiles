@@ -1,7 +1,7 @@
 local u = require('utils')
 local M = {}
 
-local live_grep_arg_ivy
+local live_grep_ivy
 local find_word_ivy
 local find_file_dropdown
 
@@ -31,7 +31,9 @@ local function get_input(buffer)
       if idx == nil then return line end
       return line:sub(2, idx - 1)
     else
-      return line:match('[^-]*')
+      local res = line:match('^[^-]*')
+      if #res < #line and res:sub(-1) == ' ' then res = res:sub(1, -2) end
+      return res
     end
   end
   return line
@@ -54,6 +56,14 @@ local function extract_quoted_and_rest(s, q)
   local inner = unescape_quoted_inner(inner_raw, q)
   local rest = s:sub(end_idx + 1) or ''
   return inner, rest
+end
+
+local function live_grep(opts)
+  if _G.loaded['telescope-live-grep-args.nvim'] then
+    require('telescope').extensions.live_grep_args.live_grep_args(opts)
+  else
+    require('telescope.builtin').live_grep(opts)
+  end
 end
 
 -- Main factory: returns a function suitable for which-key / telescope mappings
@@ -118,6 +128,7 @@ function M.toggle_quotation_wrap(opts)
     end
   end
 end
+
 function M.smart_select_all(buffer)
   local picker = require('telescope.actions.state').get_current_picker(buffer)
   local all_selected = #picker:get_multi_selection() == picker.manager:num_results()
@@ -130,13 +141,11 @@ function M.smart_select_all(buffer)
   return true
 end
 
-function M.toggle_find_file(buffer, opts)
+function M.toggle_find_file(buffer)
   local input = get_input(buffer)
-  opts = vim.tbl_deep_extend('force', {
-    default_text = input,
-  }, opts or {})
+  local opts = { default_text = input }
   find_word_ivy = nil
-  live_grep_arg_ivy = nil
+  live_grep_ivy = nil
   require('telescope.actions').close(buffer)
   if find_file_dropdown then
     find_file_dropdown = false
@@ -148,9 +157,10 @@ function M.toggle_find_file(buffer, opts)
 end
 
 function M.find_file(opts)
+  if not _G.loaded['telescope.nvim'] then return false end
   find_file_dropdown = true
   find_word_ivy = nil
-  live_grep_arg_ivy = nil
+  live_grep_ivy = nil
   opts = vim.tbl_deep_extend('force', {
     previewer = false,
     layout_config = { anchor = 'N', anchor_padding = 0 },
@@ -160,52 +170,39 @@ function M.find_file(opts)
   return true
 end
 
-function M.find_file_wrap(opts)
-  return function() return M.find_file(opts) end
-end
-
-function M.toggle_find_file_wrap(opts)
-  return function(buffer) return M.toggle_find_file(buffer, opts) end
-end
-
-function M.toggle_live_grep_arg(buffer, opts)
+function M.toggle_live_grep(buffer)
+  if not _G.loaded['telescope.nvim'] then return false end
   local input = require('telescope.actions.state').get_current_line()
-  opts = vim.tbl_deep_extend('force', { default_text = input }, opts or {})
+  local opts = { default_text = input }
   require('telescope.actions').close(buffer)
   find_file_dropdown = nil
   find_word_ivy = nil
-  if live_grep_arg_ivy then
-    live_grep_arg_ivy = false
-    require('telescope').extensions.live_grep_args.live_grep_args(opts)
+  if live_grep_ivy then
+    live_grep_ivy = false
+    live_grep(opts)
   else
-    M.live_grep_arg(opts)
+    M.live_grep(opts)
   end
   return true
 end
 
-function M.toggle_live_grep_arg_wrap(opts)
-  return function(buffer) return M.toggle_live_grep_arg(buffer, opts) end
-end
-
-function M.live_grep_arg(opts)
-  live_grep_arg_ivy = true
+function M.live_grep(opts)
+  if not _G.loaded['telescope.nvim'] then return false end
+  live_grep_ivy = true
   find_word_ivy = nil
   find_file_dropdown = nil
   opts = vim.tbl_deep_extend('force', {
     layout_config = { height = 0.4 },
   }, opts or {})
   opts = require('telescope.themes').get_ivy(opts)
-  require('telescope').extensions.live_grep_args.live_grep_args(opts)
+  live_grep(opts)
   return true
 end
 
-function M.live_grep_arg_wrap(opts)
-  return function() return M.live_grep_arg(opts) end
-end
-
 function M.find_word(opts)
+  if not _G.loaded['telescope.nvim'] then return false end
   find_word_ivy = true
-  live_grep_arg_ivy = nil
+  live_grep_ivy = nil
   find_file_dropdown = nil
   opts = vim.tbl_deep_extend('force', {
     layout_config = { height = 0.4 },
@@ -215,16 +212,13 @@ function M.find_word(opts)
   return true
 end
 
-function M.find_word_wrap(opts)
-  return function() return M.find_word(opts) end
-end
-
-function M.toggle_find_word(buffer, opts)
+function M.toggle_find_word(buffer)
+  if not _G.loaded['telescope.nvim'] then return false end
   local input = get_input(buffer)
-  opts = vim.tbl_deep_extend('force', { default_text = input }, opts or {})
+  local opts = { default_text = input }
   require('telescope.actions').close(buffer)
   find_file_dropdown = nil
-  live_grep_arg_ivy = nil
+  live_grep_ivy = nil
   if find_word_ivy then
     find_word_ivy = false
     require('telescope.builtin').grep_string(opts)
@@ -235,7 +229,108 @@ function M.toggle_find_word(buffer, opts)
 end
 
 function M.help_tags()
-  vim.cmd('Telescope help_tags')
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope help_tags<cr>'
+end
+
+function M.registers()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope registers<cr>'
+end
+
+function M.resume()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope resume<cr>'
+end
+
+function M.buffers()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope buffers<cr>'
+end
+
+function M.diagnostics()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope diagnostics<cr>'
+end
+
+function M.quickfix()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope quickfix<cr>'
+end
+
+function M.loclist()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope loclist<cr>'
+end
+
+function M.highlights()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope highlights<cr>'
+end
+
+function M.keymaps()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope keymaps<cr>'
+end
+
+function M.man_pages()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope man_pages<cr>'
+end
+
+function M.pickers()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope<cr>'
+end
+
+function M.oldfiles()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope oldfiles<cr>'
+end
+
+function M.todo()
+  if not _G.loaded['telescope.nvim'] or not _G.loaded['todo-comments.nvim'] then return false end
+  return '<cmd>Telescope todo-comments todo<cr>'
+end
+
+function M.current_buffer_fuzzy_find()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope current_buffer_fuzzy_find<cr>'
+end
+
+local l_dir = vim.fn.fnameescape(u.plugin_path())
+local c_dir = vim.fn.fnameescape(vim.fn.stdpath('config'))
+M.live_grep_config = function()
+  if not _G.loaded['telescope.nvim'] then return false end
+  local plugin = 'live_grep'
+  if _G.loaded['telescope-live-grep-args.nvim'] then plugin = plugin .. '_args' end
+  return '<cmd>Telescope ' .. plugin .. ' cwd=' .. c_dir .. '<cr>'
+end
+
+M.live_grep_plugin = function()
+  if not _G.loaded['telescope.nvim'] then return false end
+  local plugin = 'live_grep'
+  if _G.loaded['telescope-live-grep-args.nvim'] then plugin = plugin .. '_args' end
+  return '<cmd>Telescope ' .. plugin .. ' cwd=' .. l_dir .. '<cr>'
+end
+
+M.find_file_config = function()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope find_files cwd=' .. c_dir .. '<cr>'
+end
+
+M.find_file_plugin = function()
+  if not _G.loaded['telescope.nvim'] then return false end
+  return '<cmd>Telescope find_files cwd=' .. l_dir .. '<cr>'
+end
+
+function M.live_grep_open_file()
+  if not _G.loaded['telescope.nvim'] then return false end
+  require('telescope.builtin').live_grep({
+    grep_open_files = true,
+    prompt_title = 'Live Grep in Open Files',
+  })
+  return true
 end
 
 return M
