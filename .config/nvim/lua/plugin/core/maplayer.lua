@@ -251,15 +251,15 @@ local opts = {
   { key = '<m-E>', mode = 'i', desc = 'Autopair Reverse Fastwarp', handler = h.auto_pair_wrap('<m-E>') },
   { key = '<m-s>', mode = 'i', desc = 'Autopair Surround', handler = h.auto_pair_wrap('<m-)>') },
 
-  -- Window
-  { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = false },
-  { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = false },
-  { key = '<left>', desc = 'Resize Left', handler = h.resize_wrap('left'), fallback = false },
-  { key = '<right>', desc = 'Resize Right', handler = h.resize_wrap('right'), fallback = false },
-  { key = '<s-up>', desc = 'Resize Top', handler = h.resize_wrap('top', true), fallback = false },
-  { key = '<s-down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = false },
-  { key = '<s-left>', desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = false },
-  { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = false },
+  -- Window Resizer
+  { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = true, expr = true },
+  { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = true, expr = true },
+  { key = '<left>', desc = 'Resize Left', handler = h.resize_wrap('left'), fallback = true, expr = true },
+  { key = '<right>', desc = 'Resize Right', handler = h.resize_wrap('right'), fallback = true, expr = true },
+  { key = '<s-up>', desc = 'Resize Top', handler = h.resize_wrap('top', true), fallback = true, expr = true },
+  { key = '<s-down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = true, expr = true },
+  { key = '<s-left>', desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = true, expr = true },
+  { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = true, expr = true },
 
   -- Key with Multi Functionalities
   -- By default, "<c-e>" is used to insert content below the cursor

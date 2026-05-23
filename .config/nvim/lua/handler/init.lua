@@ -48,6 +48,7 @@ function M.resize_wrap(border, reverse, abs_delta, first)
   local second = first_to_second[first]
   local delta = (border == first) and abs_delta or -abs_delta
   return function()
+    if not _G.loaded['win-resizer.nvim'] then return false end
     local resize = require('win.resizer').resize
     local actual_delta = delta * vim.v.count1
     if reverse then
