@@ -23,18 +23,18 @@ require('which-key').setup({
   -- See https://github.com/folke/which-key.nvim/issues/1033
   filter = function(mapping)
     if mapping.desc and mapping.desc:match('[Nn]op') then return false end
-      -- stylua: ignore start
-      if
-        (mapping.mode == 'n' or mapping.mode == 'o' or mapping.mode == 'x' or mapping.mode == 'v' or mapping.mode == 's')
-        and vim.tbl_contains(
-          { 'b', 'c', 'd', 'e', 'f', 'h', 'j', 'k', 'l', 'r', 't', 'v', 'w', 'y',
-            'B', 'E', 'F', 'G', 'T', 'V', 'W',
-            '~', '$', '%', ',', ';', '<', '>', '/', '?', '^', '0' }, mapping.lhs)
-      then
-      -- stylua: ignore end
-        return false
-      end
-      return true
+    -- stylua: ignore start
+    if
+      (mapping.mode == 'n' or mapping.mode == 'o' or mapping.mode == 'x' or mapping.mode == 'v' or mapping.mode == 's')
+      and vim.tbl_contains(
+        { 'b', 'c', 'd', 'e', 'f', 'h', 'j', 'k', 'l', 'r', 't', 'v', 'w', 'y',
+          'B', 'E', 'F', 'G', 'T', 'V', 'W',
+          '~', '$', '%', ',', ';', '<', '>', '/', '?', '^', '0' }, mapping.lhs)
+    then
+    -- stylua: ignore end
+      return false
+    end
+    return true
   end,
   defer = function() return false end,
 })

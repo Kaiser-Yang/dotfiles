@@ -27,7 +27,6 @@ local function live_grep_open_file()
   })
   return true
 end
--- stylua: ignore start
 local opts = {
   -- Builtin
   { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = h.builtin.insert_undo_point, priority = 0 },
@@ -50,8 +49,22 @@ local opts = {
   { key = '<c-a>', mode = 'ci', desc = 'Cursor to BOL', handler = h.builtin.cursor_to_bol },
   -- By default, "<c-e>" is used to insert content below the cursor
   -- This hack will make it still work as default when the cusor is already at the end of the line in insert mode
-  { key = '<c-e>', mode = 'ci', desc = 'Cursor to EOL', handler = h.builtin.cursor_to_eol, fallback = true, priority = 0 },
-  { key = '<c-k>', mode = 'ci', desc = 'Delete to EOL', handler = h.builtin.delete_to_eol, fallback = true, priority = 0 },
+  {
+    key = '<c-e>',
+    mode = 'ci',
+    desc = 'Cursor to EOL',
+    handler = h.builtin.cursor_to_eol,
+    fallback = true,
+    priority = 0,
+  },
+  {
+    key = '<c-k>',
+    mode = 'ci',
+    desc = 'Delete to EOL',
+    handler = h.builtin.delete_to_eol,
+    fallback = true,
+    priority = 0,
+  },
   { key = '<c-p>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '<c-n>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '&', desc = 'Last Substitute with Flag', handler = h.builtin.last_s_cmd },
@@ -170,21 +183,73 @@ local opts = {
   -- Completion
   { key = '<c-s>', mode = 'i', desc = 'Toggle Signature Help', handler = h.completion.toggle_signature },
   -- By default, "<c-u>" are used to delete content before
-  { key = '<c-u>', mode = 'i', desc = 'Scroll Documentation Up', handler = h.completion.scroll_documentation_up, fallback = true },
-  { key = '<c-u>', mode = 'i', desc = 'Scroll Signature Up', handler = h.completion.scroll_signature_up, fallback = true },
+  {
+    key = '<c-u>',
+    mode = 'i',
+    desc = 'Scroll Documentation Up',
+    handler = h.completion.scroll_documentation_up,
+    fallback = true,
+  },
+  {
+    key = '<c-u>',
+    mode = 'i',
+    desc = 'Scroll Signature Up',
+    handler = h.completion.scroll_signature_up,
+    fallback = true,
+  },
   -- By default, "<c-d>" and "<c-t>" are used to delete or add indent in insert mode
-  { key = '<c-d>', mode = 'i', desc = 'Scroll Documentation Down', handler = h.completion.scroll_documentation_down, expr = true, fallback = true },
-  { key = '<c-d>', mode = 'i', desc = 'Scroll Signature Down', handler = h.completion.scroll_signature_down, expr = true, fallback = true },
+  {
+    key = '<c-d>',
+    mode = 'i',
+    desc = 'Scroll Documentation Down',
+    handler = h.completion.scroll_documentation_down,
+    expr = true,
+    fallback = true,
+  },
+  {
+    key = '<c-d>',
+    mode = 'i',
+    desc = 'Scroll Signature Down',
+    handler = h.completion.scroll_signature_down,
+    expr = true,
+    fallback = true,
+  },
   { key = '<tab>', mode = 'i', desc = 'Snippet Forward', handler = h.completion.snippet_forward, fallback = true },
   { key = '<s-tab>', mode = 'i', desc = 'Snippet Backward', handler = h.completion.snippet_backward },
   -- By default <C-J> is an alias of <CR>
-  { key = '<c-j>', mode = 'ci', desc = 'Select Next Completion Item', handler = h.completion.next_completion_item, fallback = true },
+  {
+    key = '<c-j>',
+    mode = 'ci',
+    desc = 'Select Next Completion Item',
+    handler = h.completion.next_completion_item,
+    fallback = true,
+  },
   -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
-  { key = '<c-k>', mode = 'ci', desc = 'Select Previous Completion Item', handler = h.completion.previous_completion_item, fallback = true, priority = 1 },
+  {
+    key = '<c-k>',
+    mode = 'ci',
+    desc = 'Select Previous Completion Item',
+    handler = h.completion.previous_completion_item,
+    fallback = true,
+    priority = 1,
+  },
   -- By default "<c-y>" is used to insert content above the cursor
-  { key = '<c-y>', mode = 'ci', desc = 'Accept Completion Item', handler = h.completion.accept_completion_item, fallback = true },
+  {
+    key = '<c-y>',
+    mode = 'ci',
+    desc = 'Accept Completion Item',
+    handler = h.completion.accept_completion_item,
+    fallback = true,
+  },
   -- By default, "<c-e>" is used to insert content below the cursor
-  { key = '<c-e>', mode = 'ci', desc = 'Cancel Completion', handler = h.completion.cancel_completion, fallback = true, priority = 1 },
+  {
+    key = '<c-e>',
+    mode = 'ci',
+    desc = 'Cancel Completion',
+    handler = h.completion.cancel_completion,
+    fallback = true,
+    priority = 1,
+  },
 
   -- Format
   -- We will format automatically on save, therefore this one is not used frequently.
@@ -215,7 +280,13 @@ local opts = {
   { key = '<space>', mode = 'i', desc = 'Autopair Space', handler = h.pair.auto_pair_wrap('<space>') },
   { key = '<cr>', mode = 'i', desc = 'Autopair CR', handler = h.pair.auto_pair_wrap('<cr>'), priority = 1 },
   { key = '<m-e>', mode = 'i', desc = 'Autopair Fastwarp', handler = h.pair.auto_pair_wrap('<m-e>'), expr = true },
-  { key = '<m-E>', mode = 'i', desc = 'Autopair Reverse Fastwarp', handler = h.pair.auto_pair_wrap('<m-E>'), expr = true },
+  {
+    key = '<m-E>',
+    mode = 'i',
+    desc = 'Autopair Reverse Fastwarp',
+    handler = h.pair.auto_pair_wrap('<m-E>'),
+    expr = true,
+  },
   { key = '<m-s>', mode = 'i', desc = 'Autopair Close', handler = h.pair.auto_pair_wrap('<m-)>') },
 
   -- Indent

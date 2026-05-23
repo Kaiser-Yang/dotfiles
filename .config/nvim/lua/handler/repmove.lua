@@ -206,9 +206,20 @@ function M.previous_hunk() return u.ensure_repmove(previous_hunk, next_hunk)[1](
 function M.indent_top() return u.ensure_repmove(indent_top, indent_bottom)[1]() end
 function M.indent_bottom() return u.ensure_repmove(indent_top, indent_bottom)[2]() end
 
--- stylua: ignore start
-function M.comma() if not _G.loaded['repmove.nvim'] then return ',' else return require('repmove').comma() end end
-function M.semicolon() if not _G.loaded['repmove.nvim'] then return ';' else return require('repmove').semicolon() end end
+function M.comma()
+  if not _G.loaded['repmove.nvim'] then
+    return ','
+  else
+    return require('repmove').comma()
+  end
+end
+function M.semicolon()
+  if not _G.loaded['repmove.nvim'] then
+    return ';'
+  else
+    return require('repmove').semicolon()
+  end
+end
 function M.F() return vim.v.count1 .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[1]() end
 function M.f() return vim.v.count1 .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[2]() end
 function M.T() return vim.v.count1 .. u.ensure_repmove('T', 't', comma_with_count, semicolon_with_count)[1]() end
@@ -257,6 +268,5 @@ function M.previous_statement_end() return u.ensure_repmove(previous_statement_e
 function M.previous_call_start() return u.ensure_repmove(previous_call_start, next_call_start)[1]() end
 function M.previous_call_end() return u.ensure_repmove(previous_call_end, next_call_end)[1]() end
 function M.previous_plugin() return u.ensure_repmove(previous_plugin, next_plugin)[1]() end
--- stylua: ignore end
 
 return M

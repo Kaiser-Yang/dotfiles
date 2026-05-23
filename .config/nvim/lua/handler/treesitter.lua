@@ -22,7 +22,6 @@ local function swap(direction, query_string)
   return true
 end
 
--- stylua: ignore start
 -- HACK:
 -- Those below do not support vim.v.count
 function M.around_function() return select('@function.outer') end
@@ -64,6 +63,5 @@ function M.swap_with_previous_return() return swap('previous', '@return.outer') 
 function M.swap_with_previous_parameter() return swap('previous', '@parameter.inner') end
 function M.swap_with_previous_statement() return swap('previous', '@statement.outer') end
 function M.swap_with_previous_call() return swap('previous', '@call.outer') end
--- stylua: ignore end
 
 return M
