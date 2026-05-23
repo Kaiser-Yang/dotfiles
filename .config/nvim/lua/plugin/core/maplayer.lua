@@ -52,6 +52,8 @@ local opts = {
   { key = '<c-l>', desc = 'To Right', handler = h.builtin.to_right, expr = true },
   { key = '<c-w>T', desc = 'Tab Split', handler = h.builtin.tab_split },
   { key = '<c-a>', mode = 'ci', desc = 'Cursor to BOL', handler = h.builtin.cursor_to_bol },
+  { key = '<c-e>', mode = 'ci', desc = 'Cursor to EOL', handler = h.builtin.cursor_to_eol, priority = 0 },
+  { key = '<c-k>', mode = 'ci', desc = 'Delete to EOL', handler = h.builtin.delete_to_eol, priority = 0 },
   { key = '<c-p>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '<c-n>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '&', desc = 'Last Substitute with Flag', handler = h.builtin.last_s_cmd },
@@ -178,11 +180,11 @@ local opts = {
   { key = '<tab>', mode = 'i', desc = 'Snippet Forward', handler = h.completion.snippet_forward, fallback = true },
   { key = '<s-tab>', mode = 'i', desc = 'Snippet Backward', handler = h.completion.snippet_backward },
   -- By default <C-J> is an alias of <CR>
-  { key = '<c-j>', mode = 'ic', desc = 'Select Next Completion Item', handler = h.completion.next_completion_item, fallback = true },
+  { key = '<c-j>', mode = 'ci', desc = 'Select Next Completion Item', handler = h.completion.next_completion_item, fallback = true },
   -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
-  { key = '<c-k>', mode = 'ic', desc = 'Select Previous Completion Item', handler = h.completion.previous_completion_item, fallback = true },
-  { key = '<c-y>', mode = 'ic', desc = 'Accept Completion Item', handler = h.completion.accept_completion_item, fallback = true },
-  { key = '<c-e>', mode = 'ic', desc = 'Cancel Completion', handler = h.completion.cancel_completion, fallback = true },
+  { key = '<c-k>', mode = 'ci', desc = 'Select Previous Completion Item', handler = h.completion.previous_completion_item, fallback = true, priority = 1 },
+  { key = '<c-y>', mode = 'ci', desc = 'Accept Completion Item', handler = h.completion.accept_completion_item, fallback = true },
+  { key = '<c-e>', mode = 'ci', desc = 'Cancel Completion', handler = h.completion.cancel_completion, fallback = true, priority = 1 },
 
   -- Format
   -- We will format automatically on save, therefore this one is not used frequently.
@@ -264,7 +266,6 @@ local opts = {
   -- Key with Multi Functionalities
   -- By default, "<c-e>" is used to insert content below the cursor
   -- This hack will make it still work as default when the cusor is already at the end of the line in insert mode
-  { key = '<c-e>', mode = 'ic', desc = 'Cursor to EOL', handler = h.builtin.cursor_to_eol },
   { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = insert_undo_point },
   { key = '<cr>', mode = 'i', desc = 'Autopair CR', handler = h.auto_pair_wrap('<cr>'), expr = true },
   { key = '<c-k>', mode = 'ic', desc = 'Delete to EOL', handler = h.builtin.delete_to_eol },
