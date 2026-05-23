@@ -1,11 +1,10 @@
 vim.schedule(function()
-  local h = require('handler')
+  local h = require('handler').markdown
   local u = require('utils')
 
   local function comma_typed()
     local key = u.key.last_key()
-    if key == nil then return false end
-    return key:match(',$') ~= nil
+    return key and key:match(',$') ~= nil
   end
 
   local mappings = {

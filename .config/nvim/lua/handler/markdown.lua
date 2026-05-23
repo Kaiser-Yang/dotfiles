@@ -3,13 +3,15 @@ local M = {}
 
 local pattern = '<++>'
 local prefix = '<c-g>u<bs>'
--- stylua: ignore start
 --- @param n integer
 --- @return string
 function M.markdown_title(n) return prefix .. string.rep('#', n) .. ' ' end
 M.markdown_separate_line = prefix .. '---<cr><cr>'
-M.markdown_math_inline = prefix .. '$  $' .. pattern .. string.rep('<c-g>U<left>', 2 + #pattern)
-M.markdown_math_inline_2 = prefix .. '$$  $$' .. pattern .. string.rep('<c-g>U<left>', 3 + #pattern)
+M.markdown_math_inline = function()
+  local char = '$'
+  if vim.fn.getcwd():find('github%.io') then char = '$$' end
+  return prefix .. char .. '  ' .. char .. pattern .. string.rep('<c-g>U<left>', #char + #pattern + 1)
+end
 M.markdown_code_inline = prefix .. '``' .. pattern .. string.rep('<c-g>U<left>', 1 + #pattern)
 M.markdown_todo = prefix .. '- [ ] '
 M.markdown_link = prefix .. '[](' .. pattern .. ')' .. pattern .. string.rep('<c-g>U<left>', 3 + 2 * #pattern)
@@ -18,7 +20,6 @@ M.markdown_delete_line = prefix .. '~~~~' .. pattern .. string.rep('<c-g>U<left>
 M.markdown_italic = prefix .. '**' .. pattern .. string.rep('<c-g>U<left>', 1 + #pattern)
 M.markdown_math_block = prefix .. '$$<cr><cr>$$<cr><cr>' .. pattern .. string.rep('<up>', 3) .. string.rep('<right>', 2)
 M.markdown_code_block = prefix .. '```<cr>```<cr><cr>' .. pattern .. string.rep('<up>', 3)
--- stylua: ignore end
 
 function M.markdown_goto_placeholder()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
