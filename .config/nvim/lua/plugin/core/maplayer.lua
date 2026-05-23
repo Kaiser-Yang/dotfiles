@@ -288,6 +288,7 @@ local opts = {
     expr = true,
   },
   { key = '<m-s>', mode = 'i', desc = 'Autopair Close', handler = h.pair.auto_pair_wrap('<m-)>') },
+  { key = '<c-l>', mode = 'i', desc = 'Autopair Tabout', handler = h.pair.auto_pair_wrap('<m-tab>'), fallback = true },
 
   -- Indent
   { key = 'i|', mode = 'ox', desc = 'Indent Line', handler = h.blink_indent.inside_indent },
