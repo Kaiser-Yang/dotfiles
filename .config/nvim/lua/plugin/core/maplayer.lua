@@ -16,6 +16,8 @@ vim.api.nvim_del_keymap('i', '<c-s>')
 local h = require('handler')
 local opts = {
   -- Builtin
+  { key = '<tab>', mode = 'c', handler = h.builtin.nop },
+  { key = '<s-tab>', mode = 'c', handler = h.builtin.nop },
   { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = h.builtin.insert_undo_point, priority = 0 },
   { key = '<m-x>', mode = 'nox', desc = 'System Cut', handler = h.builtin.system_cut, expr = true },
   { key = '<m-c>', mode = 'nox', desc = 'System Yank', handler = h.builtin.system_yank, expr = true },
@@ -309,6 +311,9 @@ local opts = {
   -- Nvim Tree
   { key = '<m-e>', mode = 'n', desc = 'Open, Focus, or Reveal', handler = h.nvim_tree.open_focus_reveal },
 
+  -- Context
+  { key = '<leader>tc', desc = 'Context', handler = h.toggle_context },
+
   -- Window Resizer
   { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = true, expr = true },
   { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = true, expr = true },
@@ -332,9 +337,5 @@ local opts = {
   { key = '<f10>', desc = 'Dap Step Over', handler = '<cmd>DapStepOver<cr>' },
   { key = '<f11>', desc = 'Dap Step Into', handler = '<cmd>DapStepInto<cr>' },
   { key = '<f12>', desc = 'Dap Step Out', handler = '<cmd>DapStepOut<cr>' },
-
-  -- Disable some keys
-  { key = '<tab>', mode = 'c', handler = '<c-v><tab>' },
-  { key = '<s-tab>', mode = 'c', handler = '<c-v><s-tab>' },
 }
 require('maplayer').setup(opts)
