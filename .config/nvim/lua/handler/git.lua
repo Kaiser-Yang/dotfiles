@@ -63,16 +63,16 @@ M.select_hunk = function()
   return true
 end
 
-M.quickfix_all_hunk = function()
-  if not _G.loaded['gitsigns.nvim'] then return false end
-  require('gitsigns').setqflist('all')
-  return true
-end
-
-M.quickfix_with_input = function()
+M.qflist_with_input = function()
   if not _G.loaded['gitsigns.nvim'] then return false end
   vim.defer_fn(require('handler').completion.show, 10)
   return ':Gitsigns setqflist '
+end
+
+M.loclist_with_input = function()
+  if not _G.loaded['gitsigns.nvim'] then return false end
+  vim.defer_fn(require('handler').completion.show, 10)
+  return ':Gitsigns setloclist '
 end
 
 M.toggle_current_line_blame = function()
@@ -108,12 +108,6 @@ end
 M.toggle_deleted = function()
   if not _G.loaded['gitsigns.nvim'] then return false end
   u.toggle_notify('Deleted', require('gitsigns').toggle_deleted(), { title = 'Git Sign' })
-  return true
-end
-
-M.diff_this = function()
-  if not _G.loaded['gitsigns.nvim'] then return false end
-  require('gitsigns').diffthis('~')
   return true
 end
 

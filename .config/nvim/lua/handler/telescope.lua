@@ -250,7 +250,7 @@ function M.diagnostics()
   return true
 end
 
-function M.quickfix()
+function M.qflist()
   if not _G.loaded['telescope.nvim'] then return false end
   require('telescope.builtin').quickfix()
   return true

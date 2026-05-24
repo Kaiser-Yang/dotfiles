@@ -53,7 +53,7 @@ local opts = {
   { key = '<leader>r', desc = 'Run Single File', handler = h.builtin.run_single_file },
   { key = '<leader>ts', desc = 'Spell', handler = h.builtin.toggle_spell },
   { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.builtin.toggle_treesitter },
-  { key = '<leader>q', desc = 'Diagnostic Quickfix', handler = h.builtin.diagnostic_qflist },
+  { key = '<leader>q', desc = 'Diagnostic Qflist', handler = h.builtin.diagnostic_qflist },
   { key = '<leader>l', desc = 'Diagnostic Loclist', handler = h.builtin.diagnostic_loclist },
   { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.builtin.select_file },
   { key = { '<esc>', '<c-[>' }, desc = 'No Highlight Search', handler = h.builtin.no_hl_search },
@@ -84,10 +84,9 @@ local opts = {
   { key = '<leader>gU', desc = 'Undo Add Buffer', handler = h.git.reset_buffer_index },
   { key = '<leader>gr', mode = 'nx', desc = 'Reset', handler = h.git.reset },
   { key = '<leader>gR', desc = 'Reset Buffer', handler = h.git.reset_buffer },
-  { key = '<leader>gt', desc = 'Diff This', handler = h.git.diff_this },
-  { key = '<leader>gT', desc = 'Git Diff This with Input', handler = h.git.diff_this_with_input, expr = true },
-  { key = '<leader>gq', desc = 'All to Quickfix', handler = h.git.quickfix_all_hunk },
-  { key = '<leader>gQ', desc = 'Quickfix with Input', handler = h.git.quickfix_with_input, expr = true },
+  { key = '<leader>gt', desc = 'Git Diff This with Input', handler = h.git.diff_this_with_input, expr = true },
+  { key = '<leader>gq', desc = 'Qflist with Input', handler = h.git.qflist_with_input, expr = true },
+  { key = '<leader>gl', desc = 'Loclist with Input', handler = h.git.loclist_with_input, expr = true },
   { key = '<leader>gd', desc = 'Diff', handler = h.git.preview_hunk },
   { key = '<leader>gD', desc = 'Diff Inline', handler = h.git.preview_hunk_inline },
   { key = '<leader>gb', desc = 'Line Blame', handler = h.git.line_blame },
@@ -159,10 +158,10 @@ local opts = {
   { key = ']|', mode = 'nox', desc = 'Indent End', handler = h.repmove.indent_bottom },
   { key = '[b', desc = 'Buffer', handler = h.repmove.previous_buffer },
   { key = ']b', desc = 'Buffer', handler = h.repmove.next_buffer },
-  { key = '[l', desc = 'Location', handler = h.repmove.previous_location },
-  { key = ']l', desc = 'Location', handler = h.repmove.next_location },
-  { key = '[q', desc = 'Quickfix', handler = h.repmove.previous_quickfix },
-  { key = ']q', desc = 'Quickfix', handler = h.repmove.next_quickfix },
+  { key = '[l', desc = 'Loclist Item', handler = h.repmove.previous_loclist_item },
+  { key = ']l', desc = 'Loclist Item', handler = h.repmove.next_loclist_item },
+  { key = '[q', desc = 'Qflist Item', handler = h.repmove.previous_qflist_item },
+  { key = ']q', desc = 'Qflist Item', handler = h.repmove.next_qflist_item },
 
   -- Swap
   { key = '<m-s>pa', desc = 'Argument', handler = h.treesitter.swap_with_previous_parameter },
@@ -300,7 +299,7 @@ local opts = {
   { key = '<f1>', desc = 'Search Help', handler = h.telescope.help_tags },
   { key = '<m-f>', mode = 'nx', desc = 'Find Word', handler = h.telescope.find_word },
   { key = '<leader>sd', desc = 'Diagnostics', handler = h.telescope.diagnostics },
-  { key = '<leader>sq', desc = 'Quickfix', handler = h.telescope.quickfix },
+  { key = '<leader>sq', desc = 'Qflist', handler = h.telescope.qflist },
   { key = '<leader>sl', desc = 'Loclist', handler = h.telescope.loclist },
   { key = '<leader>sh', desc = 'Highlight', handler = h.telescope.highlights },
   { key = '<leader>sk', desc = 'Key Mapping', handler = h.telescope.keymaps },
@@ -317,7 +316,7 @@ local opts = {
   { key = '<leader>s/', desc = 'Search in Open Files', handler = h.telescope.live_grep_open_file },
 
   -- Nvim Tree
-  { key = '<m-e>', mode = 'n', desc = 'Open, Focus, or Reveal', handler = h.tree.open_focus_reveal },
+  { key = '<m-e>', desc = 'Open, Focus, or Reveal', handler = h.tree.open_focus_reveal },
 
   -- Context
   { key = '<leader>tC', desc = 'Context', handler = h.toggle_context },

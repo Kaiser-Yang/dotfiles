@@ -191,10 +191,10 @@ function M.nvim_tree_next_diagnostic()
 end
 function M.next_diagnostic() return u.ensure_repmove(previous_diagnostic, next_diagnostic)[2]() end
 function M.previous_diagnostic() return u.ensure_repmove(previous_diagnostic, next_diagnostic)[1]() end
-function M.next_quickfix() return u.ensure_repmove(cprevious, cnext)[2]() end
-function M.previous_quickfix() return u.ensure_repmove(cprevious, cnext)[1]() end
-function M.next_location() return u.ensure_repmove(lprevious, lnext)[2]() end
-function M.previous_location() return u.ensure_repmove(lprevious, lnext)[1]() end
+function M.next_qflist_item() return u.ensure_repmove(cprevious, cnext)[2]() end
+function M.previous_qflist_item() return u.ensure_repmove(cprevious, cnext)[1]() end
+function M.next_loclist_item() return u.ensure_repmove(lprevious, lnext)[2]() end
+function M.previous_loclist_item() return u.ensure_repmove(lprevious, lnext)[1]() end
 function M.next_buffer() return u.ensure_repmove(bprevious, bnext)[2]() end
 function M.previous_buffer() return u.ensure_repmove(bprevious, bnext)[1]() end
 function M.next_file() return u.ensure_repmove(previous_file, next_file)[2]() end

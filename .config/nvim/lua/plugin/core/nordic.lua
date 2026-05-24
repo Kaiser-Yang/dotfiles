@@ -1,4 +1,3 @@
-
 local u = require('utils')
 u.gh('AlexvZyl/nordic.nvim')
 local n = require('nordic')
