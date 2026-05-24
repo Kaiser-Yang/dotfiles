@@ -1,7 +1,6 @@
+vim.g.nvim_surround_no_mappings = true
 local u = require('utils')
 u.gh('kylechui/nvim-surround')
-
-vim.g.nvim_surround_no_mappings = true
 require('nvim-surround').setup({
   surrounds = {
     [')'] = { change = { target = '^(. ?)().-( ?.)()$' } },
