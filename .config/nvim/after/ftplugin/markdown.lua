@@ -28,6 +28,7 @@ vim.schedule(function()
 
   for _, m in ipairs(mappings) do
     local rhs = m[3]
+    ---@diagnostic disable-next-line: assign-type-mismatch
     m[3] = function()
       local res = m[2]
       if not comma_typed() then return res end

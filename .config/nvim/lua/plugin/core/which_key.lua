@@ -1,10 +1,12 @@
 local u = require('utils')
 u.gh('Kaiser-Yang/which-key.nvim')
 
+local w = require('which-key')
 -- BUG:
 -- this plugin has many bugs
 -- In insert mode, <C-O> with some other keys may not work as expected
-require('which-key').setup({
+-- "grn" will never be able to visual replace with "n"
+w.setup({
   preset = 'helix',
   delay = 0,
   sort = { 'order', 'group', 'desc', 'mod' },
@@ -38,7 +40,7 @@ require('which-key').setup({
   end,
   defer = function() return false end,
 })
-require('which-key').add({
+w.add({
   { '<leader>g', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Git', mode = 'nx' },
   { '<leader>x', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Conflict' },
   { '<leader>xd', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Diff' },

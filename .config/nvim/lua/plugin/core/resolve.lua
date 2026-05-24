@@ -21,12 +21,12 @@ if vim.fn.executable('delta') == 1 then
     { 'n', '<leader>xdV' },
   })
 end
-require('resolve').setup({
+local r = require('resolve')
+r.setup({
   default_keymaps = false,
   auto_detect_enabled = false,
   on_conflict_detected = function(args)
     local h = require('handler')
-    local r = require('resolve')
     if #mapping[1] < 4 then
       vim.list_extend(mapping[1], { h.repmove.previous_conflict, { desc = 'Previous Conflict' } })
       vim.list_extend(mapping[2], { h.repmove.next_conflict, { desc = 'Next Conflict' } })

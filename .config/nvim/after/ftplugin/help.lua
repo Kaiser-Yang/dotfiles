@@ -6,6 +6,7 @@ vim.schedule(function()
   }
   for _, m in ipairs(mapping) do
     m[4].buffer = true
+    ---@diagnostic disable-next-line: param-type-mismatch
     vim.keymap.set(unpack(m))
   end
 end)

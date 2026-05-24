@@ -52,6 +52,7 @@ local function blink_pairs(keycode)
     local rule_lib = require('blink.pairs.rule')
     local rules_by_key = rule_lib.parse(require('blink.pairs.config').mappings.pairs)
     local all_rules = rule_lib.get_all(rules_by_key)
+    local wrap = require('blink.pairs.mappings.wrap.treesitter').wrap
     keycode_to_function = {
       ['<'] = ops.on_key('<', rules_by_key['<']),
       ['>'] = ops.on_key('>', rules_by_key['>']),
@@ -72,8 +73,8 @@ local function blink_pairs(keycode)
       [vim.keycode('<bs>')] = ops.backspace(all_rules),
       [vim.keycode('<cr>')] = ops.enter(all_rules),
       [vim.keycode('<space>')] = ops.space(all_rules),
-      [vim.keycode('<m-e>')] = "<C-g>U<Cmd>lua require('blink.pairs.mappings.wrap.treesitter').wrap('fwd')<CR>",
-      [vim.keycode('<m-E>')] = "<C-g>U<Cmd>lua require('blink.pairs.mappings.wrap.treesitter').wrap('rev')<CR>",
+      [vim.keycode('<m-e>')] = wrap('fwd'),
+      [vim.keycode('<m-E>')] = wrap('rev'),
     }
   end
   local res = keycode_to_function[keycode]

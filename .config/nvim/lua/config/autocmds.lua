@@ -120,10 +120,6 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
   callback = function(ev)
-    -- WARN:
-    -- With those keys below,
-    -- we can not use something like "grn" to enter visual replace mode and change a character to "n"
-    -- gr not work
     local grr = vim.lsp.buf.references --- @type string|function()
     local grI = vim.lsp.buf.implementation --- @type string|function()
     local gri = vim.lsp.buf.incoming_calls --- @type string|function()
