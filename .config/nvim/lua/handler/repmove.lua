@@ -2,7 +2,7 @@ local M = {}
 local u = require('utils')
 
 local function previous_todo()
-  if not _G.loaded('todo-comments.nvim') then return false end
+  if not _G.loaded['todo-comments.nvim'] then return false end
   local cnt1 = vim.v.count1
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   for _ = 1, cnt1 do
@@ -11,7 +11,7 @@ local function previous_todo()
   return true
 end
 local function next_todo()
-  if not _G.loaded('todo-comments.nvim') then return false end
+  if not _G.loaded['todo-comments.nvim'] then return false end
   local cnt1 = vim.v.count1
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   for _ = 1, cnt1 do
