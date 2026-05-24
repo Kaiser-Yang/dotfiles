@@ -220,7 +220,6 @@ end
 local function make_system_op(name, op, normal_cmd)
   return function()
     local mode = vim.api.nvim_get_mode().mode
-
     if mode:sub(1, 2) == 'no' then
       if vim.v.operator ~= op or vim.v.register ~= '+' then return false end
       return op
@@ -424,10 +423,12 @@ M.down = '<down>'
 M.last_s_cmd = '<cmd>&&<cr>'
 M.no_hl_search = '<cmd>nohlsearch<cr>'
 M.tab_split = '<cmd>tab split<cr>'
+
 M.diagnostic_qflist = function()
   vim.diagnostic.setqflist()
   return diagnostic_cnt() > 0
 end
+
 M.diagnostic_loclist = function()
   vim.diagnostic.setloclist()
   return diagnostic_cnt() > 0
