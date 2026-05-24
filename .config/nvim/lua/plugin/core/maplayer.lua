@@ -250,14 +250,8 @@ local opts = {
   { key = '<bs>', mode = 'i', desc = 'Autopair BS', handler = h.pair.auto_pair_wrap('<bs>') },
   { key = '<space>', mode = 'i', desc = 'Autopair Space', handler = h.pair.auto_pair_wrap('<space>') },
   { key = '<cr>', mode = 'i', desc = 'Autopair CR', handler = h.pair.auto_pair_wrap('<cr>'), priority = 1 },
-  { key = '<m-e>', mode = 'i', desc = 'Autopair Fastwarp', handler = h.pair.auto_pair_wrap('<m-e>'), expr = true },
-  {
-    key = '<m-E>',
-    mode = 'i',
-    desc = 'Autopair Reverse Fastwarp',
-    handler = h.pair.auto_pair_wrap('<m-E>'),
-    expr = true,
-  },
+  { key = '<m-e>', mode = 'i', desc = 'Autopair Fastwarp', handler = h.pair.auto_pair_wrap('<m-e>') },
+  { key = '<m-E>', mode = 'i', desc = 'Autopair Reverse Fastwarp', handler = h.pair.auto_pair_wrap('<m-E>') },
   { key = '<m-s>', mode = 'i', desc = 'Autopair Close', handler = h.pair.auto_pair_wrap('<m-)>') },
   { key = '<c-l>', mode = 'i', desc = 'Autopair Tabout', handler = h.pair.auto_pair_wrap('<m-tab>'), fallback = true },
 
