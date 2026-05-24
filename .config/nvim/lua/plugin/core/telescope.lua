@@ -21,7 +21,8 @@ end
 local function cursor(opts)
   return vim.tbl_deep_extend('force', {
     theme = 'cursor',
-    layout_config = { width = 0.2, height = 0.4 },
+    layout_config = { width = 0.6, height = 0.4 },
+    path_display = { 'tail' },
   }, opts or {})
 end
 
