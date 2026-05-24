@@ -1,3 +1,4 @@
+
 local u = require('utils')
 u.gh('AlexvZyl/nordic.nvim')
 local n = require('nordic')
@@ -62,6 +63,28 @@ n.setup({
     h.LspReferenceTarget = { bg = p.gray3 }
     h.LspReferenceRead = { link = 'LspReferenceTarget' }
     h.LspReferenceWrite = { link = 'LspReferenceTarget' }
+
+    local git_colors = {
+      Add = p.green.base,
+      Delete = p.red.base,
+      Change = p.blue1,
+    }
+    git_colors.Untracked = git_colors.Add
+    git_colors.Topdelete = git_colors.Delete
+    git_colors.Changedelete = git_colors.Change
+    local types = { 'Add', 'Delete', 'Change', 'Untracked', 'Topdelete', 'Changedelete' }
+    for i, t in ipairs(types) do
+      -- For `linehl`
+      h['GitSigns' .. t .. 'Ln'] = { undercurl = true, sp = git_colors[t] }
+      if i <= 3 then
+        -- For 'word_diff'
+        h['GitSigns' .. t .. 'LnInline'] = { bg = git_colors[t], fg = p.black0 }
+      end
+    end
+    -- For `show_deleted`
+    h.GitSignsDeleteVirtLn = { bg = git_colors.Delete, fg = p.black0 }
+    -- For the line number in `preview_hunk_inline`, we should set `fg`
+    h.GitSignsVirtLnum = { fg = git_colors.Delete }
   end,
   telescope = { style = 'classic' },
 })
