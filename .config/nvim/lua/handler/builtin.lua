@@ -408,6 +408,8 @@ M.down = '<down>'
 M.last_s_cmd = '<cmd>&&<cr>'
 M.no_hl_search = '<cmd>nohlsearch<cr>'
 M.tab_split = '<cmd>tab split<cr>'
+M.around_angle_bracket = 'a<'
+M.inside_angle_bracket = 'i<'
 
 M.diagnostic_qflist = function()
   vim.diagnostic.setqflist()

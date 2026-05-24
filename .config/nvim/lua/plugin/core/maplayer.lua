@@ -57,6 +57,9 @@ local opts = {
   { key = '<leader>l', desc = 'Diagnostic Loclist', handler = h.builtin.diagnostic_loclist },
   { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.builtin.select_file },
   { key = { '<esc>', '<c-[>' }, desc = 'No Highlight Search', handler = h.builtin.no_hl_search },
+  { key = 'aa', mode = 'ox', desc = '<> block', handler = h.builtin.around_angle_bracket },
+  { key = 'ia', mode = 'ox', desc = '<> block', handler = h.builtin.inside_angle_bracket },
+
   -- LSP
   -- INFO:
   -- By default, "tagfunc" is set whne "LspAttach",
@@ -182,8 +185,8 @@ local opts = {
   { key = '<m-s>nr', desc = 'Return', handler = h.treesitter.swap_with_next_return },
 
   -- Treesitter Text Object
-  { key = 'aa', mode = 'ox', desc = 'Argument', handler = h.treesitter.around_parameter },
-  { key = 'ia', mode = 'ox', desc = 'Argument', handler = h.treesitter.inside_parameter },
+  { key = 'aA', mode = 'ox', desc = 'Argument', handler = h.treesitter.around_parameter },
+  { key = 'iA', mode = 'ox', desc = 'Argument', handler = h.treesitter.inside_parameter },
   -- By default, "ab", "aB", "ib" and "iB" are aliases of "a(", "a{", "i(" and "i{" respectively
   -- Therefore we use "al" and "il" here
   { key = 'al', mode = 'ox', desc = 'Block', handler = h.treesitter.around_block },
