@@ -120,46 +120,6 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
   callback = function(ev)
-    local grr = vim.lsp.buf.references --- @type string|function()
-    local grI = vim.lsp.buf.implementation --- @type string|function()
-    local gri = vim.lsp.buf.incoming_calls --- @type string|function()
-    local gro = vim.lsp.buf.outgoing_calls --- @type string|function()
-    local grt = vim.lsp.buf.type_definition --- @type string|function()
-    local gO = vim.lsp.buf.document_symbol --- @type string|function()
-    local gW = vim.lsp.buf.document_symbol --- @type string|function()
-    if _G.loaded['telescope.nvim'] then
-      local b = require('telescope.builtin')
-      grr = b.lsp_references
-      grI = b.lsp_implementations
-      gri = b.lsp_incoming_calls
-      gro = b.lsp_outgoing_calls
-      grt = b.lsp_type_definitions
-      gO = b.lsp_document_symbols
-      gW = b.lsp_dynamic_workspace_symbols
-    end
-    local lsp_m = {
-      -- By default, "tagfunc" is set whne "LspAttach",
-      -- "<C-]>", "<C-W>]", and "<C-W>}" will work, you can use them to go to definition
-      -- You can use "<C-T>" to go back
-      { 'n', 'K', vim.lsp.buf.hover, { desc = 'Hover' } },
-      { 'n', 'grn', vim.lsp.buf.rename, { desc = 'Rename Symbol' } },
-      { 'n', 'gra', vim.lsp.buf.code_action, { desc = 'Code Action' } },
-      -- This will go to header files for "C" or "CPP" files
-      { 'n', 'grD', vim.lsp.buf.declaration, { desc = 'Goto Declaration' } },
-      { 'n', 'grx', vim.lsp.codelens.run, { desc = 'Codelens' } },
-      { 'n', 'grr', grr, { desc = 'References' } },
-      { 'n', 'grI', grI, { desc = 'Go to Implementation' } },
-      { 'n', 'gri', gri, { desc = 'Incoming Call' } },
-      { 'n', 'gro', gro, { desc = 'Outgoint Call' } },
-      { 'n', 'grt', grt, { desc = 'Go to Type Definition' } },
-      { 'n', 'gO', gO, { desc = 'Document Symbol' } },
-      { 'n', 'gW', gW, { desc = 'Dynamic Workspace Symbols' } },
-    }
-    for _, m in ipairs(lsp_m) do
-      m[4].buffer = ev.buf
-      ---@diagnostic disable-next-line: param-type-mismatch
-      vim.keymap.set(unpack(m))
-    end
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     local highlight_augroup, lightbulb_augroup
     if client and client:supports_method('textDocument/documentHighlight', ev.buf) then

@@ -4,15 +4,6 @@ u.gh('Kaiser-Yang/maplayer.nvim')
 -- We have provide another key binding for commenting current line
 -- We must remove this to make "gc" work
 vim.api.nvim_del_keymap('n', 'gcc')
--- We will map those keys on "LspAttach"
-vim.api.nvim_del_keymap('n', 'grn')
-vim.api.nvim_del_keymap('n', 'grx')
-vim.api.nvim_del_keymap('n', 'gra')
-vim.api.nvim_del_keymap('n', 'grr')
-vim.api.nvim_del_keymap('n', 'gri')
-vim.api.nvim_del_keymap('n', 'grt')
-vim.api.nvim_del_keymap('n', 'gO')
-vim.api.nvim_del_keymap('i', '<c-s>')
 local h = require('handler')
 local opts = {
   -- Builtin
@@ -61,13 +52,29 @@ local opts = {
   { key = '<m-p>', mode = 'c', desc = 'Previous Commend History', handler = h.builtin.up },
   { key = '<leader>r', desc = 'Run Single File', handler = h.builtin.run_single_file },
   { key = '<leader>ts', desc = 'Spell', handler = h.builtin.toggle_spell },
-  { key = '<leader>ti', desc = 'Inlay Hint', handler = h.builtin.toggle_inlay_hint },
-  { key = '<leader>tc', desc = 'Code Lens', handler = h.builtin.toogle_codelens },
   { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.builtin.toggle_treesitter },
   { key = '<leader>q', desc = 'Diagnostic Quickfix', handler = h.builtin.diagnostic_qflist },
   { key = '<leader>l', desc = 'Diagnostic Loclist', handler = h.builtin.diagnostic_loclist },
   { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.builtin.select_file },
   { key = { '<esc>', '<c-[>' }, desc = 'No Highlight Search', handler = h.builtin.no_hl_search },
+  -- LSP
+  -- INFO:
+  -- By default, "tagfunc" is set whne "LspAttach",
+  -- "<C-]>", "<C-W>]", and "<C-W>}" will work, you can use them to go to definition
+  { key = 'K', desc = 'Hover', handler = h.lsp.hover },
+  { key = 'grn', desc = 'Rename', handler = h.lsp.rename },
+  { key = 'gra', desc = 'Code Action', handler = h.lsp.code_action },
+  { key = 'grD', desc = 'Declaration', handler = h.lsp.declaration },
+  { key = 'grx', desc = 'Codelens', handler = h.lsp.codelens_run },
+  { key = 'grr', desc = 'References', handler = h.lsp.references },
+  { key = 'grI', desc = 'Implementation', handler = h.lsp.implementation },
+  { key = 'gri', desc = 'Incoming Call', handler = h.lsp.incoming_calls },
+  { key = 'gro', desc = 'Outgoing Call', handler = h.lsp.outgoing_calls },
+  { key = 'grt', desc = 'Type Definition', handler = h.lsp.type_definition },
+  { key = 'gO', desc = 'Document Symbol', handler = h.lsp.document_symbol },
+  { key = 'gW', desc = 'Dynamic Workspace Symbols', handler = h.lsp.dynamic_workspace_symbols },
+  { key = '<leader>ti', desc = 'Inlay Hint', handler = h.lsp.toggle_inlay_hint },
+  { key = '<leader>tc', desc = 'Code Lens', handler = h.lsp.toggle_codelens },
 
   -- Repmove Motion
   { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.repmove.semicolon },

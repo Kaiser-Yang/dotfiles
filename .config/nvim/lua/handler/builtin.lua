@@ -372,21 +372,6 @@ M.to_above = '<c-w><c-k>'
 M.to_right = '<c-w><c-l>'
 M.nop = ''
 
-function M.toggle_inlay_hint()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local clients = vim.lsp.get_clients({ bufnr = bufnr })
-  if #clients == 0 then return false end
-  for _, client in ipairs(clients) do
-    if client and client:supports_method('textDocument/inlayHint', bufnr) then
-      local status = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }) == false
-      vim.lsp.inlay_hint.enable(status)
-      u.toggle_notify('Inlay Hint', status, { title = 'LSP' })
-      return true
-    end
-  end
-  return false
-end
-
 function M.toggle_spell()
   local status = vim.wo.spell == false
   vim.wo.spell = status
@@ -437,12 +422,6 @@ end
 function M.insert_undo_point()
   u.key.feed('<c-g>u', 'n')
   return false
-end
-
-function M.toogle_codelens()
-  local status = not vim.lsp.codelens.is_enabled()
-  vim.lsp.codelens.enable(status)
-  u.toggle_notify('Code Lens', status, { title = 'LSP' })
 end
 
 return M

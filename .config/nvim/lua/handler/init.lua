@@ -6,6 +6,7 @@ local M = {
   dap = require('handler.dap'),
   git = require('handler.git'),
   indent = require('handler.indent'),
+  lsp = require('handler.lsp'),
   markdown = require('handler.markdown'),
   pair = require('handler.pair'),
   repmove = require('handler.repmove'),
