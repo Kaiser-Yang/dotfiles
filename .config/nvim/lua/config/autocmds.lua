@@ -128,13 +128,14 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
     local gO = vim.lsp.buf.document_symbol --- @type string|function()
     local gW = vim.lsp.buf.document_symbol --- @type string|function()
     if _G.loaded['telescope.nvim'] then
-      grr = '<cmd>Telescope lsp_references<cr>'
-      grI = '<cmd>Telescope lsp_implementations<cr>'
-      gri = '<cmd>Telescope lsp_incoming_calls<cr>'
-      gro = '<cmd>Telescope lsp_outgoing_calls<cr>'
-      grt = '<cmd>Telescope lsp_type_definitions<cr>'
-      gO = '<cmd>Telescope lsp_document_symbols<cr>'
-      gW = '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>'
+      local b = require('telescope.builtin')
+      grr = b.lsp_references
+      grI = b.lsp_implementations
+      gri = b.lsp_incoming_calls
+      gro = b.lsp_outgoing_calls
+      grt = b.lsp_type_definitions
+      gO = b.lsp_document_symbols
+      gW = b.lsp_dynamic_workspace_symbols
     end
     local lsp_m = {
       -- By default, "tagfunc" is set whne "LspAttach",

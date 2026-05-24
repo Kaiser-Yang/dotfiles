@@ -230,98 +230,112 @@ end
 
 function M.help_tags()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope help_tags<cr>'
+  require('telescope.builtin').help_tags()
+  return true
 end
 
 function M.registers()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope registers<cr>'
+  require('telescope.builtin').registers()
+  return true
 end
 
 function M.resume()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope resume<cr>'
+  require('telescope.builtin').resume()
+  return true
 end
 
 function M.buffers()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope buffers<cr>'
+  require('telescope.builtin').buffers()
+  return true
 end
 
 function M.diagnostics()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope diagnostics<cr>'
+  require('telescope.builtin').diagnostics()
+  return true
 end
 
 function M.quickfix()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope quickfix<cr>'
+  require('telescope.builtin').quickfix()
+  return true
 end
 
 function M.loclist()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope loclist<cr>'
+  require('telescope.builtin').loclist()
+  return true
 end
 
 function M.highlights()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope highlights<cr>'
+  require('telescope.builtin').highlights()
+  return true
 end
 
 function M.keymaps()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope keymaps<cr>'
+  require('telescope.builtin').keymaps()
+  return true
 end
 
 function M.man_pages()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope man_pages<cr>'
+  require('telescope.builtin').man_pages()
+  return true
 end
 
 function M.pickers()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope<cr>'
+  require('telescope.builtin').builtin()
+  return true
 end
 
 function M.oldfiles()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope oldfiles<cr>'
+  require('telescope.builtin').oldfiles()
+  return true
 end
 
 function M.todo()
   if not _G.loaded['telescope.nvim'] or not _G.loaded['todo-comments.nvim'] then return false end
-  return '<cmd>Telescope todo-comments todo<cr>'
+  require('telescope').extensions['todo-comments'].todo()
+  return true
 end
 
 function M.current_buffer_fuzzy_find()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope current_buffer_fuzzy_find<cr>'
+  require('telescope.builtin').current_buffer_fuzzy_find()
+  return true
 end
 
 local l_dir = vim.fn.fnameescape(u.plugin_path())
 local c_dir = vim.fn.fnameescape(vim.fn.stdpath('config'))
 M.live_grep_config = function()
   if not _G.loaded['telescope.nvim'] then return false end
-  local plugin = 'live_grep'
-  if _G.loaded['telescope-live-grep-args.nvim'] then plugin = plugin .. '_args' end
-  return '<cmd>Telescope ' .. plugin .. ' cwd=' .. c_dir .. '<cr>'
+  live_grep({ cwd = c_dir })
+  return true
 end
 
 M.live_grep_plugin = function()
   if not _G.loaded['telescope.nvim'] then return false end
-  local plugin = 'live_grep'
-  if _G.loaded['telescope-live-grep-args.nvim'] then plugin = plugin .. '_args' end
-  return '<cmd>Telescope ' .. plugin .. ' cwd=' .. l_dir .. '<cr>'
+  live_grep({ cwd = l_dir })
+  return true
 end
 
 M.find_file_config = function()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope find_files cwd=' .. c_dir .. '<cr>'
+  require('telescope.builtin').find_files({ cwd = c_dir })
+  return true
 end
 
 M.find_file_plugin = function()
   if not _G.loaded['telescope.nvim'] then return false end
-  return '<cmd>Telescope find_files cwd=' .. l_dir .. '<cr>'
+  require('telescope.builtin').find_files({ cwd = l_dir })
+  return true
 end
 
 function M.live_grep_open_file()
