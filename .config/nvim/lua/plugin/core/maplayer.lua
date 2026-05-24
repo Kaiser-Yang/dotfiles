@@ -76,6 +76,29 @@ local opts = {
   { key = '<leader>ti', desc = 'Inlay Hint', handler = h.lsp.toggle_inlay_hint },
   { key = '<leader>tc', desc = 'Code Lens', handler = h.lsp.toggle_codelens },
 
+  -- Git
+  { key = { 'ah', 'ih' }, mode = 'ox', desc = 'Git Hunk', handler = h.git.select_hunk },
+  { key = '<leader>ga', mode = 'nx', desc = 'Add', handler = h.git.stage },
+  { key = '<leader>gA', desc = 'Add Buffer', handler = h.git.stage_buffer },
+  { key = '<leader>gu', desc = 'Undo Add', handler = h.git.undo_stage_hunk },
+  { key = '<leader>gU', desc = 'Undo Add Buffer', handler = h.git.reset_buffer_index },
+  { key = '<leader>gr', mode = 'nx', desc = 'Reset', handler = h.git.reset },
+  { key = '<leader>gR', desc = 'Reset Buffer', handler = h.git.reset_buffer },
+  { key = '<leader>gt', desc = 'Diff This', handler = h.git.diff_this },
+  { key = '<leader>gT', desc = 'Git Diff This with Input', handler = h.git.diff_this_with_input, expr = true },
+  { key = '<leader>gq', desc = 'All to Quickfix', handler = h.git.quickfix_all_hunk },
+  { key = '<leader>gQ', desc = 'Quickfix with Input', handler = h.git.quickfix_with_input, expr = true },
+  { key = '<leader>gd', desc = 'Diff', handler = h.git.preview_hunk },
+  { key = '<leader>gD', desc = 'Diff Inline', handler = h.git.preview_hunk_inline },
+  { key = '<leader>gb', desc = 'Line Blame', handler = h.git.line_blame },
+  { key = '<leader>gB', desc = 'Buffer Blame', handler = h.git.buffer_blame },
+  { key = '<leader>tgb', desc = 'Current Line Blame', handler = h.git.toggle_current_line_blame },
+  { key = '<leader>tgw', desc = 'Word Diff', handler = h.git.toggle_word_diff },
+  { key = '<leader>tgs', desc = 'Signs', handler = h.git.toggle_signs },
+  { key = '<leader>tgn', desc = 'Line Number Highlight', handler = h.git.toggle_numhl },
+  { key = '<leader>tgd', desc = 'Deleted', handler = h.git.toggle_deleted },
+  { key = '<leader>tgl', desc = 'Line Highlight', handler = h.git.toggle_linehl },
+
   -- Repmove Motion
   { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.repmove.semicolon },
   { key = ',', mode = 'nx', desc = 'Last Motion Backward', handler = h.repmove.comma },
@@ -97,6 +120,8 @@ local opts = {
   { key = ']C', mode = 'nox', desc = 'Class End', handler = h.repmove.next_class_end },
   { key = '[d', mode = 'nox', desc = 'Diagnostic', handler = h.repmove.previous_diagnostic },
   { key = ']d', mode = 'nox', desc = 'Diagnostic', handler = h.repmove.next_diagnostic },
+  { key = '[g', mode = 'nx', desc = 'Git Hunk', handler = h.repmove.previous_hunk },
+  { key = ']g', mode = 'nx', desc = 'Git Hunk', handler = h.repmove.next_hunk },
   -- By default, "[i", "]i", "[I", and "]I" are used to show information of keywords under cursor
   { key = '[i', mode = 'nox', desc = 'If Start', handler = h.repmove.previous_conditional_start },
   { key = ']i', mode = 'nox', desc = 'If Start', handler = h.repmove.next_conditional_start },
