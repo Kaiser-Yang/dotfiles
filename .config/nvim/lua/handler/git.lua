@@ -69,9 +69,9 @@ M.quickfix_all_hunk = function()
   return true
 end
 
--- TODO: completion
 M.quickfix_with_input = function()
   if not _G.loaded['gitsigns.nvim'] then return false end
+  vim.defer_fn(require('handler').completion.show, 10)
   return ':Gitsigns setqflist '
 end
 
@@ -129,9 +129,9 @@ M.preview_hunk_inline = function()
   return true
 end
 
--- TODO: completion
 M.diff_this_with_input = function()
   if not _G.loaded['gitsigns.nvim'] then return false end
+  vim.defer_fn(require('handler').completion.show, 10)
   return ':Gitsigns diffthis '
 end
 
