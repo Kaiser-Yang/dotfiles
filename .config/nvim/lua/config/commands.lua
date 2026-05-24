@@ -107,7 +107,7 @@ vim.schedule(function()
           end
         )
       end,
-      opt = {
+      opts = {
         nargs = '*',
         bar = true,
         complete = function(ArgLead, CmdLine, CursorPos)
@@ -144,7 +144,7 @@ vim.schedule(function()
         end
         u.build_plugin(list)
       end,
-      opt = {
+      opts = {
         nargs = '?',
         bar = true,
         complete = function(_, CmdLine, CursorPos)
@@ -178,7 +178,7 @@ vim.schedule(function()
         local opts = args.bang and { force = true } or {}
         vim.pack.update(plugins, opts)
       end,
-      opt = {
+      opts = {
         nargs = '*',
         bang = true,
         bar = true,
@@ -199,6 +199,6 @@ vim.schedule(function()
     },
   }
   for name, c in pairs(command) do
-    vim.api.nvim_create_user_command(name, c.callback, c.opt)
+    vim.api.nvim_create_user_command(name, c.callback, c.opts)
   end
 end)
