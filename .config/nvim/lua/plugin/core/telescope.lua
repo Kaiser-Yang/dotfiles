@@ -112,12 +112,7 @@ local insert_and_normal = {
   ['<c-p>'] = { h.telescope.toggle_find_file, type = 'action', opts = { desc = 'Toggle Find File' } },
   ['<m-f>'] = { h.telescope.toggle_find_word, type = 'action', opts = { desc = 'Toogle Find Word' } },
   ['<m-a>'] = { h.telescope.smart_select_all, type = 'action', opts = { desc = 'Smart Select All' } },
-  ['<m-s>'] = { h.telescope.toggle_quotation_wrap(), type = 'action', opts = { desc = 'Toggle Quotation' } },
-  ['<m-i>'] = {
-    h.telescope.toggle_quotation_wrap({ postfix = ' --iglob=' }),
-    type = 'action',
-    opts = { desc = 'Toggle iglob' },
-  },
+  ['<m-s>'] = { h.telescope.toggle_quotation, type = 'action', opts = { desc = 'Toggle Quotation' } },
   ['<tab>'] = { a.toggle_selection + a.move_selection_worse, type = 'action', opts = { desc = 'Toggle Selection' } },
   ['<s-tab>'] = { a.move_selection_better + a.toggle_selection, type = 'action', opts = { desc = 'Toggle Selection' } },
   ['<leftmouse>'] = { a.mouse_click, type = 'action', opts = { desc = 'Mouse Click' } },

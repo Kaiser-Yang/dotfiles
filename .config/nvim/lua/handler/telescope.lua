@@ -39,93 +39,78 @@ local function get_input(buffer)
   return line
 end
 
-local last_input = nil
+local last_args = nil
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'TelescopePrompt',
-  callback = function() last_input = nil end,
+  callback = function() last_args = nil end,
 })
-local function escape_for_quote(s, q) return s:gsub(q, '\\' .. q) end
-local function unescape_quoted_inner(s, q) return s:gsub('\\' .. q, q) end
+--- @param s string
+--- @return string
+local function escape_for_quote(s)
+  local res = {}
+  local i = 1
+  while i <= #s do
+    local c = s:sub(i, i)
+    if c == '\\' then
+      table.insert(res, s:sub(i, i + 1))
+      i = i + 2
+    elseif c == '"' or c == "'" then
+      table.insert(res, '\\' .. c)
+      i = i + 1
+    else
+      table.insert(res, c)
+      i = i + 1
+    end
+  end
+  return table.concat(res)
+end
+--- @param s string
+--- @return string
+local function unescape_quoted_inner(s)
+  local res = {}
+  local i = 1
+  while i <= #s do
+    local c = s:sub(i, i)
+    if c == '\\' then
+      local next = s:sub(i + 1, i + 1)
+      if next ~= '"' and next ~= "'" then table.insert(res, c) end
+      table.insert(res, next)
+      i = i + 2
+    else
+      table.insert(res, c)
+      i = i + 1
+    end
+  end
+  return table.concat(res)
+end
+--- @param s string
+--- @param q string
+--- @return string? inner
+--- @return string? rest
 local function extract_quoted_and_rest(s, q)
   local end_idx = find_closing_quote(s, q)
-  if not end_idx then
-    local inner_raw = s:sub(2)
-    return unescape_quoted_inner(inner_raw, q), ''
-  end
-  local inner_raw = s:sub(2, end_idx - 1)
-  local inner = unescape_quoted_inner(inner_raw, q)
-  local rest = s:sub(end_idx + 1) or ''
-  return inner, rest
+  if not end_idx then return nil, nil end
+  return unescape_quoted_inner(s:sub(2, end_idx - 1)), s:sub(end_idx + 1)
 end
-
-local function live_grep(opts)
-  if _G.loaded['telescope-live-grep-args.nvim'] then
-    require('telescope').extensions.live_grep_args.live_grep_args(opts)
-  else
-    require('telescope.builtin').live_grep(opts)
-  end
-end
-
 -- Main factory: returns a function suitable for which-key / telescope mappings
--- opts:
---   trim: boolean (trim prompt before processing)
---   quote_char: default '"'
---   postfix: optional string appended after a quoted expression
-function M.toggle_quotation_wrap(opts)
-  local function ends_with(str, suffix)
-    if suffix == nil or suffix == '' then return false end
-    return str:sub(-#suffix) == suffix
+function M.toggle_quotation(prompt_bufnr)
+  local quote_char = '"'
+  local action_state = require('telescope.actions.state')
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  if not picker then return end
+  local prompt = picker:_get_prompt() or ''
+  local quoted = prompt:sub(1, 1) == quote_char
+  local inner, rest
+  if quoted then
+    inner, rest = extract_quoted_and_rest(prompt, quote_char)
+    quoted = inner ~= nil and rest ~= nil
   end
-  opts = opts or {}
-  local quote_char = opts.quote_char or '"'
-  local postfix = opts.postfix or ''
-
-  return function(prompt_bufnr)
-    local action_state = require('telescope.actions.state')
-    local picker = action_state.get_current_picker(prompt_bufnr)
-    if not picker then return end
-    local prompt = picker:_get_prompt() or ''
-    if opts.trim then prompt = vim.trim(prompt) end
-    if postfix ~= '' then
-      if prompt:sub(1, 1) == quote_char then
-        local inner, rest = extract_quoted_and_rest(prompt, quote_char)
-        local escaped = escape_for_quote(inner, quote_char)
-        if ends_with(rest, postfix) then
-          -- Already has postfix: just re-quote the inner and rest without postfix
-          picker:set_prompt(quote_char .. escaped .. quote_char .. rest:sub(1, #rest - #postfix))
-        else
-          -- No postfix: add it
-          picker:set_prompt(quote_char .. escaped .. quote_char .. rest .. postfix)
-        end
-      else
-        -- Quote it if not quoted, and add postfix
-        local escaped = escape_for_quote(prompt, quote_char)
-        picker:set_prompt(quote_char .. escaped .. quote_char .. postfix)
-      end
-      return
-    end
-
-    -- No postfix: toggle-ish behavior with last_input memory
-    if prompt:sub(1, 1) == quote_char then
-      -- quoted: extract inner and save outside content as last_input,
-      -- then set prompt to the inner (unescaped)
-      local inner, rest = extract_quoted_and_rest(prompt, quote_char)
-      last_input = rest
-      picker:set_prompt(inner)
-      return
-    else
-      -- not quoted: if last_input exists, place current content into last_input's quotes
-      if last_input and last_input ~= '' then
-        local escaped = escape_for_quote(prompt, quote_char)
-        picker:set_prompt(quote_char .. escaped .. quote_char .. last_input)
-        return
-      else
-        -- no last_input: just wrap current prompt
-        local escaped = escape_for_quote(prompt, quote_char)
-        picker:set_prompt(quote_char .. escaped .. quote_char)
-        return
-      end
-    end
+  if quoted then
+    last_args = rest
+    picker:set_prompt(inner)
+  else
+    local escaped = escape_for_quote(prompt)
+    picker:set_prompt(quote_char .. escaped .. quote_char .. (last_args or ''))
   end
 end
 
@@ -170,6 +155,13 @@ function M.find_file(opts)
   return true
 end
 
+local function live_grep(opts)
+  if _G.loaded['telescope-live-grep-args.nvim'] then
+    require('telescope').extensions.live_grep_args.live_grep_args(opts)
+  else
+    require('telescope.builtin').live_grep(opts)
+  end
+end
 function M.toggle_live_grep(buffer)
   if not _G.loaded['telescope.nvim'] then return false end
   local input = require('telescope.actions.state').get_current_line()
