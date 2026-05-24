@@ -62,7 +62,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "maplayer.nvim": {
-      "rev": "7867ac61f432c161fecf56e3be0678fec34af623",
+      "rev": "1faea7aed6f071d9ae9f7e01b97fc17eb833d44a",
       "src": "https://github.com/Kaiser-Yang/maplayer.nvim"
     },
     "nordic.nvim": {

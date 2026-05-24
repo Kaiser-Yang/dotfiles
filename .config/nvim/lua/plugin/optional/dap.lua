@@ -1,4 +1,5 @@
 local u = require('utils')
+u.gh('nvim-lua/plenary.nvim')
 u.gh('mayromr/blink-cmp-dap')
 u.gh('igorlfs/nvim-dap-view')
 u.gh('theHamsta/nvim-dap-virtual-text')
