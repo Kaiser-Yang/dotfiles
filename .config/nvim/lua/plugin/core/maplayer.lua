@@ -291,14 +291,14 @@ local opts = {
   { key = '<leader>tC', desc = 'Context', handler = h.toggle_context },
 
   -- Window Resizer
-  { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = true },
-  { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = true },
-  { key = '<left>', desc = 'Resize Left', handler = h.resize_wrap('left'), fallback = true },
-  { key = '<right>', desc = 'Resize Right', handler = h.resize_wrap('right'), fallback = true },
-  { key = '<s-up>', desc = 'Resize Top', handler = h.resize_wrap('top', true), fallback = true },
-  { key = '<s-down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = true },
-  { key = '<s-left>', desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = true },
-  { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = true },
+  { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = true, expr = true },
+  { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = true, expr = true },
+  { key = '<left>', desc = 'Resize Left', handler = h.resize_wrap('left'), fallback = true, expr = true },
+  { key = '<right>', desc = 'Resize Right', handler = h.resize_wrap('right'), fallback = true, expr = true },
+  { key = '<s-up>', desc = 'Resize Top', handler = h.resize_wrap('top', true), fallback = true, expr = true },
+  { key = '<s-down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = true, expr = true },
+  { key = '<s-left>', desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = true, expr = true },
+  { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = true, expr = true },
 
   -- Debugger
   { key = '<leader>tb', desc = 'Breakpoint', handler = '<cmd>DapToggleBreakpoint<cr>' },
