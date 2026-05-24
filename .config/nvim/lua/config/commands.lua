@@ -161,6 +161,42 @@ vim.schedule(function()
         end,
       },
     },
+    PackUpdate = {
+      callback = function(args)
+        local plugins = {}
+        if args.args and args.args ~= '' then
+          plugins = vim.split(args.args, '%s+', { trimempty = true })
+          for _, p in ipairs(plugins) do
+            if not _G.loaded[p] then
+              vim.notify('Unknown plugin: ' .. p, vim.log.levels.ERROR, { title = 'PackUpdate' })
+              return
+            end
+          end
+        else
+          plugins = nil
+        end
+        local opts = args.bang and { force = true } or {}
+        vim.pack.update(plugins, opts)
+      end,
+      opt = {
+        nargs = '*',
+        bang = true,
+        bar = true,
+        complete = function(_, CmdLine)
+          local all_plugins = vim.tbl_keys(_G.loaded)
+          local used = {}
+          local after_cmd = CmdLine:gsub('^%S+%s*', '')
+          for _, token in ipairs(vim.split(after_cmd, '%s+', { trimempty = true })) do
+            used[token] = true
+          end
+          local candidates = {}
+          for _, plugin in ipairs(all_plugins) do
+            if not used[plugin] then table.insert(candidates, plugin) end
+          end
+          return candidates
+        end,
+      },
+    },
   }
   for name, c in pairs(command) do
     vim.api.nvim_create_user_command(name, c.callback, c.opt)
