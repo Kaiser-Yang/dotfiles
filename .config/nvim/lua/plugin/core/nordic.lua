@@ -84,6 +84,18 @@ n.setup({
     h.GitSignsDeleteVirtLn = { bg = git_colors.Delete, fg = p.black0 }
     -- For the line number in `preview_hunk_inline`, we should set `fg`
     h.GitSignsVirtLnum = { fg = git_colors.Delete }
+
+    -- DAP
+    local signs = {
+      DapStopped = { text = '▶', texthl = 'String', linehl = 'TreeCursorLine' },
+      DapLogPoint = { text = '', texthl = 'DiagnosticInfo' },
+      DapBreakpoint = { text = '●', texthl = 'DiagnosticError' },
+      DapBreakpointRejected = { text = 'x', texthl = 'DiagnosticError' },
+      DapBreakpointCondition = { text = '', texthl = 'DiagnosticWarn' },
+    }
+    for name, opts in pairs(signs) do
+      vim.fn.sign_define(name, opts)
+    end
   end,
   telescope = { style = 'classic' },
 })
