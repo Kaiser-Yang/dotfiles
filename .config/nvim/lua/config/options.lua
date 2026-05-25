@@ -42,3 +42,4 @@ vim.o.statuscolumn = '%s%l%=%C '
 vim.o.undofile = true
 vim.o.scrolloff = 5
 vim.o.concealcursor = 'nvic'
+vim.o.guicursor = 'n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:block-TermCursor'
