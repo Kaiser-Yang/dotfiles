@@ -350,7 +350,7 @@ function M.toggle_comment()
   if mode:sub(1, 1) == 'i' then
     return comment_line_insert()
   elseif mode:sub(1, 1) == 'n' then
-    return comment_line()
+    return (vim.v.count1 > 1 and tostring(vim.v.count1) or '') .. comment_line()
   elseif vim.tbl_contains({ 'v', 'V', '' }, mode:sub(1, 1)) then
     return comment_selection()
   else

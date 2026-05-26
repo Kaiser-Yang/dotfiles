@@ -20,7 +20,7 @@ local opts = {
   { key = '<m-V>', mode = 'nx', desc = 'System Put Before', handler = h.builtin.system_put_before },
   { key = '<m-d>', mode = 'ci', desc = 'Delete to EOW', handler = h.builtin.delete_to_eow },
   { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.builtin.toggle_lazygit },
-  { key = '<m-/>', mode = 'inx', desc = 'Toggle Line Comment', handler = h.builtin.toggle_comment, expr = true },
+  { key = '<m-/>', mode = 'inx', desc = 'Toggle Line Comment', handler = h.builtin.toggle_comment },
   { key = '<c-h>', desc = 'To Left', handler = h.builtin.to_left },
   { key = '<c-j>', desc = 'To Bottom', handler = h.builtin.to_bottom },
   { key = '<c-k>', desc = 'To Above', handler = h.builtin.to_above },
