@@ -4,9 +4,6 @@
 [submodule ".config/tmux/plugins/catppuccin"]
 	path = .config/tmux/plugins/catppuccin
 	url = https://github.com/catppuccin/tmux.git
-[submodule ".config/zsh/plugins/catppuccin"]
-	path = .config/zsh/plugins/catppuccin
-	url = https://github.com/catppuccin/zsh-syntax-highlighting
 [submodule ".config/zsh/plugins/zsh-autosuggestions"]
 	path = .config/zsh/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
@@ -22,9 +19,6 @@
 [submodule ".config/zsh/plugins/zsh-expand"]
 	path = .config/zsh/plugins/zsh-expand
 	url = https://github.com/MenkeTechnologies/zsh-expand
-[submodule ".config/zsh/plugins/powerlevel10k"]
-	path = .config/zsh/plugins/powerlevel10k
-	url = https://github.com/romkatv/powerlevel10k.git
 [submodule ".config/zsh/themes/powerlevel10k"]
 	path = .config/zsh/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
