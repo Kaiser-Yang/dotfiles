@@ -1,182 +1,41 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-if [[ -e "$HOME/.zprofile" ]]; then
-    source "$HOME/.zprofile"
-fi
-
-if [[ "$(uname)" == "Darwin" && -e "/opt/homebrew/bin/brew" ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
-if [[ -d "/opt/homebrew/lib" && "$(uname)" == "Darwin" ]]; then
-    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/opt/homebrew/lib"
-fi
-
-if [[ -d "/usr/local/bin" ]]; then
-    export PATH="/usr/local/bin:$PATH"
-fi
-
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_CUSTOM="$HOME/.config/zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-
+export \
+    ZSH="$HOME/.oh-my-zsh" \
+    ZSH_CUSTOM="$HOME/.config/zsh" \
+    ZSH_THEME="powerlevel10k/powerlevel10k"
+zstyle ':omz:*' aliases no
 plugins=(
-    git
-    zsh-vi-mode
-    zsh-expand
     zsh-autosuggestions
+    zsh-expand
     zsh-syntax-highlighting
+    zsh-vi-mode
     extract
 )
-
-# zsh-vi-mode
-ZVM_INIT_MODE=sourcing
-
-# zsh-expand
 ZPWR_EXPAND_BLACKLIST=(grep ls)
-ZPWR_CORRECT=false
-
-# zsh-completions
-fpath+=$ZSH_CUSTOM/plugins/zsh-completions/src
-autoload -U compinit && compinit
-
-source $ZSH/oh-my-zsh.sh
-
-paste-from-clipboard() {
-  local clip=""
-
-  # macOS
-  if command -v pbpaste >/dev/null 2>&1; then
-    clip="$(pbpaste)"
-
-  # Wayland
-  elif command -v wl-paste >/dev/null 2>&1; then
-    clip="$(wl-paste --no-newline 2>/dev/null)"
-
-  # X11
-  elif command -v xclip >/dev/null 2>&1; then
-    clip="$(xclip -o -selection clipboard 2>/dev/null)"
-  elif command -v xsel >/dev/null 2>&1; then
-    clip="$(xsel --clipboard --output 2>/dev/null)"
-
-  # WSL / Windows
-  elif grep -qi microsoft /proc/version 2>/dev/null; then
-    if command -v powershell.exe >/dev/null 2>&1; then
-      clip="$(powershell.exe -NoProfile -Command Get-Clipboard 2>/dev/null | tr -d '\r')"
-    elif command -v clip.exe >/dev/null 2>&1; then
-      clip="$(clip.exe < /dev/null 2>/dev/null)"
-    fi
-  fi
-
-  LBUFFER+="$clip"
-}
-zle -N paste-from-clipboard
-bindkey 'v' paste-from-clipboard
-# Make Alt+f move the cursor forward by a word
-bindkey 'f' forward-word
-# Make Alt+d delete the word after the cursor
-bindkey 'd' delete-word
-# Make Alt+p be up
-bindkey 'p' up-line-or-search
-# Make Alt+n be down
-bindkey 'n' down-line-or-search
-
-if grep -qi '^ID=arch' /etc/os-release &> /dev/null && command -v xdg-open &> /dev/null; then
-    alias open='xdg-open'
-fi
-
-alias ll='ls -lFh'
-
-alias nv='nvim'
-
-alias lzg='lazygit'
-
-alias g='git'
-alias gst='git status'
-alias gps='git push'
-alias gpl='git pull --ff-only'
-alias gplr='git pull --rebase'
-alias ga='git add'
-alias gaa='git add :/'
-alias gad='git add .'
-alias gcm='git commit'
-alias gft='git fetch'
-alias gfta='git fetch --all'
-alias gftp='git fetch --prune'
-alias gmg='git merge'
-alias gmga='git merge --abort'
-alias gmgc='git merge --continue'
-alias gdf='git diff'
-alias gdfs='git diff --staged'
-alias gswt='git switch'
-alias grbs='git rebase'
-alias grbsa='git rebase --abort'
-alias grbsc='git rebase --continue'
-alias grbsi='git rebase --interactive'
-alias gl='git log'
-alias gdag='git log \
-    --graph \
-    --abbrev-commit \
-    --decorate \
-    --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" \
-    --all'
-alias gdagol='git log --all --decorate --oneline --graph'
-alias gbrc='git branch'
-alias gbrca='git branch --all'
-alias gbrcr='git branch --remote'
-alias gbrcd='git branch -d'
-alias gbrcD='git branch -D'
-alias gcln='git clone'
-alias grst='git reset'
-alias grsth='git reset --hard'
-alias grsr='git restore'
-alias grsra='git restore :/'
-alias grsrd='git restore .'
-alias gss='git stash'
-alias gssp='git stash pop'
-alias gssl='git stash list'
-
-alias tm='tmux'
-alias tmls='tmux ls'
-alias tmatc='tmux attach -t'
-alias tmksv='tmux kill-server'
-alias tmkss='tmux kill-session -t'
-
-export EDITOR=nvim
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Configure cd to use zoxide if available
-! command -v zoxide &>/dev/null || eval "$(zoxide init --cmd cd zsh)"
-
-# Check if /opt/nvim-linux64/bin/nvim exists and add to PATH
-if [[ -d "/opt/nvim-linux-x86_64/bin" ]] then
-    export PATH="/opt/nvim-linux-x86_64/bin:$PATH"
-fi
-
-if [ -d "$HOME/opt/miniconda3" ]; then
-    # >>> conda initialize >>>
-    # !! Contents within this block are managed by 'conda init' !!
-    __conda_setup="$("$HOME/opt/miniconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
-    if [ $? -eq 0 ]; then
-        eval "$__conda_setup"
-    else
-        if [ -f "$HOME/opt/miniconda3/etc/profile.d/conda.sh" ]; then
-            . "$HOME/opt/miniconda3/etc/profile.d/conda.sh"
-        else
-            export PATH="$HOME/opt/miniconda3/bin:$PATH"
-        fi
-    fi
-    unset __conda_setup
-    # <<< conda initialize <<<
-    if [[ -n "$TMUX" ]] then
-      export flavor='conda'
-      source $HOME/.config/tmux/plugins/conda_inherit.sh
-    fi
-fi
+sources=(
+    "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    "$HOME/.p10k.zsh"
+    $ZSH_CUSTOM/extra/**/*.zsh(N)
+    "$ZSH/oh-my-zsh.sh"
+)
+for file in "${sources[@]}"; do
+    [[ -f "$file" ]] && source "$file"
+done
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+[[ -d "$ZSH_CUSTOM/plugins/zsh-completions/src" ]] && \
+    fpath+=$ZSH_CUSTOM/plugins/zsh-completions/src && \
+    autoload -U compinit && compinit
+[[ -e "/opt/homebrew/bin/brew" ]] && \
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ -d "/usr/local/bin" ]] && \
+    export PATH="/usr/local/bin:$PATH"
+command -v go &>/dev/null && \
+    GOPATH_BIN="$(go env GOPATH)/bin" && \
+    [[ -d "$GOPATH_BIN" ]] && \
+    export PATH="$PATH:$GOPATH_BIN"
+command -v nvim &>/dev/null && \
+    export EDITOR=nvim
+command -v zoxide &>/dev/null && \
+    eval "$(zoxide init --cmd cd zsh)"
+zvm_after_init_commands+=('command -v fzf &>/dev/null && eval "$(fzf --zsh)"')

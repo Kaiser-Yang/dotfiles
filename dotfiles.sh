@@ -13,7 +13,6 @@ DIRS=(
 
     # zsh related configurations
     ".zshrc"
-    ".p10k.zsh"
     ".config/zsh"
 
     # lazygit related configurations
@@ -36,16 +35,16 @@ REQUIRED_EXECUTABLES=(
     "tmux"
     "zsh"
     "zoxide"
-    "node"
-    "npm"
     "tree-sitter"
     "rg"
     "rime_ls"
     "wn"
     "delta"
+    "fzf"
+    "fd"
 )
 declare -A INSTALLATION_COMMANDS
-COMMANDS_AFTER_INSTALLATION=("$SUDO npm install -g tree-sitter-cli")
+COMMANDS_AFTER_INSTALLATION=()
 
 if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
     DIRS+=(
@@ -81,7 +80,6 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         )
     fi
     REQUIRED_EXECUTABLES+=(
-        "base-devel" # required to compile yay
         "yay"
     )
     INSTALLATION_COMMANDS+=(
@@ -96,14 +94,8 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         [tmux]="$SUDO pacman -Sy --noconfirm tmux"
         [zsh]="$SUDO pacman -Sy --noconfirm zsh"
         [zoxide]="$SUDO pacman -Sy --noconfirm zoxide"
-        [node]="$SUDO pacman -Sy --noconfirm nodejs"
-        [npm]="$SUDO pacman -Sy --noconfirm npm"
         [rg]="$SUDO pacman -Sy --noconfirm ripgrep"
-        [base-devel]="$SUDO pacman -Sy --noconfirm base-devel"
-        [yay]="git clone https://aur.archlinux.org/yay.git &&
-            cd yay && \
-            makepkg -si && \
-            cd .. && rm -rf yay"
+        [yay]="$SUDO pacman -Sy --noconfirm base-devel && custom_install yay"
         [wn]="yay -Sy --noconfirm wordnet-common"
         [rime_ls]="yay -Sy --noconfirm rime-ls"
         [fcitx5-im]="$SUDO pacman -Sy --noconfirm fcitx5-im"
@@ -113,6 +105,9 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         [wl-paste]="$SUDO pacman -Sy --noconfirm wl-clipboard"
         [xclip]="$SUDO pacman -Sy --noconfirm xclip"
         [delta]="$SUDO pacman -Sy --noconfirm git-delta"
+        [fzf]="$SUDO pacman -Sy --noconfirm fzf"
+        [fd]="$SUDO pacman -Sy --noconfirm fd"
+        [tree-sitter]="$SUDO pacman -Sy --noconfirm tree-sitter"
     )
     DIRS+=(
         ".config/fontconfig/fonts_arch.conf"
@@ -153,8 +148,6 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
         [tmux]="$SUDO apt install -y tmux"
         [zsh]="$SUDO apt install -y zsh"
         [zoxide]="$SUDO apt install -y zoxide"
-        [node]="$SUDO apt install -y nodejs"
-        [npm]="$SUDO apt install -y npm"
         [rg]="$SUDO apt install -y ripgrep"
         [rime_ls]="$SUDO apt install -y librime-dev && custom_install rime_ls"
         [wn]="$SUDO apt install -y wordnet" 
@@ -184,7 +177,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         "${REQUIRED_EXECUTABLES[@]}"
         "wezterm"
         "squirrel"
-        "pngpaste"
+        "pngpaste" # used by img-clip.nvim
         "hammerspoon"
     )
     INSTALLATION_COMMANDS+=(
@@ -200,7 +193,6 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [tmux]="brew install tmux"
         [zsh]="brew install zsh"
         [zoxide]="brew install zoxide"
-        [node]="brew install node"
         [rg]="brew install ripgrep"
         [rime_ls]="brew install librime && custom_install rime_ls"
         [wn]="brew install wordnet"
@@ -217,8 +209,7 @@ if [[ "$(uname)" == "Linux" ]]; then
     DIRS+=(
         ".config/fcitx5/conf/classicui.conf"
         ".local/share/fcitx5/themes"
-        ".config/keyd/config"
-        ".config/keyd/app.conf"
+        ".config/keyd"
     )
     if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
         REQUIRED_EXECUTABLES+=(
@@ -231,6 +222,12 @@ if [[ "$(uname)" == "Linux" ]]; then
     fi
 fi
 
+install_yay() {
+    git clone https://aur.archlinux.org/yay.git && \
+        cd yay && \
+        makepkg -si && \
+        cd .. && rm -rf yay
+}
 # This will check if a command or package is installed.
 # Usage: is_installed <expected_executable> <package_manager> <package_name>
 # Returns:
@@ -604,7 +601,10 @@ back_up_and_link() {
     if ! eval "$sudo_cmd ln -s $src $dst"; then
         log_error "Failed to create symbolic link from $src to $dst. Please check the file path."
         return 1
+    elif [ "$dst" = "/etc/keyd/default.conf" ]; then
+        eval "! command -v keyd &> /dev/null || $SUDO keyd reload"
     fi
+    log "Linking: $dst -> $src"
 }
 
 restore_one_file() {
@@ -708,9 +708,6 @@ restore_or_create() {
                 restore_one_file "$REPO_ROOT/$file" "$dst" || return $?
             elif [ "$1" = "create" ]; then
                 back_up_and_link "$REPO_ROOT/$file" "$dst" || return $?
-            fi
-            if [ "$dst" = "/etc/keyd/default.conf" ]; then
-                eval "! command -v keyd &> /dev/null || $SUDO keyd reload"
             fi
         else
             log_error "File $file does not exist."
