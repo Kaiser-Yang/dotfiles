@@ -38,6 +38,7 @@ end
 local function ui_select_on_init(uiselect, items, opts, on_done)
   local event = require('nui.utils.autocmd').event
   uiselect:on(event.BufLeave, function() uiselect:unmount() end, { once = true })
+  uiselect:on(event.BufWinEnter, function() vim.cmd('stopinsert | norm! 0') end, { once = true })
   uiselect:map('n', 'q', function() on_done(nil, nil) end, { noremap = true, nowait = true })
   uiselect:map('n', '<Esc>', function() on_done(nil, nil) end, { noremap = true, nowait = true })
   if #items <= 10 then
