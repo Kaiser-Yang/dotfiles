@@ -8,15 +8,16 @@ vim.g.treesitter_ensure_installed = {
   'c',
   'cpp',
   'diff',
+  'gitattributes',
+  'gitcommit',
+  'gitignore',
+  'git_config',
+  'git_rebase',
   'go',
-  'javascript',
   'json',
-  'python',
-  'sql',
   'markdown_inline',
-  'html',
-  'latex',
-  'yaml',
+  'python',
+  'zsh',
 }
 --- @type table<string, boolean>
 _G.loaded = {}

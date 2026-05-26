@@ -107,8 +107,13 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-  callback = vim.schedule_wrap(function()
-    if u.enabled('treesitter_highlight_auto_start') and u.treesitter_available('highlights') then
+  callback = vim.schedule_wrap(function(ev)
+    if
+      u.enabled('treesitter_highlight_auto_start')
+      and u.treesitter_available('highlights')
+      and vim.api.nvim_buf_is_valid(ev.buf)
+      and vim.tbl_contains({ 'gitconfig', 'gitignore', 'gitcommit', 'sh', 'c', 'cpp', 'go', 'json', 'markdown', 'python', 'zsh' }, vim.bo[ev.buf].filetype)
+    then
       vim.treesitter.start()
     end
     if u.enabled('treesitter_foldexpr_auto_set') and u.treesitter_available('folds') then
