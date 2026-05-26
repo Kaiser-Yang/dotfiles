@@ -23,3 +23,4 @@ gui:
       - "#ea6962"
   nerdFontsVersion: "3"
   showFileIcons: true
+  useHunkModeInStagingView: false
