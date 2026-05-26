@@ -25,7 +25,7 @@ local opts = {
   { key = '<c-j>', desc = 'To Bottom', handler = h.builtin.to_bottom },
   { key = '<c-k>', desc = 'To Above', handler = h.builtin.to_above },
   { key = '<c-l>', desc = 'To Right', handler = h.builtin.to_right },
-  { key = '<c-w>T', desc = 'Tab Split', handler = h.builtin.tab_split },
+  { key = '<c-w>t', desc = 'Tab Split', handler = h.builtin.tab_split },
   -- By default "<C-A>" is used to insert all commands in command mode
   -- and is used to insert previously inserted text in insert mode
   { key = '<c-a>', mode = 'ci', desc = 'Cursor to BOL', handler = h.builtin.cursor_to_bol },
