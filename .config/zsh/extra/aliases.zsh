@@ -41,28 +41,14 @@ alias ga='git add'
 alias gaa='git add :/'
 alias gad='git add .'
 alias gcm='git commit'
+alias gco='git checkout'
 alias gft='git fetch'
 alias gfta='git fetch --all'
-# rarely used
 alias gftp='git fetch --prune'
 alias gmg='git merge'
-# rarely used
-alias gmga='git merge --abort'
-# rarely used
-alias gmgc='git merge --continue'
 alias gdf='git diff'
-# rarely used
 alias gdfs='git diff --staged'
-# rarely used
-alias gswt='git switch'
-# rarely used
 alias grbs='git rebase'
-# rarely used
-alias grbsa='git rebase --abort'
-# rarely used
-alias grbsc='git rebase --continue'
-# rarely used
-alias grbsi='git rebase --interactive'
 alias gl='git log'
 alias gdag='git log \
     --graph \
@@ -70,33 +56,13 @@ alias gdag='git log \
     --decorate \
     --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" \
     --all'
-# rarely used
 alias gdagol='git log --all --decorate --oneline --graph'
 alias gbrc='git branch'
-# rarely used
-alias gbrca='git branch --all'
-# rarely used
-alias gbrcr='git branch --remote'
-# rarely used
-alias gbrcd='git branch -d'
-# rarely used
-alias gbrcD='git branch -D'
 alias gcln='git clone'
 alias grst='git reset'
-# rarely used
-alias grsth='git reset --hard'
-# rarely used
 alias grsr='git restore'
-# rarely used
 alias grsra='git restore :/'
-# rarely used
 alias grsrd='git restore .'
-# rarely used
-alias gss='git stash'
-# rarely used
-alias gssp='git stash pop'
-# rarely used
-alias gssl='git stash list'
 
 alias tm='tmux'
 alias tmls='tmux ls'
