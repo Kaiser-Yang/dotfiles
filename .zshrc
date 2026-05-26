@@ -1,3 +1,4 @@
+CONDA_PATH="/opt/miniconda3/etc/profile.d/conda.sh"
 export \
     ZSH="$HOME/.oh-my-zsh" \
     ZSH_CUSTOM="$HOME/.config/zsh" \
@@ -39,3 +40,6 @@ command -v nvim &>/dev/null && \
 command -v zoxide &>/dev/null && \
     eval "$(zoxide init --cmd cd zsh)"
 zvm_after_init_commands+=('command -v fzf &>/dev/null && eval "$(fzf --zsh)"')
+[[ -f "$CONDA_PATH" ]] && \
+    source "$CONDA_PATH" && \
+    source "$ZSH_CUSTOM/conda_inherit.zsh"

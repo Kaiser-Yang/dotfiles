@@ -1,5 +1,7 @@
-# Compatible with both bash and zsh
-
+flavor=conda
+if ! declare -f "$flavor" >&/dev/null; then
+    return
+fi
 # Get function definition
 flavor_definition=$(declare -f $flavor)
 original_flavor_name="original_$flavor"
@@ -34,7 +36,9 @@ if [[ -n \"$TMUX_PARENT_PANE_ID\" ]]; then
     if [ $? -eq 0 ]; then
         PATT="(?<=${TMUX_PARENT_PANE_ID}:).*?(?=([[:space:]]|$))"
         PARENT_CONDA_ENV=$(perl -e '$ENV{"TMUX_SESSION_CONDA_ENVS"} =~ /'"$PATT"'/; print $&')
-        $flavor activate $PARENT_CONDA_ENV
+        if [[ -n "$PARENT_CONDA_ENV" ]]; then
+            $flavor activate $PARENT_CONDA_ENV
+        fi
     fi
     unset TMUX_SESSION_CONDA_ENVS PATT PARENT_CONDA_ENV
     unset TMUX_PARENT_PANE_ID
