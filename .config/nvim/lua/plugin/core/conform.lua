@@ -8,7 +8,7 @@ require('conform').setup({
     cpp = { 'clang-format' },
     go = { 'goimports' },
     lua = { 'stylua' },
-    python = { 'black' },
+    python = { 'isort', 'black' },
     javascript = { 'prettier' },
     sql = { 'sql-formatter' },
     typescript = { 'prettier' },
