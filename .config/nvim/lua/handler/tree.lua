@@ -198,8 +198,6 @@ M.open_focus_reveal = function()
   else
     local file = _G.last_filename
     if file and file ~= '' and vim.fn.filereadable(file) == 1 then
-      local new_cwd = vim.fs.root(file, { '.git', '.nvim' })
-      if new_cwd then vim.api.nvim_set_current_dir(new_cwd) end
       tree.find_file({ buf = file, update_root = true })
     end
   end

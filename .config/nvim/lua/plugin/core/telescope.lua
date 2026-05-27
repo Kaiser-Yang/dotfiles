@@ -7,13 +7,13 @@ u.gh('kkharji/sqlite.lua')
 u.gh('prochri/telescope-all-recent.nvim')
 
 local function find_command()
-  local res = { 'rg', '--files', '--color', 'never', '-g', '!.git' }
+  local res = { 'rg', '--files', '--color', 'never' }
   if u.in_config_dir() then table.insert(res, '--hidden') end
   return res
 end
 
 local additional_args = function()
-  local res = { '-g', '!.git' }
+  local res = {}
   if u.in_config_dir() then table.insert(res, '--hidden') end
   return res
 end
