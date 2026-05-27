@@ -42,6 +42,8 @@ REQUIRED_EXECUTABLES=(
     "delta"
     "fzf"
     "fd"
+    "bash-language-server"
+    "shfmt"
 )
 declare -A INSTALLATION_COMMANDS
 COMMANDS_AFTER_INSTALLATION=()
@@ -91,15 +93,17 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
         [yay]="$SUDO pacman -Sy --noconfirm base-devel && install_yay"
         [wn]="yay -Sy --noconfirm wordnet-common"
         [rime_ls]="yay -Sy --noconfirm rime-ls"
-        [fcitx5-im]="$SUDO pacman -Sy --noconfirm fcitx5-im"
-        [fcitx5-rime]="$SUDO pacman -Sy --noconfirm fcitx5-rime"
+        ["fcitx5-im"]="$SUDO pacman -Sy --noconfirm fcitx5-im"
+        ["fcitx5-rime"]="$SUDO pacman -Sy --noconfirm fcitx5-rime"
         [wezterm]="$SUDO pacman -Sy --noconfirm wezterm"
-        [wl-paste]="$SUDO pacman -Sy --noconfirm wl-clipboard"
+        ["wl-paste"]="$SUDO pacman -Sy --noconfirm wl-clipboard"
         [xclip]="$SUDO pacman -Sy --noconfirm xclip"
         [delta]="$SUDO pacman -Sy --noconfirm git-delta"
         [fzf]="$SUDO pacman -Sy --noconfirm fzf"
         [fd]="$SUDO pacman -Sy --noconfirm fd"
-        [tree-sitter]="$SUDO pacman -Sy --noconfirm tree-sitter"
+        ["tree-sitter"]="$SUDO pacman -Sy --noconfirm tree-sitter"
+        ["bash-language-server"]="$SUDO pacman -Sy --noconfirm bash-language-server"
+        [shfmt]="$SUDO pacman -Sy --noconfirm shfmt"
     )
     if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
         REQUIRED_EXECUTABLES+=(xremap)
