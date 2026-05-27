@@ -1,6 +1,6 @@
 local u = require('utils')
-  u.gh('nvim-tree/nvim-web-devicons')
-  u.gh('nvim-lualine/lualine.nvim')
+u.gh('nvim-tree/nvim-web-devicons')
+u.gh('nvim-lualine/lualine.nvim')
 
 local function recording()
   local reg = vim.fn.reg_recording()
@@ -12,9 +12,9 @@ local function indent()
   local expandtab = vim.bo.expandtab
   local sw = vim.bo.shiftwidth
   if expandtab then
-    return string.format("space:%d", sw)
+    return string.format('space:%d', sw)
   else
-    return string.format("tab:%d", sw)
+    return string.format('tab:%d', sw)
   end
 end
 
@@ -25,6 +25,14 @@ require('lualine').setup({
   },
   sections = {
     lualine_c = { 'filename', 'filesize', indent, recording },
-    lualine_x = { 'searchcount', 'lsp_status', 'encoding', 'fileformat', 'filetype' },
+    lualine_x = {
+      { '%-10.S', separator = { left = '', right = '' } },
+      'searchcount',
+      'selectioncount',
+      'lsp_status',
+      'encoding',
+      'fileformat',
+      'filetype',
+    },
   },
 })
