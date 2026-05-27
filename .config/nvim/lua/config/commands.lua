@@ -10,18 +10,18 @@ vim.schedule(function()
         for _, p in ipairs(params) do
           if p == 'loclist' or p == 'qflist' then
             if list_type ~= nil then
-              vim.notify('Only one of loclist/qflist can be specified.', vim.log.levels.ERROR, { title = 'Resolve' })
+              vim.notify('Only one of loclist/qflist can be specified.', vim.log.levels.ERROR, { title = 'Light Boat' })
               return
             end
             list_type = p
           elseif p == 'open' or p == 'close' then
             if should_open ~= nil then
-              vim.notify('Only one of open/close can be specified.', vim.log.levels.ERROR, { title = 'Resolve' })
+              vim.notify('Only one of open/close can be specified.', vim.log.levels.ERROR, { title = 'Light Boat' })
               return
             end
             should_open = (p == 'open')
           else
-            vim.notify('Invalid argument: ' .. p, vim.log.levels.ERROR, { title = 'Resolve' })
+            vim.notify('Invalid argument: ' .. p, vim.log.levels.ERROR, { title = 'Light Boat' })
             return
           end
         end
@@ -40,71 +40,66 @@ vim.schedule(function()
         vim.system(
           { 'git', 'diff', '--name-only', '--diff-filter=U' },
           { text = true, cwd = vim.fn.getcwd() },
-          function(result)
+          vim.schedule_wrap(function(result)
             if result.code ~= 0 then
-              vim.schedule_wrap(vim.notify)(
-                'Error running git command: ' .. result.stderr,
-                vim.log.levels.ERROR,
-                { title = 'Light Boat' }
-              )
+              vim.notify('Error running git command: ' .. result.stderr, vim.log.levels.ERROR, { title = 'Light Boat' })
               return
             end
             local files = vim.split(result.stdout, '\n', { trimempty = true })
-            vim.schedule(function()
-              for _, file in ipairs(files) do
-                file = vim.fn.fnamemodify(file, ':p')
-                local bufnr = vim.fn.bufadd(file)
-                vim.bo[bufnr].buflisted = true
-                if not vim.api.nvim_buf_is_loaded(bufnr) then
-                  vim.api.nvim_create_autocmd('BufReadPost', {
-                    buffer = bufnr,
-                    once = true,
-                    callback = function()
-                      if vim.api.nvim_buf_is_valid(bufnr) then extend(bufnr, r.detect_conflicts(bufnr, true)) end
-                    end,
-                  })
-                  vim.fn.bufload(bufnr)
-                else
-                  extend(bufnr, r.detect_conflicts(bufnr, true))
-                end
-              end
-              if #conflicts == 0 then
-                vim.notify('No conflicts detected in current repository.', vim.log.levels.INFO, { title = 'Resolve' })
-                return
-              end
-              local items = {}
-              for i, conflict in ipairs(conflicts) do
-                table.insert(items, {
-                  bufnr = conflict.bufnr,
-                  filename = vim.api.nvim_buf_get_name(conflict.bufnr),
-                  lnum = conflict.start,
-                  text = string.format('Conflict %d/%d', i, #conflicts),
+            for _, file in ipairs(files) do
+              file = vim.fn.fnamemodify(file, ':p')
+              local bufnr = vim.fn.bufadd(file)
+              if not vim.api.nvim_buf_is_loaded(bufnr) then
+                vim.api.nvim_create_autocmd('BufReadPost', {
+                  once = true,
+                  buffer = bufnr,
+                  callback = function()
+                    if vim.api.nvim_buf_is_valid(bufnr) then extend(bufnr, r.detect_conflicts(bufnr, true)) end
+                  end,
                 })
-              end
-              if list_type == 'qflist' then
-                vim.fn.setqflist({}, 'r', {
-                  title = 'Resolve Conflicts',
-                  items = items,
-                })
-                if should_open then vim.cmd('copen') end
+                vim.fn.bufload(bufnr)
               else
-                vim.fn.setloclist(vim.api.nvim_get_current_win(), {}, 'r', {
-                  title = 'Resolve Conflicts',
-                  items = items,
-                })
-                if should_open then vim.cmd('lopen') end
+                extend(bufnr, r.detect_conflicts(bufnr, true))
               end
-              vim.notify(
-                string.format(
-                  'Detected %d conflict(s) in current repository, they have been added to %s.',
-                  #conflicts,
-                  list_type
-                ),
-                vim.log.levels.INFO,
-                { title = 'Resolve' }
-              )
-            end)
-          end
+            end
+            if #conflicts == 0 then
+              vim.notify('No conflicts detected in current repository.', vim.log.levels.INFO, { title = 'Light Boat' })
+              return
+            end
+            local items = {}
+            for i, conflict in ipairs(conflicts) do
+              table.insert(items, {
+                bufnr = conflict.bufnr,
+                filename = vim.api.nvim_buf_get_name(conflict.bufnr),
+                lnum = conflict.start,
+                text = string.format('Conflict %d/%d', i, #conflicts),
+              })
+            end
+            local open_cmd = nil
+            if list_type == 'qflist' then
+              vim.fn.setqflist({}, 'r', {
+                title = 'Git Conflicts',
+                items = items,
+              })
+              open_cmd = 'copen'
+            else
+              vim.fn.setloclist(vim.api.nvim_get_current_win(), {}, 'r', {
+                title = 'Git Conflicts',
+                items = items,
+              })
+              open_cmd = 'lopen'
+            end
+            if should_open then vim.cmd(open_cmd) end
+            vim.notify(
+              string.format(
+                'Detected %d conflict(s) in current repository, they have been added to %s.',
+                #conflicts,
+                list_type
+              ),
+              vim.log.levels.INFO,
+              { title = 'Light Boat' }
+            )
+          end)
         )
       end,
       opts = {
