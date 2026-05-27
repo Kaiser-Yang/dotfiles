@@ -47,7 +47,6 @@ declare -A INSTALLATION_COMMANDS
 COMMANDS_AFTER_INSTALLATION=()
 
 if [[ "$(uname)" == "Darwin" ]]; then
-    DIRS+=("./.hammerspoon/init.lua")
     COMMANDS_AFTER_INSTALLATION+=(
         "defaults write -g ApplePressAndHoldEnabled -bool false"
         "defaults write com.apple.dock autohide-delay 0"
@@ -119,7 +118,6 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         "wezterm"
         "squirrel"
         "pngpaste" # used by img-clip.nvim
-        "hammerspoon"
     )
     INSTALLATION_COMMANDS+=(
         [brew]="install_brew"
@@ -141,7 +139,6 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [wezterm]="brew install --cask wezterm"
         [squirrel]="brew install --cask squirrel"
         [pngpaste]="brew install pngpaste"
-        [hammerspoon]="brew install --cask hammerspoon"
         [delta]="brew install git-delta"
     )
 fi
