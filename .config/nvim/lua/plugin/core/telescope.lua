@@ -92,10 +92,10 @@ local h = require('handler')
 local a = require('telescope.actions')
 local ag = require('telescope.actions.generate')
 local insert_and_normal = {
-  ['<cr>'] = { a.select_default, type = 'action', opts = { desc = 'Select Default' } },
+  ['<cr>'] = { a.select_drop, type = 'action', opts = { desc = 'Select Drop' } },
   ['<c-s>'] = { a.select_horizontal, type = 'action', opts = { desc = 'Select Horizontal' } },
   ['<c-v>'] = { a.select_vertical, type = 'action', opts = { desc = 'Select Vertical' } },
-  ['<c-t>'] = { a.select_tab, type = 'action', opts = { desc = 'Select Tab' } },
+  ['<c-t>'] = { a.select_tab_drop, type = 'action', opts = { desc = 'Select Tab Drop' } },
   ['<c-u>'] = { a.preview_scrolling_up, type = 'action', opts = { desc = 'Preview Scroll Up' } },
   ['<c-d>'] = { a.preview_scrolling_down, type = 'action', opts = { desc = 'Preview Scroll Down' } },
   ['<c-j>'] = { a.move_selection_next, type = 'action', opts = { desc = 'Move Selection Next' } },
