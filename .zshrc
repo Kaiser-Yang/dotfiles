@@ -29,8 +29,8 @@ setopt HIST_IGNORE_SPACE
     autoload -U compinit && compinit
 [[ -e "/opt/homebrew/bin/brew" ]] && \
     eval "$(/opt/homebrew/bin/brew shellenv)"
-[[ -d "/usr/local/bin" ]] && \
-    export PATH="/usr/local/bin:$PATH"
+[[ -d "$HOME/.local/bin" ]] && \
+    export PATH="$PATH:$HOME/.local/bin"
 command -v go &>/dev/null && \
     GOPATH_BIN="$(go env GOPATH)/bin" && \
     [[ -d "$GOPATH_BIN" ]] && \
