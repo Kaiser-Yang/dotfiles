@@ -1,6 +1,4 @@
 vim.schedule(function()
-  -- Outline
-  require('plugin.optional.aerial')
   -- Competitive programming test runner
   require('plugin.optional.competitest')
   -- Database client (vim-dadbod)
