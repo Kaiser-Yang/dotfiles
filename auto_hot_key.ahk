@@ -6,7 +6,6 @@ SetTitleMatchMode 2
 CapsLock::Send #{Space}
 $^a::Send {Home}
 $^e::Send {End}
-$^n::Send {Esc}
 
 $!z::Send ^z
 $!x::Send ^x

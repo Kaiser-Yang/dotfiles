@@ -6,7 +6,6 @@
 [control]
 a = home
 e = end
-n = esc
 
 [alt]
 z = C-z
