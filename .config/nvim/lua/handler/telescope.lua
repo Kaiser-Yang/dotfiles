@@ -335,7 +335,7 @@ function M.live_grep_open_file()
   if not _G.loaded['telescope.nvim'] then return false end
   require('telescope.builtin').live_grep({
     grep_open_files = true,
-    prompt_title = 'Live Grep in Open Files',
+    prompt_title = 'Live Grep (Open Files)',
   })
   return true
 end

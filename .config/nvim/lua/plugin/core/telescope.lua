@@ -75,13 +75,14 @@ local opts = {
       initial_mode = 'normal',
     }),
     grep_string = { additional_args = additional_args },
-    find_files = { prompt_title = 'Find File', find_command = find_command },
+    find_files = { find_command = find_command },
+    oldfiles = { prompt_title = 'Recent Files' },
   },
   extensions = {
     live_grep_args = {
       auto_quoting = false,
       additional_args = additional_args,
-      prompt_title = 'Live Grep Arg',
+      prompt_title = 'Live Grep',
       mappings = { i = {}, n = {} },
     },
   },
