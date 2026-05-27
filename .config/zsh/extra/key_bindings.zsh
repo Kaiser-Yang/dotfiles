@@ -22,12 +22,15 @@ paste-from-clipboard() {
   LBUFFER+="$clip"
 }
 zle -N paste-from-clipboard
-zvm_after_init_commands+=(
-  "zvm_bindkey vicmd 'v' paste-from-clipboard"
-  "zvm_bindkey viins 'v' paste-from-clipboard"
-  "zvm_bindkey viins 'b' backward-word"
-  "zvm_bindkey viins 'f' forward-word"
-  "zvm_bindkey viins 'd' delete-word"
-  "zvm_bindkey viins 'p' up-line-or-search"
-  "zvm_bindkey viins 'n' down-line-or-search"
-)
+setup_bindings () {
+  zvm_bindkey vicmd 'v' paste-from-clipboard
+  zvm_bindkey viins 'v' paste-from-clipboard
+  zvm_bindkey viins 'b' backward-word
+  zvm_bindkey viins 'f' forward-word
+  zvm_bindkey viins 'd' delete-word
+  zvm_bindkey viins 'p' up-line-or-search
+  zvm_bindkey viins 'n' down-line-or-search
+  bindkey 's' sudo-command-line
+  bindkey -r ''
+}
+zvm_after_init_commands+=(setup_bindings)

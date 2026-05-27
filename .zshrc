@@ -10,6 +10,7 @@ plugins=(
     zsh-syntax-highlighting
     zsh-vi-mode
     extract
+    sudo
 )
 ZPWR_EXPAND_BLACKLIST=(grep ls)
 sources=(
