@@ -51,8 +51,8 @@ function M.ensure_repmove(previous, next, comma, semicolon, rp)
   return { rp[previous], rp[next] }
 end
 
-function M.treesitter_available(name)
-  local lang = vim.treesitter.language.get_lang(vim.bo.filetype)
+function M.treesitter_available(bufnr, name)
+  local lang = vim.treesitter.language.get_lang(vim.bo[bufnr].filetype)
   if lang == nil then return false end
   return vim.treesitter.query.get(lang, name) ~= nil
 end

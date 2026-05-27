@@ -108,15 +108,17 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
 
 vim.api.nvim_create_autocmd('FileType', {
   callback = vim.schedule_wrap(function(ev)
+    if not vim.api.nvim_buf_is_valid(ev.buf) then return end
     if
       u.enabled('treesitter_highlight_auto_start')
-      and u.treesitter_available('highlights')
-      and vim.api.nvim_buf_is_valid(ev.buf)
-      and vim.tbl_contains({ 'gitconfig', 'gitignore', 'gitcommit', 'sh', 'c', 'cpp', 'go', 'json', 'markdown', 'python', 'zsh' }, vim.bo[ev.buf].filetype)
+      and u.treesitter_available(ev.buf, 'highlights')
+      -- INFO:
+      -- c, lua, markdown, help, vim and query files will be started by neovim automatically
+      and not vim.tbl_contains({ 'c', 'lua', 'markdown', 'help', 'vim', 'query' }, vim.bo[ev.buf].filetype)
     then
-      vim.treesitter.start()
+      vim.treesitter.start(ev.buf)
     end
-    if u.enabled('treesitter_foldexpr_auto_set') and u.treesitter_available('folds') then
+    if u.enabled('treesitter_foldexpr_auto_set') and u.treesitter_available(ev.buf, 'folds') then
       vim.wo[0][0].foldmethod = 'expr'
       vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     end

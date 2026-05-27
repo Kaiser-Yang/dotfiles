@@ -5,7 +5,6 @@ vim.g.big_file_limit = 3 * 1024 * 1024 -- 3 MB
 vim.g.big_file_average_every_line = nil -- Unit: B, nil for no limit
 vim.g.treesitter_ensure_installed = {
   'bash',
-  'c',
   'cpp',
   'diff',
   'gitattributes',
