@@ -40,8 +40,9 @@ end
 local function autopair(keycode)
   local core = require('ultimate-autopair.core')
   core.get_run(keycode)
-  u.key.feed(core.run_run(keycode), 'n', false)
-  return true
+  local res = core.run_run(keycode)
+  u.key.feed(res, 'n', false)
+  return res and res ~= ""
 end
 
 local keycode_to_function

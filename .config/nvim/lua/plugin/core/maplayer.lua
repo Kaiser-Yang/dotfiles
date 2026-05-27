@@ -291,7 +291,13 @@ local opts = {
   { key = '<m-e>', mode = 'i', desc = 'Autopair Fastwarp', handler = h.pair.auto_pair_wrap('<m-e>') },
   { key = '<m-E>', mode = 'i', desc = 'Autopair Reverse Fastwarp', handler = h.pair.auto_pair_wrap('<m-E>') },
   { key = '<m-s>', mode = 'i', desc = 'Autopair Close', handler = h.pair.auto_pair_wrap('<m-)>') },
-  { key = '<c-l>', mode = 'i', desc = 'Autopair Tabout', handler = h.pair.auto_pair_wrap('<m-tab>') },
+  {
+    key = '<c-l>',
+    mode = 'i',
+    desc = 'Autopair Tabout',
+    handler = h.pair.auto_pair_wrap('<m-tab>'),
+    fallback = h.builtin.right,
+  },
 
   -- Indent
   { key = 'i|', mode = 'ox', desc = 'Indent', handler = h.indent.inside },
