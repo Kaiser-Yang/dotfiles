@@ -1,4 +1,13 @@
 local M = {}
+local u = require('utils')
+
+M.toggle_virtual_text = function()
+  if not _G.loaded['nvim-dap-view'] then return false end
+  local status = not require('dap-view.setup').config.virtual_text.enabled
+  require('dap-view.virtual-text').set_virtual_text(status)
+  u.toggle_notify('Dap Virtual Text', status, { title = 'Dap View' })
+  return true
+end
 
 function M.toggle_dap_view()
   if not _G.loaded['nvim-dap-view'] then return false end
@@ -95,19 +104,19 @@ M.step_out = function()
   return true
 end
 
-M.run_to_cursor = function ()
+M.run_to_cursor = function()
   if not _G.loaded['nvim-dap'] then return false end
   require('dap').run_to_cursor()
   return true
 end
 
-M.reverse_continue = function ()
+M.reverse_continue = function()
   if not _G.loaded['nvim-dap'] then return false end
   require('dap').reverse_continue()
   return true
 end
 
-M.set_exception_breakpoints = function ()
+M.set_exception_breakpoints = function()
   if not _G.loaded['nvim-dap'] then return false end
   require('dap').set_exception_breakpoints()
   return true

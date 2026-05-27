@@ -350,6 +350,7 @@ local opts = {
   -- Debugger
   { key = '<m-b>', desc = 'Toggle Breakpoint', handler = h.dap.toggle_breakpoint },
   { key = '<leader>td', desc = 'Dap View', handler = h.dap.toggle_dap_view },
+  { key = '<leader>tv', desc = 'Dap Virtual Text', handler = h.dap.toggle_virtual_text },
   { key = '<leader>dl', desc = 'Set Log Point', handler = h.dap.set_log_point },
   { key = '<leader>dc', desc = 'Set Condition Breakpoint', handler = h.dap.set_condition_breakpoint },
   { key = '<leader>de', desc = 'Dap Set Exception Breakpoints', handler = h.dap.set_exception_breakpoints },

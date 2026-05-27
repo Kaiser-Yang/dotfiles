@@ -2,7 +2,6 @@ local u = require('utils')
 u.gh('nvim-lua/plenary.nvim')
 u.gh('mayromr/blink-cmp-dap')
 u.gh('igorlfs/nvim-dap-view')
-u.gh('theHamsta/nvim-dap-virtual-text')
 u.gh('mfussenegger/nvim-dap')
 
 local function get_exe()
@@ -48,7 +47,6 @@ local function get_connect()
   end)
 end
 
-require('nvim-dap-virtual-text').setup()
 require('dap-view').setup({
   winbar = {
     show = true,
@@ -90,6 +88,7 @@ require('dap-view').setup({
     }
   end)(),
   help = { border = vim.o.winborder },
+  virtual_text = { enabled = true },
 })
 local dap = require('dap')
 require('dap.ext.vscode').json_decode = function(str)
