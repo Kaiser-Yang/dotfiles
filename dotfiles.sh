@@ -46,11 +46,6 @@ REQUIRED_EXECUTABLES=(
 declare -A INSTALLATION_COMMANDS
 COMMANDS_AFTER_INSTALLATION=()
 
-if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
-    DIRS+=(
-        ".config/autostart/keyd-application-mapper.desktop"
-    )
-fi
 if [[ "$(uname)" == "Darwin" ]]; then
     DIRS+=("./.hammerspoon/init.lua")
     COMMANDS_AFTER_INSTALLATION+=(
@@ -75,7 +70,6 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         REQUIRED_EXECUTABLES+=(
             "fcitx5-im"
             "fcitx5-rime"
-            "keyd"
             "wezterm"
         )
     fi
@@ -95,12 +89,11 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         [zsh]="$SUDO pacman -Sy --noconfirm zsh"
         [zoxide]="$SUDO pacman -Sy --noconfirm zoxide"
         [rg]="$SUDO pacman -Sy --noconfirm ripgrep"
-        [yay]="$SUDO pacman -Sy --noconfirm base-devel && custom_install yay"
+        [yay]="$SUDO pacman -Sy --noconfirm base-devel && install_yay"
         [wn]="yay -Sy --noconfirm wordnet-common"
         [rime_ls]="yay -Sy --noconfirm rime-ls"
         [fcitx5-im]="$SUDO pacman -Sy --noconfirm fcitx5-im"
         [fcitx5-rime]="$SUDO pacman -Sy --noconfirm fcitx5-rime"
-        [keyd]="$SUDO pacman -Sy --noconfirm keyd"
         [wezterm]="$SUDO pacman -Sy --noconfirm wezterm"
         [wl-paste]="$SUDO pacman -Sy --noconfirm wl-clipboard"
         [xclip]="$SUDO pacman -Sy --noconfirm xclip"
@@ -109,6 +102,11 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
         [fd]="$SUDO pacman -Sy --noconfirm fd"
         [tree-sitter]="$SUDO pacman -Sy --noconfirm tree-sitter"
     )
+    if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
+        REQUIRED_EXECUTABLES+=(xremap)
+        INSTALLATION_COMMANDS+=([xremap]="yay -Sy --noconfirm xremap-kde-bin")
+        DIRS+=(".config/xremap" ".config/autostart/xremap.desktop")
+    fi
     DIRS+=(
         ".config/fontconfig/fonts_arch.conf"
     )
@@ -125,7 +123,6 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
             "fcitx5-diagnose"
             "gpg" # required for wezterm installation
             "wezterm"
-            "keyd"
         )
     fi
     # The 'update_package_list' is a placeholder for the command to update package list
@@ -162,9 +159,6 @@ elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
                 $SUDO tee /etc/apt/sources.list.d/wezterm.list
             $SUDO chmod 644 /usr/share/keyrings/wezterm-fury.gpg &&
             $SUDO apt update && $SUDO apt install -y wezterm"
-        [keyd]="git clone https://github.com/rvaiya/keyd && \
-            cd keyd && make && $SUDO make install && \
-            cd .. && rm -rf keyd"
         [wl-paste]="$SUDO apt install -y wl-clipboard"
         [xclip]="$SUDO apt install -y xclip"
         [delta]="$SUDO apt install -y git-delta"
@@ -181,7 +175,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         "hammerspoon"
     )
     INSTALLATION_COMMANDS+=(
-        [brew]="custom_install brew"
+        [brew]="install_brew"
         [_update_package_list]="brew update"
         [curl]="brew install curl"
         [unzip]="brew install unzip"
@@ -194,7 +188,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [zsh]="brew install zsh"
         [zoxide]="brew install zoxide"
         [rg]="brew install ripgrep"
-        [rime_ls]="brew install librime && custom_install rime_ls"
+        [rime_ls]="brew install librime && install_rime_ls"
         [wn]="brew install wordnet"
         # macOS should hava GUI always, we do not need to check it
         [wezterm]="brew install --cask wezterm"
@@ -209,7 +203,6 @@ if [[ "$(uname)" == "Linux" ]]; then
     DIRS+=(
         ".config/fcitx5/conf/classicui.conf"
         ".local/share/fcitx5/themes"
-        ".config/keyd"
     )
     if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
         REQUIRED_EXECUTABLES+=(
@@ -269,7 +262,7 @@ is_installed() {
             return 1
         fi
     else
-        log "Unsupported package manager: $package_manager"
+        log_verbose "Unsupported package manager: $package_manager"
         return 1
     fi
 }
@@ -311,8 +304,6 @@ get_destination() {
             return
         fi
         echo "$HOME/Library/Rime/$file"
-    elif [[ "$file" == ".config/keyd/config" ]]; then
-        echo "/etc/keyd/default.conf"
     elif [[ "$file" == ".config/fontconfig"* ]]; then
         echo "$HOME/.config/fontconfig/fonts.conf"
     else
@@ -425,10 +416,6 @@ init_options() {
     return $?
 }
 
-custom_install() {
-    eval install_"$1" || return "$?"
-}
-
 install_oh_my_zsh() {
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         log_verbose "Installing Oh My Zsh..."
@@ -529,6 +516,39 @@ install_rime_ls() {
     fi
 }
 
+init_xremap() {
+    $SUDO usermod -aG input $USER
+    local uinput_rule='KERNEL=="uinput", GROUP="input", TAG+="uaccess", MODE:="0660", OPTIONS+="static_node=uinput"'
+    local uinput_file="/etc/udev/rules.d/99-input.rules"
+    if ! grep -Fxq "$uinput_rule" "$uinput_file" 2>/dev/null; then
+        echo "$uinput_rule" | $SUDO tee -a "$uinput_file" > /dev/null
+        log "Added uinput rule to $uinput_file"
+    else
+        log "uinput rule already exists in $uinput_file"
+    fi
+
+    if [ ! -e /dev/uinput ]; then
+        local module_conf="/etc/modules-load.d/uinput.conf"
+        if ! grep -Fxq "uinput" "$module_conf" 2>/dev/null; then
+            echo "uinput" | $SUDO tee -a "$module_conf" > /dev/null
+            log "uinput added to $module_conf, you may need to reboot your machine"
+        else
+            log "uinput already in $module_conf"
+        fi
+    else
+        log "/dev/uinput already exists, skipping module config"
+    fi
+
+    local event_rule='KERNEL=="event*", NAME="input/%k", MODE="660", GROUP="input"'
+    local event_file="/etc/udev/rules.d/input.rules"
+    if ! grep -Fxq "$event_rule" "$event_file" 2>/dev/null; then
+        echo "$event_rule" | $SUDO tee -a "$event_file" > /dev/null
+        log "Added input event rule to $event_file"
+    else
+        log "input event rule already exists in $event_file"
+    fi
+}
+
 install_packages() {
     log "Start to install required packages."
     for executable in "${REQUIRED_EXECUTABLES[@]}"; do
@@ -539,16 +559,10 @@ install_packages() {
                 "Please check the command and your system configuration."
             return 1
         fi
-        if [ "$executable" = "keyd" ]; then
-            # Add keyd service commands to COMMANDS_AFTER_INSTALLATION
-            COMMANDS_AFTER_INSTALLATION+=(
-                "$SUDO systemctl enable --now keyd"
-                "$SUDO usermod -aG keyd $USER"
-            )
-        elif [[ "$executable" == "zsh" ]]; then
-            COMMANDS_AFTER_INSTALLATION+=(
-                "install_oh_my_zsh"
-            )
+        if [[ "$executable" == "zsh" ]]; then
+            COMMANDS_AFTER_INSTALLATION+=("install_oh_my_zsh")
+        elif [[ "$executable" == "xremap" ]]; then
+            COMMANDS_AFTER_INSTALLATION+=(init_xremap)
         fi
         log_verbose "Command executed successfully: $cmd"
     done
@@ -601,8 +615,6 @@ back_up_and_link() {
     if ! eval "$sudo_cmd ln -s $src $dst"; then
         log_error "Failed to create symbolic link from $src to $dst. Please check the file path."
         return 1
-    elif [ "$dst" = "/etc/keyd/default.conf" ]; then
-        eval "! command -v keyd &> /dev/null || $SUDO keyd reload"
     fi
     log "Linking: $dst -> $src"
 }

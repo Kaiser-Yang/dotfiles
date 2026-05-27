@@ -1,6 +1,0 @@
-[Desktop Entry]
-Exec=keyd-application-mapper -d
-Icon=application-x-executable-script
-Name=keyd-application-mapper
-Type=Application
-X-KDE-AutostartScript=true

@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=xremap
+Comment=Key remapper for Linux
+Exec=sh -c "xremap --watch=config,device \$HOME/.config/xremap/config.yml"
+Type=Application
