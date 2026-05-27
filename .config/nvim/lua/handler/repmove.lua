@@ -54,11 +54,11 @@ local function previous_section_start()
   return true
 end
 
-local function previous_misspelled() return vim.v.count1 .. '[s' end
-local function next_misspelled() return vim.v.count1 .. ']s' end
+local function previous_misspelled() return u.get_cnt_prefix() .. '[s' end
+local function next_misspelled() return u.get_cnt_prefix() .. ']s' end
 
-local function comma_with_count() return vim.v.count1 .. ',' end
-local function semicolon_with_count() return vim.v.count1 .. ';' end
+local function comma_with_count() return u.get_cnt_prefix() .. ',' end
+local function semicolon_with_count() return u.get_cnt_prefix() .. ';' end
 
 --- @param direction 'next'|'previous'
 --- @param position 'start'|'end'
@@ -148,14 +148,14 @@ end
 
 local next_diagnostic = function() return vim.diagnostic.jump({ count = vim.v.count1 }) end
 local previous_diagnostic = function() return vim.diagnostic.jump({ count = -vim.v.count1 }) end
-local cprevious = function() return '<cmd>' .. vim.v.count1 .. 'cprevious<cr>' end
-local cnext = function() return '<cmd>' .. vim.v.count1 .. 'cnext<cr>' end
-local lprevious = function() return '<cmd>' .. vim.v.count1 .. 'lprevious<cr>' end
-local lnext = function() return '<cmd>' .. vim.v.count1 .. 'lnext<cr>' end
-local bprevious = function() return '<cmd>' .. vim.v.count1 .. 'bprevious<cr>' end
-local bnext = function() return '<cmd>' .. vim.v.count1 .. 'bnext<cr>' end
-local previous_file = function() return '<cmd>' .. vim.v.count1 .. 'previous<cr>' end
-local next_file = function() return '<cmd>' .. vim.v.count1 .. 'next<cr>' end
+local cprevious = function() return '<cmd>' .. u.get_cnt_prefix() .. 'cprevious<cr>' end
+local cnext = function() return '<cmd>' .. u.get_cnt_prefix() .. 'cnext<cr>' end
+local lprevious = function() return '<cmd>' .. u.get_cnt_prefix() .. 'lprevious<cr>' end
+local lnext = function() return '<cmd>' .. u.get_cnt_prefix() .. 'lnext<cr>' end
+local bprevious = function() return '<cmd>' .. u.get_cnt_prefix() .. 'bprevious<cr>' end
+local bnext = function() return '<cmd>' .. u.get_cnt_prefix() .. 'bnext<cr>' end
+local previous_file = function() return '<cmd>' .. u.get_cnt_prefix() .. 'previous<cr>' end
+local next_file = function() return '<cmd>' .. u.get_cnt_prefix() .. 'next<cr>' end
 
 function M.nvim_tree_previous_git()
   if not _G.loaded['nvim-tree.lua'] then return false end
@@ -220,10 +220,10 @@ function M.semicolon()
     return require('repmove').semicolon()
   end
 end
-function M.F() return vim.v.count1 .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[1]() end
-function M.f() return vim.v.count1 .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[2]() end
-function M.T() return vim.v.count1 .. u.ensure_repmove('T', 't', comma_with_count, semicolon_with_count)[1]() end
-function M.t() return vim.v.count1 .. u.ensure_repmove('T', 't', comma_with_count, semicolon_with_count)[2]() end
+function M.F() return u.get_cnt_prefix() .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[1]() end
+function M.f() return u.get_cnt_prefix() .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[2]() end
+function M.T() return u.get_cnt_prefix() .. u.ensure_repmove('T', 't', comma_with_count, semicolon_with_count)[1]() end
+function M.t() return u.get_cnt_prefix() .. u.ensure_repmove('T', 't', comma_with_count, semicolon_with_count)[2]() end
 function M.next_todo() return u.ensure_repmove(previous_todo, next_todo)[2]() end
 function M.next_misspelled() return u.ensure_repmove(previous_misspelled, next_misspelled)[2]() end
 function M.next_section_start() return u.ensure_repmove(previous_section_start, next_section_start)[2]() end

@@ -30,7 +30,7 @@ local function hack(suffix)
   end
   if not res then return false end
   local cnt = (op == 'g@' and last_count or vim.v.count1)
-  local key = (cnt ~= 1 and cnt or '') .. res
+  local key = (cnt > 1 and cnt or '') .. res
   vim.schedule_wrap(u.key.feed)(key, 'n')
   return '<esc>'
 end
