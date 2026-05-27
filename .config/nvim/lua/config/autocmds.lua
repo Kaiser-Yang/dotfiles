@@ -221,12 +221,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
   desc = 'Format on save',
   group = _G.autocmd_group,
   callback = function(ev)
-    if not u.enabled('conform_on_save') or not _G.loaded['conform.nvim'] then return end
-    local buffer = ev.buf
-    require('conform').format({ bufnr = buffer }, function(err)
-      if err then return end
-      if _G.loaded['guess-indent.nvim'] then require('guess-indent').set_from_buffer(ev.buf, true, true) end
-    end)
+    if not u.enabled('conform_on_save') then return end
+    require('handler').format({ bufnr = ev.buf, async = false })
   end,
 })
 
