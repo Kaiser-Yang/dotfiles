@@ -7,6 +7,10 @@ vim.api.nvim_del_keymap('n', 'gcc')
 local h = require('handler')
 local opts = {
   -- Builtin
+  { key = '<c-f>', mode = 'ci', desc = 'Right', handler = h.builtin.right },
+  { key = '<c-b>', mode = 'ci', desc = 'Left', handler = h.builtin.left },
+  { key = '<m-f>', mode = 'ci', desc = 'Word Forward', handler = h.builtin.word_forward },
+  { key = '<m-b>', mode = 'ci', desc = 'Word Backward', handler = h.builtin.word_backward },
   { key = '<c-p>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '<c-n>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '<tab>', mode = 'c', desc = 'Nop', handler = h.builtin.nop },

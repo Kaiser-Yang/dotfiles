@@ -405,6 +405,10 @@ end
 
 M.up = '<up>'
 M.down = '<down>'
+M.left = '<left>'
+M.right = '<right>'
+M.word_backward = '<s-left>'
+M.word_forward = '<s-right>'
 M.last_s_cmd = '<cmd>&&<cr>'
 M.no_hl_search = '<cmd>nohlsearch<cr>'
 M.tab_split = '<cmd>tab split<cr>'
