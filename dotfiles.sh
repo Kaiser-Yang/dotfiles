@@ -110,59 +110,6 @@ if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
     DIRS+=(
         ".config/fontconfig/fonts_arch.conf"
     )
-# Ubuntu related configurations
-elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
-    DIRS+=(".config/fontconfig/fonts_ubuntu.conf")
-    LAZYGIT_VERSION=$(curl -s \
-        https://api.github.com/repos/jesseduffield/lazygit/releases/latest | \
-        \grep -Po '"tag_name": *"v\K[^"]*')
-    if [ -n "$DISPLAY" ]; then
-        REQUIRED_EXECUTABLES+=(
-            "fcitx5"
-            "fcitx5-chinese-addons"
-            "fcitx5-diagnose"
-            "gpg" # required for wezterm installation
-            "wezterm"
-        )
-    fi
-    # The 'update_package_list' is a placeholder for the command to update package list
-    REQUIRED_EXECUTABLES=("_update_package_list" "${REQUIRED_EXECUTABLES[@]}")
-    INSTALLATION_COMMANDS+=(
-        [_update_package_list]="$SUDO apt update"
-        [curl]="$SUDO apt install -y curl"
-        [make]="$SUDO apt install -y make"
-        [unzip]="$SUDO apt install -y unzip"
-        [wget]="$SUDO apt install -y wget"
-        [tar]="$SUDO apt install -y tar"
-        [git]="$SUDO apt install -y git"
-        [lazygit]="[[ $(uname -m) == 'x86_64' ]] &&
-            curl -Lo lazygit.tar.gz \
-                https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz && \
-            tar xf lazygit.tar.gz lazygit && \
-            $SUDO install lazygit -D -t /usr/local/bin/ && \
-            rm -f lazygit.tar.gz lazygit"
-        [nvim]="$SUDO apt install -y neovim"
-        [tmux]="$SUDO apt install -y tmux"
-        [zsh]="$SUDO apt install -y zsh"
-        [zoxide]="$SUDO apt install -y zoxide"
-        [rg]="$SUDO apt install -y ripgrep"
-        [rime_ls]="$SUDO apt install -y librime-dev && custom_install rime_ls"
-        [wn]="$SUDO apt install -y wordnet" 
-        [fcitx5]="$SUDO apt install -y fcitx5"
-        [fcitx5-chinese-addons]="$SUDO apt install -y fcitx5-chinese-addons"
-        [fcitx5-diagnose]="$SUDO apt install -y fcitx5-diagnose"
-        [gpg]="$SUDO apt install -y gnupg"
-        [wezterm]="apt list &> /dev/null && \
-            curl -fsSL https://apt.fury.io/wez/gpg.key | \
-                $SUDO gpg --yes --dearmor -o /usr/share/keyrings/wezterm-fury.gpg
-            echo 'deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | \
-                $SUDO tee /etc/apt/sources.list.d/wezterm.list
-            $SUDO chmod 644 /usr/share/keyrings/wezterm-fury.gpg &&
-            $SUDO apt update && $SUDO apt install -y wezterm"
-        [wl-paste]="$SUDO apt install -y wl-clipboard"
-        [xclip]="$SUDO apt install -y xclip"
-        [delta]="$SUDO apt install -y git-delta"
-    )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
     REQUIRED_EXECUTABLES=(
@@ -239,12 +186,7 @@ is_installed() {
     fi
     local package_manager="$2"
     local package_name="$3"
-    if [[ "$package_manager" == "apt" ]]; then
-        if ! dpkg -s "$package_name" &>/dev/null; then
-            log_verbose "Package '$package_name' is not installed."
-            return 1
-        fi
-    elif [[ "$package_manager" == "pacman" || "$package_manager" == 'yay' ]]; then
+    if [[ "$package_manager" == "pacman" || "$package_manager" == 'yay' ]]; then
         if  "$package_manager" -Q "$package_name" &> /dev/null || \
             "$package_manager" -Qg "$package_name" &> /dev/null; then
             cat /dev/null
@@ -783,10 +725,6 @@ install_fonts() {
             wqy-microhei wqy-microhei-lite wqy-bitmapfont wqy-zenhei
             ttf-arphic-ukai ttf-arphic-uming ttf-jetbrains-mono-nerd
         )
-    elif grep -qi '^ID=ubuntu' /etc/os-release &> /dev/null; then
-        log_error "Fonts installation for Ubuntu is not implemented yet. "
-        command="$SUDO apt install -y"
-        fonts+=(fonts-jetbrains-mono)
     elif [[ "$(uname)" == "Darwin" ]]; then
         if ! command -v brew &>/dev/null; then
             log_error "Homebrew is not installed. Please install Homebrew first."
