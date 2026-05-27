@@ -20,7 +20,10 @@ vim.g.treesitter_ensure_installed = {
 }
 --- @type table<string, boolean>
 _G.loaded = {}
-
+--- @type integer
+_G.autocmd_group = vim.api.nvim_create_augroup('LightBoat', { clear = true })
+--- @type string?
+_G.last_args = nil
 vim.filetype.add({
   extension = {
     gotmpl = 'gotmpl',

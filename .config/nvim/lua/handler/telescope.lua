@@ -39,11 +39,6 @@ local function get_input(buffer)
   return line
 end
 
-local last_args = nil
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'TelescopePrompt',
-  callback = function() last_args = nil end,
-})
 --- @param s string
 --- @return string
 local function escape_for_quote(s)
@@ -106,11 +101,11 @@ function M.toggle_quotation(prompt_bufnr)
     quoted = inner ~= nil and rest ~= nil
   end
   if quoted then
-    last_args = rest
+    _G.last_args = rest
     picker:set_prompt(inner)
   else
     local escaped = escape_for_quote(prompt)
-    picker:set_prompt(quote_char .. escaped .. quote_char .. (last_args or ' '))
+    picker:set_prompt(quote_char .. escaped .. quote_char .. (_G.last_args or ' '))
   end
 end
 

@@ -51,6 +51,8 @@ vim.schedule(function()
               local bufnr = vim.fn.bufadd(file)
               if not vim.api.nvim_buf_is_loaded(bufnr) then
                 vim.api.nvim_create_autocmd('BufReadPost', {
+                  desc = 'Detect conflicts after buffers read',
+                  group = _G.autocmd_group,
                   once = true,
                   buffer = bufnr,
                   callback = function()

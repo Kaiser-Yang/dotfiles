@@ -1,6 +1,8 @@
 local u = require('utils')
 
 vim.api.nvim_create_autocmd('PackChanged', {
+  desc = 'Build plugins when changed',
+  group = _G.autocmd_group,
   callback = function(ev)
     local name, kind = ev.data.spec.name, ev.data.kind
     if name ~= 'nvim-treesitter' or kind == 'update' then
@@ -11,6 +13,8 @@ vim.api.nvim_create_autocmd('PackChanged', {
 })
 
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
+  desc = 'Disable features for big files',
+  group = _G.autocmd_group,
   callback = function(ev)
     local old_status = vim.b.big_file_status or false
     vim.b.big_file_status = u.buffer.big(ev.buf, ev.event)
@@ -56,6 +60,8 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
 local unnamed_reg_content
 local unnamed_reg_type
 vim.api.nvim_create_autocmd('VimEnter', {
+  desc = 'Store the unnamed register after entering',
+  group = _G.autocmd_group,
   callback = function()
     unnamed_reg_content = vim.fn.getreg('"')
     unnamed_reg_type = vim.fn.getregtype('"')
@@ -63,6 +69,8 @@ vim.api.nvim_create_autocmd('VimEnter', {
   once = true,
 })
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
+  desc = 'Store or restore the unnamed register',
+  group = _G.autocmd_group,
   callback = function()
     if vim.v.event.regname ~= '' and vim.v.event.regname ~= '"' then
       vim.fn.setreg('"', unnamed_reg_content, unnamed_reg_type)
@@ -74,6 +82,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
+  desc = 'Disable hlsearch when starting input',
+  group = _G.autocmd_group,
   callback = function()
     if u.in_macro_executing() then return end
     if vim.tbl_contains({ 'i', 'ic', 'ix', 'R', 'Rc', 'Rx', 'Rv', 'Rvc', 'Rvx' }, vim.api.nvim_get_mode().mode) then
@@ -86,6 +96,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
 local limit = 1024 * 1024 -- 1 MB
 local timeout = 300 -- Unit: ms
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
+  desc = 'Highlight after yanking',
+  group = _G.autocmd_group,
   callback = function()
     assert(vim.v.event.regcontents)
     local size = 0
@@ -107,6 +119,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
 })
 
 vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Enable some treesitter features',
+  group = _G.autocmd_group,
   callback = vim.schedule_wrap(function(ev)
     if not vim.api.nvim_buf_is_valid(ev.buf) then return end
     if
@@ -126,40 +140,47 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
+  desc = 'Enable some LSP features',
+  group = _G.autocmd_group,
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     local highlight_augroup, lightbulb_augroup
     if client and client:supports_method('textDocument/documentHighlight', ev.buf) then
       highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
       vim.api.nvim_create_autocmd('CursorHold', {
-        buffer = ev.buf,
+        desc = 'LSP document highlight',
         group = highlight_augroup,
+        buffer = ev.buf,
         callback = function()
           vim.lsp.buf.clear_references()
           vim.lsp.buf.document_highlight()
         end,
       })
       vim.api.nvim_create_autocmd({ 'CursorMovedI', 'CursorMovedC', 'CursorMoved', 'ModeChanged', 'BufLeave' }, {
-        buffer = ev.buf,
+        desc = 'Clear LSP document highlight',
         group = highlight_augroup,
+        buffer = ev.buf,
         callback = vim.lsp.buf.clear_references,
       })
     end
     if _G.loaded['nvim-lightbulb'] and client and client:supports_method('textDocument/codeAction', ev.buf) then
       lightbulb_augroup = vim.api.nvim_create_augroup('nvim-lightbulb', { clear = false })
       vim.api.nvim_create_autocmd('CursorHold', {
-        buffer = ev.buf,
+        desc = 'LSP code action lightbulb',
         group = lightbulb_augroup,
+        buffer = ev.buf,
         callback = require('nvim-lightbulb').update_lightbulb,
       })
       vim.api.nvim_create_autocmd({ 'CursorMoved', 'ModeChanged', 'BufLeave' }, {
-        buffer = ev.buf,
+        desc = 'Clear LSP code action lightbulb',
         group = lightbulb_augroup,
+        buffer = ev.buf,
         callback = function(ev2) require('nvim-lightbulb').clear_lightbulb(ev2.buf) end,
       })
     end
     if _G.loaded['conform.nvim'] then vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end
     vim.api.nvim_create_autocmd('LspDetach', {
+      desc = 'Clear LSP auto commands',
       group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
       callback = function(ev2)
         if highlight_augroup then
@@ -176,6 +197,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'FocusLost', 'BufLeave' }, {
+  desc = 'Save on leaving',
+  group = _G.autocmd_group,
   callback = function()
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
       if u.buffer.normal(bufnr) and vim.bo[bufnr].modified then
@@ -186,6 +209,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'FocusLost', 'BufLeave' }, {
 })
 
 vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Guess indent for files',
+  group = _G.autocmd_group,
   callback = vim.schedule_wrap(function(ev)
     if not u.buffer.normal(ev.buf) or not _G.loaded['guess-indent.nvim'] then return end
     require('guess-indent').set_from_buffer(ev.buf, true, true)
@@ -193,6 +218,8 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
+  desc = 'Format on save',
+  group = _G.autocmd_group,
   callback = function(ev)
     if not u.enabled('conform_on_save') or not _G.loaded['conform.nvim'] then return end
     local buffer = ev.buf
@@ -204,11 +231,22 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('User', {
+  desc = 'Set wrap for telescope',
+  group = _G.autocmd_group,
   pattern = 'TelescopePreviewerLoaded',
   callback = function() vim.wo.wrap = true end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Store live grep args',
+  group = _G.autocmd_group,
+  pattern = 'TelescopePrompt',
+  callback = function() _G.last_args = nil end,
+})
+
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('QuitPre', {
+  desc = 'Quit when there is only nvim-tree',
+  group = _G.autocmd_group,
   nested = false,
   callback = function(ev)
     if not _G.loaded['nvim-tree.lua'] then return end
@@ -239,6 +277,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('QuitPre', {
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWinEnter', 'BufEnter' }, {
+  desc = 'Set winbar for competitest windows',
+  group = _G.autocmd_group,
   callback = function(ev)
     if vim.bo[ev.buf].filetype ~= 'CompetiTest' then return end
     for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -260,6 +300,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWinEnter', 'BufEnter' }, {
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('WinNew', {
+  desc = 'Resize nvim-tree when there is only nvim-tree',
+  group = _G.autocmd_group,
   callback = function()
     if not _G.loaded['nvim-tree.lua'] then return end
     local tree = require('nvim-tree.api').tree
@@ -275,6 +317,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('WinNew', {
 })
 
 vim.api.nvim_create_autocmd('BufEnter', {
+  desc = "Record last file's name",
+  group = _G.autocmd_group,
   callback = function()
     if vim.bo.filetype == 'NvimTree' or vim.api.nvim_buf_get_name(0) == '' then return end
     _G.last_filename = vim.api.nvim_buf_get_name(0)
