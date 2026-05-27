@@ -122,7 +122,7 @@ local insert_and_normal = {
   ['<m-n>'] = { a.cycle_history_next, type = 'action', opts = { desc = 'Next Search History' } },
   ['<c-space>'] = { a.to_fuzzy_refine, type = 'action', opts = { desc = 'Freeze for Fuzzy Refine' } },
   ['<c-c>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
-  ['<f1>'] = { ag.which_key({ keybind_width = 14, max_height = 0.25 }), type = 'action', opts = { desc = 'Which Key' } },
+  ['<f1>'] = { ag.which_key({ keybind_width = 14, max_height = 0.25 }), type = 'action', opts = { desc = 'Help' } },
 }
 opts.defaults.mappings.n = {
   ['j'] = { a.move_selection_next, type = 'action', opts = { desc = 'Move Selection Next' } },
@@ -134,6 +134,7 @@ opts.defaults.mappings.n = {
   ['G'] = { a.move_to_bottom, type = 'action', opts = { desc = 'Move to Bottom' } },
   ['q'] = { a.close, type = 'action', opts = { desc = 'Close' } },
   ['<esc>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
+  ['g?'] = { ag.which_key({ keybind_width = 14, max_height = 0.25 }), type = 'action', opts = { desc = 'Help' } },
 }
 opts.defaults.mappings.i = {
   ['<c-w>'] = { '<c-s-w>', type = 'command' },

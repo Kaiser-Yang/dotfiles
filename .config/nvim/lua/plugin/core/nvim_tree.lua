@@ -20,6 +20,7 @@ require('nvim-tree').setup({
       { 'n', 'H', a.node.collapse, opts('Collapse') },
       { 'n', 'L', a.node.expand, opts('Expand') },
 
+      { 'n', 'g?', a.tree.toggle_help, opts('Help') },
       { 'n', '<f1>', a.tree.toggle_help, opts('Help') },
       { 'n', '<f5>', a.tree.reload, opts('Refresh') },
       { 'n', 'q', a.tree.close, opts('Quit') },
