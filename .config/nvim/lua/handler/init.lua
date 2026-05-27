@@ -18,12 +18,11 @@ local M = {
 function M.async_format()
   if not _G.loaded['conform.nvim'] then return false end
   local buf = vim.api.nvim_get_current_buf()
-  local res = require('conform').format({ async = true }, function(err)
+  require('conform').format({ async = true }, function(err)
     if err then return end
     vim.schedule_wrap(require('guess-indent').set_from_buffer)(buf, true, true)
   end)
-  if res ~= nil then return res end
-  return true
+  return '<esc>'
 end
 
 local first_to_second = {

@@ -264,7 +264,7 @@ local opts = {
   -- Format
   -- We will format automatically on save, therefore this one is not used frequently.
   -- It will only be useful when the format on save occurs errors such as timeout
-  { key = '<m-F>', desc = 'Async Format', handler = h.async_format },
+  { key = '<m-F>', mode = 'nx', desc = 'Async Format', handler = h.async_format },
 
   -- Surround
   -- By default "s" and "S" in visual mode are aliases of "c"
