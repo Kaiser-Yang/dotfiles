@@ -6,3 +6,6 @@ repro.lua
 
 # executables
 *.out
+
+# lock files
+*.lock
