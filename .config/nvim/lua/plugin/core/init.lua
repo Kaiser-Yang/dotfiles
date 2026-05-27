@@ -5,8 +5,12 @@ vim.schedule(function()
   require('plugin.core.blink_cmp')
   -- Indent guides (indent lines)
   require('plugin.core.blink_indent')
+  -- Highlight matching pairs (brackets/quotes, etc.)
+  require('plugin.core.blink_pairs')
   -- Code formatter
   require('plugin.core.conform')
+  -- Auto-insert `end` for some languages
+  require('plugin.core.endwise')
   -- Git signs in the gutter + hunk actions (per buffer)
   require('plugin.core.gitsigns')
   -- Detect/guess indentation style per buffer
@@ -35,6 +39,8 @@ vim.schedule(function()
   require('plugin.core.treesitter_context')
   -- Treesitter textobjects (motions / swap / select)
   require('plugin.core.treesitter_textobjects')
+  -- Auto pairs plugin
+  require('plugin.core.ultimate_autopair')
   -- Show keybindings as you type (which-key)
   require('plugin.core.which_key')
 end)
