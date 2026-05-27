@@ -110,7 +110,7 @@ function M.toggle_quotation(prompt_bufnr)
     picker:set_prompt(inner)
   else
     local escaped = escape_for_quote(prompt)
-    picker:set_prompt(quote_char .. escaped .. quote_char .. (last_args or ''))
+    picker:set_prompt(quote_char .. escaped .. quote_char .. (last_args or ' '))
   end
 end
 
