@@ -14,7 +14,6 @@ require('conform').setup({
     typescript = { 'prettier' },
     markdown = { 'prettier', 'cbfmt' },
     sh = { 'shfmt' },
-    zsh = { 'shfmt' },
     json = { 'jq' },
   },
   default_format_opts = { lsp_format = 'fallback' },
