@@ -64,7 +64,7 @@ if [[ -n "$DISPLAY" || "$(uname)" == "Darwin" ]]; then
 fi
 SUDO=$(command -v sudo)
 # Arch linux related configurations
-if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
+if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
     if [ -n "$DISPLAY" ]; then
         REQUIRED_EXECUTABLES+=(
             "fcitx5-im"
@@ -160,9 +160,9 @@ if [[ "$(uname)" == "Linux" ]]; then
 fi
 
 install_yay() {
-    git clone https://aur.archlinux.org/yay.git && \
-        cd yay && \
-        makepkg -si && \
+    git clone https://aur.archlinux.org/yay.git &&
+        cd yay &&
+        makepkg -si &&
         cd .. && rm -rf yay
 }
 # This will check if a command or package is installed.
@@ -184,8 +184,8 @@ is_installed() {
     local package_manager="$2"
     local package_name="$3"
     if [[ "$package_manager" == "pacman" || "$package_manager" == 'yay' ]]; then
-        if  "$package_manager" -Q "$package_name" &> /dev/null || \
-            "$package_manager" -Qg "$package_name" &> /dev/null; then
+        if "$package_manager" -Q "$package_name" &>/dev/null ||
+            "$package_manager" -Qg "$package_name" &>/dev/null; then
             cat /dev/null
             return 0
         else
@@ -193,8 +193,8 @@ is_installed() {
             return 1
         fi
     elif [[ "$package_manager" == "brew" ]]; then
-        if { "$package_manager" list --formula 2>/dev/null | grep -Fxq -- "$package_name"; } || \
-           { "$package_manager" list --cask 2>/dev/null | grep -Fxq -- "$package_name"; }; then
+        if { "$package_manager" list --formula 2>/dev/null | grep -Fxq -- "$package_name"; } ||
+            { "$package_manager" list --cask 2>/dev/null | grep -Fxq -- "$package_name"; }; then
             log_verbose "Package '$package_name' is installed."
         else
             log_verbose "Package '$package_name' is not installed."
@@ -211,7 +211,7 @@ is_installed() {
 check_and_install_package() {
     local expected_executable="$1"
     local installation_command="${*:2}"
-    IFS=" " read -r -a cmd_array <<< "$installation_command"
+    IFS=" " read -r -a cmd_array <<<"$installation_command"
     local package_manager="${cmd_array[0]}"
     [[ "$package_manager" == "$SUDO" ]] && package_manager="${cmd_array[1]}"
     local package_name="${cmd_array[-1]}"
@@ -221,7 +221,7 @@ check_and_install_package() {
         log_verbose "Command '$expected_executable' is not installed. Installing..."
         log_verbose "Installation command: $installation_command"
         if ! eval "$installation_command"; then
-            log_error "Failed to install '$expected_executable'. "\
+            log_error "Failed to install '$expected_executable'. " \
                 "Please check the installation command."
             return 1
         fi
@@ -278,8 +278,8 @@ usage() {
 }
 
 check_options() {
-    if [[ "$RESTORE" == false && "$CREATE_LINKS" == false && "$INSTALL_PACKAGES" == false && \
-          "$INSTALL_FONTS" == false && "$CHANGE_SHELL" == false ]]; then
+    if [[ "$RESTORE" == false && "$CREATE_LINKS" == false && "$INSTALL_PACKAGES" == false &&
+        "$INSTALL_FONTS" == false && "$CHANGE_SHELL" == false ]]; then
         log_error "No valid option provided. Please use -c, -i, -s, or -r."
         usage
         return 1
@@ -300,55 +300,62 @@ init_options() {
     CHANGE_SHELL=false
     while [[ $# -gt 0 ]]; do
         case "$1" in
-            --restore)
-                RESTORE=true
-                shift
-                ;;
-            --help)
-                usage
-                return 1
-                ;;
-            --verbose)
-                VERBOSE=true
-                shift
-                ;;
-            --install)
-                INSTALL_PACKAGES=true
-                shift
-                ;;
-            --create)
-                CREATE_LINKS=true
-                shift
-                ;;
-            --fonts)
-                INSTALL_FONTS=true
-                shift
-                ;;
-            --change)
-                CHANGE_SHELL=true
-                shift
-                ;;
-            -*)
-                short_opts="${1:1}"
-                for ((i=0; i<${#short_opts}; i++)); do
-                    case "${short_opts:$i:1}" in
-                        r) RESTORE=true ;;
-                        h) usage; return 1 ;;
-                        v) VERBOSE=true ;;
-                        i) INSTALL_PACKAGES=true ;;
-                        c) CREATE_LINKS=true ;;
-                        f) INSTALL_FONTS=true ;;
-                        s) CHANGE_SHELL=true ;;
-                        *) log_error "Unknown option: -${short_opts:$i:1}"; usage; return 1 ;;
-                    esac
-                done
-                shift
-                ;;
-            *)
-                log_error "Unknown option: $1"
-                usage
-                return 1
-                ;;
+        --restore)
+            RESTORE=true
+            shift
+            ;;
+        --help)
+            usage
+            return 1
+            ;;
+        --verbose)
+            VERBOSE=true
+            shift
+            ;;
+        --install)
+            INSTALL_PACKAGES=true
+            shift
+            ;;
+        --create)
+            CREATE_LINKS=true
+            shift
+            ;;
+        --fonts)
+            INSTALL_FONTS=true
+            shift
+            ;;
+        --change)
+            CHANGE_SHELL=true
+            shift
+            ;;
+        -*)
+            short_opts="${1:1}"
+            for ((i = 0; i < ${#short_opts}; i++)); do
+                case "${short_opts:$i:1}" in
+                r) RESTORE=true ;;
+                h)
+                    usage
+                    return 1
+                    ;;
+                v) VERBOSE=true ;;
+                i) INSTALL_PACKAGES=true ;;
+                c) CREATE_LINKS=true ;;
+                f) INSTALL_FONTS=true ;;
+                s) CHANGE_SHELL=true ;;
+                *)
+                    log_error "Unknown option: -${short_opts:$i:1}"
+                    usage
+                    return 1
+                    ;;
+                esac
+            done
+            shift
+            ;;
+        *)
+            log_error "Unknown option: $1"
+            usage
+            return 1
+            ;;
         esac
     done
     check_options
@@ -358,9 +365,7 @@ init_options() {
 install_oh_my_zsh() {
     if [ ! -d "$HOME/.oh-my-zsh" ]; then
         log_verbose "Installing Oh My Zsh..."
-        if ! sh -c "$(curl -fsSL \
-            https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-        then
+        if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
             local error_code=$?
             log_error "Failed to install Oh My Zsh. " \
                 "Please check your internet connection or the installation script."
@@ -378,7 +383,7 @@ install_brew() {
         if ! bash -c "$(curl -fsSL \
             https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
             local error_code=$?
-            log_error "Failed to install Home brew. "\
+            log_error "Failed to install Home brew. " \
                 "Please check your internet connection or the installation script."
             return $error_code
         fi
@@ -425,7 +430,7 @@ install_rime_ls() {
     local RIME_LS_URL="$RIME_LS_RELEASE_URL/download/$RIME_LS_TAG/$RIME_LS_PACKAGE_NAME"
     log_verbose "Downloading rime_ls from $RIME_LS_URL..."
     wget -O $RIME_LS_PACKAGE_NAME $RIME_LS_URL || {
-        log_error "Failed to download rime_ls from $RIME_LS_URL. "\
+        log_error "Failed to download rime_ls from $RIME_LS_URL. " \
             "Please check your internet connection or the URL."
         return 1
     }
@@ -433,18 +438,18 @@ install_rime_ls() {
     log_verbose "Extracting rime_ls package..."
     if [[ "$RIME_LS_TARGET_EXTENSION" == "gz" ]]; then
         tar -xzf $RIME_LS_PACKAGE_NAME || {
-            log_error "Failed to extract rime_ls package. "\
+            log_error "Failed to extract rime_ls package. " \
                 "Please check the package integrity or the extraction command."
             return 1
         }
     elif [[ "$RIME_LS_TARGET_EXTENSION" == "bz2" ]]; then
         tar -xjf $RIME_LS_PACKAGE_NAME || {
-            log_error "Failed to extract rime_ls package. "\
+            log_error "Failed to extract rime_ls package. " \
                 "Please check the package integrity or the extraction command."
             return 1
         }
     else
-        log_error "Unknown package format: $RIME_LS_TARGET. "\
+        log_error "Unknown package format: $RIME_LS_TARGET. " \
             "Please check the RIME_LS_PACKAGE_NAME variable."
         return 1
     fi
@@ -460,7 +465,7 @@ init_xremap() {
     local uinput_rule='KERNEL=="uinput", GROUP="input", TAG+="uaccess", MODE:="0660", OPTIONS+="static_node=uinput"'
     local uinput_file="/etc/udev/rules.d/99-input.rules"
     if ! grep -Fxq "$uinput_rule" "$uinput_file" 2>/dev/null; then
-        echo "$uinput_rule" | $SUDO tee -a "$uinput_file" > /dev/null
+        echo "$uinput_rule" | $SUDO tee -a "$uinput_file" >/dev/null
         log "Added uinput rule to $uinput_file"
     else
         log "uinput rule already exists in $uinput_file"
@@ -469,7 +474,7 @@ init_xremap() {
     if [ ! -e /dev/uinput ]; then
         local module_conf="/etc/modules-load.d/uinput.conf"
         if ! grep -Fxq "uinput" "$module_conf" 2>/dev/null; then
-            echo "uinput" | $SUDO tee -a "$module_conf" > /dev/null
+            echo "uinput" | $SUDO tee -a "$module_conf" >/dev/null
             log "uinput added to $module_conf, you may need to reboot your machine"
         else
             log "uinput already in $module_conf"
@@ -481,7 +486,7 @@ init_xremap() {
     local event_rule='KERNEL=="event*", NAME="input/%k", MODE="660", GROUP="input"'
     local event_file="/etc/udev/rules.d/input.rules"
     if ! grep -Fxq "$event_rule" "$event_file" 2>/dev/null; then
-        echo "$event_rule" | $SUDO tee -a "$event_file" > /dev/null
+        echo "$event_rule" | $SUDO tee -a "$event_file" >/dev/null
         log "Added input event rule to $event_file"
     else
         log "input event rule already exists in $event_file"
@@ -714,7 +719,7 @@ install_fonts() {
     log "Start to install fonts."
     local fonts=()
     local command
-    if grep -qi '^ID=arch' /etc/os-release &> /dev/null; then
+    if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
         command="$SUDO pacman -Sy --noconfirm"
         fonts+=(
             adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts
@@ -737,7 +742,7 @@ install_fonts() {
         }
     done
     if [[ "$(uname)" == "Linux" ]]; then
-        fc-cache -f &> /dev/null || {
+        fc-cache -f &>/dev/null || {
             log_error "Failed to update font cache. Please check your fonts installation."
             return 1
         }
