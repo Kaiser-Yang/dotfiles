@@ -63,6 +63,7 @@ local opts = {
   { key = { '<esc>', '<c-[>' }, desc = 'No Highlight Search', handler = h.builtin.no_hl_search },
   { key = 'aa', mode = 'ox', desc = '<> block', handler = h.builtin.around_angle_bracket },
   { key = 'ia', mode = 'ox', desc = '<> block', handler = h.builtin.inside_angle_bracket },
+  { key = 'zS', desc = 'Inspect', handler = h.builtin.inspect },
 
   -- LSP
   -- INFO:
