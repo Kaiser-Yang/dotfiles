@@ -186,6 +186,12 @@ function M.live_grep(opts)
   return true
 end
 
+function M.auto_commands()
+  if not _G.loaded['telescope.nvim'] then return false end
+  require('telescope.builtin').autocommands()
+  return true
+end
+
 function M.find_word(opts)
   if not _G.loaded['telescope.nvim'] then return false end
   find_word_ivy = true

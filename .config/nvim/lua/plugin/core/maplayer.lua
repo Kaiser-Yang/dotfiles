@@ -313,6 +313,7 @@ local opts = {
   { key = '<f1>', mode = 'i', desc = 'Search Help', handler = h.telescope.help_tags },
   { key = { '<f1>', 'g?' }, desc = 'Search Help', handler = h.telescope.help_tags },
   { key = '<m-f>', mode = 'nx', desc = 'Find Word', handler = h.telescope.find_word },
+  { key = '<leader>sa', desc = 'Auto commands', handler = h.telescope.auto_commands },
   { key = '<leader>sd', desc = 'Diagnostics', handler = h.telescope.diagnostics },
   { key = '<leader>sq', desc = 'Qflist', handler = h.telescope.qflist },
   { key = '<leader>sl', desc = 'Loclist', handler = h.telescope.loclist },
