@@ -76,6 +76,7 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
     fi
     REQUIRED_EXECUTABLES+=(
         "yay"
+        "pkgfile"
     )
     INSTALLATION_COMMANDS+=(
         [curl]="$SUDO pacman -Sy --noconfirm curl"
@@ -104,6 +105,7 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
         ["tree-sitter"]="$SUDO pacman -Sy --noconfirm tree-sitter"
         ["bash-language-server"]="$SUDO pacman -Sy --noconfirm bash-language-server"
         [shfmt]="$SUDO pacman -Sy --noconfirm shfmt"
+        [pkgfile]="$SUDO pacman -Sy --noconfirm pkgfile"
     )
     if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
         REQUIRED_EXECUTABLES+=(xremap)
@@ -122,6 +124,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         "wezterm"
         "squirrel"
         "pngpaste" # used by img-clip.nvim
+        "command-not-found-init"
     )
     INSTALLATION_COMMANDS+=(
         [brew]="install_brew"
@@ -144,6 +147,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [squirrel]="brew install --cask squirrel"
         [pngpaste]="brew install pngpaste"
         [delta]="brew install git-delta"
+        ["command-not-found-init"]="brew command-not-found-init"
     )
 fi
 # Configurations for all Linux distributions
@@ -511,6 +515,8 @@ install_packages() {
             COMMANDS_AFTER_INSTALLATION+=("install_oh_my_zsh")
         elif [[ "$executable" == "xremap" ]]; then
             COMMANDS_AFTER_INSTALLATION+=(init_xremap)
+        elif [[ "$executable" == "pkgfile" ]]; then
+            COMMANDS_AFTER_INSTALLATION+=("$SUDO pkgfile -u")
         fi
         log_verbose "Command executed successfully: $cmd"
     done

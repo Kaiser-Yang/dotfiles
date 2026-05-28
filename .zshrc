@@ -1,8 +1,7 @@
 CONDA_PATH="/opt/miniconda3/etc/profile.d/conda.sh"
-export \
-    ZSH="$HOME/.oh-my-zsh" \
-    ZSH_CUSTOM="$HOME/.config/zsh" \
-    ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH="$HOME/.oh-my-zsh"
+ZSH_CUSTOM="$HOME/.config/zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 zstyle ':omz:*' aliases no
 plugins=(
     zsh-autosuggestions
@@ -22,14 +21,23 @@ sources=(
 for file in "${sources[@]}"; do
     [[ -f "$file" ]] && source "$file"
 done
+[[ -f "$CONDA_PATH" ]] &&
+    source "$CONDA_PATH" &&
+    source "$ZSH_CUSTOM/conda_inherit.zsh"
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 [[ -d "$ZSH_CUSTOM/plugins/zsh-completions/src" ]] &&
     fpath+=$ZSH_CUSTOM/plugins/zsh-completions/src &&
     autoload -U compinit && compinit
+COMMAND_NOT_FOUND_HANDLER=""
 [[ -e "/opt/homebrew/bin/brew" ]] &&
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+    eval "$(/opt/homebrew/bin/brew shellenv)" &&
+    COMMAND_NOT_FOUND_HANDLER="$(brew --repository)/Library/Homebrew/command-not-found/handler.sh"
+command -v pkgfile &>/dev/null &&
+    COMMAND_NOT_FOUND_HANDLER="/usr/share/doc/pkgfile/command-not-found.zsh"
+[[ -f "$COMMAND_NOT_FOUND_HANDLER" ]] &&
+    source "$COMMAND_NOT_FOUND_HANDLER"
 [[ -d "$HOME/.local/bin" ]] &&
     export PATH="$PATH:$HOME/.local/bin"
 command -v go &>/dev/null &&
@@ -65,6 +73,3 @@ setup_fzf () {
     eval "$(fzf --zsh)"
 }
 zvm_after_init_commands+=(setup_fzf)
-[[ -f "$CONDA_PATH" ]] &&
-    source "$CONDA_PATH" &&
-    source "$ZSH_CUSTOM/conda_inherit.zsh"
