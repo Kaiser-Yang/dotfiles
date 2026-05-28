@@ -325,8 +325,8 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
   desc = 'Set winfixbuf for some windows',
   group = _G.autocmd_group,
   callback = function(ev)
-    if vim.tbl_contains({'dap-view', 'NvimTree', 'CompetiTest'}, vim.bo[ev.buf].filetype) then
+    if vim.tbl_contains({ 'dap-view', 'NvimTree', 'CompetiTest' }, vim.bo[ev.buf].filetype) then
       vim.wo[0][0].winfixbuf = true
     end
-  end
+  end,
 })
