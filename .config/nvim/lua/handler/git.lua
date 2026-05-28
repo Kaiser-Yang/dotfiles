@@ -129,4 +129,70 @@ M.diff_this_with_input = function()
   return ':Gitsigns diffthis '
 end
 
+M.choose_ours = function()
+  if not _G.loaded['resolve.nvim'] then return false end
+  require('resolve').choose_ours()
+  return true
+end
+
+M.choose_theirs = function()
+  if not _G.loaded['resolve.nvim'] then return false end
+  require('resolve').choose_theirs()
+  return true
+end
+
+M.choose_both = function()
+  if not _G.loaded['resolve.nvim'] then return false end
+  require('resolve').choose_both()
+  return true
+end
+
+M.choose_both_reverse = function()
+  if not _G.loaded['resolve.nvim'] then return false end
+  require('resolve').choose_both_reverse()
+  return true
+end
+
+M.choose_none = function()
+  if not _G.loaded['resolve.nvim'] then return false end
+  require('resolve').choose_none()
+  return true
+end
+
+M.choose_base = function()
+  if not _G.loaded['resolve.nvim'] then return false end
+  require('resolve').choose_base()
+  return true
+end
+
+M.show_diff_theirs = function()
+  if not _G.loaded['resolve.nvim'] or vim.fn.executable('delta') ~= 1 then return false end
+  require('resolve').show_diff_theirs()
+  return true
+end
+
+M.show_diff_ours = function()
+  if not _G.loaded['resolve.nvim'] or vim.fn.executable('delta') ~= 1 then return false end
+  require('resolve').show_diff_ours()
+  return true
+end
+
+M.show_diff_both = function()
+  if not _G.loaded['resolve.nvim'] or vim.fn.executable('delta') ~= 1 then return false end
+  require('resolve').show_diff_both()
+  return true
+end
+
+M.show_diff_ours_vs_theirs = function()
+  if not _G.loaded['resolve.nvim'] or vim.fn.executable('delta') ~= 1 then return false end
+  require('resolve').show_diff_ours_vs_theirs()
+  return true
+end
+
+M.show_diff_theirs_vs_ours = function()
+  if not _G.loaded['resolve.nvim'] or vim.fn.executable('delta') ~= 1 then return false end
+  require('resolve').show_diff_theirs_vs_ours()
+  return true
+end
+
 return M
