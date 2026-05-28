@@ -25,20 +25,20 @@ done
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
-[[ -d "$ZSH_CUSTOM/plugins/zsh-completions/src" ]] && \
-    fpath+=$ZSH_CUSTOM/plugins/zsh-completions/src && \
+[[ -d "$ZSH_CUSTOM/plugins/zsh-completions/src" ]] &&
+    fpath+=$ZSH_CUSTOM/plugins/zsh-completions/src &&
     autoload -U compinit && compinit
-[[ -e "/opt/homebrew/bin/brew" ]] && \
+[[ -e "/opt/homebrew/bin/brew" ]] &&
     eval "$(/opt/homebrew/bin/brew shellenv)"
-[[ -d "$HOME/.local/bin" ]] && \
+[[ -d "$HOME/.local/bin" ]] &&
     export PATH="$PATH:$HOME/.local/bin"
-command -v go &>/dev/null && \
-    GOPATH_BIN="$(go env GOPATH)/bin" && \
-    [[ -d "$GOPATH_BIN" ]] && \
+command -v go &>/dev/null &&
+    GOPATH_BIN="$(go env GOPATH)/bin" &&
+    [[ -d "$GOPATH_BIN" ]] &&
     export PATH="$PATH:$GOPATH_BIN"
-command -v nvim &>/dev/null && \
+command -v nvim &>/dev/null &&
     export EDITOR=nvim
-command -v zoxide &>/dev/null && \
+command -v zoxide &>/dev/null &&
     eval "$(zoxide init --cmd cd zsh)"
 setup_fzf () {
     if ! command -v fzf &>/dev/null; then
@@ -65,6 +65,6 @@ setup_fzf () {
     eval "$(fzf --zsh)"
 }
 zvm_after_init_commands+=(setup_fzf)
-[[ -f "$CONDA_PATH" ]] && \
-    source "$CONDA_PATH" && \
+[[ -f "$CONDA_PATH" ]] &&
+    source "$CONDA_PATH" &&
     source "$ZSH_CUSTOM/conda_inherit.zsh"
