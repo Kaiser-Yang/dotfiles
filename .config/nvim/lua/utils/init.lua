@@ -130,15 +130,15 @@ function M.terminal(cmd, bufnr, border)
     return nil, nil
   end
 
-  vim.wo[term_win].cursorcolumn = false
-  vim.wo[term_win].signcolumn = 'no'
-
   if vim.bo[term_buf].buftype ~= 'terminal' then
     vim.cmd('terminal ' .. cmd)
     vim.bo[term_buf].filetype = 'terminal'
     vim.bo[term_buf].buflisted = false
     vim.bo[term_buf].swapfile = false
     vim.bo[term_buf].bufhidden = 'hide'
+    vim.wo[term_win].cursorcolumn = false
+    vim.wo[term_win].signcolumn = 'no'
+    vim.wo[term_win].winfixbuf = true
   end
   vim.cmd('startinsert')
   vim.cmd('nohlsearch')
