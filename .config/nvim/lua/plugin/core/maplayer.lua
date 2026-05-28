@@ -68,6 +68,8 @@ local opts = {
   { key = 'ia', mode = 'ox', desc = '<> block', handler = h.builtin.inside_angle_bracket },
   { key = 'ar', mode = 'ox', desc = '[] block', handler = h.builtin.around_square_bracket },
   { key = 'ir', mode = 'ox', desc = '[] block', handler = h.builtin.inside_square_bracket },
+  { key = 'aq', mode = 'ox', desc = '`` block', handler = h.builtin.around_tilde_bracket },
+  { key = 'iq', mode = 'ox', desc = '`` block', handler = h.builtin.inside_tilde_bracket },
   { key = 'zS', desc = 'Inspect', handler = h.builtin.inspect },
 
   -- LSP

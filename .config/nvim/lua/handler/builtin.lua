@@ -416,6 +416,8 @@ M.around_angle_bracket = 'a<'
 M.inside_angle_bracket = 'i<'
 M.around_square_bracket = 'a['
 M.inside_square_bracket = 'i['
+M.around_tilde_bracket = 'a`'
+M.inside_tilde_bracket = 'i`'
 M.inspect = '<cmd>Inspect<cr>'
 
 M.diagnostic_qflist = function()

@@ -13,7 +13,7 @@ require('nvim-surround').setup({
     b = ')',
     B = '}',
     r = ']',
-    q = false,
+    q = '`',
   },
   move_cursor = 'sticky',
 })
