@@ -112,7 +112,7 @@ local insert_and_normal = {
   },
   ['<c-f>'] = { h.telescope.toggle_live_grep, type = 'action', opts = { desc = 'Toggle Live Grep Arg' } },
   ['<c-p>'] = { h.telescope.toggle_find_file, type = 'action', opts = { desc = 'Toggle Find File' } },
-  ['<m-f>'] = { h.telescope.toggle_find_word, type = 'action', opts = { desc = 'Toogle Find Word' } },
+  ['<m-f>'] = { h.telescope.toggle_find_word, type = 'action', opts = { desc = 'Toggle Find Word' } },
   ['<m-a>'] = { h.telescope.smart_select_all, type = 'action', opts = { desc = 'Smart Select All' } },
   ['<m-s>'] = { h.telescope.toggle_quotation, type = 'action', opts = { desc = 'Toggle Quotation' } },
   ['<tab>'] = { a.toggle_selection + a.move_selection_worse, type = 'action', opts = { desc = 'Toggle Selection' } },
