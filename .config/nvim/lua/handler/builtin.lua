@@ -438,4 +438,13 @@ function M.toggle_diagnostic()
   u.toggle_notify('Diagnostic', status, { title = 'Diagnostic' })
 end
 
+function M.jump_list_wrap(key, cnt)
+  cnt = cnt or 5
+  return function()
+    local res = u.get_cnt_prefix() .. key
+    if vim.v.count1 > cnt then vim.cmd("normal! m'") end
+    return res
+  end
+end
+
 return M
