@@ -414,6 +414,8 @@ M.no_hl_search = '<cmd>nohlsearch<cr>'
 M.tab_split = '<cmd>tab split<cr>'
 M.around_angle_bracket = 'a<'
 M.inside_angle_bracket = 'i<'
+M.around_square_bracket = 'a['
+M.inside_square_bracket = 'i['
 M.inspect = '<cmd>Inspect<cr>'
 
 M.diagnostic_qflist = function()

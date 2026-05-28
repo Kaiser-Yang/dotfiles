@@ -66,6 +66,8 @@ local opts = {
   { key = { '<esc>', '<c-[>' }, desc = 'No Highlight Search', handler = h.builtin.no_hl_search },
   { key = 'aa', mode = 'ox', desc = '<> block', handler = h.builtin.around_angle_bracket },
   { key = 'ia', mode = 'ox', desc = '<> block', handler = h.builtin.inside_angle_bracket },
+  { key = 'ar', mode = 'ox', desc = '[] block', handler = h.builtin.around_square_bracket },
+  { key = 'ir', mode = 'ox', desc = '[] block', handler = h.builtin.inside_square_bracket },
   { key = 'zS', desc = 'Inspect', handler = h.builtin.inspect },
 
   -- LSP
@@ -222,8 +224,8 @@ local opts = {
   { key = 'im', mode = 'ox', desc = 'Method', handler = h.treesitter.inside_function },
   { key = 'ao', mode = 'ox', desc = 'Call', handler = h.treesitter.around_call },
   { key = 'io', mode = 'ox', desc = 'Call', handler = h.treesitter.inside_call },
-  { key = 'ar', mode = 'ox', desc = 'Return', handler = h.treesitter.around_return },
-  { key = 'ir', mode = 'ox', desc = 'Return', handler = h.treesitter.inside_return },
+  { key = 'aR', mode = 'ox', desc = 'Return', handler = h.treesitter.around_return },
+  { key = 'iR', mode = 'ox', desc = 'Return', handler = h.treesitter.inside_return },
 
   -- Completion
   { key = '<c-s>', mode = 'i', desc = 'Toggle Signature Help', handler = h.completion.toggle_signature },

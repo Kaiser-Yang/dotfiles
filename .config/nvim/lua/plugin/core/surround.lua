@@ -12,9 +12,8 @@ require('nvim-surround').setup({
     a = '>', -- angle
     b = ')',
     B = '}',
-    s = ']', -- square
-    q = { '"', "'", '`' },
-    r = false,
+    r = ']',
+    q = false,
   },
   move_cursor = 'sticky',
 })
