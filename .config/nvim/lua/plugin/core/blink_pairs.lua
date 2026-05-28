@@ -15,7 +15,6 @@ require('blink.pairs').setup({
       'BlinkPairsRed',
       'BlinkPairsOrange',
       'BlinkPairsYellow',
-      'BlinkPairsGreen',
       'BlinkPairsBlue',
       'BlinkPairsCyan',
       'BlinkPairsPurple',
