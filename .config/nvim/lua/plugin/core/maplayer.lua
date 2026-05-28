@@ -55,6 +55,7 @@ local opts = {
   { key = '<m-n>', mode = 'c', desc = 'Next Commend History', handler = h.builtin.down },
   { key = '<m-p>', mode = 'c', desc = 'Previous Commend History', handler = h.builtin.up },
   { key = '<leader>r', desc = 'Run Single File', handler = h.builtin.run_single_file },
+  { key = '<leader>tD', desc = 'Buffer Diagnostic', handler = h.builtin.toggle_diagnostic },
   { key = '<leader>ts', desc = 'Spell', handler = h.builtin.toggle_spell },
   { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.builtin.toggle_treesitter },
   { key = '<leader>q', desc = 'Diagnostic Qflist', handler = h.builtin.diagnostic_qflist },

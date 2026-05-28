@@ -431,4 +431,11 @@ function M.insert_undo_point()
   return false
 end
 
+function M.toggle_diagnostic()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local status = not vim.diagnostic.is_enabled({ bufnr = bufnr })
+  vim.diagnostic.enable(status, { bufnr = bufnr })
+  u.toggle_notify('Diagnostic', status, { title = 'Diagnostic' })
+end
+
 return M
