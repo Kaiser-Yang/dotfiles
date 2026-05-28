@@ -12,7 +12,7 @@ plugins=(
     extract
     sudo
 )
-ZPWR_EXPAND_BLACKLIST=(grep ls)
+ZPWR_EXPAND_BLACKLIST=(grep ls open)
 sources=(
     "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
     "$HOME/.p10k.zsh"
