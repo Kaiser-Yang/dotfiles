@@ -12,7 +12,7 @@ w.setup({
   sort = { 'order', 'group', 'desc', 'mod' },
   keys = { scroll_down = '', scroll_up = '' },
   icons = { rules = false },
-  triggers = { { '<auto>', mode = 'nxso' }, { 'b', mode = 'n' } },
+  triggers = { { '<auto>', mode = 'nxo' }, { 'b', mode = 'n' } },
   plugins = { registers = { format = function(value) return value:gsub('^%s+', ''):gsub('%s+$', ''):sub(1, 10) end } },
   -- BUG:
   -- See https://github.com/folke/which-key.nvim/issues/1033
@@ -31,7 +31,7 @@ w.setup({
     end
     return true
   end,
-  defer = function() return false end,
+  defer = function(ctx) return ctx.mode ~= 'o' end,
 })
 w.add({
   { '<leader>g', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Git', mode = 'nx' },
