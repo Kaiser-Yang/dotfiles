@@ -17,7 +17,7 @@ local M = {
 
 function M.format(opts)
   if not _G.loaded['conform.nvim'] then return false end
-  opts = vim.tbl_extend('force', { bufnr = vim.api.nvim_get_current_buf(), async = true }, opts)
+  opts = vim.tbl_deep_extend('force', { bufnr = vim.api.nvim_get_current_buf(), async = true }, opts)
   require('conform').format(opts, function(err)
     if err then return end
     vim.schedule_wrap(require('guess-indent').set_from_buffer)(opts.bufnr, true, true)
