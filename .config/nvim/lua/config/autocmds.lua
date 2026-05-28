@@ -82,14 +82,13 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
 })
 
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
-  desc = 'Disable hlsearch when starting input',
+  desc = 'Disable hlsearch when leaving normal or visual mode',
   group = _G.autocmd_group,
   callback = function()
     if u.in_macro_executing() then return end
-    if vim.tbl_contains({ 'i', 'ic', 'ix', 'R', 'Rc', 'Rx', 'Rv', 'Rvc', 'Rvx' }, vim.api.nvim_get_mode().mode) then
-      -- We must schedule here
-      vim.schedule(function() vim.cmd('nohlsearch') end)
-    end
+    ---@diagnostic disable-next-line: undefined-field
+    local new = vim.v.event.new_mode
+    if not vim.tbl_contains({ 'n', 'v', 'V', '' }, new) then vim.schedule_wrap(vim.cmd.nohlsearch)() end
   end,
 })
 
