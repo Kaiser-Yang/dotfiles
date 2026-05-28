@@ -2,6 +2,7 @@ local u = require('utils')
 u.gh('nvim-tree/nvim-web-devicons')
 u.gh('nvim-tree/nvim-tree.lua')
 require('nvim-tree').setup({
+  hijack_cursor = true,
   on_attach = function(buffer)
     local a = require('nvim-tree.api')
     local function opts(desc) return { desc = desc, buffer = buffer, noremap = true, silent = true, nowait = true } end
@@ -88,19 +89,7 @@ require('nvim-tree').setup({
       resize_window = false,
       window_picker = {
         exclude = {
-          filetype = {
-            'CompetiTest',
-            'notify',
-            'packer',
-            'qf',
-            'diff',
-            'fugitive',
-            'fugitiveblame',
-            'smear-cursor',
-            'snacks_notif',
-            'noice',
-            'grug-far',
-          },
+          filetype = {},
           buftype = { 'nofile', 'terminal', 'quickfix', 'prompt' },
         },
       },
