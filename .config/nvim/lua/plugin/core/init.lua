@@ -1,5 +1,3 @@
--- Nordic colorscheme
-require('plugin.core.nordic')
 vim.schedule(function()
   -- Completion engine (blink)
   require('plugin.core.blink_cmp')

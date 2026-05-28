@@ -33,6 +33,10 @@
       "src": "https://github.com/saghen/blink.pairs",
       "version": ">=0.0.0"
     },
+    "catppuccin": {
+      "rev": "8edd468af4d63212b84d69b2ddb5ffc9023ef5eb",
+      "src": "https://github.com/catppuccin/nvim"
+    },
     "competitest.nvim": {
       "rev": "b42c06ca308906f07912ba9aff015ac2c0831f85",
       "src": "https://github.com/xeluxee/competitest.nvim"
@@ -64,10 +68,6 @@
     "maplayer.nvim": {
       "rev": "1faea7aed6f071d9ae9f7e01b97fc17eb833d44a",
       "src": "https://github.com/Kaiser-Yang/maplayer.nvim"
-    },
-    "nordic.nvim": {
-      "rev": "9fb62116b891184049c50ca6ffb0d3bc100a1a6e",
-      "src": "https://github.com/AlexvZyl/nordic.nvim"
     },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",

@@ -1,3 +1,4 @@
+require('plugin.optional.colorscheme')
 vim.schedule(function()
   -- Competitive programming test runner
   require('plugin.optional.competitest')
