@@ -148,12 +148,24 @@ end
 
 local next_diagnostic = function() return vim.diagnostic.jump({ count = vim.v.count1 }) end
 local previous_diagnostic = function() return vim.diagnostic.jump({ count = -vim.v.count1 }) end
+local function first_diagnostic() return vim.diagnostic.jump({ count = -9999, wrap = false }) end
+local function last_diagnostic() return vim.diagnostic.jump({ count = 9999, wrap = false }) end
 local cprevious = function() return '<cmd>' .. u.get_cnt_prefix() .. 'cprevious<cr>' end
 local cnext = function() return '<cmd>' .. u.get_cnt_prefix() .. 'cnext<cr>' end
+local crewind = '<cmd>crewind<cr>'
+local clast = '<cmd>clast<cr>'
+local function cpfile() return '<cmd>' .. u.get_cnt_prefix() .. 'cpfile<cr>' end
+local function cnfile() return '<cmd>' .. u.get_cnt_prefix() .. 'cnfile<cr>' end
 local lprevious = function() return '<cmd>' .. u.get_cnt_prefix() .. 'lprevious<cr>' end
 local lnext = function() return '<cmd>' .. u.get_cnt_prefix() .. 'lnext<cr>' end
+local lrewind = '<cmd>lrewind<cr>'
+local llast = '<cmd>llast<cr>'
+local function lpfile() return '<cmd>' .. u.get_cnt_prefix() .. 'lpfile<cr>' end
+local function lnfile() return '<cmd>' .. u.get_cnt_prefix() .. 'lnfile<cr>' end
 local bprevious = function() return '<cmd>' .. u.get_cnt_prefix() .. 'bprevious<cr>' end
 local bnext = function() return '<cmd>' .. u.get_cnt_prefix() .. 'bnext<cr>' end
+local brewind = '<cmd>brewind<cr>'
+local blast = '<cmd>blast<cr>'
 local previous_file = function() return '<cmd>' .. u.get_cnt_prefix() .. 'previous<cr>' end
 local next_file = function() return '<cmd>' .. u.get_cnt_prefix() .. 'next<cr>' end
 
@@ -191,12 +203,24 @@ function M.nvim_tree_next_diagnostic()
 end
 function M.next_diagnostic() return u.ensure_repmove(previous_diagnostic, next_diagnostic)[2]() end
 function M.previous_diagnostic() return u.ensure_repmove(previous_diagnostic, next_diagnostic)[1]() end
+function M.last_diagnostic() return u.ensure_repmove(first_diagnostic, last_diagnostic)[2]() end
+function M.first_diagnostic() return u.ensure_repmove(first_diagnostic, last_diagnostic)[1]() end
 function M.next_qflist_item() return u.ensure_repmove(cprevious, cnext)[2]() end
 function M.previous_qflist_item() return u.ensure_repmove(cprevious, cnext)[1]() end
+function M.last_qflist_item() return u.ensure_repmove(crewind, clast)[2]() end
+function M.first_qflist_item() return u.ensure_repmove(crewind, clast)[1]() end
+function M.previous_file_qflist_item() return u.ensure_repmove(cpfile, cnfile)[2]() end
+function M.next_file_qflist_item() return u.ensure_repmove(cpfile, cnfile)[1]() end
 function M.next_loclist_item() return u.ensure_repmove(lprevious, lnext)[2]() end
 function M.previous_loclist_item() return u.ensure_repmove(lprevious, lnext)[1]() end
+function M.last_loclist_item() return u.ensure_repmove(lrewind, llast)[2]() end
+function M.first_loclist_item() return u.ensure_repmove(lrewind, llast)[1]() end
+function M.next_file_loclist_item() return u.ensure_repmove(lpfile, lnfile)[2]() end
+function M.previous_file_loclist_item() return u.ensure_repmove(lpfile, lnfile)[1]() end
 function M.next_buffer() return u.ensure_repmove(bprevious, bnext)[2]() end
 function M.previous_buffer() return u.ensure_repmove(bprevious, bnext)[1]() end
+function M.last_buffer() return u.ensure_repmove(brewind, blast)[2]() end
+function M.first_buffer() return u.ensure_repmove(brewind, blast)[1]() end
 function M.next_file() return u.ensure_repmove(previous_file, next_file)[2]() end
 function M.previous_file() return u.ensure_repmove(previous_file, next_file)[1]() end
 function M.next_conflict() return u.ensure_repmove(previous_conflict, next_conflict)[2]() end
