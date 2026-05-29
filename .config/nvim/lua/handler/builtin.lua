@@ -419,6 +419,7 @@ M.inside_square_bracket = 'i['
 M.around_tilde_bracket = 'a`'
 M.inside_tilde_bracket = 'i`'
 M.inspect = '<cmd>Inspect<cr>'
+M.back_to_normal = '<c-\\><c-n>'
 
 M.diagnostic_qflist = function()
   vim.diagnostic.setqflist()
