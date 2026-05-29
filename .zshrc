@@ -48,7 +48,7 @@ command -v nvim &>/dev/null &&
     export EDITOR=nvim
 command -v zoxide &>/dev/null &&
     eval "$(zoxide init --cmd cd zsh)"
-setup_fzf () {
+setup_fzf() {
     if ! command -v fzf &>/dev/null; then
         return
     fi
