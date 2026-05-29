@@ -23,8 +23,6 @@ vim.schedule(function()
   require('plugin.core.lualine')
   -- Global keymaps manager / layer system
   require('plugin.core.maplayer')
-  -- Better UI for vim.ui.input / vim.ui.select
-  require('plugin.core.nui')
   -- File explorer
   require('plugin.core.nvim_tree')
   -- Repeat last motion with `;` and `,`

@@ -12,6 +12,8 @@ vim.schedule(function()
   require('plugin.optional.lightbulb')
   -- Markdown viewer
   require('plugin.optional.render_markdown')
+  -- Better UI for vim.ui.input / vim.ui.select
+  require('plugin.optional.nui')
   -- Easy window resizing
   require('plugin.optional.win_resizer')
 end)
