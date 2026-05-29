@@ -181,4 +181,45 @@ end
 
 function M.get_cnt_prefix() return vim.v.count1 > 1 and vim.v.count1 or '' end
 
+--- @param insertText string
+--- @return string
+function M.doc_from_snippet(insertText)
+  local defaults = {}
+  insertText = insertText:gsub('%$%{(%d+):([^}]+)%}', function(n, default)
+    defaults[tonumber(n)] = default
+    return default
+  end)
+  insertText = insertText:gsub('%$%{(%d+)%}', function(n) return defaults[tonumber(n)] or '' end)
+  insertText = insertText:gsub('%$(%d+)', function(n) return defaults[tonumber(n)] or '' end)
+  return insertText
+end
+
+--- @param label string
+--- @param lines string|string[]
+--- @param desc string?
+function M.make_snippet_wrap(label, lines, desc)
+  if type(lines) == 'string' then lines = { lines } end
+  local insertText = table.concat(lines, '\n')
+  return function(item)
+    item = vim.deepcopy(item)
+    item.label = label
+    item.filterText = label
+    item.insertText = insertText
+    item.insertTextFormat = vim.lsp.protocol.InsertTextFormat.Snippet
+    item.kind = require('blink.cmp.types').CompletionItemKind.Snippet
+    item.detail = M.doc_from_snippet(insertText)
+    item.textEdit = nil
+    item.labelDetails = nil
+    if item.source_id == 'snippets' then
+      item.description = desc
+    else
+      item.documentation = {
+        kind = 'markdown',
+        value = desc or label,
+      }
+    end
+    return item
+  end
+end
+
 return M
