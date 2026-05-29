@@ -13,6 +13,8 @@ vim.schedule(function()
   require('plugin.core.gitsigns')
   -- Detect/guess indentation style per buffer
   require('plugin.core.guess_indent')
+  -- Lint
+  require('plugin.core.lint')
   -- Statusline
   require('plugin.core.lualine')
   -- Global keymaps manager / layer system

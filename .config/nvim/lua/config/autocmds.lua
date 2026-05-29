@@ -25,6 +25,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
     end
     if new_status == old_status then return end
     if new_status then
+      vim.b.lint = false
       vim.b.blink_pairs = false
       vim.b.conform = false
       vim.b.treesitter_foldexpr = false
@@ -43,6 +44,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
       -- Using enable here will automatically disable context for big files
       if _G.loaded['nvim-treesitter-context'] then require('treesitter-context').enable() end
     else
+      vim.b.lint = nil
       vim.b.blink_pairs = nil
       vim.b.conform = nil
       vim.b.treesitter_foldexpr = nil
@@ -351,5 +353,15 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TermOpen', {
     local r = require('handler').repmove
     vim.keymap.set({ 'n', 'x', 'o' }, '[[', r.previous_prompt, { desc = 'Prompt', buf = ev.buf })
     vim.keymap.set({ 'n', 'x', 'o' }, ']]', r.next_prompt, { desc = 'Prompt', buf = ev.buf })
+  end,
+})
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWritePost', 'InsertLeave', 'TextChanged' }, {
+  desc = 'Run linters',
+  group = _G.autocmd_group,
+  callback = function()
+    if not _G.loaded['nvim-lint'] or not u.enabled('lint') then return end
+    if require('utils').in_config_dir() and vim.bo.filetype == 'lua' then return end
+    require('lint').try_lint()
   end,
 })
