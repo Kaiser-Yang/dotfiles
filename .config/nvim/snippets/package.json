@@ -47,7 +47,7 @@
                 "path": "./python/pydoc.json"
             },
             {
-                "language": ["shellscript", "shell", "sh", "zsh"],
+                "language": ["sh", "zsh"],
                 "path": "./shell/shell.json"
             },
             {
@@ -59,7 +59,7 @@
                 "path": "./go.json"
             },
             {
-                "language": ["markdown", "rmd"],
+                "language": "markdown",
                 "path": "./markdown.json"
             }
         ]
