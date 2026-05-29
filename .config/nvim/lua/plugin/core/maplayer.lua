@@ -353,7 +353,7 @@ local opts = {
   { key = '<leader>sh', desc = 'Highlight', handler = h.telescope.highlights },
   { key = '<leader>sk', desc = 'Key Mapping', handler = h.telescope.keymaps },
   { key = '<leader>sm', desc = 'Man Page', handler = h.telescope.man_pages },
-  { key = '<leader>ss', desc = 'Picker', handler = h.telescope.pickers },
+  { key = '<leader>sS', desc = 'Picker', handler = h.telescope.pickers },
   { key = '<leader>sr', desc = 'Recent Files', handler = h.telescope.oldfiles },
   { key = '<leader>st', desc = 'Todo', handler = h.telescope.todo },
   { key = '<leader>sb', desc = 'Buffer', handler = h.telescope.buffers },
@@ -379,6 +379,9 @@ local opts = {
   { key = '<s-down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = true, expr = true },
   { key = '<s-left>', desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = true, expr = true },
   { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = true, expr = true },
+
+  -- Session
+  { key = '<leader>ss', desc = 'Session', handler = h.search_session },
 
   -- Debugger
   { key = '<m-b>', desc = 'Toggle Breakpoint', handler = h.dap.toggle_breakpoint },

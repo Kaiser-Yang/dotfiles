@@ -1,4 +1,3 @@
-auto-session
 bufferline.nvim
 img-clip.nvim
 avante.nvim
@@ -13,6 +12,5 @@ nvim-notify
 nvim-ts-autotag
 overseer.nvim
 persistent-breakpoints.nvim
-rainbow-delimiters.nvim
 vim-interestingwords
 vim-matchup

@@ -4,6 +4,10 @@
       "rev": "43dd88ad4024b1945906887521057c73d3b0d84e",
       "src": "https://github.com/stevearc/aerial.nvim"
     },
+    "auto-session": {
+      "rev": "3e145ee9af42eb6764908a1a481f53fe7f0bdbe5",
+      "src": "https://github.com/rmagatti/auto-session"
+    },
     "blink-cmp-dap": {
       "rev": "772c51ff57025b0a02fcee31d1a3bd369ae370d5",
       "src": "https://github.com/mayromr/blink-cmp-dap"

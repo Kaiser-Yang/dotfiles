@@ -66,4 +66,10 @@ function M.toggle_context()
   return true
 end
 
+function M.search_session()
+  if not _G.loaded['auto-session'] then return false end
+  require('auto-session').search()
+  return true
+end
+
 return M

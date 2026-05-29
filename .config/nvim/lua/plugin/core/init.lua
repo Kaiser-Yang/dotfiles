@@ -1,3 +1,5 @@
+-- Session
+require('plugin.core.session')
 vim.schedule(function()
   -- Completion engine (blink)
   require('plugin.core.blink_cmp')
