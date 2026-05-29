@@ -1,3 +1,5 @@
+#!/usr/bin/zsh
+
 if [[ -n "$NVIM" ]]; then
     # INFO: cause problems in nvim
     WEZTERM_SHELL_SKIP_USER_VARS=true
