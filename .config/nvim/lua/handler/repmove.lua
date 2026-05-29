@@ -168,6 +168,8 @@ local brewind = '<cmd>brewind<cr>'
 local blast = '<cmd>blast<cr>'
 local previous_file = function() return '<cmd>' .. u.get_cnt_prefix() .. 'previous<cr>' end
 local next_file = function() return '<cmd>' .. u.get_cnt_prefix() .. 'next<cr>' end
+local previous_prompt = function() return string.rep('[[', vim.v.count1) end
+local next_prompt = function() return string.rep(']]', vim.v.count1) end
 
 function M.nvim_tree_previous_git()
   if not _G.loaded['nvim-tree.lua'] then return false end
@@ -223,6 +225,8 @@ function M.last_buffer() return u.ensure_repmove(brewind, blast)[2]() end
 function M.first_buffer() return u.ensure_repmove(brewind, blast)[1]() end
 function M.next_file() return u.ensure_repmove(previous_file, next_file)[2]() end
 function M.previous_file() return u.ensure_repmove(previous_file, next_file)[1]() end
+function M.next_prompt() return u.ensure_repmove(previous_prompt, next_prompt)[2]() end
+function M.previous_prompt() return u.ensure_repmove(previous_prompt, next_prompt)[1]() end
 function M.next_conflict() return u.ensure_repmove(previous_conflict, next_conflict)[2]() end
 function M.previous_conflict() return u.ensure_repmove(previous_conflict, next_conflict)[1]() end
 function M.next_hunk() return u.ensure_repmove(previous_hunk, next_hunk)[2]() end
