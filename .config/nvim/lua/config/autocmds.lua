@@ -26,9 +26,9 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
     if new_status == old_status then return end
     if new_status then
       vim.b.blink_pairs = false
-      vim.b.conform_on_save = false
-      vim.b.treesitter_foldexpr_auto_set = false
-      vim.b.treesitter_highlight_auto_start = false
+      vim.b.conform = false
+      vim.b.treesitter_foldexpr = false
+      vim.b.treesitter_highlight = false
       for _, win in ipairs(vim.api.nvim_list_wins()) do
         if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == bufnr then
           vim.wo[win][0].foldmethod = 'manual'
@@ -44,9 +44,9 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
       if _G.loaded['nvim-treesitter-context'] then require('treesitter-context').enable() end
     else
       vim.b.blink_pairs = nil
-      vim.b.conform_on_save = nil
-      vim.b.treesitter_foldexpr_auto_set = nil
-      vim.b.treesitter_highlight_auto_start = nil
+      vim.b.conform = nil
+      vim.b.treesitter_foldexpr = nil
+      vim.b.treesitter_highlight = nil
       -- Trigger the FileType autocommand to let LSP, indentexpr, endwise and foldexpr set up
       vim.bo.filetype = vim.bo.filetype:gsub('bigfile', '')
       if _G.loaded['nvim-treesitter-context'] then require('treesitter-context').enable() end
@@ -137,7 +137,7 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = vim.schedule_wrap(function(ev)
     if not vim.api.nvim_buf_is_valid(ev.buf) then return end
     if
-      u.enabled('treesitter_highlight_auto_start')
+      u.enabled('treesitter_highlight')
       and u.treesitter_available(ev.buf, 'highlights')
       -- INFO:
       -- c, lua, markdown, help, vim and query files will be started by neovim automatically
@@ -145,7 +145,7 @@ vim.api.nvim_create_autocmd('FileType', {
     then
       vim.treesitter.start(ev.buf)
     end
-    if u.enabled('treesitter_foldexpr_auto_set') and u.treesitter_available(ev.buf, 'folds') then
+    if u.enabled('treesitter_foldexpr') and u.treesitter_available(ev.buf, 'folds') then
       vim.wo[0][0].foldmethod = 'expr'
       vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
     end
@@ -234,7 +234,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
   desc = 'Format on save',
   group = _G.autocmd_group,
   callback = function(ev)
-    if not u.enabled('conform_on_save') then return end
+    if not u.enabled('conform') then return end
     require('handler').format({ bufnr = ev.buf, async = false })
   end,
 })
