@@ -1,3 +1,8 @@
+if [[ -n "$NVIM" ]]; then
+    # INFO: cause problems in nvim
+    WEZTERM_SHELL_SKIP_USER_VARS=true
+    WEZTERM_SHELL_SKIP_CWD=true
+fi
 CONDA_PATH="/opt/miniconda3/etc/profile.d/conda.sh"
 ZSH="$HOME/.oh-my-zsh"
 ZSH_CUSTOM="$HOME/.config/zsh"
