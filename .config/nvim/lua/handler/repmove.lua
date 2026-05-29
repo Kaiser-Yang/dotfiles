@@ -10,6 +10,29 @@ local function previous_todo()
   end
   return true
 end
+
+local nvim_terminal_prompt_ns = vim.api.nvim_create_namespace('nvim.terminal.prompt')
+local function jump_to_prompt(ns, win, buf, count)
+  local row, col = unpack(vim.api.nvim_win_get_cursor(win))
+  local start = -1
+  local end_ ---@type 0|-1
+  if count > 0 then
+    start = row
+    end_ = -1
+  elseif count < 0 then
+    -- Subtract 2 because row is 1-based, but extmarks are 0-based
+    start = row - 2
+    end_ = 0
+  end
+
+  if start < 0 then return end
+
+  local extmarks = vim.api.nvim_buf_get_extmarks(buf, ns, { start, col }, end_, { limit = math.abs(count) })
+  if #extmarks > 0 then
+    local extmark = assert(extmarks[math.min(#extmarks, math.abs(count))])
+    vim.api.nvim_win_set_cursor(win, { extmark[2] + 1, extmark[3] })
+  end
+end
 local function next_todo()
   if not _G.loaded['todo-comments.nvim'] then return false end
   local cnt1 = vim.v.count1
@@ -170,8 +193,16 @@ local previous = function() return '<cmd>' .. u.get_cnt_prefix() .. 'previous<cr
 local next = function() return '<cmd>' .. u.get_cnt_prefix() .. 'next<cr>' end
 local rewind = '<cmd>rewind<cr>'
 local last = '<cmd>last<cr>'
-local previous_prompt = function() return string.rep('[[', vim.v.count1) end
-local next_prompt = function() return string.rep(']]', vim.v.count1) end
+local previous_prompt = function()
+  if vim.bo.buftype ~= 'terminal' then return false end
+  jump_to_prompt(nvim_terminal_prompt_ns, 0, vim.api.nvim_get_current_buf(), -vim.v.count1)
+  return true
+end
+local next_prompt = function()
+  if vim.bo.buftype ~= 'terminal' then return false end
+  jump_to_prompt(nvim_terminal_prompt_ns, 0, vim.api.nvim_get_current_buf(), -vim.v.count1)
+  return true
+end
 local function tprevious() return '<cmd>' .. u.get_cnt_prefix() .. 'tprevious<cr>' end
 local function tnext() return '<cmd>' .. u.get_cnt_prefix() .. 'tnext<cr>' end
 local trewind = '<cmd>trewind<cr>'

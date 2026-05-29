@@ -181,8 +181,8 @@ local opts = {
   -- Those two below do not support vim.v.count
   { key = '[t', mode = 'nox', desc = 'Todo', handler = h.repmove.previous_todo },
   { key = ']t', mode = 'nox', desc = 'Todo', handler = h.repmove.next_todo },
-  { key = '[[', mode = 'nox', desc = 'Block Start', handler = h.repmove.previous_block_start, priority = 0 },
-  { key = ']]', mode = 'nox', desc = 'Block Start', handler = h.repmove.next_block_start, priority = 0 },
+  { key = '[[', mode = 'nox', desc = 'Block Start', handler = h.repmove.previous_block_start },
+  { key = ']]', mode = 'nox', desc = 'Block Start', handler = h.repmove.next_block_start },
   { key = '[]', mode = 'nox', desc = 'Block End', handler = h.repmove.previous_block_end },
   { key = '][', mode = 'nox', desc = 'Block End', handler = h.repmove.next_block_end },
   { key = '[|', mode = 'nox', desc = 'Indent Start', handler = h.repmove.indent_top },
@@ -203,22 +203,6 @@ local opts = {
   { key = ']Q', desc = 'Last Qflist Item', handler = h.repmove.last_qflist_item },
   { key = '[<c-q>', desc = 'File Qflist Item', handler = h.repmove.previous_file_qflist_item },
   { key = ']<c-q>', desc = 'File Qflist Item', handler = h.repmove.next_file_qflist_item },
-  {
-    key = '[[',
-    mode = 'nox',
-    desc = 'Prompt',
-    handler = h.repmove.previous_prompt,
-    condition = function() return vim.bo.buftype == 'terminal' end,
-    priority = 1,
-  },
-  {
-    key = ']]',
-    mode = 'nox',
-    desc = 'Prompt',
-    handler = h.repmove.next_prompt,
-    condition = function() return vim.bo.buftype == 'terminal' end,
-    priority = 1,
-  },
 
   -- Swap
   { key = '<m-s>pa', desc = 'Argument', handler = h.treesitter.swap_with_previous_parameter },

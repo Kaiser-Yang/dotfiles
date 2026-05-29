@@ -343,3 +343,13 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
     end
   end,
 })
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('TermOpen', {
+  group = _G.autocmd_group,
+  desc = 'Repmove key mappings for terminal',
+  callback = function(ev)
+    local r = require('handler').repmove
+    vim.keymap.set({ 'n', 'x', 'o' }, '[[', r.previous_prompt, { desc = 'Prompt', buf = ev.buf })
+    vim.keymap.set({ 'n', 'x', 'o' }, ']]', r.next_prompt, { desc = 'Prompt', buf = ev.buf })
+  end,
+})
