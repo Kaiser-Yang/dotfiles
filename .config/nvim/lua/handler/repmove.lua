@@ -172,6 +172,12 @@ local rewind = '<cmd>rewind<cr>'
 local last = '<cmd>last<cr>'
 local previous_prompt = function() return string.rep('[[', vim.v.count1) end
 local next_prompt = function() return string.rep(']]', vim.v.count1) end
+local function tprevious() return '<cmd>' .. u.get_cnt_prefix() .. 'tprevious<cr>' end
+local function tnext() return '<cmd>' .. u.get_cnt_prefix() .. 'tnext<cr>' end
+local trewind = '<cmd>trewind<cr>'
+local tlast = '<cmd>tlast<cr>'
+local function ptprevious() return '<cmd>' .. u.get_cnt_prefix() .. 'ptprevious<cr>' end
+local function ptnext() return '<cmd>' .. u.get_cnt_prefix() .. 'ptnext<cr>' end
 
 function M.nvim_tree_previous_git()
   if not _G.loaded['nvim-tree.lua'] then return false end
@@ -221,6 +227,12 @@ function M.last_loclist_item() return u.ensure_repmove(lrewind, llast)[2]() end
 function M.first_loclist_item() return u.ensure_repmove(lrewind, llast)[1]() end
 function M.next_file_loclist_item() return u.ensure_repmove(lpfile, lnfile)[2]() end
 function M.previous_file_loclist_item() return u.ensure_repmove(lpfile, lnfile)[1]() end
+function M.next_tag() return u.ensure_repmove(tprevious, tnext)[2]() end
+function M.previous_tag() return u.ensure_repmove(tprevious, tnext)[1]() end
+function M.last_tag() return u.ensure_repmove(trewind, tlast)[2]() end
+function M.first_tag() return u.ensure_repmove(trewind, tlast)[1]() end
+function M.preview_next_tag() return u.ensure_repmove(ptprevious, ptnext)[2]() end
+function M.preview_previous_tag() return u.ensure_repmove(ptprevious, ptnext)[1]() end
 function M.next_buffer() return u.ensure_repmove(bprevious, bnext)[2]() end
 function M.previous_buffer() return u.ensure_repmove(bprevious, bnext)[1]() end
 function M.last_buffer() return u.ensure_repmove(brewind, blast)[2]() end
