@@ -26,7 +26,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
     if new_status == old_status then return end
     if new_status then
       vim.b.lint = false
-      vim.b.blink_pairs = false
+      vim.b.pairs = false
       vim.b.conform = false
       vim.b.treesitter_foldexpr = false
       vim.b.treesitter_highlight = false
@@ -45,7 +45,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
       if _G.loaded['nvim-treesitter-context'] then require('treesitter-context').enable() end
     else
       vim.b.lint = nil
-      vim.b.blink_pairs = nil
+      vim.b.pairs = nil
       vim.b.conform = nil
       vim.b.treesitter_foldexpr = nil
       vim.b.treesitter_highlight = nil
