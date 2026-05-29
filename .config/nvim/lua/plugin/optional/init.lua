@@ -4,8 +4,6 @@ vim.schedule(function()
   require('plugin.optional.competitest')
   -- Database client (vim-dadbod)
   require('plugin.optional.dadbod')
-  -- Debug Adapter Protocol (DAP) integration
-  require('plugin.optional.dap')
   -- Winbar breadcrumbs
   require('plugin.optional.dropbar')
   -- LSP status UI

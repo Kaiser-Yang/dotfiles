@@ -9,6 +9,8 @@ vim.schedule(function()
   require('plugin.core.blink_pairs')
   -- Code formatter
   require('plugin.core.conform')
+  -- Debug Adapter Protocol (DAP) integration
+  require('plugin.core.dap')
   -- Auto-insert `end` for some languages
   require('plugin.core.endwise')
   -- Git signs in the gutter + hunk actions (per buffer)
