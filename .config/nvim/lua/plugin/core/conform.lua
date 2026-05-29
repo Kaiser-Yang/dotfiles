@@ -7,7 +7,7 @@ require('conform').setup({
     c = { 'clang-format' },
     cpp = { 'clang-format' },
     go = { 'goimports' },
-    json = { 'jq' },
+    json = { 'prettier' },
     lua = { 'stylua' },
     markdown = { 'prettier', 'cbfmt' },
     python = { 'isort', 'black' },
