@@ -9,7 +9,7 @@ require('conform').setup({
     go = { 'goimports' },
     json = { 'prettier' },
     lua = { 'stylua' },
-    markdown = { 'prettier', 'cbfmt' },
+    markdown = { 'prettier' },
     python = { 'isort', 'black' },
     sh = { 'shfmt' },
     zsh = { 'shfmt' },
