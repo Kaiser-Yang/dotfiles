@@ -233,4 +233,13 @@ end
 
 function M.grug_inst() return require('grug-far').get_instance(vim.api.nvim_get_current_buf()) end
 
+-- disable global shada; create separate shadafile for each workspace
+-- ensures project-scoped jumplist, marks, etc.
+--—@return string?
+function M.shadafile()
+  local dir = vim.fs.root(0, { '.git' }) or vim.fn.getcwd()
+  local workspace_uid = vim.fs.basename(dir) .. '_' .. vim.fn.sha256(dir)
+  return vim.fn.stdpath('state') .. '/shada/' .. workspace_uid .. '.shada'
+end
+
 return M
