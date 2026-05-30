@@ -83,6 +83,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
   end,
 })
 
+local force = false
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
   desc = 'Disable hlsearch when leaving normal mode',
   group = _G.autocmd_group,
@@ -90,7 +91,14 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
     if u.in_macro_executing() then return end
     ---@diagnostic disable-next-line: undefined-field
     local new = vim.v.event.new_mode
-    if new ~= 'n' then vim.schedule_wrap(vim.cmd.nohlsearch)() end
+    local clear = false
+    if new == 'c' then
+      if vim.fn.getcmdtype() == ':' then force = true end
+    elseif new ~= 'n' or force then
+      clear = true
+      if new == 'n' then force = false end
+    end
+    if clear then vim.schedule_wrap(vim.cmd.nohlsearch)() end
   end,
 })
 
