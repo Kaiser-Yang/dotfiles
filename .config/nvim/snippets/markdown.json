@@ -23,41 +23,6 @@
         ],
         "description": "github io page template"
     },
-    "header 1": {
-        "prefix": "h1",
-        "body": ["# ${0}"],
-        "description": "Add header level 1"
-    },
-    "header 2": {
-        "prefix": "h2",
-        "body": ["## ${0}"],
-        "description": "Add header level 2"
-    },
-    "header 3": {
-        "prefix": "h3",
-        "body": ["### ${0}"],
-        "description": "Add header level 3"
-    },
-    "header 4": {
-        "prefix": "h4",
-        "body": ["#### ${0}"],
-        "description": "Add header level 4"
-    },
-    "header 5": {
-        "prefix": "h5",
-        "body": ["##### ${0}"],
-        "description": "Add header level 5"
-    },
-    "header 6": {
-        "prefix": "h6",
-        "body": ["###### ${0}"],
-        "description": "Add header level 6"
-    },
-    "Links": {
-        "prefix": ["l", "link"],
-        "body": ["[${1:text}](${2:url}) ${0}"],
-        "description": "Add links"
-    },
     "URLS": {
         "prefix": ["u", "url"],
         "body": ["<${1}> ${0}"],
@@ -67,21 +32,6 @@
         "prefix": "img",
         "body": ["![${1:alt text}](${2:path}) ${0}"],
         "description": "Add images"
-    },
-    "Insert strikethrough": {
-        "prefix": "strikethrough",
-        "body": "~~${1}~~ ${0}",
-        "description": "Insert strikethrough"
-    },
-    "Insert bold text": {
-        "prefix": ["bold", "b"],
-        "body": "**${1}** $0",
-        "description": "Insert bold text"
-    },
-    "Insert italic text": {
-        "prefix": ["i", "italic"],
-        "body": "*${1}* $0",
-        "description": "Insert italic text"
     },
     "Insert bold and italic text": {
         "prefix": ["bold and italic", "bi"],
@@ -93,16 +43,6 @@
         "body": "> ${1}",
         "description": "Insert quoted text"
     },
-    "Insert code": {
-        "prefix": "code",
-        "body": "`${1}` $0",
-        "description": "Insert code"
-    },
-    "Insert code block": {
-        "prefix": "codeblock",
-        "body": ["```${1:language}", "$0", "```"],
-        "description": "Insert fenced code block"
-    },
     "Insert unordered list": {
         "prefix": "unordered list",
         "body": ["- ${1:first}", "- ${2:second}", "- ${3:third}", "$0"],
@@ -112,11 +52,6 @@
         "prefix": "ordered list",
         "body": ["1. ${1:first}", "2. ${2:second}", "3. ${3:third}", "$0"],
         "description": "Insert ordered list"
-    },
-    "Insert horizontal rule": {
-        "prefix": "horizontal rule",
-        "body": "----------\n",
-        "description": "Insert horizontal rule"
     },
     "Insert task list": {
         "prefix": "task",
