@@ -219,6 +219,62 @@ local function tabnext()
   return true
 end
 
+local function grug_next_input()
+  if not _G.loaded['grug-far.nvim'] or vim.bo.filetype ~= 'grug-far' then return false end
+  u.grug_inst():goto_next_input()
+  return true
+end
+
+local function grug_previous_input()
+  if not _G.loaded['grug-far.nvim'] or vim.bo.filetype ~= 'grug-far' then return false end
+  u.grug_inst():goto_prev_input()
+  return true
+end
+
+local function grug_apply_then_next()
+  if not _G.loaded['grug-far.nvim'] or vim.bo.filetype ~= 'grug-far' then return false end
+  u.grug_inst():apply_next_change()
+  return true
+end
+
+local function grug_apply_then_previous()
+  if not _G.loaded['grug-far.nvim'] or vim.bo.filetype ~= 'grug-far' then return false end
+  u.grug_inst():apply_prev_change()
+  return true
+end
+
+local function grug_sync_then_next()
+  if not _G.loaded['grug-far.nvim'] or vim.bo.filetype ~= 'grug-far' then return false end
+  u.grug_inst():apply_next_change({ open_location = false, remove_synced = false, notify = true })
+  return true
+end
+
+local function grug_sync_then_previous()
+  if not _G.loaded['grug-far.nvim'] or vim.bo.filetype ~= 'grug-far' then return false end
+  u.grug_inst():apply_prev_change({ open_location = false, remove_synced = false, notify = true })
+  return true
+end
+
+local function grug_open_next()
+  local inst = u.grug_inst()
+  local location = inst:goto_next_match()
+  if location then
+    inst:open_location()
+    return true
+  end
+  return false
+end
+
+local function grug_open_previous()
+  local inst = u.grug_inst()
+  local location = inst:goto_prev_match()
+  if location then
+    inst:open_location()
+    return true
+  end
+  return false
+end
+
 function M.nvim_tree_previous_git()
   if not _G.loaded['nvim-tree.lua'] then return false end
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
@@ -354,5 +410,13 @@ function M.previous_call_end() return u.ensure_repmove(previous_call_end, next_c
 function M.previous_plugin() return u.ensure_repmove(previous_plugin, next_plugin)[1]() end
 function M.previous_tab() return u.ensure_repmove(tabprevious, tabnext)[1]() end
 function M.next_tab() return u.ensure_repmove(tabprevious, tabnext)[2]() end
+function M.grug_next_input() return u.ensure_repmove(grug_previous_input, grug_next_input)[2]() end
+function M.grug_previous_input() return u.ensure_repmove(grug_previous_input, grug_next_input)[1]() end
+function M.grug_apply_then_next() return u.ensure_repmove(grug_apply_then_previous, grug_apply_then_next)[2]() end
+function M.grug_apply_then_previous() return u.ensure_repmove(grug_apply_then_previous, grug_apply_then_next)[1]() end
+function M.grug_sync_then_next() return u.ensure_repmove(grug_sync_then_previous, grug_sync_then_next)[2]() end
+function M.grug_sync_then_previous() return u.ensure_repmove(grug_sync_then_previous, grug_sync_then_next)[1]() end
+function M.grug_open_next() return u.ensure_repmove(grug_open_previous, grug_open_next)[2]() end
+function M.grug_open_previous() return u.ensure_repmove(grug_open_previous, grug_open_next)[1]() end
 
 return M

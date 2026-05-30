@@ -350,7 +350,7 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
   desc = 'Set winfixbuf for some windows',
   group = _G.autocmd_group,
   callback = function(ev)
-    if vim.tbl_contains({ 'dap-view', 'NvimTree', 'CompetiTest' }, vim.bo[ev.buf].filetype) then
+    if vim.tbl_contains({ 'grug-far', 'dap-view', 'NvimTree', 'CompetiTest' }, vim.bo[ev.buf].filetype) then
       vim.wo[0][0].winfixbuf = true
     end
   end,
@@ -376,5 +376,17 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWritePost', 'InsertLeave', 
       ignore_errors = true,
       filter = ev.event ~= 'BufWritePost' and 'stdin' or nil,
     })
+  end,
+})
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufEnter', {
+  group = _G.autocmd_group,
+  desc = 'Set key mappings for floating windows',
+  callback = function()
+    local win = vim.api.nvim_get_current_win()
+    local config = vim.api.nvim_win_get_config(win)
+    if config.relative == '' then return end
+    local buf = vim.api.nvim_win_get_buf(win)
+    vim.keymap.set('n', 'q', '<c-w>q', { desc = 'Quit', buf = buf })
   end,
 })

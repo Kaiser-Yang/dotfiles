@@ -5,6 +5,7 @@ local M = {
   completion = require('handler.completion'),
   dap = require('handler.dap'),
   git = require('handler.git'),
+  grug_far = require('handler.grug_far'),
   indent = require('handler.indent'),
   lsp = require('handler.lsp'),
   markdown = require('handler.markdown'),

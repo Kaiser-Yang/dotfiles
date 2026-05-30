@@ -61,6 +61,10 @@
       "rev": "dd3f588bacbeb041be6facf1742e42097f62165d",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
+    "grug-far.nvim": {
+      "rev": "5506c2f59dc9ab2ed6c233585412b24d31d51521",
+      "src": "https://github.com/MagicDuck/grug-far.nvim"
+    },
     "guess-indent.nvim": {
       "rev": "84a4987ff36798c2fc1169cbaff67960aed9776f",
       "src": "https://github.com/NMAC427/guess-indent.nvim"
