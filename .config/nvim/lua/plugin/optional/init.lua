@@ -2,6 +2,8 @@ require('plugin.optional.colorscheme')
 vim.schedule(function()
   -- Indent guides (indent lines)
   require('plugin.optional.blink_indent')
+  -- Color Highlight
+  require('plugin.optional.color')
   -- Competitive programming test runner
   require('plugin.optional.competitest')
   -- Database client (vim-dadbod)

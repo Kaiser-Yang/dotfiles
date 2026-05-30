@@ -89,6 +89,10 @@
       "rev": "fbdb48c2ed45f4a8293d0d483f7730d24467ccb6",
       "src": "https://github.com/theHamsta/nvim-dap-virtual-text"
     },
+    "nvim-highlight-colors": {
+      "rev": "e4c7af0211866162d999ce0bdd6a029302e19139",
+      "src": "https://github.com/brenoprata10/nvim-highlight-colors"
+    },
     "nvim-lightbulb": {
       "rev": "b8c08c5f3b1586dfcdd9f34d7d54fe6982e01ac9",
       "src": "https://github.com/kosayoda/nvim-lightbulb"

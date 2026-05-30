@@ -1,5 +1,6 @@
 vim.loader.enable()
 vim.g.lint = true
+vim.g.color = true
 vim.g.conform = true
 vim.g.treesitter_highlight = true
 vim.g.treesitter_foldexpr = true
