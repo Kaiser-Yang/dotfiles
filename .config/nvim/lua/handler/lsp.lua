@@ -85,10 +85,65 @@ function M.dynamic_workspace_symbols()
   end
 end
 
-M.hover = vim.lsp.buf.hover
-M.rename = vim.lsp.buf.rename
-M.code_action = vim.lsp.buf.code_action
-M.declaration = vim.lsp.buf.declaration
-M.codelens_run = vim.lsp.codelens.run
+M.hover = function()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+  if #clients == 0 then return false end
+  for _, client in ipairs(clients) do
+    if client and client:supports_method('textDocument/hover', bufnr) then
+      vim.lsp.buf.hover()
+      return true
+    end
+  end
+  return false
+end
+
+M.rename = function()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+  for _, client in ipairs(clients) do
+    if client:supports_method('textDocument/rename', bufnr) then
+      vim.lsp.buf.rename()
+      return true
+    end
+  end
+  return false
+end
+
+M.code_action = function()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+  for _, client in ipairs(clients) do
+    if client:supports_method('textDocument/codeAction', bufnr) then
+      vim.lsp.buf.code_action()
+      return true
+    end
+  end
+  return false
+end
+
+M.declaration = function()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+  for _, client in ipairs(clients) do
+    if client:supports_method('textDocument/declaration', bufnr) then
+      vim.lsp.buf.declaration()
+      return true
+    end
+  end
+  return false
+end
+
+M.codelens_run = function()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+  for _, client in ipairs(clients) do
+    if client:supports_method('textDocument/codeLens', bufnr) then
+      vim.lsp.codelens.run()
+      return true
+    end
+  end
+  return false
+end
 
 return M

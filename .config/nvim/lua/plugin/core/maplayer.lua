@@ -77,7 +77,7 @@ local opts = {
   -- INFO:
   -- By default, "tagfunc" is set whne "LspAttach",
   -- "<C-]>", "<C-W>]", and "<C-W>}" will work, you can use them to go to definition
-  { key = 'K', desc = 'Hover', handler = h.lsp.hover },
+  { key = 'K', desc = 'Hover', handler = h.lsp.hover, fallback = true },
   { key = 'grn', desc = 'Rename', handler = h.lsp.rename },
   { key = 'gra', desc = 'Code Action', handler = h.lsp.code_action },
   { key = 'grD', desc = 'Declaration', handler = h.lsp.declaration },
