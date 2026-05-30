@@ -94,7 +94,7 @@ local function do_operation(opts)
   return false
 end
 
-M.copy_to = function()
+M.copy = function()
   return do_operation({
     cmd = { 'cp', '-R' },
     title = 'Light Boat',
@@ -105,13 +105,13 @@ M.copy_to = function()
   })
 end
 
-M.rename_full = function()
+M.move = function()
   return do_operation({
     cmd = { 'mv' },
     title = 'NvimTree',
     action_verb_past = 'Moved',
     action_verb_lower = 'move',
-    prompt_single = 'Rename',
+    prompt_single = 'Move to',
     prompt_multi = 'Move to directory:',
   })
 end
