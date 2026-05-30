@@ -35,6 +35,15 @@ end
 
 local opts = {
   defaults = {
+    get_selection_window = function(_, _)
+      local cur_win = vim.api.nvim_get_current_win()
+      if not vim.wo[cur_win].winfixbuf then return cur_win end
+      -- Find the first non fixed win
+      for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        if not vim.wo[win].winfixbuf then return win end
+      end
+      return cur_win
+    end,
     mappings = { n = {}, i = {} },
     dynamic_preview_title = true,
     sorting_strategy = 'ascending',
