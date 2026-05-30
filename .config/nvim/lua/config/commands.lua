@@ -1,5 +1,43 @@
 vim.schedule(function()
   local u = require('utils')
+  local function pack_command_handler(method, args)
+    local plugins = {}
+    if args.args and args.args ~= '' then
+      plugins = vim.split(args.args, '%s+', { trimempty = true })
+      for _, p in ipairs(plugins) do
+        if not _G.loaded[p] then
+          vim.notify(
+            'Unknown plugin: ' .. p,
+            vim.log.levels.ERROR,
+            { title = 'Pack' .. method:gsub('^%l', string.upper) }
+          )
+          return
+        end
+      end
+    else
+      plugins = vim.tbl_keys(_G.loaded)
+    end
+    local opts = args.bang and { force = true } or {}
+    if method == 'update' then
+      vim.pack.update(plugins, opts)
+    elseif method == 'del' then
+      vim.pack.del(plugins, opts)
+    end
+  end
+
+  local function pack_complete(_, CmdLine)
+    local all_plugins = vim.tbl_keys(_G.loaded)
+    local used = {}
+    local after_cmd = CmdLine:gsub('^%S+%s*', '')
+    for _, token in ipairs(vim.split(after_cmd, '%s+', { trimempty = true })) do
+      used[token] = true
+    end
+    local candidates = {}
+    for _, plugin in ipairs(all_plugins) do
+      if not used[plugin] then table.insert(candidates, plugin) end
+    end
+    return candidates
+  end
   local command = {
     DetectConflictAndLoad = {
       callback = function(args)
@@ -159,40 +197,12 @@ vim.schedule(function()
       },
     },
     PackUpdate = {
-      callback = function(args)
-        local plugins = {}
-        if args.args and args.args ~= '' then
-          plugins = vim.split(args.args, '%s+', { trimempty = true })
-          for _, p in ipairs(plugins) do
-            if not _G.loaded[p] then
-              vim.notify('Unknown plugin: ' .. p, vim.log.levels.ERROR, { title = 'PackUpdate' })
-              return
-            end
-          end
-        else
-          plugins = nil
-        end
-        local opts = args.bang and { force = true } or {}
-        vim.pack.update(plugins, opts)
-      end,
-      opts = {
-        nargs = '*',
-        bang = true,
-        bar = true,
-        complete = function(_, CmdLine)
-          local all_plugins = vim.tbl_keys(_G.loaded)
-          local used = {}
-          local after_cmd = CmdLine:gsub('^%S+%s*', '')
-          for _, token in ipairs(vim.split(after_cmd, '%s+', { trimempty = true })) do
-            used[token] = true
-          end
-          local candidates = {}
-          for _, plugin in ipairs(all_plugins) do
-            if not used[plugin] then table.insert(candidates, plugin) end
-          end
-          return candidates
-        end,
-      },
+      callback = function(args) pack_command_handler('update', args) end,
+      opts = { nargs = '*', bang = true, bar = true, complete = pack_complete },
+    },
+    PackDel = {
+      callback = function(args) pack_command_handler('del', args) end,
+      opts = { nargs = '*', bang = true, bar = true, complete = pack_complete },
     },
   }
   for name, c in pairs(command) do
