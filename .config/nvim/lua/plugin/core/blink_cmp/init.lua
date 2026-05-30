@@ -4,11 +4,16 @@ u.gh('saghen/blink.lib')
 u.gh('saghen/blink.cmp')
 
 local function default_sources()
-  local res = { 'snippets', 'path', 'buffer', 'dictionary' }
+  local res = {}
   local sql_file = vim.tbl_contains({ 'sql', 'mysql', 'plsql' }, vim.bo.filetype)
-  if sql_file then table.insert(res, 'dadbod') end
-  if not sql_file then table.insert(res, 'lsp') end
-  if vim.bo.filetype == 'dap-repl' then table.insert(res, 'dap') end
+  if sql_file then
+    table.insert(res, 'dadbod')
+  elseif vim.bo.filetype == 'dap-repl' then
+    table.insert(res, 'dap')
+  else
+    table.insert(res, 'lsp')
+  end
+  vim.list_extend(res, { 'snippets', 'path', 'dictionary', 'buffer' })
   return res
 end
 
@@ -21,17 +26,11 @@ local blink_cmp_unique_priority = function(ctx)
 end
 
 require('blink.cmp').setup({
+  snippets = { score_offset = 0 },
   sources = {
     default = default_sources,
     providers = {
       lsp = {
-        transform_items = function(_, items)
-          -- Remove keywords
-          return vim.tbl_filter(
-            function(item) return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword end,
-            items
-          )
-        end,
         fallbacks = {},
       },
       path = {
@@ -44,20 +43,22 @@ require('blink.cmp').setup({
         },
         fallbacks = {},
       },
-      snippets = { name = 'Snip' },
+      snippets = {
+        name = 'Snip',
+        score_offset = 0,
+      },
       cmdline = { name = 'CMD' },
       buffer = {
         name = 'Buf',
-        score_offset = -13,
         get_bufnrs = function()
           return vim.tbl_filter(
             function(bufnr) return vim.bo[bufnr].filetype == 'help' or vim.bo[bufnr].buftype == '' end,
             vim.api.nvim_list_bufs()
           )
         end,
-        transform_items = function(context, items)
+        transform_items = function(ctx, items)
           -- Do not convert case when searching
-          if context.mode == 'cmdline' then return items end
+          if ctx.mode == 'cmdline' then return items end
           local out = {}
           for _, item in ipairs(items) do
             table.insert(out, vim.deepcopy(item))
@@ -76,9 +77,8 @@ require('blink.cmp').setup({
       dictionary = {
         name = 'Dict',
         module = 'blink-cmp-dictionary',
-        min_keyword_length = 3,
+        min_keyword_length = 1,
         opts = { dictionary_files = { vim.fn.stdpath('config') .. '/dict/en_dict.txt' } },
-        score_offset = -16,
       },
       dadbod = {
         name = 'Dadbod',
@@ -101,7 +101,9 @@ require('blink.cmp').setup({
         padding = 0,
         align_to = 'cursor',
         columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 }, { 'source_name' } },
-        components = { source_name = { text = function(ctx) return '[' .. ctx.source_name .. ']' end } },
+        components = {
+          source_name = { text = function(ctx) return '[' .. ctx.source_name .. ']' end },
+        },
       },
     },
     documentation = { auto_show = true, auto_show_delay_ms = vim.o.updatetime },
@@ -127,6 +129,7 @@ require('blink.cmp.completion.list').show = function(ctx, items_by_source)
   end
   return original(ctx, items_by_source)
 end
+
 -- After "blink.cmp" loads, we can enable LSP servers
 local lsp_path = vim.fn.stdpath('config')
 if lsp_path:sub(-1) ~= '/' then lsp_path = lsp_path .. '/' end
