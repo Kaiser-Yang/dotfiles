@@ -28,6 +28,8 @@ end
 local k = require('blink.cmp.types').CompletionItemKind
 local lsp_extra = {
 }
+local snippets_trigger_characters = {
+}
 require('blink.cmp').setup({
   snippets = { score_offset = 0 },
   sources = {
@@ -90,6 +92,9 @@ require('blink.cmp').setup({
             sh = { 'shelldoc' },
             zsh = { 'shelldoc' },
           },
+        },
+        override = {
+          get_trigger_characters = function() return snippets_trigger_characters[vim.bo.filetype] or {} end,
         },
       },
       cmdline = { name = 'CMD' },
