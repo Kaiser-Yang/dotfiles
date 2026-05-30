@@ -77,6 +77,8 @@ local opts = {
     grep_string = { additional_args = additional_args },
     find_files = { find_command = find_command },
     oldfiles = { prompt_title = 'Recent Files' },
+    help_tags = { mappings = {} },
+    man_pages = { mappings = {} },
   },
   extensions = {
     live_grep_args = {
@@ -146,6 +148,16 @@ opts.defaults.mappings.i = {
 }
 opts.defaults.mappings.n = vim.tbl_deep_extend('error', opts.defaults.mappings.n, insert_and_normal)
 opts.defaults.mappings.i = vim.tbl_deep_extend('error', opts.defaults.mappings.i, insert_and_normal)
+-- INFO:
+-- See: https://github.com/nvim-telescope/telescope.nvim/issues/2940
+local special_insert_and_normal = {
+  ['<cr>'] = { a.select_default, type = 'action', opts = { desc = 'Select' } },
+  ['<c-t>'] = { a.select_tab, type = 'action', opts = { desc = 'Select Tab' } },
+}
+opts.pickers.help_tags.mappings.n = special_insert_and_normal
+opts.pickers.help_tags.mappings.i = special_insert_and_normal
+opts.pickers.man_pages.mappings.n = special_insert_and_normal
+opts.pickers.man_pages.mappings.i = special_insert_and_normal
 t.setup(opts)
 t.load_extension('fzf')
 t.load_extension('live_grep_args')
