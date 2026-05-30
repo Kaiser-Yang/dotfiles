@@ -28,6 +28,8 @@ end
 local k = require('blink.cmp.types').CompletionItemKind
 local lsp_extra = {
 }
+local snippets_extra = {
+}
 local snippets_trigger_characters = {
 }
 require('blink.cmp').setup({
@@ -81,6 +83,14 @@ require('blink.cmp').setup({
             item.detail = u.doc_from_snippet(item.insertText)
             return item
           end, items)
+          local ft_extra = snippets_extra[vim.bo.filetype] or {}
+          for _, snippet in ipairs(ft_extra) do
+            if type(snippet) == 'function' then
+              table.insert(items, snippet())
+            elseif type(snippet) == 'table' then
+              table.insert(items, snippet)
+            end
+          end
           return items
         end,
         opts = {
