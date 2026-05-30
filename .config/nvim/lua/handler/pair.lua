@@ -74,6 +74,8 @@ local function blink_pairs(keycode)
       [vim.keycode('<bs>')] = ops.backspace(all_rules),
       [vim.keycode('<cr>')] = ops.enter(all_rules),
       [vim.keycode('<space>')] = ops.space(all_rules),
+      -- INFO:
+      -- the implementation for those two is not so good
       [vim.keycode('<m-e>')] = wrap('fwd'),
       [vim.keycode('<m-E>')] = wrap('rev'),
     }
