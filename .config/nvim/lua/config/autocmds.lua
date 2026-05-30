@@ -142,8 +142,8 @@ vim.api.nvim_create_autocmd('FileType', {
       u.enabled('treesitter_highlight')
       and u.treesitter_available(ev.buf, 'highlights')
       -- INFO:
-      -- c, lua, markdown, help, vim and query files will be started by neovim automatically
-      and not vim.tbl_contains({ 'c', 'lua', 'markdown', 'help', 'vim', 'query' }, vim.bo[ev.buf].filetype)
+      -- lua, markdown, help and query files will be started by neovim automatically
+      and not vim.tbl_contains({ 'lua', 'markdown', 'help', 'query' }, vim.bo[ev.buf].filetype)
     then
       vim.treesitter.start(ev.buf)
     end
