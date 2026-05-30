@@ -369,7 +369,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWritePost', 'InsertLeave', 
   group = _G.autocmd_group,
   callback = function()
     if not _G.loaded['nvim-lint'] or not u.enabled('lint') then return end
-    if require('utils').in_config_dir() and vim.bo.filetype == 'lua' then return end
+    if (u.in_config_dir() or u.in_plugin_dir()) and vim.bo.filetype == 'lua' then return end
     require('lint').try_lint()
   end,
 })

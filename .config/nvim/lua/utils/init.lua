@@ -14,6 +14,15 @@ function M.in_config_dir()
   return false
 end
 
+function M.in_plugin_dir()
+  local paths = { vim.fn.expand('%:p'), vim.fn.getcwd() }
+  local plugin_dir = M.plugin_path()
+  for _, path in ipairs(paths) do
+    if path:sub(1, #plugin_dir) == plugin_dir then return true end
+  end
+  return false
+end
+
 function M.get(v, ...)
   if type(v) == 'function' then return v(...) end
   return v
