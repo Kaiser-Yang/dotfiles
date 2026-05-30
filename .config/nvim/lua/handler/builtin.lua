@@ -452,4 +452,6 @@ function M.jump_list_wrap(key, cnt)
   end
 end
 
+function M.select_tab(target) return '<cmd>' .. (target or u.get_cnt_prefix()) .. 'tabnext<cr>' end
+
 return M
