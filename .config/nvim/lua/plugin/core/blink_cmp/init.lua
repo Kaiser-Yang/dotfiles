@@ -78,6 +78,7 @@ require('blink.cmp').setup({
       cmdline = { name = 'CMD' },
       buffer = {
         name = 'Buf',
+        score_offset = -13,
         get_bufnrs = function()
           return vim.tbl_filter(
             function(bufnr) return vim.bo[bufnr].filetype == 'help' or vim.bo[bufnr].buftype == '' end,
@@ -105,6 +106,7 @@ require('blink.cmp').setup({
       dictionary = {
         name = 'Dict',
         module = 'blink-cmp-dictionary',
+        score_offset = -16,
         min_keyword_length = 1,
         opts = { dictionary_files = { vim.fn.stdpath('config') .. '/dict/en_dict.txt' } },
       },
