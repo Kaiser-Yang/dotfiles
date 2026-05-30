@@ -367,9 +367,12 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TermOpen', {
 vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWritePost', 'InsertLeave', 'TextChanged' }, {
   desc = 'Run linters',
   group = _G.autocmd_group,
-  callback = function()
+  callback = function(ev)
     if not _G.loaded['nvim-lint'] or not u.enabled('lint') then return end
     if (u.in_config_dir() or u.in_plugin_dir()) and vim.bo.filetype == 'lua' then return end
-    require('lint').try_lint()
+    require('lint').try_lint(nil, {
+      ignore_errors = true,
+      filter = ev.event ~= 'BufWritePost' and 'stdin' or nil,
+    })
   end,
 })
