@@ -25,6 +25,9 @@ local blink_cmp_unique_priority = function(ctx)
   end
 end
 
+local k = require('blink.cmp.types').CompletionItemKind
+local lsp_extra = {
+}
 require('blink.cmp').setup({
   snippets = { score_offset = 0 },
   sources = {
@@ -33,8 +36,22 @@ require('blink.cmp').setup({
       lsp = {
         transform_items = function(_, items)
           local res = {}
+          local ft_extra = lsp_extra[vim.bo.filetype] or {}
           for _, item in ipairs(items) do
             if item.kind == k.Snippet then item.detail = u.doc_from_snippet(item.insertText) end
+            for label, label_or_map in pairs(ft_extra[item.kind] or {}) do
+              if item.label == label then
+                if type(label_or_map) == 'function' then label_or_map = { label_or_map } end
+                if type(label_or_map) == 'string' then
+                  item.label = label_or_map
+                elseif type(label_or_map) == 'table' then
+                  item = vim.tbl_map(function(map) return map(item) end, label_or_map)
+                elseif label_or_map == false then
+                  item = nil
+                end
+                break
+              end
+            end
             if item then
               if not item[1] then item = { item } end
               vim.list_extend(res, item)
