@@ -209,6 +209,15 @@ local trewind = '<cmd>trewind<cr>'
 local tlast = '<cmd>tlast<cr>'
 local function ptprevious() return '<cmd>' .. u.get_cnt_prefix() .. 'ptprevious<cr>' end
 local function ptnext() return '<cmd>' .. u.get_cnt_prefix() .. 'ptnext<cr>' end
+local function tabprevious() return '<cmd>tabprevious' .. u.get_cnt_prefix() .. '<cr>' end
+local function tabnext()
+  local count = vim.v.count1
+  local current = vim.api.nvim_get_current_tabpage()
+  local total = #vim.api.nvim_list_tabpages()
+  local target = (current + count - 1) % total + 1
+  vim.api.nvim_set_current_tabpage(target)
+  return true
+end
 
 function M.nvim_tree_previous_git()
   if not _G.loaded['nvim-tree.lua'] then return false end
@@ -343,5 +352,7 @@ function M.previous_statement_end() return u.ensure_repmove(previous_statement_e
 function M.previous_call_start() return u.ensure_repmove(previous_call_start, next_call_start)[1]() end
 function M.previous_call_end() return u.ensure_repmove(previous_call_end, next_call_end)[1]() end
 function M.previous_plugin() return u.ensure_repmove(previous_plugin, next_plugin)[1]() end
+function M.previous_tab() return u.ensure_repmove(tabprevious, tabnext)[1]() end
+function M.next_tab() return u.ensure_repmove(tabprevious, tabnext)[2]() end
 
 return M

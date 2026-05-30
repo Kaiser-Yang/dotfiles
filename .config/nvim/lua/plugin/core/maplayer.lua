@@ -203,6 +203,8 @@ local opts = {
   { key = ']Q', desc = 'Last Qflist Item', handler = h.repmove.last_qflist_item },
   { key = '[<c-q>', desc = 'File Qflist Item', handler = h.repmove.previous_file_qflist_item },
   { key = ']<c-q>', desc = 'File Qflist Item', handler = h.repmove.next_file_qflist_item },
+  { key = 'gT', desc = 'Tab', handler = h.repmove.previous_tab },
+  { key = 'gt', desc = 'Tab', handler = h.repmove.next_tab },
 
   -- Swap
   { key = '<m-s>pa', desc = 'Argument', handler = h.treesitter.swap_with_previous_parameter },
