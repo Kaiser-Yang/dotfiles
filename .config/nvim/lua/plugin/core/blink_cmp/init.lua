@@ -46,6 +46,13 @@ require('blink.cmp').setup({
       snippets = {
         name = 'Snip',
         score_offset = 0,
+        transform_items = function(_, items)
+          items = vim.tbl_map(function(item)
+            item.detail = u.doc_from_snippet(item.insertText)
+            return item
+          end, items)
+          return items
+        end,
       },
       cmdline = { name = 'CMD' },
       buffer = {
