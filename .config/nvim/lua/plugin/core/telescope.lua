@@ -170,4 +170,4 @@ opts.pickers.man_pages.mappings.i = special_insert_and_normal
 t.setup(opts)
 t.load_extension('fzf')
 t.load_extension('live_grep_args')
-require('telescope-all-recent').setup({})
+require('telescope-all-recent').setup({ scoring = { boost_factor = 0.00001 } })
