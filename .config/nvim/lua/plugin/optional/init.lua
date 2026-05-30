@@ -16,10 +16,10 @@ vim.schedule(function()
   require('plugin.optional.lightbulb')
   -- Statusline
   require('plugin.optional.lualine')
-  -- Markdown viewer
-  require('plugin.optional.render_markdown')
   -- Better UI for vim.ui.input / vim.ui.select
   require('plugin.optional.nui')
+  -- Markdown viewer
+  require('plugin.optional.render_markdown')
   -- Highlight and manage TODO/FIXME comments
   require('plugin.optional.todo_comments')
   -- Treesitter (parser installer)
