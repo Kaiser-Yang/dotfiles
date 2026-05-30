@@ -31,6 +31,17 @@ require('blink.cmp').setup({
     default = default_sources,
     providers = {
       lsp = {
+        transform_items = function(_, items)
+          local res = {}
+          for _, item in ipairs(items) do
+            if item.kind == k.Snippet then item.detail = u.doc_from_snippet(item.insertText) end
+            if item then
+              if not item[1] then item = { item } end
+              vim.list_extend(res, item)
+            end
+          end
+          return res
+        end,
         fallbacks = {},
       },
       path = {
@@ -53,6 +64,16 @@ require('blink.cmp').setup({
           end, items)
           return items
         end,
+        opts = {
+          extended_filetypes = {
+            c = { 'cdoc' },
+            cpp = { 'cppdoc' },
+            lua = { 'luadoc' },
+            python = { 'pydoc' },
+            sh = { 'shelldoc' },
+            zsh = { 'shelldoc' },
+          },
+        },
       },
       cmdline = { name = 'CMD' },
       buffer = {
