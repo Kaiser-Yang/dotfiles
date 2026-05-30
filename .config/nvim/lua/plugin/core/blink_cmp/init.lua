@@ -63,7 +63,7 @@ require('blink.cmp').setup({
           end
           return res
         end,
-        fallbacks = {},
+        fallbacks = { 'dictionary' },
       },
       path = {
         opts = {
