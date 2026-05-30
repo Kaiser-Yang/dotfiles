@@ -18,7 +18,7 @@ return {
   root_markers = { root_markers1, root_markers2, { '.git' } },
   on_init = function(client)
     local u = require('utils')
-    if not client.workspace_folders or not u.in_config_dir() then return end
+    if not client.workspace_folders or (not u.in_config_dir() and not u.in_plugin_dir()) then return end
     ---@diagnostic disable-next-line: param-type-mismatch
     client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
       runtime = {
