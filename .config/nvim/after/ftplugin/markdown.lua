@@ -25,7 +25,6 @@ vim.schedule(function()
     { 'i', 'i', h.markdown.italic, { desc = 'Insert Markdown Italic Text' } },
     { 'i', 'M', h.markdown.math_block, { desc = 'Insert Markdown Math Block' } },
     { 'i', 'c', h.markdown.code_block, { desc = 'Insert Markdown Code Block' } },
-    { 'i', 'f', h.markdown.goto_placeholder, { desc = 'Goto&Delete Markdown Placeholder' } },
   }
 
   for _, m in ipairs(mappings) do
@@ -34,13 +33,20 @@ vim.schedule(function()
     m[3] = function()
       local res = m[2]
       if not comma_typed() then return res end
+      local prefix = ''
       if type(rhs) == 'function' then
         res = rhs()
-        if not res then res = m[2] end
+        if not res then
+          res = m[2]
+        else
+          if res == true then res = '' end
+          prefix = '<c-g>u<bs>'
+        end
       else
         res = rhs
+        prefix = '<c-g>u<bs>'
       end
-      return res
+      return prefix .. res
     end
     m[4].expr = true
     m[4].buffer = true
