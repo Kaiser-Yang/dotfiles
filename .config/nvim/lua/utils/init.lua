@@ -63,6 +63,7 @@ end
 function M.treesitter_available(bufnr, name)
   local lang = vim.treesitter.language.get_lang(vim.bo[bufnr].filetype)
   if lang == nil then return false end
+  if name == nil then return true end
   return vim.treesitter.query.get(lang, name) ~= nil
 end
 
