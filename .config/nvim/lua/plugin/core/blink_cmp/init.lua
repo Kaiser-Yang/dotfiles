@@ -65,6 +65,8 @@ require('blink.cmp').setup({
         end,
         fallbacks = { 'dictionary' },
       },
+      -- HACK:
+      -- path can not work when the leading character is not "./" or "/"
       path = {
         opts = {
           show_hidden_files_by_default = true,
