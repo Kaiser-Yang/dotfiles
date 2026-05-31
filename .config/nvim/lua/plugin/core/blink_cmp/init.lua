@@ -93,7 +93,8 @@ require('blink.cmp').setup({
           local ft_extra = snippets_extra[vim.bo.filetype] or {}
           for _, snippet in ipairs(ft_extra) do
             if type(snippet) == 'function' then
-              table.insert(items, snippet())
+              local item = snippet()
+              if item then table.insert(items, item) end
             elseif type(snippet) == 'table' then
               table.insert(items, snippet)
             end
