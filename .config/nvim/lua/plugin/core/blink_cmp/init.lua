@@ -63,7 +63,7 @@ require('blink.cmp').setup({
           end
           return res
         end,
-        fallbacks = { 'dictionary' },
+        fallbacks = {},
       },
       -- HACK:
       -- path can not work when the leading character is not "./" or "/"
