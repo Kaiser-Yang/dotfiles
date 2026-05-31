@@ -83,7 +83,20 @@ require('nvim-tree').setup({
   filters = {
     git_ignored = true,
     dotfiles = not u.in_config_dir(),
-    custom = {},
+    custom = {
+      '^\\.git/info/refs$',
+      '^\\.git/logs',
+      '^\\.git/modules',
+      '^\\.git/objects',
+      '^\\.git/refs',
+      '^\\.git/COMMIT_EDITMSG$',
+      '^\\.git/FETCH_HEAD$',
+      '^\\.git/HEAD$',
+      '^\\.git/index$',
+      '^\\.git/ORIG_HEAD$',
+      '^\\.git/packed\\-refs$',
+      '^\\.git/.*\\.lock$',
+    },
   },
   actions = {
     file_popup = { open_win_config = { border = vim.o.winborder } },

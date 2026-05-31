@@ -6,15 +6,46 @@ u.gh('nvim-telescope/telescope.nvim')
 u.gh('kkharji/sqlite.lua')
 u.gh('prochri/telescope-all-recent.nvim')
 
+local exclude_args = {
+  '--glob',
+  '!.git/info/refs',
+  '--glob',
+  '!.git/logs/**',
+  '--glob',
+  '!.git/modules/**',
+  '--glob',
+  '!.git/objects/**',
+  '--glob',
+  '!.git/refs/**',
+  '--glob',
+  '!.git/COMMIT_EDITMSG',
+  '--glob',
+  '!.git/FETCH_HEAD',
+  '--glob',
+  '!.git/HEAD',
+  '--glob',
+  '!.git/index',
+  '--glob',
+  '!.git/ORIG_HEAD',
+  '--glob',
+  '!.git/packed-refs',
+  '--glob',
+  '!.git/*.lock',
+  '--glob',
+  '!.git/**/*.lock',
+}
+
 local function find_command()
   local res = { 'rg', '--files', '--color', 'never' }
   if u.in_config_dir() then table.insert(res, '--hidden') end
+  vim.list_extend(res, exclude_args)
   return res
 end
 
 local additional_args = function()
   local res = {}
   if u.in_config_dir() then table.insert(res, '--hidden') end
+  vim.list_extend(res, exclude_args)
   return res
 end
 
