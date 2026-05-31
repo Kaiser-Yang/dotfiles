@@ -14,7 +14,7 @@ require('grug-far').setup({
   keymaps = {
     prevInput = false,
     nextInput = false,
-    qflist = { n = '<leader>q' },
+    qflist = { n = '<c-q>', i = '<c-q>' },
     close = { n = 'q' },
     refresh = { n = '<f5>', i = '<f5>' },
     previewLocation = { n = 'K' },
