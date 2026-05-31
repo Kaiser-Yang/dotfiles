@@ -183,11 +183,7 @@ vim.schedule(function()
         nargs = '?',
         bar = true,
         complete = function(_, CmdLine, CursorPos)
-          local items = {
-            'telescope-fzf-native.nvim',
-            'nvim-treesitter',
-            'blink.cmp',
-          }
+          local items = u.builders()
           local used = {}
           for _, token in ipairs(vim.split(CmdLine:sub(1, CursorPos), '%s+', { trimempty = true })) do
             used[token] = true
