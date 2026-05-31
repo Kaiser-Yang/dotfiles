@@ -34,8 +34,8 @@ local snippets_trigger_characters = {
   cpp = { '#', '/', '@' },
   lua = { '-', '@' },
   python = { '#' },
-  sh = {'#'},
-  zsh = {'#'},
+  sh = { '#' },
+  zsh = { '#' },
 }
 require('blink.cmp').setup({
   snippets = { score_offset = 0 },
