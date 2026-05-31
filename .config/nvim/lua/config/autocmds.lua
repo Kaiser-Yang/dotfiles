@@ -372,6 +372,10 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWritePost', 'InsertLeave', 
   callback = function(ev)
     if not _G.loaded['nvim-lint'] or not u.enabled('lint') then return end
     if (u.in_config_dir() or u.in_plugin_dir()) and vim.bo.filetype == 'lua' then return end
+    local win = vim.api.nvim_get_current_win()
+    local config = vim.api.nvim_win_get_config(win)
+    -- Do not lint for floating windows
+    if config.relative ~= '' then return end
     require('lint').try_lint(nil, {
       ignore_errors = true,
       filter = ev.event ~= 'BufWritePost' and 'stdin' or nil,
