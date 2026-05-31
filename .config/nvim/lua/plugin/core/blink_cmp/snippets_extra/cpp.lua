@@ -1,5 +1,4 @@
 local u = require('utils')
-local item = { source_name = 'Snip', source_id = 'snippets' }
 return {
   function()
     local function sanitize(s) return s:upper():gsub('[^%w_]', '_') end
@@ -14,7 +13,7 @@ return {
       '$0',
       '',
       '#endif  // $1',
-    }, 'header guard: `_<DIRNAME>_<FILENAME>_<EXTENSION>_`')(item)
+    }, 'header guard: `_<DIRNAME>_<FILENAME>_<EXTENSION>_`')()
   end,
   function()
     if not vim.fn.getcwd():find('OJProblems') then return end
@@ -33,6 +32,6 @@ return {
       '    $0',
       '    return 0;',
       '}',
-    }, 'competitive programming template')(item)
+    }, 'competitive programming template')()
   end,
 }

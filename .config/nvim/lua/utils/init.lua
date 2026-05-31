@@ -215,7 +215,7 @@ function M.make_snippet_wrap(label, lines, desc)
   if type(lines) == 'string' then lines = { lines } end
   local insertText = table.concat(lines, '\n')
   return function(item)
-    item = vim.deepcopy(item)
+    item = item and vim.deepcopy(item) or { source_name = 'Snip', source_id = 'snippets' }
     item.label = label
     item.filterText = label
     item.insertText = insertText
