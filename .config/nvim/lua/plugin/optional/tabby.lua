@@ -24,12 +24,15 @@ require('tabby').setup({
     return {
       line.tabs().foreach(function(tab)
         local hl = tab.is_current() and theme.current_tab or theme.tab
+        local name = tab.name()
+        local index = string.find(name, '%[%d')
+        local tab_name = index and string.sub(name, 1, index - 1) or name
         return {
           line.sep(' ', hl, theme.fill),
           tab.is_current() and '' or '󰆣',
           build_file_icon(tab.current_win()),
           tab.number(),
-          tab.name(),
+          tab_name,
           tab.close_btn(''),
           hl = hl,
           margin = ' ',
