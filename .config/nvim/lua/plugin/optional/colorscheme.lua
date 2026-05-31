@@ -27,7 +27,7 @@ require('catppuccin').setup({
     render_markdown = true,
     which_key = true,
   },
-  custom_highlights = function(_)
+  custom_highlights = function(C)
     -- DAP
     local signs = {
       DapStopped = { text = '▶', texthl = 'DapStopped', linehl = 'debugPC' },
@@ -43,6 +43,9 @@ require('catppuccin').setup({
       TelescopeSelection = { fg = 'NONE' },
       BlinkIndentPurple = { link = 'BlinkIndentViolet' },
       BlinkIndentPurpleUnderline = { link = 'BlinkIndentVioletUnderline' },
+      TabLineFill = { bg = C.mantle },
+      TabLine = { fg = C.surface1, bg = C.mantle },
+      TabLineSel = { fg = C.text, bg = C.base, style = { 'bold' } },
     }
   end,
 })

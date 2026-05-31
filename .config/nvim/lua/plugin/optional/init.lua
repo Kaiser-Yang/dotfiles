@@ -1,3 +1,4 @@
+-- Colorscheme
 require('plugin.optional.colorscheme')
 vim.schedule(function()
   -- Indent guides (indent lines)
