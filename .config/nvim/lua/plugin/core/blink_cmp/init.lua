@@ -27,11 +27,13 @@ end
 
 local k = require('blink.cmp.types').CompletionItemKind
 local lsp_extra = {
+  cpp = require('plugin.core.blink_cmp.lsp_extra.cpp'),
 }
 local snippets_extra = {
+  cpp = require('plugin.core.blink_cmp.snippets_extra.cpp'),
 }
 local snippets_trigger_characters = {
-  cpp = { '#', '/', '@' },
+  cpp = { '#' },
   lua = { '-', '@' },
   python = { '#' },
   sh = { '#' },
@@ -104,7 +106,6 @@ require('blink.cmp').setup({
         opts = {
           extended_filetypes = {
             c = { 'cdoc' },
-            cpp = { 'cppdoc' },
             lua = { 'luadoc' },
             python = { 'pydoc' },
             sh = { 'shelldoc' },

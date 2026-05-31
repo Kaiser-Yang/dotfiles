@@ -12,11 +12,7 @@
             },
             {
                 "language": "cpp",
-                "path": "./cpp/cpp.json"
-            },
-            {
-                "language": "cppdoc",
-                "path": "./cpp/cppdoc.json"
+                "path": "./cpp.json"
             },
             {
                 "language": "lua",

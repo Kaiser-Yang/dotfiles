@@ -1,0 +1,101 @@
+{
+  "#if": {
+    "prefix": "#if",
+    "body": ["#if ${1:0}", "$0", "#endif // $1"],
+    "description": "#if"
+  },
+  "#ifdef": {
+    "prefix": "#ifd",
+    "body": ["#ifdef ${1:DEBUG}", "$0", "#endif // $1"],
+    "description": "#ifdef"
+  },
+  "#ifndef": {
+    "prefix": "#ifn",
+    "body": ["#ifndef ${1:DEBUG}", "$0", "#endif // !$1"],
+    "description": "#ifndef"
+  },
+  "#def": {
+    "prefix": "def",
+    "body": ["#define $0"],
+    "description": "#define \" \""
+  },
+  "#inc": {
+    "prefix": "#inc",
+    "body": ["#include <$1>$0"],
+    "description": "#include < >"
+  },
+  "#inc\"": {
+    "prefix": "#incq",
+    "body": ["#include \"$1\"$0"],
+    "description": "#include \" \""
+  },
+  "auto function": {
+    "prefix": "afu",
+    "body": ["auto ${1:name}( ${2:void} ) -> ${3:auto} {", "\t${5}", "}"],
+    "description": "auto function and trailing return"
+  },
+  "enum class": {
+    "prefix": "enc",
+    "body": ["enum class ${1:MyClass} {", "\t$0", "};"],
+    "description": "enum class (since C++11)"
+  },
+  "empty class": {
+    "prefix": "cle",
+    "body": [
+      "class ${1:MyClass} {",
+      "public:",
+      "\t$2",
+      "private:",
+      "\t$3",
+      "};",
+      ""
+    ],
+    "description": "class with empty body"
+  },
+  "inline class": {
+    "prefix": "cli",
+    "body": [
+      "class ${1:MyClass} {",
+      "public:",
+      "\t$1() = default;",
+      "\t$1($1 &&) = default;",
+      "\t$1(const $1 &) = default;",
+      "\t$1 &operator=($1 &&) = default;",
+      "\t$1 &operator=(const $1 &) = default;",
+      "\t~$1() = default;",
+      "",
+      "private:",
+      "\t$2",
+      "};"
+    ],
+    "description": "class with inline constructor/destructor"
+  },
+  "forn": {
+    "prefix": "forn",
+    "body": [
+      "for (int ${1:i} = ${2:0}; $1 < ${3:n}; $1${4:++}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "for with numeric"
+  },
+  "forr": {
+    "prefix": "forr",
+    "body": [
+      "for (int ${1:i} = ${2:n - 1}; $1 >= ${3:0}; $1${4:--}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "for reversely"
+  },
+  "fore": {
+    "prefix": "fore",
+    "body": ["for (${1:auto} ${2:it} : ${3:collection}) {", "\t$0", "}"],
+    "description": "for each"
+  },
+  "Main function template": {
+    "prefix": "main",
+    "body": ["int main (int argc, char *argv[]) {", "\t$1", "\treturn 0;", "}"],
+    "description": "main function"
+  }
+}
