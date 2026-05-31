@@ -14,7 +14,7 @@ local function build_file_icon(win)
   local filetype = vim.bo[vim.api.nvim_win_get_buf(win.id)].filetype
   return {
     win.file_icon(),
-    hl = get_icon_hl(filetype)
+    hl = get_icon_hl(filetype),
   }
 end
 
