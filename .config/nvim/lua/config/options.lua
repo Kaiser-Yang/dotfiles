@@ -47,4 +47,5 @@ vim.o.shadafile = require('utils').shadafile()
 vim.opt.sessionoptions:remove('buffers')
 vim.opt.sessionoptions:remove('blank')
 vim.opt.sessionoptions:append('globals')
-vim.o.showtabline = 2
+vim.o.showtabline = 0
+vim.o.laststatus = 0

@@ -18,6 +18,7 @@ local function indent()
   end
 end
 
+vim.o.laststatus = 2
 require('lualine').setup({
   options = {
     globalstatus = true,

@@ -7,6 +7,7 @@ local theme = {
   win = 'TabLine',
   current_win = 'TabLineSel',
 }
+vim.o.showtabline = 2
 require('tabby').setup({
   line = function(line)
     return {
