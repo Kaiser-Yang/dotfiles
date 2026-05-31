@@ -179,6 +179,10 @@
       "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",
       "src": "https://github.com/folke/todo-comments.nvim"
     },
+    "ts-autotag.nvim": {
+      "rev": "35f79f6253dff5cc43cf943d74c4b2734370a81d",
+      "src": "https://github.com/tronikelis/ts-autotag.nvim"
+    },
     "ultimate-autopair.nvim": {
       "rev": "6b58234de921437836efe27714b2026ed2ee235a",
       "src": "https://github.com/altermo/ultimate-autopair.nvim"

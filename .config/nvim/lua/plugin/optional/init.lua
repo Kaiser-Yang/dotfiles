@@ -1,6 +1,8 @@
 -- Colorscheme
 require('plugin.optional.colorscheme')
 vim.schedule(function()
+  -- Auto tag
+  require('plugin.optional.autotag')
   -- Indent guides (indent lines)
   require('plugin.optional.blink_indent')
   -- Color Highlight
