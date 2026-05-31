@@ -164,7 +164,7 @@ local function build_telescope_fzf_native()
   vim.system({ 'make' }, { cwd = M.plugin_path() .. '/telescope-fzf-native.nvim' })
 end
 local function build_nvim_treesitter() vim.cmd('TSUpdate') end
-local function build_blink_cmp() require('blink.cmp').build():wait(60000) end
+local function build_blink_cmp() require('blink.cmp').download({ force = true, tag = '*' }):wait(60000) end
 register_build('telescope-fzf-native.nvim', build_telescope_fzf_native)
 register_build('nvim-treesitter', build_nvim_treesitter)
 register_build('blink.cmp', build_blink_cmp)
