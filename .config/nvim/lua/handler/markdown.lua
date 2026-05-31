@@ -24,5 +24,7 @@ M.italic = expand_wrap('*${1:italic}* $0')
 M.math_block = expand_wrap('\\$\\$\n${1:formula}\n\\$\\$\n\n$0')
 M.code_block = expand_wrap('```$1\n${2:code}\n```\n\n$0')
 M.code_inline = expand_wrap('`${1:code}` $0')
+M.image = expand_wrap('![$1](${2:path}) $0')
+M.bold_and_italic = expand_wrap('***${1:bold and italic}*** $0')
 
 return M

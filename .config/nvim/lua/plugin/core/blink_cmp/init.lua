@@ -32,10 +32,12 @@ local lsp_extra = {
 }
 local snippets_extra = {
   cpp = require('plugin.core.blink_cmp.snippets_extra.cpp'),
+  markdown = require('plugin.core.blink_cmp.snippets_extra.markdown'),
 }
 local snippets_trigger_characters = {
   cpp = { '#' },
   lua = { '-', '@' },
+  markdown = { '>' },
   python = { '#' },
   sh = { '#' },
   zsh = { '#' },

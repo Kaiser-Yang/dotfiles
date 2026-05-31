@@ -16,15 +16,17 @@ vim.schedule(function()
     { 'i', '5', h.markdown.title(5), { desc = 'Insert Markdown Title 5' } },
     { 'i', '6', h.markdown.title(6), { desc = 'Insert Markdown Title 6' } },
     { 'i', 's', h.markdown.separate_line, { desc = 'Insert Markdown Separate Line' } },
-    { 'i', 'm', h.markdown.math_inline, { desc = 'Insert Markdown Inline Math' } },
-    { 'i', 't', h.markdown.code_inline, { desc = 'Insert Markdown Code Line' } },
-    { 'i', 'x', h.markdown.todo, { desc = 'Insert Markdown Todo' } },
     { 'i', 'a', h.markdown.link, { desc = 'Insert Markdown Link' } },
     { 'i', 'b', h.markdown.bold, { desc = 'Insert Markdown Bold Text' } },
+    { 'i', 'B', h.markdown.bold_and_italic, { desc = 'Insert Markdown Bold and Italic Text' } },
+    { 'i', 'c', h.markdown.code_block, { desc = 'Insert Markdown Code Block' } },
     { 'i', 'd', h.markdown.delete_line, { desc = 'Insert Markdown Delete Line' } },
     { 'i', 'i', h.markdown.italic, { desc = 'Insert Markdown Italic Text' } },
+    { 'i', 'm', h.markdown.math_inline, { desc = 'Insert Markdown Inline Math' } },
     { 'i', 'M', h.markdown.math_block, { desc = 'Insert Markdown Math Block' } },
-    { 'i', 'c', h.markdown.code_block, { desc = 'Insert Markdown Code Block' } },
+    { 'i', 'p', h.markdown.image, { desc = 'Insert Markdown Image' } },
+    { 'i', 't', h.markdown.code_inline, { desc = 'Insert Markdown Code Line' } },
+    { 'i', 'x', h.markdown.todo, { desc = 'Insert Markdown Todo' } },
   }
 
   for _, m in ipairs(mappings) do
