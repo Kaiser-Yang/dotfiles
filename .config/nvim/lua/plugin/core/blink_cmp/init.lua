@@ -31,6 +31,11 @@ local lsp_extra = {
 local snippets_extra = {
 }
 local snippets_trigger_characters = {
+  cpp = { '#', '/', '@' },
+  lua = { '-', '@' },
+  python = { '#' },
+  sh = {'#'},
+  zsh = {'#'},
 }
 require('blink.cmp').setup({
   snippets = { score_offset = 0 },
