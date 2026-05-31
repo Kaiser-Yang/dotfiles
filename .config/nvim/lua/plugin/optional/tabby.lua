@@ -1,4 +1,5 @@
 local u = require('utils')
+u.gh('nvim-tree/nvim-web-devicons')
 u.gh('nanozuki/tabby.nvim')
 local theme = {
   fill = 'TabLineFill',
@@ -7,6 +8,16 @@ local theme = {
   win = 'TabLine',
   current_win = 'TabLineSel',
 }
+local get_icon_hl = function(filetype) return 'DevIcon' .. filetype:sub(1, 1):upper() .. filetype:sub(2):lower() end
+
+local function build_file_icon(win)
+  local filetype = vim.bo[vim.api.nvim_win_get_buf(win.id)].filetype
+  return {
+    win.file_icon(),
+    hl = get_icon_hl(filetype)
+  }
+end
+
 vim.o.showtabline = 2
 require('tabby').setup({
   line = function(line)
@@ -16,6 +27,7 @@ require('tabby').setup({
         return {
           line.sep(' ', hl, theme.fill),
           tab.is_current() and '' or '󰆣',
+          build_file_icon(tab.current_win()),
           tab.number(),
           tab.name(),
           tab.close_btn(''),
@@ -29,6 +41,7 @@ require('tabby').setup({
         return {
           line.sep(' ', hl, theme.fill),
           win.is_current() and '' or '',
+          build_file_icon(win),
           win.buf_name(),
           hl = hl,
           margin = ' ',
