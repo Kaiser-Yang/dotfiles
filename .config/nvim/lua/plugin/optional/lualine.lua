@@ -18,6 +18,18 @@ local function indent()
   end
 end
 
+
+local function search_count()
+  local last_search = vim.fn.getreg('/')
+  if vim.v.hlsearch == 0 then return last_search end
+  local limit, timeout = 999, 50
+  local ok, result = pcall(vim.fn.searchcount, { maxcount = limit + 1, timeout = timeout })
+  if not ok or next(result) == nil then return '' end
+  if result.current > limit then result.current = '??' end
+  if result.total > limit then result.total = '>' .. limit end
+  return last_search .. '[' .. result.current .. '/' .. result.total .. ']'
+end
+
 vim.o.laststatus = 2
 require('lualine').setup({
   options = {
@@ -28,7 +40,7 @@ require('lualine').setup({
     lualine_c = { 'filename', 'filesize', indent, recording },
     lualine_x = {
       { '%-10.S', separator = { left = '', right = '' } },
-      'searchcount',
+      search_count,
       'selectioncount',
       'lsp_status',
       'encoding',
