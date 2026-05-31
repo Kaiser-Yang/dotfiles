@@ -8,13 +8,15 @@ local theme = {
   win = 'TabLine',
   current_win = 'TabLineSel',
 }
-local get_icon_hl = function(filetype) return 'DevIcon' .. filetype:sub(1, 1):upper() .. filetype:sub(2):lower() end
+local color = function(abs)
+  local _, color = require'nvim-web-devicons'.get_icon_color(vim.fn.fnamemodify(abs, ':t'), vim.fn.fnamemodify(abs, ':e'))
+  return color
+end
 
 local function build_file_icon(win)
-  local filetype = vim.bo[vim.api.nvim_win_get_buf(win.id)].filetype
   return {
     win.file_icon(),
-    hl = get_icon_hl(filetype),
+    hl = {fg = color(vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win.id)))}
   }
 end
 
