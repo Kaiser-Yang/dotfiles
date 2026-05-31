@@ -175,9 +175,7 @@ local function build_plugin_internal(name)
   fn()
 end
 
-function M.builders()
-  return vim.tbl_keys(builders  )
-end
+function M.builders() return vim.tbl_keys(builders) end
 
 function M.build_plugin(names)
   if names == nil then
