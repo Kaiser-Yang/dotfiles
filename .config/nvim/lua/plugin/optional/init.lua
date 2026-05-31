@@ -24,6 +24,8 @@ vim.schedule(function()
   require('plugin.optional.nui')
   -- Markdown viewer
   require('plugin.optional.render_markdown')
+  -- Tabline
+  require('plugin.optional.tabby')
   -- Highlight and manage TODO/FIXME comments
   require('plugin.optional.todo_comments')
   -- Treesitter (parser installer)

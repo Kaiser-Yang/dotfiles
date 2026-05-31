@@ -46,3 +46,5 @@ vim.o.guicursor = 'n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,t:block-TermCursor'
 vim.o.shadafile = require('utils').shadafile()
 vim.opt.sessionoptions:remove('buffers')
 vim.opt.sessionoptions:remove('blank')
+vim.opt.sessionoptions:append('globals')
+vim.o.showtabline = 2

@@ -155,6 +155,10 @@
       "rev": "50092d60feb242602d7578398c6eb53b4a8ffe7b",
       "src": "https://github.com/kkharji/sqlite.lua"
     },
+    "tabby.nvim": {
+      "rev": "3c130e1fcb598ce39a9c292847e32d7c3987cf11",
+      "src": "https://github.com/nanozuki/tabby.nvim"
+    },
     "telescope-all-recent.nvim": {
       "rev": "e437f60ea468268e49ffdc0c9ed7c5ba384e63cf",
       "src": "https://github.com/prochri/telescope-all-recent.nvim"
