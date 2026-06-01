@@ -39,5 +39,5 @@ require('grug-far').setup({
     swapReplacementInterpreter = { n = '<m-i>', i = '<m-i>' },
     swapEngine = false,
   },
-  openTargetWindow = { exclude = { function(win) return vim.wo[win].winfixbuf end } },
+  openTargetWindow = { exclude = { function(win) return vim.wo[win][0].winfixbuf end } },
 })

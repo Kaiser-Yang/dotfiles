@@ -146,9 +146,9 @@ function M.terminal(cmd, bufnr, border)
     vim.bo[term_buf].buflisted = false
     vim.bo[term_buf].swapfile = false
     vim.bo[term_buf].bufhidden = 'hide'
-    vim.wo[term_win].cursorcolumn = false
-    vim.wo[term_win].signcolumn = 'no'
-    vim.wo[term_win].winfixbuf = true
+    vim.wo[term_win][0].cursorcolumn = false
+    vim.wo[term_win][0].signcolumn = 'no'
+    vim.wo[term_win][0].winfixbuf = true
   end
   vim.cmd('startinsert')
   vim.cmd('nohlsearch')
