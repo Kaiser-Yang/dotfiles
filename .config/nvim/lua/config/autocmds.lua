@@ -356,25 +356,20 @@ vim.api.nvim_create_autocmd('BufEnter', {
   end,
 })
 
-vim.api.nvim_create_autocmd({ 'BufWinEnter', 'WinEnter' }, {
+vim.api.nvim_create_autocmd('BufWinEnter', {
   desc = 'Set winfixbuf for some windows',
   group = _G.autocmd_group,
   callback = function(ev)
-    if not vim.tbl_contains({ 'grug-far', 'dap-view', 'NvimTree', 'CompetiTest' }, vim.bo[ev.buf].filetype) then
+    if not vim.tbl_contains({ 'grug-far', 'dap-view', 'CompetiTest' }, vim.bo[ev.buf].filetype) then
       return
     end
-    local cnt = 0
-    vim.iter(vim.api.nvim_list_wins()):each(function(win)
-      if vim.api.nvim_win_get_config(win).focusable then cnt = cnt + 1 end
-    end)
-    local target = cnt ~= 1
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       if
         vim.api.nvim_win_is_valid(win)
         and vim.api.nvim_win_get_buf(win) == ev.buf
-        and vim.wo[win][0].winfixbuf ~= target
+        and vim.wo[win][0].winfixbuf ~= true
       then
-        vim.wo[win][0].winfixbuf = target
+        vim.wo[win][0].winfixbuf = true
       end
     end
   end,
