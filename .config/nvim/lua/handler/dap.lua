@@ -139,4 +139,72 @@ M.set_exception_breakpoints = function()
   return true
 end
 
+local win
+function M.show_breakpoint_info()
+  local bp = get_current_breakpoint()
+  if not bp then
+    vim.notify('No breakpoint at current line')
+    return
+  end
+
+  local lines = {
+    string.format('Buffer: %d', bp.buf),
+    string.format('Line:   %d', bp.line),
+    string.format('State:  %s', bp.state or 'enabled'),
+  }
+  if bp.condition and bp.condition ~= '' then table.insert(lines, string.format('Condition: %s', bp.condition)) end
+  if bp.hitCondition and bp.hitCondition ~= '' then
+    table.insert(lines, string.format('Hit Count: %s', bp.hitCondition))
+  end
+  if bp.logMessage and bp.logMessage ~= '' then table.insert(lines, string.format('Log Message: %s', bp.logMessage)) end
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.bo[buf].modifiable = false
+
+  local title = ' Breakpoint Details '
+  local width = #title
+  for _, line in ipairs(lines) do
+    width = math.max(width, #line)
+  end
+  width = math.min(width, 80)
+  local height = #lines
+  local winline = vim.fn.winline()
+  local winheight = vim.api.nvim_win_get_height(0)
+  local row = 1
+  if winheight - winline < height + 3 then row = -height - 2 end
+  local opts = {
+    relative = 'cursor',
+    width = width,
+    height = height,
+    col = 0,
+    row = row,
+    style = 'minimal',
+    border = 'rounded',
+    title = title,
+    title_pos = 'center',
+  }
+  if win then pcall(vim.api.nvim_win_close, win, true) end
+  win = vim.api.nvim_open_win(buf, false, opts)
+
+  vim.api.nvim_buf_set_keymap(buf, 'n', 'q', '<cmd>close<CR>', { silent = true, noremap = true })
+  vim.api.nvim_buf_set_keymap(buf, 'n', '<esc>', '<cmd>close<CR>', { silent = true, noremap = true })
+
+  local augroup = vim.api.nvim_create_augroup('BreakpointInfoAutoClose', { clear = true })
+  local function cleanup()
+    pcall(vim.api.nvim_win_close, win, true)
+    vim.api.nvim_del_augroup_by_id(augroup)
+  end
+  vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+    group = augroup,
+    callback = cleanup,
+    once = true,
+  })
+  vim.api.nvim_create_autocmd('BufLeave', {
+    buffer = buf,
+    group = augroup,
+    callback = cleanup,
+    once = true,
+  })
+end
+
 return M

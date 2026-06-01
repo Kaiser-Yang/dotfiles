@@ -393,6 +393,7 @@ local opts = {
   { key = '<leader>dh', desc = 'Set Hit Count Breakpoint', handler = h.dap.set_hit_count_breakpoint },
   { key = '<leader>de', desc = 'Dap Set Exception Breakpoints', handler = h.dap.set_exception_breakpoints },
   { key = '<leader>dC', desc = 'Clear Breakpoint', handler = h.dap.clear_breakpoints },
+  { key = '<leader>ds', desc = 'Show Breakpoint Information', handler = h.dap.show_breakpoint_info },
   { key = '<f4>', desc = 'Dap Terminate', handler = h.dap.terminate },
   { key = '<f5>', desc = 'Dap Continue', handler = h.dap.continue },
   { key = { '<s-f5>', '<f17>' }, desc = 'Dap Reverse Continue', handler = h.dap.reverse_continue },
