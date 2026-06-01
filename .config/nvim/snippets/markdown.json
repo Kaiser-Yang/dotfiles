@@ -1,32 +1,32 @@
 {
-    "Insert quoted text": {
-        "prefix": ">",
-        "body": "> ",
-        "description": "Insert quoted text"
-    },
-    "Insert Note": {
-        "prefix": ">note",
-        "body": "> [!NOTE]\n> ",
-        "description": "Insert Note"
-    },
-    "Insert Tip": {
-        "prefix": ">tip",
-        "body": "> [!TIP]\n> ",
-        "description": "Insert Tip"
-    },
-    "Insert Important": {
-        "prefix": ">imp",
-        "body": "> [!IMPORTANT]\n> ",
-        "description": "Insert Important"
-    },
-    "Insert Warning": {
-        "prefix": ">war",
-        "body": "> [!WARNING]\n> ",
-        "description": "Insert Warning"
-    },
-    "Insert Caution": {
-        "prefix": ">cau",
-        "body": "> [!CAUTION]\n> ",
-        "description": "Insert Caution"
-    }
+  "Insert quoted text": {
+    "prefix": ">",
+    "body": "> ",
+    "description": "Insert quoted text"
+  },
+  "Insert Note": {
+    "prefix": ">note",
+    "body": "> [!NOTE]\n> ",
+    "description": "Insert Note"
+  },
+  "Insert Tip": {
+    "prefix": ">tip",
+    "body": "> [!TIP]\n> ",
+    "description": "Insert Tip"
+  },
+  "Insert Important": {
+    "prefix": ">important",
+    "body": "> [!IMPORTANT]\n> ",
+    "description": "Insert Important"
+  },
+  "Insert Warning": {
+    "prefix": ">warning",
+    "body": "> [!WARNING]\n> ",
+    "description": "Insert Warning"
+  },
+  "Insert Caution": {
+    "prefix": ">caution",
+    "body": "> [!CAUTION]\n> ",
+    "description": "Insert Caution"
+  }
 }
