@@ -1,9 +1,6 @@
-bufferline.nvim
-img-clip.nvim
 avante.nvim
 blink-cmp-avante
 diffview.nvim
-flash.nvim
 non-ascii.nvim
 nvim-jdtls
 overseer.nvim
