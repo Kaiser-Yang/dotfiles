@@ -5,11 +5,7 @@ blink-cmp-avante
 diffview.nvim
 flash.nvim
 non-ascii.nvim
-nvim-highlight-colors
 nvim-jdtls
-nvim-nio
-nvim-notify
-nvim-ts-autotag
 overseer.nvim
 persistent-breakpoints.nvim
 vim-interestingwords
