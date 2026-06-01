@@ -160,8 +160,16 @@ vim.api.nvim_create_autocmd('FileType', {
       vim.treesitter.start(ev.buf)
     end
     if u.enabled('treesitter_foldexpr') and u.treesitter_available(ev.buf, 'folds') then
-      vim.wo[0][0].foldmethod = 'expr'
-      vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      for _, win in ipairs(vim.api.nvim_list_wins()) do
+        if
+          vim.api.nvim_win_is_valid(win)
+          and vim.api.nvim_win_get_buf(win) == ev.buf
+          and (vim.wo[win][0].foldmethod ~= 'expr' or vim.wo[win][0].foldexpr ~= 'v:lua.vim.treesitter.foldexpr()')
+        then
+          vim.wo[win][0].foldmethod = 'expr'
+          vim.wo[win][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+        end
+      end
     end
   end),
 })
@@ -348,12 +356,26 @@ vim.api.nvim_create_autocmd('BufEnter', {
   end,
 })
 
-vim.api.nvim_create_autocmd('BufWinEnter', {
+vim.api.nvim_create_autocmd({ 'BufWinEnter', 'WinEnter' }, {
   desc = 'Set winfixbuf for some windows',
   group = _G.autocmd_group,
   callback = function(ev)
-    if vim.tbl_contains({ 'grug-far', 'dap-view', 'NvimTree', 'CompetiTest' }, vim.bo[ev.buf].filetype) then
-      vim.wo[0][0].winfixbuf = true
+    if not vim.tbl_contains({ 'grug-far', 'dap-view', 'NvimTree', 'CompetiTest' }, vim.bo[ev.buf].filetype) then
+      return
+    end
+    local cnt = 0
+    vim.iter(vim.api.nvim_list_wins()):each(function(win)
+      if vim.api.nvim_win_get_config(win).focusable then cnt = cnt + 1 end
+    end)
+    local target = cnt ~= 1
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      if
+        vim.api.nvim_win_is_valid(win)
+        and vim.api.nvim_win_get_buf(win) == ev.buf
+        and vim.wo[win][0].winfixbuf ~= target
+      then
+        vim.wo[win][0].winfixbuf = target
+      end
     end
   end,
 })
