@@ -17,11 +17,11 @@
       "src": "https://github.com/Kaiser-Yang/blink-cmp-dictionary"
     },
     "blink.cmp": {
-      "rev": "5ee69ea52492fa038b3a1cd8de55edffe205c77d",
+      "rev": "7c0fae7fb37c4ee43927df88f4f1b7eb8e33a520",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.download": {
-      "rev": "2cb62890cee636fe46722d03b7b2331e54fb3755",
+      "rev": "c09dd66e9ad97e1a7777f3fa5f0504ca2e877231",
       "src": "https://github.com/saghen/blink.download"
     },
     "blink.indent": {
@@ -29,7 +29,7 @@
       "src": "https://github.com/saghen/blink.indent"
     },
     "blink.lib": {
-      "rev": "2cb62890cee636fe46722d03b7b2331e54fb3755",
+      "rev": "c09dd66e9ad97e1a7777f3fa5f0504ca2e877231",
       "src": "https://github.com/saghen/blink.lib"
     },
     "blink.pairs": {
