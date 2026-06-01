@@ -13,7 +13,7 @@ require('competitest').setup({
     mappings = {
       focus_next = 'j',
       focus_prev = 'k',
-      close = { '<esc>', 'q' },
+      close = 'q',
       submit = '<cr>',
     },
   },
@@ -21,7 +21,7 @@ require('competitest').setup({
     normal_mode_mappings = {
       switch_window = {},
       save_and_close = { '<c-s>', '<m-s>' },
-      cancel = { '<esc>', 'q' },
+      cancel = 'q',
     },
     insert_mode_mappings = {
       switch_window = {},
@@ -41,7 +41,7 @@ require('competitest').setup({
       view_stdout = 'o',
       view_stderr = 'e',
       toggle_diff = 'd',
-      close = { 'q', '<esc>' },
+      close = 'q',
     },
   },
   template_file = { cpp = vim.fn.stdpath('config') .. '/cp/template.cpp' },

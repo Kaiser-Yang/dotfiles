@@ -411,7 +411,6 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufEnter', {
     if config.relative == '' then return end
     local buf = vim.api.nvim_win_get_buf(win)
     vim.keymap.set('n', 'q', '<c-w>q', { desc = 'Quit', buf = buf })
-    vim.keymap.set('n', '<esc>', '<c-w>q', { desc = 'Quit', buf = buf })
   end,
 })
 
@@ -448,8 +447,6 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('FileType', {
       { 'n', ']C', h.repmove.grug_sync_then_next, { desc = 'Change after Sync' } },
       { 'n', '[[', h.repmove.grug_open_previous, { desc = 'Location Then Open' } },
       { 'n', ']]', h.repmove.grug_open_next, { desc = 'Location Then Open' } },
-      { 'n', 'q', '<c-w>q', { desc = 'Close' } },
-      { 'n', '<esc>', '<c-w>q', { desc = 'Close' } },
     }
     for _, m in ipairs(mappings) do
       m[4].buf = ev.buf
@@ -546,7 +543,6 @@ vim.api.nvim_create_autocmd('FileType', {
       { { 'n', 'x' }, '[[', h.repmove.previous_plugin, { desc = 'Plugin' } },
       { { 'n', 'x' }, ']]', h.repmove.next_plugin, { desc = 'Plugin' } },
       { 'n', 'q', '<c-w>q', { desc = 'Quit' } },
-      { 'n', '<esc>', '<c-w>q', { desc = 'Quit' } },
     }
     for _, m in ipairs(mapping) do
       m[4].buf = ev.buf
@@ -562,6 +558,5 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'cmd', 'msg' },
   callback = function(ev)
     vim.keymap.set('n', 'q', '<c-w>q', { buf = ev.buf, desc = 'Quit' })
-    vim.keymap.set('n', '<esc>', '<c-w>q', { buf = ev.buf, desc = 'Quit' })
   end,
 })

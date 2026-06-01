@@ -15,7 +15,7 @@ require('grug-far').setup({
     prevInput = false,
     nextInput = false,
     qflist = { n = '<c-q>', i = '<c-q>' },
-    close = false,
+    close = { n = 'q' },
     refresh = { n = '<f5>', i = '<f5>' },
     previewLocation = { n = 'K' },
     help = false,

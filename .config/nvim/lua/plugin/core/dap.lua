@@ -98,9 +98,9 @@ require('dap-view').setup({
     watches = {
     },
     hover = {
-      quit = { 'q', '<esc>' },
+      quit = 'q',
     },
-    help = { quit = { 'q', '<esc>' } },
+    help = { quit = 'q' },
     console = {
     },
     threads = {
@@ -117,7 +117,7 @@ require('dap-view').setup({
       jump_to_first = {},
       jump_to_last = {},
       help = { 'g?', '<f1>' },
-      quit = { 'q', '<esc>' },
+      quit = 'q',
     },
   },
   virtual_text = { enabled = true },

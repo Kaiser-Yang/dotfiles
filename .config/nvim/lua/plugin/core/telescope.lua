@@ -171,7 +171,6 @@ opts.defaults.mappings.n = {
   ['L'] = { a.move_to_bottom, type = 'action', opts = { desc = 'Move to Bottom' } },
   ['G'] = { a.move_to_bottom, type = 'action', opts = { desc = 'Move to Bottom' } },
   ['q'] = { a.close, type = 'action', opts = { desc = 'Close' } },
-  ['<esc>'] = { a.close, type = 'action', opts = { desc = 'Close' } },
   ['g?'] = { ag.which_key({ keybind_width = 14, max_height = 0.25 }), type = 'action', opts = { desc = 'Help' } },
 }
 opts.defaults.mappings.i = {

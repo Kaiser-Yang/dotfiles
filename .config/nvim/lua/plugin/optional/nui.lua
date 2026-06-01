@@ -14,7 +14,6 @@ local function ui_input_on_init(uiinput, opts, on_done)
   ) and default:sub(-1) ~= '/' or opts.normal
   uiinput:on(event.BufLeave, function() uiinput:unmount() end, { once = true })
   uiinput:map('n', 'q', function() on_done(nil) end, { noremap = true, nowait = true })
-  uiinput:map('n', '<Esc>', function() on_done(nil) end, { noremap = true, nowait = true })
   uiinput:map('i', '<c-c>', function() on_done(nil) end, { noremap = true, nowait = true })
   uiinput:map('i', '<c-w>', '<c-s-w>', { noremap = true, nowait = true })
   uiinput:on(event.BufEnter, function()
@@ -40,7 +39,6 @@ local function ui_select_on_init(uiselect, items, opts, on_done)
   uiselect:on(event.BufLeave, function() uiselect:unmount() end, { once = true })
   uiselect:on(event.BufWinEnter, function() vim.cmd('stopinsert | norm! 0') end, { once = true })
   uiselect:map('n', 'q', function() on_done(nil, nil) end, { noremap = true, nowait = true })
-  uiselect:map('n', '<Esc>', function() on_done(nil, nil) end, { noremap = true, nowait = true })
   if #items <= 10 then
     for i = 1, math.min(10, #items) do
       uiselect:map('n', tostring(i % 10), function() on_done(items[i], i) end, { noremap = true, nowait = true })
