@@ -204,8 +204,8 @@ local opts = {
   { key = ']Q', desc = 'Last Qflist Item', handler = h.repmove.last_qflist_item },
   { key = '[<c-q>', desc = 'File Qflist Item', handler = h.repmove.previous_file_qflist_item },
   { key = ']<c-q>', desc = 'File Qflist Item', handler = h.repmove.next_file_qflist_item },
-  { key = 'gT', desc = 'Tab', handler = h.repmove.previous_tab },
-  { key = 'gt', desc = 'Tab', handler = h.repmove.next_tab },
+  { key = 'gT', desc = 'Previous Tab', handler = h.repmove.previous_tab },
+  { key = 'gt', desc = 'Select Tab', handler = h.repmove.select_tab },
 
   -- Flash
   { key = '/', mode = 'nox', desc = 'Check Flash', handler = h.check_flash, fallback = true, expr = true },

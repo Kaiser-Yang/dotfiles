@@ -442,5 +442,17 @@ function M.grug_sync_then_next() return u.ensure_repmove(grug_sync_then_previous
 function M.grug_sync_then_previous() return u.ensure_repmove(grug_sync_then_previous, grug_sync_then_next)[1]() end
 function M.grug_open_next() return u.ensure_repmove(grug_open_previous, grug_open_next)[2]() end
 function M.grug_open_previous() return u.ensure_repmove(grug_open_previous, grug_open_next)[1]() end
+function M.select_tab()
+  local ignored = vim.v.count == 0 and _G.loaded['tabby.nvim']
+  if ignored then require('tabby.feature.tab_jumper').start() end
+  u.ensure_repmove(tabprevious, function()
+    if ignored then
+      ignored = false
+      return true
+    end
+    return tabnext()
+  end)[2]()
+  return true
+end
 
 return M
