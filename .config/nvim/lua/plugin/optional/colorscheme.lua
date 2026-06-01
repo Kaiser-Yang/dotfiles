@@ -17,6 +17,7 @@ require('catppuccin').setup({
       color_mode = true,
     },
     fidget = true,
+    flash = true,
     gitsigns = true,
     grug_far = true,
     lualine = { enabled = true },

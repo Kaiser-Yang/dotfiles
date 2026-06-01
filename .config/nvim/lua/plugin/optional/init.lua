@@ -17,6 +17,8 @@ vim.schedule(function()
   require('plugin.optional.endwise')
   -- LSP status UI
   require('plugin.optional.fidget')
+  -- Flash
+  require('plugin.optional.flash')
   -- Find And Replace
   require('plugin.optional.grug_far')
   -- Code action indicator

@@ -125,6 +125,8 @@ local opts = {
   { key = '<leader>tgl', desc = 'Line Highlight', handler = h.git.toggle_linehl },
 
   -- Repmove Motion
+  -- FIXME:
+  -- Mappings for operator-pending mode will cause problems when using '.' to repeat
   { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.repmove.semicolon },
   { key = ',', mode = 'nx', desc = 'Last Motion Backward', handler = h.repmove.comma },
   { key = 'f', mode = 'nx', desc = 'Move to Next Character', handler = h.repmove.f },
@@ -204,6 +206,12 @@ local opts = {
   { key = ']<c-q>', desc = 'File Qflist Item', handler = h.repmove.next_file_qflist_item },
   { key = 'gT', desc = 'Tab', handler = h.repmove.previous_tab },
   { key = 'gt', desc = 'Tab', handler = h.repmove.next_tab },
+
+  -- Flash
+  { key = '/', mode = 'nox', desc = 'Check Flash', handler = h.check_flash, fallback = true, expr = true },
+  { key = '?', mode = 'nox', desc = 'Check Flash', handler = h.check_flash, fallback = true, expr = true },
+  { key = 'r', mode = 'o', desc = 'Flash Remote', handler = h.flash.remote },
+  { key = '<c-s>', mode = 'nox', desc = 'Two Char Jump', handler = h.flash.two_char_jump },
 
   -- Swap
   { key = '<m-s>pa', desc = 'Argument', handler = h.treesitter.swap_with_previous_parameter },

@@ -27,6 +27,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
     if new_status then
       vim.b.lint = false
       vim.b.color = false
+      vim.g.flash = false
       vim.b.pairs = false
       vim.b.autotag = false
       vim.b.conform = false
@@ -48,6 +49,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
     else
       vim.b.lint = nil
       vim.b.color = nil
+      vim.g.flash = nil
       vim.b.pairs = nil
       vim.b.autotag = nil
       vim.b.conform = nil

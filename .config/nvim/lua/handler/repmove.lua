@@ -11,6 +11,33 @@ local function previous_todo()
   return true
 end
 
+local function flash_wrap(key)
+  return function()
+    if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return u.get_cnt_prefix() .. key end
+    local Repeat = require('flash.repeat')
+    local Config = require('flash.config')
+    local Flash = require('flash/plugins/char')
+    local ignorecase = vim.o.ignorecase
+    local smartcase = vim.o.smartcase
+    vim.o.ignorecase = false
+    vim.o.smartcase = false
+    Flash.jumping = true
+    local autohide = Config.get('char').autohide
+    if Repeat.is_repeat then
+      Flash.jump_labels = false
+      Flash.state:jump({ count = vim.v.count1 })
+    else
+      Flash.jump(key)
+    end
+    vim.schedule(function()
+      Flash.jumping = false
+      if Flash.state and autohide then Flash.state:hide() end
+      vim.o.ignorecase = ignorecase
+      vim.o.smartcase = smartcase
+    end)
+  end
+end
+
 local nvim_terminal_prompt_ns = vim.api.nvim_create_namespace('nvim.terminal.prompt')
 local function jump_to_prompt(ns, win, buf, count)
   local row, col = unpack(vim.api.nvim_win_get_cursor(win))
@@ -79,9 +106,6 @@ end
 
 local function previous_misspelled() return u.get_cnt_prefix() .. '[s' end
 local function next_misspelled() return u.get_cnt_prefix() .. ']s' end
-
-local function comma_with_count() return u.get_cnt_prefix() .. ',' end
-local function semicolon_with_count() return u.get_cnt_prefix() .. ';' end
 
 --- @param direction 'next'|'previous'
 --- @param position 'start'|'end'
@@ -360,10 +384,10 @@ function M.semicolon()
     return require('repmove').semicolon()
   end
 end
-function M.F() return u.get_cnt_prefix() .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[1]() end
-function M.f() return u.get_cnt_prefix() .. u.ensure_repmove('F', 'f', comma_with_count, semicolon_with_count)[2]() end
-function M.T() return u.get_cnt_prefix() .. u.ensure_repmove('T', 't', comma_with_count, semicolon_with_count)[1]() end
-function M.t() return u.get_cnt_prefix() .. u.ensure_repmove('T', 't', comma_with_count, semicolon_with_count)[2]() end
+function M.F() return u.ensure_repmove(flash_wrap('F'), flash_wrap('f'), flash_wrap(','), flash_wrap(';'))[1]() end
+function M.f() return u.ensure_repmove(flash_wrap('F'), flash_wrap('f'), flash_wrap(','), flash_wrap(';'))[2]() end
+function M.T() return u.ensure_repmove(flash_wrap('T'), flash_wrap('t'), flash_wrap(','), flash_wrap(';'))[1]() end
+function M.t() return u.ensure_repmove(flash_wrap('T'), flash_wrap('t'), flash_wrap(','), flash_wrap(';'))[2]() end
 function M.next_todo() return u.ensure_repmove(previous_todo, next_todo)[2]() end
 function M.next_misspelled() return u.ensure_repmove(previous_misspelled, next_misspelled)[2]() end
 function M.next_section_start() return u.ensure_repmove(previous_section_start, next_section_start)[2]() end
