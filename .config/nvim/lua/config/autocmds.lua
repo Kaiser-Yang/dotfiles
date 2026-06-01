@@ -551,3 +551,13 @@ vim.api.nvim_create_autocmd('FileType', {
     end
   end,
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = _G.autocmd_group,
+  desc = 'Settings for msg',
+  pattern = { 'cmd', 'msg' },
+  callback = function(ev)
+    vim.keymap.set('n', 'q', '<c-w>q', { buf = ev.buf, desc = 'Quit' })
+    vim.keymap.set('n', '<esc>', '<c-w>q', { buf = ev.buf, desc = 'Quit' })
+  end,
+})
