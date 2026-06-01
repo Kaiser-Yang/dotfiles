@@ -390,6 +390,7 @@ local opts = {
   { key = '<leader>tv', desc = 'Dap Virtual Text', handler = h.dap.toggle_virtual_text },
   { key = '<leader>dl', desc = 'Set Log Point', handler = h.dap.set_log_point },
   { key = '<leader>dc', desc = 'Set Condition Breakpoint', handler = h.dap.set_condition_breakpoint },
+  { key = '<leader>dh', desc = 'Set Hit Count Breakpoint', handler = h.dap.set_hit_count_breakpoint },
   { key = '<leader>de', desc = 'Dap Set Exception Breakpoints', handler = h.dap.set_exception_breakpoints },
   { key = '<leader>dC', desc = 'Clear Breakpoint', handler = h.dap.clear_breakpoints },
   { key = '<f4>', desc = 'Dap Terminate', handler = h.dap.terminate },

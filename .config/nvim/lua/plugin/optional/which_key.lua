@@ -34,6 +34,7 @@ w.setup({
   defer = function(ctx) return ctx.mode ~= 'o' end,
 })
 w.add({
+  { '<leader>d', buffer = true, icon = { icon = ' ', color = 'orange' }, desc = 'Dap', mode = 'n' },
   { '<leader>g', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Git', mode = 'nx' },
   { '<leader>x', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Conflict' },
   { '<leader>xd', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Diff' },

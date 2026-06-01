@@ -1,17 +1,17 @@
 local u = require('utils')
 u.gh('MunifTanjim/nui.nvim')
 
-local function ui_input_on_init(uiinput, opt, on_done)
+local function ui_input_on_init(uiinput, opts, on_done)
   local event = require('nui.utils.autocmd').event
-  local prompt = opt.prompt or ''
-  local default = opt.default or ''
+  local prompt = opts.prompt or ''
+  local default = opts.default or ''
   local should_be_normal = (
     prompt:find('Copy to')
     or prompt:find('Move to')
     or prompt:find('Rename')
     or prompt:find('Remove')
     or prompt:find('New Name')
-  ) and default:sub(-1) ~= '/'
+  ) and default:sub(-1) ~= '/' or opts.normal
   uiinput:on(event.BufLeave, function() uiinput:unmount() end, { once = true })
   uiinput:map('n', 'q', function() on_done(nil) end, { noremap = true, nowait = true })
   uiinput:map('n', '<Esc>', function() on_done(nil) end, { noremap = true, nowait = true })

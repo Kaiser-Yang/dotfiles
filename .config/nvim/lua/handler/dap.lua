@@ -1,6 +1,17 @@
 local M = {}
 local u = require('utils')
 
+local function get_current_breakpoint()
+  local buf = vim.api.nvim_get_current_buf()
+  local breakpoints = require('dap.breakpoints').get(buf)[buf]
+  if not breakpoints then return nil end
+  local line = vim.api.nvim_win_get_cursor(0)[1]
+  for _, b in ipairs(breakpoints) do
+    if b.line == line then return b end
+  end
+  return nil
+end
+
 M.toggle_virtual_text = function()
   if not _G.loaded['nvim-dap-view'] then return false end
   local status = not require('dap-view.setup').config.virtual_text.enabled
@@ -34,24 +45,30 @@ end
 
 M.set_hit_count_breakpoint = function()
   if not _G.loaded['nvim-dap'] then return false end
-  vim.ui.input({ prompt = 'Hit Count Breakpoint' }, function(input)
-    if input and input ~= '' then require('dap').set_breakpoint(nil, input) end
+  local bp = get_current_breakpoint()
+  local default = bp and bp.hitCondition or nil
+  vim.ui.input({ prompt = 'Hit Count Breakpoint', default = default, normal = default ~= nil }, function(input)
+    if input and input ~= '' and input ~= default then require('dap').set_breakpoint(nil, input) end
   end)
   return true
 end
 
 M.set_condition_breakpoint = function()
   if not _G.loaded['nvim-dap'] then return false end
-  vim.ui.input({ prompt = 'Condition Breakpoint' }, function(input)
-    if input and input ~= '' then require('dap').set_breakpoint(input) end
+  local bp = get_current_breakpoint()
+  local default = bp and bp.condition or nil
+  vim.ui.input({ prompt = 'Condition Breakpoint', default = default, normal = default ~= nil }, function(input)
+    if input and input ~= '' and input ~= default then require('dap').set_breakpoint(input) end
   end)
   return true
 end
 
 M.set_log_point = function()
   if not _G.loaded['nvim-dap'] then return false end
-  vim.ui.input({ prompt = 'Log Point' }, function(input)
-    if input and input ~= '' then require('dap').set_breakpoint(nil, nil, input) end
+  local bp = get_current_breakpoint()
+  local default = bp and bp.logMessage or nil
+  vim.ui.input({ prompt = 'Log Point', default = default, normal = default ~= nil }, function(input)
+    if input and input ~= '' and input ~= default then require('dap').set_breakpoint(nil, nil, input) end
   end)
   return true
 end
