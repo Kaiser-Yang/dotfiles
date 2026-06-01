@@ -25,6 +25,7 @@ require('nvim-tree').setup({
       { 'n', '<f1>', a.tree.toggle_help, opts('Help') },
       { 'n', '<f5>', a.tree.reload, opts('Refresh') },
       { 'n', 'q', a.tree.close, opts('Quit') },
+      { 'n', '<esc>', a.tree.close, opts('Quit') },
       { 'n', 's', a.tree.search_node, opts('Search') },
 
       { 'n', 'a', a.fs.create, opts('Create') },

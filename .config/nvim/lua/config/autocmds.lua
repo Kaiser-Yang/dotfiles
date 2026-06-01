@@ -413,6 +413,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufEnter', {
     if config.relative == '' then return end
     local buf = vim.api.nvim_win_get_buf(win)
     vim.keymap.set('n', 'q', '<c-w>q', { desc = 'Quit', buf = buf })
+    vim.keymap.set('n', '<esc>', '<c-w>q', { desc = 'Quit', buf = buf })
   end,
 })
 
