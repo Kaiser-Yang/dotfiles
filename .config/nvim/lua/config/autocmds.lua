@@ -28,6 +28,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
       vim.b.lint = false
       vim.b.color = false
       vim.b.pairs = false
+      vim.b.autotag = false
       vim.b.conform = false
       vim.b.treesitter_foldexpr = false
       vim.b.treesitter_highlight = false
@@ -48,6 +49,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'FileType', 'BufReadPost' }, {
       vim.b.lint = nil
       vim.b.color = nil
       vim.b.pairs = nil
+      vim.b.autotag = nil
       vim.b.conform = nil
       vim.b.treesitter_foldexpr = nil
       vim.b.treesitter_highlight = nil
