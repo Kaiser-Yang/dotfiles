@@ -8,6 +8,12 @@ local function format(opts)
   }
 end
 
+function M.jump()
+  if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return false end
+  require('flash').jump()
+  return true
+end
+
 function M.remote()
   if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return false end
   require('flash').remote()

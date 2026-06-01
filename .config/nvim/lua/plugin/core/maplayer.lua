@@ -212,7 +212,8 @@ local opts = {
 
   -- Flash
   { key = 'r', mode = 'o', desc = 'Flash Remote', handler = h.flash.remote },
-  { key = '<c-s>', mode = 'nox', desc = 'Two Char Jump', handler = h.flash.two_char_jump },
+  { key = '<c-s>', mode = 'nox', desc = 'Flash Two Char Jump', handler = h.flash.two_char_jump },
+  { key = '<leader><leader>', mode = 'nox', desc = 'Flash Jump', handler = h.flash.jump },
 
   -- Swap
   { key = '<m-s>pa', desc = 'Argument', handler = h.treesitter.swap_with_previous_parameter },
