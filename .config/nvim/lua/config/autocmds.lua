@@ -362,9 +362,7 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
   desc = 'Set winfixbuf for some windows',
   group = _G.autocmd_group,
   callback = function(ev)
-    if not vim.tbl_contains({ 'grug-far', 'dap-view', 'CompetiTest' }, vim.bo[ev.buf].filetype) then
-      return
-    end
+    if not vim.tbl_contains({ 'grug-far', 'dap-view', 'CompetiTest' }, vim.bo[ev.buf].filetype) then return end
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       if
         vim.api.nvim_win_is_valid(win)
