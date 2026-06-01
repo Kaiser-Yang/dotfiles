@@ -186,8 +186,7 @@ function M.show_breakpoint_info()
   if win then pcall(vim.api.nvim_win_close, win, true) end
   win = vim.api.nvim_open_win(buf, false, opts)
 
-  vim.api.nvim_buf_set_keymap(buf, 'n', 'q', '<cmd>close<cr>', { silent = true, noremap = true })
-  vim.api.nvim_buf_set_keymap(buf, 'n', '<esc>', '<cmd>close<cr>', { silent = true, noremap = true })
+  vim.keymap.set('n', 'q', '<cmd>close<cr>', { buf = buf })
 
   local augroup = vim.api.nvim_create_augroup('BreakpointInfoAutoClose', { clear = true })
   local function cleanup()
