@@ -9,14 +9,15 @@ local theme = {
   current_win = 'TabLineSel',
 }
 local color = function(abs)
-  local _, color = require'nvim-web-devicons'.get_icon_color(vim.fn.fnamemodify(abs, ':t'), vim.fn.fnamemodify(abs, ':e'))
+  local _, color =
+    require('nvim-web-devicons').get_icon_color(vim.fn.fnamemodify(abs, ':t'), vim.fn.fnamemodify(abs, ':e'))
   return color
 end
 
 local function build_file_icon(win)
   return {
     win.file_icon(),
-    hl = {fg = color(vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win.id)))}
+    hl = { fg = color(vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win.id))) },
   }
 end
 
