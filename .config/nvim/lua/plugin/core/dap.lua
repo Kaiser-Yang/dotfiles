@@ -47,6 +47,10 @@ local function get_connect()
   end)
 end
 
+require('dap-view.base.keymaps').quit = {
+  action = '<c-w>q',
+  desc = 'quit',
+}
 require('dap-view').setup({
   winbar = {
     show = true,
@@ -88,6 +92,34 @@ require('dap-view').setup({
     }
   end)(),
   help = { border = vim.o.winborder },
+  keymaps = {
+    scopes = {
+    },
+    watches = {
+    },
+    hover = {
+      quit = { 'q', '<esc>' },
+    },
+    help = { quit = { 'q', '<esc>' } },
+    console = {
+    },
+    threads = {
+    },
+    exceptions = {
+    },
+    sessions = {
+    },
+    breakpoints = {
+    },
+    base = {
+      next_view = {},
+      prev_view = {},
+      jump_to_first = {},
+      jump_to_last = {},
+      help = { 'g?', '<f1>' },
+      quit = 'q',
+    },
+  },
   virtual_text = { enabled = true },
 })
 local dap = require('dap')
@@ -160,25 +192,25 @@ dap.adapters = {
     args = { '--interpreter=dap', '--eval-command', 'set print pretty on' },
   },
   debugpy = function(cb, config)
+    local adapter
     if config.request == 'attach' then
       local port = (config.connect or config).port
       local host = (config.connect or config).host or '127.0.0.1'
-      local adapter = {
+      adapter = {
         type = 'server',
         port = port,
         host = host,
         options = { source_filetype = 'python' },
       }
-      cb(adapter)
     else
-      local adapter = {
+      adapter = {
         type = 'executable',
         command = 'python',
         args = { '-m', 'debugpy.adapter' },
         options = { source_filetype = 'python' },
       }
-      cb(adapter)
     end
+    cb(adapter)
   end,
   delve = function(callback, client_config)
     local delve_config = {
@@ -255,19 +287,19 @@ dap.configurations = {
       outputMode = 'remote',
     },
     {
-      name = 'Launch (Test)',
-      type = 'delve',
-      request = 'launch',
-      mode = 'test',
-      program = '${file}',
-      outputMode = 'remote',
-    },
-    {
       name = 'Launch (Test go.mod)',
       type = 'delve',
       request = 'launch',
       mode = 'test',
       program = './${relativeFileDirname}',
+      outputMode = 'remote',
+    },
+    {
+      name = 'Launch (Test)',
+      type = 'delve',
+      request = 'launch',
+      mode = 'test',
+      program = '${file}',
       outputMode = 'remote',
     },
     {
