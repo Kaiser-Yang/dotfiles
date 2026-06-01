@@ -90,7 +90,7 @@ require('blink.cmp').setup({
       snippets = {
         name = 'Snip',
         score_offset = 0,
-        transform_items = function(_, items)
+        transform_items = function(ctx, items)
           items = vim.tbl_map(function(item)
             item.detail = u.doc_from_snippet(item.insertText)
             return item
@@ -104,7 +104,12 @@ require('blink.cmp').setup({
               table.insert(items, snippet)
             end
           end
-          return items
+          local range = ctx.line:sub(ctx.bounds.start_col, ctx.cursor[2])
+          local trigger = ctx.trigger.initial_character or '' ---@type string
+          return vim.tbl_filter(
+            function(item) return item.label:sub(1, 1) == trigger or item.label:sub(1, #range) == range end,
+            items
+          )
         end,
         opts = {
           extended_filetypes = {
