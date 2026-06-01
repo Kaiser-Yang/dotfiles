@@ -207,6 +207,9 @@ local opts = {
   { key = 'gT', desc = 'Previous Tab', handler = h.repmove.previous_tab },
   { key = 'gt', desc = 'Select Tab', handler = h.repmove.select_tab },
 
+  -- Tabby
+  { key = 'gw', desc = 'Pick Window', handler = h.pick_window },
+
   -- Flash
   { key = '/', mode = 'nox', desc = 'Check Flash', handler = h.check_flash, fallback = true, expr = true },
   { key = '?', mode = 'nox', desc = 'Check Flash', handler = h.check_flash, fallback = true, expr = true },
