@@ -543,6 +543,8 @@ vim.api.nvim_create_autocmd('FileType', {
     local mapping = {
       { { 'n', 'x' }, '[[', h.repmove.previous_plugin, { desc = 'Plugin' } },
       { { 'n', 'x' }, ']]', h.repmove.next_plugin, { desc = 'Plugin' } },
+      { 'n', 'q', '<c-w>q', { desc = 'Quit' } },
+      { 'n', '<esc>', '<c-w>q', { desc = 'Quit' } },
     }
     for _, m in ipairs(mapping) do
       m[4].buf = ev.buf
