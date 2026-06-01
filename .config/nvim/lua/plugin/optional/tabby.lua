@@ -7,6 +7,7 @@ local theme = {
   current_tab = 'TabLineSel',
   win = 'TabLine',
   current_win = 'TabLineSel',
+  jump = 'TabLineJumpKey',
 }
 local color = function(abs)
   local _, color =
@@ -32,9 +33,12 @@ require('tabby').setup({
         local tab_name = index and string.sub(name, 1, index - 1) or name
         return {
           line.sep(' ', hl, theme.fill),
-          tab.is_current() and '' or '󰆣',
-          build_file_icon(tab.current_win()),
-          tab.number(),
+          tab.in_jump_mode() and { tab.jump_key(), hl = theme.jump } or {
+            tab.is_current() and '' or '󰆣',
+            tab.number(),
+            build_file_icon(tab.current_win()),
+            margin = ' ',
+          },
           tab_name,
           tab.close_btn(''),
           hl = hl,
