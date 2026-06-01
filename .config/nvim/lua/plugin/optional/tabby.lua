@@ -45,18 +45,6 @@ require('tabby').setup({
           margin = ' ',
         }
       end),
-      line.spacer(),
-      line.wins_in_tab(line.api.get_current_tab()).foreach(function(win)
-        local hl = win.is_current() and theme.current_win or theme.win
-        return {
-          line.sep(' ', hl, theme.fill),
-          win.is_current() and '' or '',
-          build_file_icon(win),
-          win.buf_name(),
-          hl = hl,
-          margin = ' ',
-        }
-      end),
       hl = theme.fill,
     }
   end,
