@@ -418,3 +418,140 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufEnter', {
     vim.keymap.set('n', 'q', '<c-w>q', { desc = 'Quit', buf = buf })
   end,
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = _G.autocmd_group,
+  desc = 'Settings for gitcommit files',
+  pattern = 'gitcommit',
+  callback = function(ev)
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      if
+        vim.api.nvim_win_is_valid(win)
+        and vim.api.nvim_win_get_buf(win) == ev.buf
+        and vim.wo[win][0].colorcolumn ~= '50,72'
+      then
+        vim.wo[0][0].colorcolumn = '50,72'
+      end
+    end
+  end,
+})
+
+vim.schedule_wrap(vim.api.nvim_create_autocmd)('FileType', {
+  group = _G.autocmd_group,
+  desc = 'Settings for grug-far files',
+  pattern = 'grug-far',
+  callback = function(ev)
+    local h = require('handler')
+    local mappings = {
+      { 'n', 'g?', h.grug_far.help, { desc = 'Help' } },
+      { 'n', '<f1>', h.grug_far.help, { desc = 'Help' } },
+      { 'i', '<f1>', h.grug_far.help, { desc = 'Help' } },
+      { 'n', '[c', h.repmove.grug_apply_then_previous, { desc = 'Change after Apply' } },
+      { 'n', ']c', h.repmove.grug_apply_then_next, { desc = 'Change after Apply' } },
+      { 'n', '[C', h.repmove.grug_sync_then_previous, { desc = 'Change after Sync' } },
+      { 'n', ']C', h.repmove.grug_sync_then_next, { desc = 'Change after Sync' } },
+      { 'n', '[[', h.repmove.grug_open_previous, { desc = 'Location Then Open' } },
+      { 'n', ']]', h.repmove.grug_open_next, { desc = 'Location Then Open' } },
+    }
+    for _, m in ipairs(mappings) do
+      m[4].buf = ev.buf
+      ---@diagnostic disable-next-line: param-type-mismatch
+      vim.keymap.set(unpack(m))
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = _G.autocmd_group,
+  desc = 'Settings for help files',
+  pattern = 'help',
+  callback = function(ev)
+    vim.cmd('setlocal number relativenumber')
+    local h = require('handler')
+    local mapping = {
+      { { 'n', 'x', 'o' }, '[[', h.repmove.previous_section_start, { desc = 'Section Start' } },
+      { { 'n', 'x', 'o' }, ']]', h.repmove.next_section_start, { desc = 'Section Start' } },
+    }
+    for _, m in ipairs(mapping) do
+      m[4].buf = ev.buf
+      ---@diagnostic disable-next-line: param-type-mismatch
+      vim.keymap.set(unpack(m))
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = _G.autocmd_group,
+  desc = 'Settings for markdown files',
+  pattern = 'markdown',
+  callback = function(ev)
+    local h = require('handler')
+    local function comma_typed()
+      local key = u.key.last_key()
+      return key and key:match(',$') ~= nil
+    end
+    local mappings = {
+      { 'i', '1', h.markdown.title(1), { desc = 'Insert Markdown Title 1' } },
+      { 'i', '2', h.markdown.title(2), { desc = 'Insert Markdown Title 2' } },
+      { 'i', '3', h.markdown.title(3), { desc = 'Insert Markdown Title 3' } },
+      { 'i', '4', h.markdown.title(4), { desc = 'Insert Markdown Title 4' } },
+      { 'i', '5', h.markdown.title(5), { desc = 'Insert Markdown Title 5' } },
+      { 'i', '6', h.markdown.title(6), { desc = 'Insert Markdown Title 6' } },
+      { 'i', 's', h.markdown.separate_line, { desc = 'Insert Markdown Separate Line' } },
+      { 'i', 'a', h.markdown.link, { desc = 'Insert Markdown Link' } },
+      { 'i', 'b', h.markdown.bold, { desc = 'Insert Markdown Bold Text' } },
+      { 'i', 'B', h.markdown.bold_and_italic, { desc = 'Insert Markdown Bold and Italic Text' } },
+      { 'i', 'c', h.markdown.code_block, { desc = 'Insert Markdown Code Block' } },
+      { 'i', 'd', h.markdown.delete_line, { desc = 'Insert Markdown Delete Line' } },
+      { 'i', 'i', h.markdown.italic, { desc = 'Insert Markdown Italic Text' } },
+      { 'i', 'm', h.markdown.math_inline, { desc = 'Insert Markdown Inline Math' } },
+      { 'i', 'M', h.markdown.math_block, { desc = 'Insert Markdown Math Block' } },
+      { 'i', 'p', h.markdown.image, { desc = 'Insert Markdown Image' } },
+      { 'i', 't', h.markdown.code_inline, { desc = 'Insert Markdown Code Line' } },
+      { 'i', 'x', h.markdown.todo, { desc = 'Insert Markdown Todo' } },
+    }
+    for _, m in ipairs(mappings) do
+      local rhs = m[3]
+      ---@diagnostic disable-next-line: assign-type-mismatch
+      m[3] = function()
+        local res = m[2]
+        if not comma_typed() then return res end
+        local prefix = ''
+        if type(rhs) == 'function' then
+          res = rhs()
+          if not res then
+            res = m[2]
+          else
+            if res == true then res = '' end
+            prefix = '<c-g>u<bs>'
+          end
+        else
+          res = rhs
+          prefix = '<c-g>u<bs>'
+        end
+        return prefix .. res
+      end
+      m[4].expr = true
+      m[4].buf = ev.buf
+      vim.keymap.set(unpack(m))
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = _G.autocmd_group,
+  desc = 'Settings for nvim-pack files',
+  pattern = 'nvim-pack',
+  callback = function(ev)
+    local h = require('handler')
+    local mapping = {
+      { { 'n', 'x' }, '[[', h.repmove.previous_plugin, { desc = 'Plugin' } },
+      { { 'n', 'x' }, ']]', h.repmove.next_plugin, { desc = 'Plugin' } },
+    }
+    for _, m in ipairs(mapping) do
+      m[4].buf = ev.buf
+      ---@diagnostic disable-next-line: param-type-mismatch
+      vim.keymap.set(unpack(m))
+    end
+  end,
+})
