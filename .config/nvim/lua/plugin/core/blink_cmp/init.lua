@@ -13,7 +13,7 @@ local function default_sources()
   else
     table.insert(res, 'lsp')
   end
-  vim.list_extend(res, { 'snippets', 'path', 'dictionary', 'buffer' })
+  vim.list_extend(res, { 'snippets', 'path', 'buffer', 'dictionary' })
   return res
 end
 
