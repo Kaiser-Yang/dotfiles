@@ -448,6 +448,8 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('FileType', {
       { 'n', ']C', h.repmove.grug_sync_then_next, { desc = 'Change after Sync' } },
       { 'n', '[[', h.repmove.grug_open_previous, { desc = 'Location Then Open' } },
       { 'n', ']]', h.repmove.grug_open_next, { desc = 'Location Then Open' } },
+      { 'n', 'q', '<c-w>q', { desc = 'Close' } },
+      { 'n', '<esc>', '<c-w>q', { desc = 'Close' } },
     }
     for _, m in ipairs(mappings) do
       m[4].buf = ev.buf
