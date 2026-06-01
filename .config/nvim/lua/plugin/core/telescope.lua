@@ -147,11 +147,6 @@ local insert_and_normal = {
     type = 'action',
     opts = { desc = 'Send Selected to Qflist' },
   },
-  ['<c-l>'] = {
-    a.send_selected_to_loclist + a.open_loclist,
-    type = 'action',
-    opts = { desc = 'Send Selected to Loclist' },
-  },
   ['<c-f>'] = { h.telescope.toggle_live_grep, type = 'action', opts = { desc = 'Toggle Live Grep Arg' } },
   ['<c-p>'] = { h.telescope.toggle_find_file, type = 'action', opts = { desc = 'Toggle Find File' } },
   ['<m-f>'] = { h.telescope.toggle_find_word, type = 'action', opts = { desc = 'Toggle Find Word' } },
