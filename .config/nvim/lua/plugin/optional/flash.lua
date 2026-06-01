@@ -12,7 +12,7 @@ require('flash').setup({
   label = { reuse = 'all' },
   modes = {
     search = {
-      enabled = true,
+      enabled = false,
       highlight = { backdrop = true },
       jump = { autojump = true },
     },

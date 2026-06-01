@@ -211,8 +211,6 @@ local opts = {
   { key = 'gw', desc = 'Pick Window', handler = h.pick_window },
 
   -- Flash
-  { key = '/', mode = 'nox', desc = 'Check Flash', handler = h.check_flash, fallback = true, expr = true },
-  { key = '?', mode = 'nox', desc = 'Check Flash', handler = h.check_flash, fallback = true, expr = true },
   { key = 'r', mode = 'o', desc = 'Flash Remote', handler = h.flash.remote },
   { key = '<c-s>', mode = 'nox', desc = 'Two Char Jump', handler = h.flash.two_char_jump },
 
