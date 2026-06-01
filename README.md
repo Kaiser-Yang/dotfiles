@@ -53,25 +53,24 @@ with `pip install pylatexenc`.
 
 ### Others
 
-| Shortcut | Mode | Description                                                                                                  |
-| -------- | ---- | ------------------------------------------------------------------------------------------------------------ |
-| \<C-P>   | N    | Find files in the current directory or a git root directory                                                  |
-| \<C-F>   | N    | Find contents in the current directory or a git root directory                                               |
-| \<CR>    | N    | In file explorer, this will enter a directory or open a file                                                 |
-| \<BS>    | N    | In file explorer, this will go to the `..` directory. |
-| gy       | N    | List all the yanked contents                                                                                 |
-| \<C-D>   | I    | Scroll down the completion preview window, if there is one                                                   |
-| \<C-U>   | I    | Scroll up the completion preview window, if there is one                                                     |
+| Shortcut | Mode | Description                                                    |
+| -------- | ---- | -------------------------------------------------------------- |
+| \<C-P>   | N    | Find files in the current directory or a git root directory    |
+| \<C-F>   | N    | Find contents in the current directory or a git root directory |
+| \<CR>    | N    | In file explorer, this will enter a directory or open a file   |
+| \<BS>    | N    | In file explorer, this will go to the `..` directory.          |
+| gy       | N    | List all the yanked contents                                   |
+| \<C-D>   | I    | Scroll down the completion preview window, if there is one     |
+| \<C-U>   | I    | Scroll up the completion preview window, if there is one       |
 
 ### Debugger
 
-| Shortcut   | Mode | Description                             |
-| ---------- | ---- | --------------------------------------- |
-| \<F4>      | N    | Terminate current process.              |
-| \<F5>      | N    | Continue.                               |
-| \<F6>      | N    | Restart current process.                |
-| \<F9>      | N    | Back.                                   |
-| \<F10>     | N    | Next (step over).                       |
-| \<F11>     | N    | Step in.                                |
-| \<F12>     | N    | Finish (step out).                      |
-
+| Shortcut | Mode | Description                |
+| -------- | ---- | -------------------------- |
+| \<F4>    | N    | Terminate current process. |
+| \<F5>    | N    | Continue.                  |
+| \<F6>    | N    | Restart current process.   |
+| \<F9>    | N    | Back.                      |
+| \<F10>   | N    | Next (step over).          |
+| \<F11>   | N    | Step in.                   |
+| \<F12>   | N    | Finish (step out).         |
