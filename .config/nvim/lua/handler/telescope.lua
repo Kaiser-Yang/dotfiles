@@ -251,6 +251,12 @@ function M.diagnostics()
   return true
 end
 
+function M.git_status()
+  if not _G.loaded['telescope.nvim'] then return false end
+  require('telescope.builtin').git_status()
+  return true
+end
+
 function M.qflist()
   if not _G.loaded['telescope.nvim'] then return false end
   require('telescope.builtin').quickfix()
@@ -272,6 +278,12 @@ end
 function M.keymaps()
   if not _G.loaded['telescope.nvim'] then return false end
   require('telescope.builtin').keymaps()
+  return true
+end
+
+function M.marks()
+  if not _G.loaded['telescope.nvim'] then return false end
+  require('telescope.builtin').marks()
   return true
 end
 
