@@ -315,18 +315,22 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWinEnter', 'BufEnter' }, {
   callback = function(ev)
     if vim.bo[ev.buf].filetype ~= 'CompetiTest' then return end
     for _, win in ipairs(vim.api.nvim_list_wins()) do
-      if vim.api.nvim_win_get_buf(win) == ev.buf then
+      if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == ev.buf then
         vim.wo[win][0].signcolumn = 'no'
         vim.wo[win][0].statuscolumn = '%l '
-        vim.wo[win][0].winbar = table.concat({
-          '%#WinBarNC#',
-          '%=',
-          '%#lualine_a_normal#',
-          vim.b[ev.buf].competitest_title or 'CompetiTest',
-          '%#WinBarNC#',
-          '%=',
-          '%*',
-        })
+        -- NOTE: we must schedule here to make sure the "competitest_title" is set
+        vim.schedule(function()
+          if not vim.api.nvim_win_is_valid(win) then return end
+          vim.wo[win][0].winbar = table.concat({
+            '%#WinBarNC#',
+            '%=',
+            '%#lualine_a_normal#',
+            vim.b[ev.buf].competitest_title or 'CompetiTest',
+            '%#WinBarNC#',
+            '%=',
+            '%*',
+          })
+        end)
       end
     end
   end,
@@ -556,7 +560,5 @@ vim.api.nvim_create_autocmd('FileType', {
   group = _G.autocmd_group,
   desc = 'Settings for msg',
   pattern = { 'cmd', 'msg' },
-  callback = function(ev)
-    vim.keymap.set('n', 'q', '<c-w>q', { buf = ev.buf, desc = 'Quit' })
-  end,
+  callback = function(ev) vim.keymap.set('n', 'q', '<c-w>q', { buf = ev.buf, desc = 'Quit' }) end,
 })
