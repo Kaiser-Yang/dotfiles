@@ -6,10 +6,14 @@ u.gh('mfussenegger/nvim-dap')
 
 local function get_exe()
   return coroutine.create(function(dap_run_co)
+    local default = vim.fn.getcwd() .. '/'
     vim.ui.input({
       prompt = 'Path to Executable',
-      default = vim.fn.getcwd() .. '/',
-    }, function(input) coroutine.resume(dap_run_co, input) end)
+      default = default,
+    }, function(input)
+      if input == default or vim.fn.executable(input) == 0 then input = nil end
+      coroutine.resume(dap_run_co, input)
+    end)
   end)
 end
 
