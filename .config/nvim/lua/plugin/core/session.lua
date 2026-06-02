@@ -9,5 +9,5 @@ require('auto-session').setup({
   auto_create = vim.fs.root(0, '.git'),
   auto_restore = vim.fs.root(0, '.git'),
   session_lens = { mappings = false },
-  close_filetypes_on_save = { 'man', 'grug-far', 'NvimTree', 'dap-view', 'CompetiTest' },
+  close_filetypes_on_save = { 'help', 'man', 'grug-far', 'NvimTree', 'dap-view', 'CompetiTest' },
 })
