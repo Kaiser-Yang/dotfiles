@@ -315,7 +315,11 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWinEnter', 'BufEnter' }, {
   callback = function(ev)
     if vim.bo[ev.buf].filetype ~= 'CompetiTest' then return end
     for _, win in ipairs(vim.api.nvim_list_wins()) do
-      if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == ev.buf then
+      if
+        vim.api.nvim_win_is_valid(win)
+        and vim.api.nvim_win_get_buf(win) == ev.buf
+        and vim.api.nvim_win_get_config(win).relative == ''
+      then
         vim.wo[win][0].signcolumn = 'no'
         vim.wo[win][0].statuscolumn = '%l '
         -- NOTE: we must schedule here to make sure the "competitest_title" is set
