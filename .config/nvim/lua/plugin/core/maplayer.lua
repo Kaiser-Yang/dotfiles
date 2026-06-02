@@ -125,14 +125,12 @@ local opts = {
   { key = '<leader>tgl', desc = 'Line Highlight', handler = h.git.toggle_linehl },
 
   -- Repmove Motion
-  -- FIXME:
-  -- Mappings for operator-pending mode will cause problems when using '.' to repeat
   { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.repmove.semicolon },
   { key = ',', mode = 'nx', desc = 'Last Motion Backward', handler = h.repmove.comma },
-  { key = 'f', mode = 'nx', desc = 'Move to Next Character', handler = h.repmove.f },
-  { key = 'F', mode = 'nx', desc = 'Move to Previous Character', handler = h.repmove.F },
-  { key = 't', mode = 'nx', desc = 'Move till Next Character', handler = h.repmove.t },
-  { key = 'T', mode = 'nx', desc = 'Move till Previous Character', handler = h.repmove.T },
+  { key = 'f', mode = 'nox', desc = 'Move to Next Character', handler = h.repmove.f },
+  { key = 'F', mode = 'nox', desc = 'Move to Previous Character', handler = h.repmove.F },
+  { key = 't', mode = 'nox', desc = 'Move till Next Character', handler = h.repmove.t },
+  { key = 'T', mode = 'nox', desc = 'Move till Previous Character', handler = h.repmove.T },
   -- By deafault, "[a" and "]a" are mapped to ":prevvious" and ":next"
   { key = '[a', mode = 'nox', desc = 'Argument Start', handler = h.repmove.previous_parameter_start },
   { key = ']a', mode = 'nox', desc = 'Argument Start', handler = h.repmove.next_parameter_start },
