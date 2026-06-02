@@ -20,13 +20,13 @@ require('competitest').setup({
   editor_ui = {
     normal_mode_mappings = {
       switch_window = {},
-      save_and_close = { '<c-s>', '<m-s>' },
+      save_and_close = '<m-cr>',
       cancel = 'q',
     },
     insert_mode_mappings = {
       switch_window = {},
-      save_and_close = { '<c-s>', '<m-s>' },
-      cancel = { '<c-c>' },
+      save_and_close = '<m-cr>',
+      cancel = '<c-c>',
     },
   },
   runner_ui = {
@@ -36,10 +36,10 @@ require('competitest').setup({
       run_all_again = 'R',
       kill = '<c-c>',
       kill_all = {},
-      view_input = 'i',
-      view_output = 'a',
-      view_stdout = 'o',
-      view_stderr = 'e',
+      view_input = {},
+      view_output = {},
+      view_stdout = {},
+      view_stderr = {},
       toggle_diff = 'd',
       close = 'q',
     },
