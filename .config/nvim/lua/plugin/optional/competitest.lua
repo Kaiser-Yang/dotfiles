@@ -44,7 +44,7 @@ require('competitest').setup({
       close = 'q',
     },
   },
-  template_file = { cpp = vim.fn.stdpath('config') .. '/cp/template.cpp' },
+  template_file = { cpp = vim.fn.stdpath('config') .. '/cpp/template.cpp' },
   evaluate_template_modifiers = true,
   received_problems_path = function(task, file_ext)
     local sub_dir
