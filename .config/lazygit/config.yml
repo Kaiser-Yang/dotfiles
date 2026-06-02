@@ -22,3 +22,6 @@ gui:
   nerdFontsVersion: "3"
   showFileIcons: true
   useHunkModeInStagingView: false
+keybinding:
+  universal:
+    confirmInEditor: [<alt+enter>]
