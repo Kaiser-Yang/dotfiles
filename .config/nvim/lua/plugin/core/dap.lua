@@ -6,12 +6,18 @@ u.gh('mfussenegger/nvim-dap')
 
 local function get_exe()
   return coroutine.create(function(dap_run_co)
-    local default = vim.fn.getcwd() .. '/'
+    local default = vim.fn.getcwd() .. '/a.out'
+    local normal = nil
+    if vim.fn.expand('%:p'):find('OJProblems') then
+      default = vim.fn.expand('%:r') .. '.out'
+      normal = true
+    end
     vim.ui.input({
       prompt = 'Path to Executable',
       default = default,
+      normal = normal,
     }, function(input)
-      if input == default or vim.fn.executable(input) == 0 then input = nil end
+      if vim.fn.executable(input) == 0 then input = nil end
       coroutine.resume(dap_run_co, input)
     end)
   end)
