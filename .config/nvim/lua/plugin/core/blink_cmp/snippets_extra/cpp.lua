@@ -16,7 +16,7 @@ return {
     }, 'header guard: `_<DIRNAME>_<FILENAME>_<EXTENSION>_`')()
   end,
   function()
-    if not vim.fn.getcwd():find('OJProblems') then return end
+    if not vim.fn.expand('%:p'):find('OJProblems') then return end
     return u.make_snippet_wrap('oj', {
       '// problem statement: $1',
       '',

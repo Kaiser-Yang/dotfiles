@@ -269,12 +269,11 @@ function M.cursor_to_bol()
 end
 
 local function competi_test()
-  if not vim.fn.getcwd():match('OJProblems') or not _G.loaded['competitest.nvim'] then return false end
+  if not vim.fn.expand('%:p'):match('OJProblems') or not _G.loaded['competitest.nvim'] then return false end
   if vim.api.nvim_buf_get_name(0) == '' then
     vim.cmd('CompetiTest receive problem')
     return true
   end
-  if not vim.fn.expand('%:p'):match('OJProblems') then return false end
   local file_dir = vim.fn.expand('%:p:h')
   local file_name = vim.fn.expand('%:t:r')
   if vim.fn.filereadable(file_dir .. '/' .. file_name .. '_0.in') == 0 then
