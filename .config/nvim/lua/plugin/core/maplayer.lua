@@ -211,6 +211,8 @@ local opts = {
   { key = 'gw', desc = 'Pick Window', handler = h.pick_window },
 
   -- Flash
+  { key = '/', mode = 'o', desc = 'Flash Forward Search', handler = h.flash.forward_search },
+  { key = '?', mode = 'o', desc = 'Flash Backward Search', handler = h.flash.backward_search },
   { key = 'r', mode = 'o', desc = 'Flash Remote', handler = h.flash.remote },
   { key = '<c-s>', mode = 'nox', desc = 'Flash Two Char Jump', handler = h.flash.two_char_jump },
   { key = '<leader><leader>', mode = 'nox', desc = 'Flash Jump', handler = h.flash.jump },

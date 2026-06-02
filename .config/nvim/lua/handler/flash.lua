@@ -14,6 +14,18 @@ function M.jump()
   return true
 end
 
+function M.forward_search()
+  if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return false end
+  require('flash').jump({ forward = true, wrap = true, search = { multi_window = false } })
+  return true
+end
+
+function M.backward_search()
+  if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return false end
+  require('flash').jump({ forward = false, wrap = true, search = { multi_window = false } })
+  return true
+end
+
 function M.remote()
   if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return false end
   require('flash').remote()
