@@ -104,22 +104,41 @@ require('dap-view').setup({
   help = { border = vim.o.winborder },
   keymaps = {
     scopes = {
+      toggle = { 'l', 'h', '<cr>', '<2-leftmouse>' },
+      jump_to_parent = '[[',
+      set_value = 's',
     },
     watches = {
+      toggle = { 'l', 'h', '<cr>', '<2-leftmouse>' },
+      jump_to_parent = '[[',
+      set_value = 's',
+      copy_value = 'c',
+      delete_expression = 'd',
+      append_expression = 'a',
+      insert_expression = 'i',
+      edit_expression = 'e',
     },
     hover = {
       quit = 'q',
+      toggle = { 'l', 'h', '<cr>', '<2-leftmouse>' },
+      jump_to_parent = '[[',
+      set_value = 's',
     },
     help = { quit = 'q' },
-    console = {
-    },
+    console = { next_session = {}, prev_session = {} },
     threads = {
+      toggle_subtle_frames = 't',
+      filter = 'f',
+      invert_filter = 'o',
+      jump_to_frame = { '<cr>', '<2-leftmouse>' },
+      force_jump = '<c-w><cr>',
     },
-    exceptions = {
-    },
-    sessions = {
-    },
+    exceptions = { toggle_filter = { 'l', 'h', '<cr>', '<2-leftmouse>' } },
+    sessions = { switch_session = {} },
     breakpoints = {
+      delete_breakpoint = 'd',
+      jump_to_breakpoint = { '<cr>', '<2-leftmouse>' },
+      force_jump = '<c-w><cr>',
     },
     base = {
       next_view = {},
