@@ -22,7 +22,7 @@ require('flash').setup({
       label = { exclude = 'acdghijklrACDIJKY' },
       keys = {},
       char_actions = function() return { [';'] = 'next', [','] = 'prev' } end,
-      jump = { do_first_jump = true, autojump = true },
+      jump = { autojump = true },
     },
   },
 })

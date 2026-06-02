@@ -25,6 +25,9 @@ local function flash_wrap(key)
     local autohide = Config.get('char').autohide
     if Repeat.is_repeat then
       Flash.jump_labels = false
+      Flash.state = Flash.new()
+      Flash.state:hide()
+      Flash.state:update({ pattern = Flash.char })
       Flash.state:jump({ count = vim.v.count1 })
     else
       Flash.jump(key)
