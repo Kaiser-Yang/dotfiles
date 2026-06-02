@@ -136,13 +136,12 @@ local dap = require('dap')
 require('dap.ext.vscode').json_decode = function(str)
   return vim.json.decode(require('plenary.json').json_strip_comments(str))
 end
-local before_start = function()
+local view = function()
   local winnr = require('dap-view.state').winnr
   local dap_view_visible = winnr and vim.api.nvim_win_is_valid(winnr)
   if not dap_view_visible then require('handler').dap.toggle_dap_view() end
 end
-dap.listeners.before.attach.view = before_start
-dap.listeners.before.launch.view = before_start
+dap.listeners.after.event_initialized.view = view
 local c_cpp_rust_configuration = {
   {
     name = 'Launch (codelldb)',
