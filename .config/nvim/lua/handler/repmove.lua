@@ -35,6 +35,7 @@ local function flash_wrap(key)
       vim.o.ignorecase = ignorecase
       vim.o.smartcase = smartcase
     end)
+    return true
   end
 end
 
