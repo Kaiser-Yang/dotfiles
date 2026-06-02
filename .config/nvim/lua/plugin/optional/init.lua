@@ -9,8 +9,6 @@ vim.schedule(function()
   require('plugin.optional.color')
   -- Competitive programming test runner
   require('plugin.optional.competitest')
-  -- Database client (vim-dadbod)
-  require('plugin.optional.dadbod')
   -- Winbar breadcrumbs
   require('plugin.optional.dropbar')
   -- Auto-insert `end` for some languages
