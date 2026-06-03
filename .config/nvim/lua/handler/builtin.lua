@@ -453,4 +453,32 @@ end
 
 function M.select_tab(target) return '<cmd>' .. (target or u.get_cnt_prefix()) .. 'tabnext<cr>' end
 
+--- @param direction 'left'|'right'|'top'|'bottom'
+function M.swap_wrap(direction)
+  return function()
+    local cur_win = vim.api.nvim_get_current_win()
+    local nei_win = u.get_nearest_neighbor(cur_win, direction)
+    if nei_win == nil then return false end
+    if type(nei_win) == 'table' then nei_win = nei_win[1] end
+    local cur_buf = vim.api.nvim_win_get_buf(cur_win)
+    local nei_buf = vim.api.nvim_win_get_buf(nei_win)
+    if
+      vim.wo[cur_win].winfixbuf
+      or vim.wo[nei_win].winfixbuf
+      or vim.bo[cur_buf].buftype ~= ''
+      or vim.bo[nei_buf].buftype ~= ''
+    then
+      return false
+    end
+    local cur_pos = vim.api.nvim_win_get_cursor(cur_win)
+    local nei_pos = vim.api.nvim_win_get_cursor(nei_win)
+    vim.api.nvim_win_set_buf(cur_win, nei_buf)
+    vim.api.nvim_win_set_buf(nei_win, cur_buf)
+    vim.api.nvim_set_current_win(nei_win)
+    vim.api.nvim_win_set_cursor(nei_win, cur_pos)
+    vim.api.nvim_win_set_cursor(cur_win, nei_pos)
+    return true
+  end
+end
+
 return M

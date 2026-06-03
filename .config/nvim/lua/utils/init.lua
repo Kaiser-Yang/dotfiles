@@ -245,4 +245,104 @@ function M.shadafile()
   return vim.fn.stdpath('state') .. '/shada/' .. workspace_uid .. '.shada'
 end
 
+local function get_visible_windows()
+  local windows = vim.api.nvim_tabpage_list_wins(0)
+  local visible_windows = {}
+  for _, win in ipairs(windows) do
+    local win_config = vim.api.nvim_win_get_config(win)
+    -- ignore invisible windows and floating windows
+    if not win_config.hide and win_config.relative == '' then visible_windows[#visible_windows + 1] = win end
+  end
+  return visible_windows
+end
+
+--- Get the nearest neighbor window of the given window,
+--- win is the window id
+---
+--- @param win number the window id
+--- @param direction 'left'|'right'|'top'|'bottom'
+--- @return number|nil|number[]
+function M.get_nearest_neighbor(win, direction)
+  local current_pos = vim.api.nvim_win_get_position(win)
+  local current_row, current_col = current_pos[1], current_pos[2]
+  local curretn_height = vim.api.nvim_win_get_height(win)
+  local current_width = vim.api.nvim_win_get_width(win)
+
+  local windows = {}
+  for _, win_in_tab in ipairs(get_visible_windows()) do
+    if win_in_tab == win then goto continue end
+    local pos = vim.api.nvim_win_get_position(win_in_tab)
+    local row, col = pos[1], pos[2]
+    local height = vim.api.nvim_win_get_height(win_in_tab)
+    local width = vim.api.nvim_win_get_width(win_in_tab)
+    if
+      direction == 'left' and col + width < current_col
+      or direction == 'right' and col > current_col + current_width
+      or direction == 'top' and row + height < current_row
+      or direction == 'bottom' and row > current_row + curretn_height
+    then
+      table.insert(windows, win_in_tab)
+    end
+    ::continue::
+  end
+  local neighbors = {}
+  for _, win_in_direction in ipairs(windows) do
+    local pos = vim.api.nvim_win_get_position(win_in_direction)
+    local row, col = pos[1], pos[2]
+    local height = vim.api.nvim_win_get_height(win_in_direction)
+    local width = vim.api.nvim_win_get_width(win_in_direction)
+    if
+      direction == 'left' and (#neighbors == 0 or col + width > neighbors[1].col + neighbors[1].width)
+      or direction == 'right' and (#neighbors == 0 or col < neighbors[1].col)
+      or direction == 'top' and (#neighbors == 0 or row + height > neighbors[1].row + neighbors[1].height)
+      or direction == 'bottom' and (#neighbors == 0 or row < neighbors[1].row)
+    then
+      neighbors = {
+        {
+          id = win_in_direction,
+          row = row,
+          col = col,
+          width = width,
+          height = height,
+        },
+      }
+    elseif
+      direction == 'left' and #neighbors > 0 and col + width == neighbors[1].col + neighbors[1].width
+      or direction == 'right' and #neighbors > 0 and col == neighbors[1].col
+      or direction == 'top' and #neighbors > 0 and row + height == neighbors[1].row + neighbors[1].height
+      or direction == 'bottom' and #neighbors > 0 and row == neighbors[1].row
+    then
+      table.insert(neighbors, {
+        id = win_in_direction,
+        row = row,
+        col = col,
+      })
+    end
+  end
+  if #neighbors == 0 then
+    return nil
+  elseif #neighbors == 1 then
+    return neighbors[1].id
+  else
+    local neighbor = nil
+    for _, win_in_direction in ipairs(neighbors) do
+      if
+        (direction == 'left' or direction == 'right') and win_in_direction.row == current_row
+        or (direction == 'top' or direction == 'bottom') and win_in_direction.col == current_col
+      then
+        neighbor = win_in_direction
+        break
+      end
+    end
+    if not neighbor then
+      local neighbor_ids = {}
+      for _, win_in_direction in ipairs(neighbors) do
+        table.insert(neighbor_ids, win_in_direction.id)
+      end
+      return neighbor_ids
+    end
+    return neighbor.id
+  end
+end
+
 return M
