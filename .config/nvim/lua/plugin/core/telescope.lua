@@ -4,7 +4,7 @@ u.gh('nvim-telescope/telescope-live-grep-args.nvim')
 u.gh('nvim-telescope/telescope-fzf-native.nvim')
 u.gh('nvim-telescope/telescope.nvim')
 u.gh('kkharji/sqlite.lua')
-u.gh('prochri/telescope-all-recent.nvim')
+u.gh('Kaiser-Yang/telescope-all-recent.nvim')
 
 local exclude_args = {
   '--glob',

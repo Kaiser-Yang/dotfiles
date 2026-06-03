@@ -1,9 +1,5 @@
 {
   "plugins": {
-    "aerial.nvim": {
-      "rev": "43dd88ad4024b1945906887521057c73d3b0d84e",
-      "src": "https://github.com/stevearc/aerial.nvim"
-    },
     "auto-session": {
       "rev": "3e145ee9af42eb6764908a1a481f53fe7f0bdbe5",
       "src": "https://github.com/rmagatti/auto-session"
@@ -25,8 +21,8 @@
       "src": "https://github.com/saghen/blink.download"
     },
     "blink.indent": {
-      "rev": "15b3b25c2e76025733cc96df0144e9a9ef4d495c",
-      "src": "https://github.com/saghen/blink.indent"
+      "rev": "086d8196b4ecd030a783139730195ad3f3ffd99a",
+      "src": "https://github.com/Kaiser-Yang/blink.indent"
     },
     "blink.lib": {
       "rev": "c09dd66e9ad97e1a7777f3fa5f0504ca2e877231",
@@ -165,8 +161,8 @@
       "src": "https://github.com/nanozuki/tabby.nvim"
     },
     "telescope-all-recent.nvim": {
-      "rev": "e437f60ea468268e49ffdc0c9ed7c5ba384e63cf",
-      "src": "https://github.com/prochri/telescope-all-recent.nvim"
+      "rev": "b82928988f4ea18a04efaa37524b9a99aa17cd42",
+      "src": "https://github.com/Kaiser-Yang/telescope-all-recent.nvim"
     },
     "telescope-fzf-native.nvim": {
       "rev": "b25b749b9db64d375d782094e2b9dce53ad53a40",

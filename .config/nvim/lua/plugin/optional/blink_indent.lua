@@ -1,5 +1,5 @@
 local u = require('utils')
-u.gh('saghen/blink.indent')
+u.gh('Kaiser-Yang/blink.indent')
 
 -- BUG: https://github.com/saghen/blink.indent/issues/47
 -- BUG: https://github.com/saghen/blink.indent/issues/52
