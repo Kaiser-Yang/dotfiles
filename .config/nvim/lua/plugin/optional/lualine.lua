@@ -18,7 +18,6 @@ local function indent()
   end
 end
 
-
 local function search_count()
   local last_search = vim.fn.getreg('/')
   if vim.v.hlsearch == 0 then return last_search end
@@ -35,6 +34,22 @@ require('lualine').setup({
   options = {
     globalstatus = true,
     always_divide_middle = true,
+    refresh = {
+      events = {
+        'WinEnter',
+        'BufEnter',
+        'BufWritePost',
+        'SessionLoadPost',
+        'FileChangedShellPost',
+        'VimResized',
+        'Filetype',
+        'CursorMoved',
+        'CursorMovedI',
+        'ModeChanged',
+        'RecordingEnter',
+        'RecordingLeave',
+      },
+    },
   },
   sections = {
     lualine_c = { 'filename', 'filesize', indent, recording },
