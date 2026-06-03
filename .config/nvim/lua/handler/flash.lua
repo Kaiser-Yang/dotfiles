@@ -10,7 +10,7 @@ end
 
 function M.jump()
   if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return false end
-  require('flash').jump()
+  require('flash').jump({ search = { multi_window = true } })
   return true
 end
 
