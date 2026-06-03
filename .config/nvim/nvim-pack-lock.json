@@ -9,15 +9,15 @@
       "src": "https://github.com/mayromr/blink-cmp-dap"
     },
     "blink-cmp-dictionary": {
-      "rev": "78e8a6b63dcfbe8d084ba6731dfc37d7659775f7",
+      "rev": "898a958cece34da20524d04ebc032a92a9565643",
       "src": "https://github.com/Kaiser-Yang/blink-cmp-dictionary"
     },
     "blink.cmp": {
-      "rev": "7c0fae7fb37c4ee43927df88f4f1b7eb8e33a520",
+      "rev": "b943982a29f100a4d17b3d2d09dc06b5a0d0f398",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.download": {
-      "rev": "c09dd66e9ad97e1a7777f3fa5f0504ca2e877231",
+      "rev": "b127d48bf8e9ac9cf41f6e0fbead317503f76558",
       "src": "https://github.com/saghen/blink.download"
     },
     "blink.indent": {
@@ -25,7 +25,7 @@
       "src": "https://github.com/Kaiser-Yang/blink.indent"
     },
     "blink.lib": {
-      "rev": "c09dd66e9ad97e1a7777f3fa5f0504ca2e877231",
+      "rev": "b127d48bf8e9ac9cf41f6e0fbead317503f76558",
       "src": "https://github.com/saghen/blink.lib"
     },
     "blink.pairs": {
@@ -54,12 +54,12 @@
       "src": "https://github.com/j-hui/fidget.nvim"
     },
     "flash.nvim": {
-      "rev": "045457978f3fb7df03efa2023dbc8a5f6e9179bd",
+      "rev": "cbd055cfc5a58e9278993fc09b029a4d82d0b0a6",
       "src": "https://github.com/Kaiser-Yang/flash.nvim",
       "version": "'develop'"
     },
     "gitsigns.nvim": {
-      "rev": "dd3f588bacbeb041be6facf1742e42097f62165d",
+      "rev": "25050e4ed39e628282831d4cbecb1850454ce915",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "grug-far.nvim": {
@@ -124,7 +124,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
     },
     "nvim-treesitter-endwise": {
-      "rev": "8fe8a95630f4f2c72a87ba1927af649e0bfaa244",
+      "rev": "62b07a8759cd1b87df811f0c27fef96f399b540e",
       "src": "https://github.com/Kaiser-Yang/nvim-treesitter-endwise"
     },
     "nvim-treesitter-textobjects": {
