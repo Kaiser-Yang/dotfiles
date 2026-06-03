@@ -37,7 +37,13 @@ return {
         },
     }),
     font_size = 14,
-    keys = {},
+    keys = {
+        {
+            key = 'v',
+            mods = 'CMD',
+            action = act.PasteFrom('Clipboard'),
+        },
+    },
     mouse_bindings = {
         {
             event = { Up = { streak = 1, button = { WheelUp = 1 } } },
