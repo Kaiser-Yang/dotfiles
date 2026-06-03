@@ -125,7 +125,7 @@
     },
     "nvim-treesitter-endwise": {
       "rev": "8fe8a95630f4f2c72a87ba1927af649e0bfaa244",
-      "src": "https://github.com/RRethy/nvim-treesitter-endwise"
+      "src": "https://github.com/Kaiser-Yang/nvim-treesitter-endwise"
     },
     "nvim-treesitter-textobjects": {
       "rev": "851e865342e5a4cb1ae23d31caf6e991e1c99f1e",

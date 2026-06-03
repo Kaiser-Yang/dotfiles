@@ -1,5 +1,5 @@
 local u = require('utils')
-u.gh('RRethy/nvim-treesitter-endwise')
+u.gh('Kaiser-Yang/nvim-treesitter-endwise')
 local e = require('nvim-treesitter-endwise')
 
 e.init()
