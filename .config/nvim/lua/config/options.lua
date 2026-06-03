@@ -14,7 +14,6 @@ vim.o.relativenumber = true
 vim.o.signcolumn = 'yes:1'
 vim.opt.jumpoptions:append({ 'stack', 'view' })
 vim.o.termguicolors = true
-vim.o.colorcolumn = '100'
 vim.o.cursorline = true
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', lead = '·', nbsp = '␣' }
@@ -49,3 +48,15 @@ vim.opt.sessionoptions:remove('blank')
 vim.opt.sessionoptions:append('globals')
 vim.o.showtabline = 0
 vim.o.laststatus = 0
+vim.o.colorcolumn = '100'
+vim.o.textwidth = 100
+vim.o.formatoptions = table.concat({
+  'c', -- auto-wrap comments using 'textwidth'
+  'r', -- '<cr>' to insert comment leader
+  'o', -- 'o' or 'O' to insert comment leader
+  '/', -- do not insert comment leader when // is after a statement
+  'q', -- allow formatting of comments with "gq"
+  'l', -- long lines are not broken in insert mode
+  'B', -- do not insert a space between multibyte characters when joining lines
+  'j', -- remove a comment leader when joining lines
+})
