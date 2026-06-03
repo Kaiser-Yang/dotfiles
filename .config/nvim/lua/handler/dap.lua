@@ -22,13 +22,18 @@ end
 
 function M.toggle_dap_view()
   if not _G.loaded['nvim-dap-view'] then return false end
+  local should_toggle = false
   if _G.loaded['nvim-tree.lua'] then
     local tree = require('nvim-tree.api').tree
     local winnr = require('dap-view.state').winnr
     local dap_view_visible = winnr and vim.api.nvim_win_is_valid(winnr)
-    if tree.is_visible() and not dap_view_visible then tree.close() end
+    if tree.is_visible() and not dap_view_visible then
+      tree.toggle()
+      should_toggle = true
+    end
   end
   require('dap-view').toggle()
+  if should_toggle then require('nvim-tree.api').tree.toggle({ focus = false }) end
   return true
 end
 
