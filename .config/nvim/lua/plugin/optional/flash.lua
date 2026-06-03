@@ -19,7 +19,7 @@ require('flash').setup({
     char = {
       jump_labels = true,
       multi_line = false,
-      label = { exclude = 'acdghijklrACDIJKY' },
+      label = { exclude = '' },
       keys = {},
       char_actions = function() return { [';'] = 'next', [','] = 'prev' } end,
       jump = { do_first_jump = false, autojump = true },
