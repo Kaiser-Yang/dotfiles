@@ -1,33 +1,12 @@
 local wezterm = require('wezterm')
 local act = wezterm.action
 
--- check if a command exists
-local function command_exists(cmd)
-    local handle = io.popen('command -v ' .. cmd .. " >&/dev/null && echo 'yes' || echo 'no'")
-    local result = handle:read('*a')
-    handle:close()
-    return result:find('yes') ~= nil
-end
-
--- Get the default program based on the operating system
-local function default_program()
-    local default_prog = nil
-    if command_exists('zsh') then
-        default_prog = { 'zsh' }
-    elseif command_exists('fish') then
-        default_prog = { 'fish' }
-    else
-        default_prog = { 'bash' }
-    end
-    return default_prog
-end
-
 return {
     initial_rows = 40,
     initial_cols = 80,
     automatically_reload_config = true,
     color_scheme = 'Catppuccin Mocha',
-    default_prog = default_program(),
+    default_prog = { 'zsh' },
     disable_default_key_bindings = true,
     enable_tab_bar = false,
     font = wezterm.font_with_fallback({
