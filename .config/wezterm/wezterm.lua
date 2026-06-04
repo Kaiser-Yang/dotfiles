@@ -20,8 +20,15 @@ return {
         { key = '0', mods = 'CTRL', action = act.ResetFontSize },
         {
             key = 'v',
-            mods = 'CMD',
-            action = act.PasteFrom('Clipboard'),
+            mods = 'ALT',
+            action = wezterm.action_callback(function(window, pane)
+                local vars = pane:get_user_vars()
+                if vars.WEZTERM_PROG and vars.WEZTERM_PROG:find('nv') then
+                    window:perform_action(act.SendKey({ key = 'v', mods = 'ALT' }), pane)
+                else
+                    window:perform_action(act.PasteFrom('Clipboard'), pane)
+                end
+            end),
         },
     },
     mouse_bindings = {

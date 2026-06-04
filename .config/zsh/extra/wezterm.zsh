@@ -445,15 +445,8 @@ __wezterm_set_user_var() {
 }
 
 # This function emits an OSC 7 sequence to inform the terminal
-# of the current working directory.  It prefers to use a helper
-# command provided by wezterm if wezterm is installed, but falls
-# back to a simple printf command otherwise.
+# of the current working directory.
 __wezterm_osc7() {
-  if hash wezterm 2>/dev/null ; then
-    wezterm set-working-directory 2>/dev/null && return 0
-    # If the command failed (perhaps the installed wezterm
-    # is too old?) then fall back to the simple version below.
-  fi
   printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "${PWD}"
 }
 
