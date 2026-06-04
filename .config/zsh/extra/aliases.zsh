@@ -24,7 +24,6 @@ alias x=extract
 alias grep='grep --color=auto'
 alias egrep='grep -E'
 alias fgrep='grep -F'
-alias history=omz_history
 
 ! command -v open &>/dev/null && command -v xdg-open &>/dev/null && alias open=xdg-open
 

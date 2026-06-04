@@ -1,3 +1,5 @@
+CONDA_PATH="/opt/miniconda3/etc/profile.d/conda.sh"
+[[ -f "$CONDA_PATH" ]] && source "$CONDA_PATH" || return 0
 flavor=conda
 if ! declare -f "$flavor" >&/dev/null; then
     return

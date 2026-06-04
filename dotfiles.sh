@@ -371,21 +371,6 @@ init_options() {
     return $?
 }
 
-install_oh_my_zsh() {
-    if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        log_verbose "Installing Oh My Zsh..."
-        if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
-            local error_code=$?
-            log_error "Failed to install Oh My Zsh. " \
-                "Please check your internet connection or the installation script."
-            return $error_code
-        fi
-        log_verbose "Oh My Zsh installed successfully."
-    else
-        log_verbose "Oh My Zsh is already installed."
-    fi
-}
-
 install_brew() {
     if ! command -v brew &>/dev/null; then
         log_verbose "Installing Home brew..."
@@ -512,9 +497,7 @@ install_packages() {
                 "Please check the command and your system configuration."
             return 1
         fi
-        if [[ "$executable" == "zsh" ]]; then
-            COMMANDS_AFTER_INSTALLATION+=("install_oh_my_zsh")
-        elif [[ "$executable" == "xremap" ]]; then
+        if [[ "$executable" == "xremap" ]]; then
             COMMANDS_AFTER_INSTALLATION+=(init_xremap)
         elif [[ "$executable" == "pkgfile" ]]; then
             COMMANDS_AFTER_INSTALLATION+=("$SUDO pkgfile -u")
