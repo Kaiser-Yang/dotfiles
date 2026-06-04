@@ -346,7 +346,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('WinNew', {
   callback = function()
     if not _G.loaded['nvim-tree.lua'] then return end
     local tree = require('nvim-tree.api').tree
-    if not tree.is_visible() then return end
+    if vim.bo[vim.api.nvim_get_current_buf()].filetype ~= 'NvimTree' or not tree.is_visible() then return end
     local normal_win_count = 0
     for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
       if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_config(win).relative == '' then
