@@ -14,6 +14,7 @@ require('nvim-surround').setup({
     B = '}',
     r = ']',
     q = '`',
+    s = { '}', ']', ')', '>', '"', "'", '`' },
   },
   move_cursor = 'sticky',
 })
