@@ -74,7 +74,6 @@ local opts = {
   { key = 'aq', mode = 'ox', desc = '`` block', handler = h.builtin.around_tilde_bracket },
   { key = 'iq', mode = 'ox', desc = '`` block', handler = h.builtin.inside_tilde_bracket },
   { key = 'zS', desc = 'Inspect', handler = h.builtin.inspect },
-  { key = '<c-\\><esc>', mode = 't', desc = 'Back to Normal', handler = h.builtin.back_to_normal },
 
   -- LSP
   -- INFO:
