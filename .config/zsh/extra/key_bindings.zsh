@@ -1,4 +1,4 @@
-setup_bindings () {
+setup_bindings() {
   zvm_bindkey viins 'b' backward-word
   zvm_bindkey viins 'f' forward-word
   zvm_bindkey viins 'd' delete-word
