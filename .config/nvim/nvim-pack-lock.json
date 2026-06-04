@@ -13,7 +13,7 @@
       "src": "https://github.com/Kaiser-Yang/blink-cmp-dictionary"
     },
     "blink.cmp": {
-      "rev": "b943982a29f100a4d17b3d2d09dc06b5a0d0f398",
+      "rev": "d2c4d170ad51e5116da7b19f2426f3b6e318161d",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.download": {
@@ -87,7 +87,7 @@
       "src": "https://github.com/mfussenegger/nvim-dap"
     },
     "nvim-dap-view": {
-      "rev": "a03a085b020197f441f6c63383f0cb7321729f6e",
+      "rev": "3f328fc8d59835b09b65f85cd62cb255bf93dce5",
       "src": "https://github.com/igorlfs/nvim-dap-view"
     },
     "nvim-dap-virtual-text": {
