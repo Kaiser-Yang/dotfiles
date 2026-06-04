@@ -291,7 +291,6 @@ function M.run_single_file()
     vim.cmd('%lua')
     return true
   elseif filetype == 'markdown' and _G.loaded['render-markdown.nvim'] then
-    vim.notify('111')
     vim.cmd('RenderMarkdown buf_toggle')
     return true
   end
