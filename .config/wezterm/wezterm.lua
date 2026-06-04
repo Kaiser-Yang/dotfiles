@@ -15,6 +15,9 @@ return {
     }),
     font_size = 14,
     keys = {
+        { key = '=', mods = 'CTRL', action = act.IncreaseFontSize },
+        { key = '-', mods = 'CTRL', action = act.DecreaseFontSize },
+        { key = '0', mods = 'CTRL', action = act.ResetFontSize },
         {
             key = 'v',
             mods = 'CMD',
@@ -22,16 +25,6 @@ return {
         },
     },
     mouse_bindings = {
-        {
-            event = { Down = { streak = 1, button = { WheelUp = 1 } } },
-            mods = 'CTRL',
-            action = act.IncreaseFontSize,
-        },
-        {
-            event = { Down = { streak = 1, button = { WheelDown = 1 } } },
-            mods = 'CTRL',
-            action = act.DecreaseFontSize,
-        },
         {
             event = { Up = { streak = 1, button = 'Left' } },
             mods = 'NONE',
