@@ -1,6 +1,26 @@
 local wezterm = require('wezterm')
 local act = wezterm.action
 
+local function basename(path) return path:gsub('(.*[/\\])(.*)', '%2') end
+
+local function get_running_program(pane)
+    local proc_path = pane:get_foreground_process_name()
+    if not proc_path then return '' end
+    local proc_name = basename(proc_path)
+    if proc_name == 'tmux' then
+        local ok, stdout = wezterm.run_child_process({
+            'tmux',
+            'display-message',
+            '-p',
+            '-t',
+            '.',
+            '#{pane_current_command}',
+        })
+        if ok and stdout then return stdout:gsub('[\r\n]+', '') end
+    end
+    return proc_name
+end
+
 return {
     automatically_reload_config = true,
     color_scheme = 'Catppuccin Mocha',
@@ -22,8 +42,8 @@ return {
             key = 'v',
             mods = 'ALT',
             action = wezterm.action_callback(function(window, pane)
-                local vars = pane:get_user_vars()
-                if vars.WEZTERM_PROG and vars.WEZTERM_PROG:find('nv') then
+                local prog = get_running_program(pane)
+                if prog == 'nvim' then
                     window:perform_action(act.SendKey({ key = 'v', mods = 'ALT' }), pane)
                 else
                     window:perform_action(act.PasteFrom('Clipboard'), pane)
