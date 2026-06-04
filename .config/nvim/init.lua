@@ -19,7 +19,6 @@ vim.g.treesitter_ensure_installed = {
   'git_rebase',
   'go',
   'json',
-  'markdown_inline',
   'python',
   'zsh',
 }
