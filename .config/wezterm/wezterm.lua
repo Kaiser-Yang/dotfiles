@@ -2,8 +2,6 @@ local wezterm = require('wezterm')
 local act = wezterm.action
 
 return {
-    initial_rows = 40,
-    initial_cols = 80,
     automatically_reload_config = true,
     color_scheme = 'Catppuccin Mocha',
     default_prog = { 'zsh' },
