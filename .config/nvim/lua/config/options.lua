@@ -50,8 +50,8 @@ vim.opt.sessionoptions:remove('blank')
 vim.opt.sessionoptions:append('globals')
 vim.o.showtabline = 0
 vim.o.laststatus = 0
-vim.o.colorcolumn = '100'
-vim.o.textwidth = 100
+vim.o.colorcolumn = '80'
+vim.o.textwidth = 80
 vim.o.formatoptions = table.concat({
   'c', -- auto-wrap comments using 'textwidth'
   'r', -- '<cr>' to insert comment leader
