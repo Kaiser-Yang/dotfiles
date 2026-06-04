@@ -1,7 +1,4 @@
 keymap:
-  - name: "Global"
-    remap:
-      Ctrl-n: Esc
   - name: "Not wezterm"
     application:
       not: "org.wezfurlong.wezterm"

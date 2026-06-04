@@ -22,22 +22,6 @@
             "description": "Control",
             "manipulators": [
               {
-                "from": {
-                  "key_code": "n",
-                  "modifiers": {
-                    "mandatory": ["left_control"],
-                    "optional": []
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "escape",
-                    "modifiers": []
-                  }
-                ],
-                "type": "basic"
-              },
-              {
                 "conditions": [
                   {
                     "bundle_identifiers": ["^com\\.github\\.wez\\.wezterm$"],
