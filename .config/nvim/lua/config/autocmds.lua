@@ -568,3 +568,10 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'cmd', 'msg' },
   callback = function(ev) vim.keymap.set('n', 'q', '<c-w>q', { buf = ev.buf, desc = 'Quit' }) end,
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = _G.autocmd_group,
+  desc = 'Settings for gitsigns-blame',
+  pattern = 'gitsigns-blame',
+  callback = function(ev) vim.keymap.set('n', 'q', '<c-w>q', { buf = ev.buf, desc = 'Quit' }) end,
+})
