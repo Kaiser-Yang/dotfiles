@@ -23,12 +23,12 @@ return {
     },
     mouse_bindings = {
         {
-            event = { Up = { streak = 1, button = { WheelUp = 1 } } },
+            event = { Down = { streak = 1, button = { WheelUp = 1 } } },
             mods = 'CTRL',
             action = act.IncreaseFontSize,
         },
         {
-            event = { Up = { streak = 1, button = { WheelDown = 1 } } },
+            event = { Down = { streak = 1, button = { WheelDown = 1 } } },
             mods = 'CTRL',
             action = act.DecreaseFontSize,
         },
