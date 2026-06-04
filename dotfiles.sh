@@ -244,13 +244,14 @@ check_and_install_package() {
 # Destination path for symbolic links
 get_destination() {
     local file="$1"
-    if [[ "$(uname)" == "Darwin" && "$file" == ".local/share/fcitx5/rime"* ]]; then
-        file="${file#".local/share/fcitx5/rime"}"
-        if [[ "$file" == "" ]]; then
+    if [[ "$(uname)" == "Darwin" ]]; then
+        if [[ "$file" == ".local/share/fcitx5/rime" ]]; then
             echo "$HOME/Library/Rime"
-            return
+        elif [[ "$file" == ".config/lazygit" ]]; then
+            echo "$HOME/Library/Application Support/lazygit"
+        else
+            echo "$HOME/$file"
         fi
-        echo "$HOME/Library/Rime/$file"
     elif [[ "$file" == ".config/fontconfig"* ]]; then
         echo "$HOME/.config/fontconfig/fonts.conf"
     else
