@@ -1,5 +1,5 @@
 #!/usr/bin/zsh
-[[ -n "$NVIM" ]] && WEZTERM_SHELL_SKIP_USER_VARS=true
+WEZTERM_SHELL_SKIP_USER_VARS=true
 [[ -e "/opt/homebrew/bin/brew" ]] &&
     eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ -d "$HOME/.local/bin" ]] &&
