@@ -198,6 +198,8 @@ M.open_focus_reveal = function()
   else
     local file = _G.last_filename
     if file and file ~= '' and vim.fn.filereadable(file) == 1 then
+      local dir = vim.fs.root(file, { '.git' })
+      if dir then vim.cmd.cd(dir) end
       tree.find_file({ buf = file, update_root = true })
     end
   end
