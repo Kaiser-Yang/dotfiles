@@ -13,7 +13,7 @@
       "src": "https://github.com/Kaiser-Yang/blink-cmp-dictionary"
     },
     "blink.cmp": {
-      "rev": "d2c4d170ad51e5116da7b19f2426f3b6e318161d",
+      "rev": "3db7326f54b73df4789e0fd6274bedda33975fea",
       "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.download": {
@@ -124,7 +124,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
     },
     "nvim-treesitter-endwise": {
-      "rev": "62b07a8759cd1b87df811f0c27fef96f399b540e",
+      "rev": "5b058058ad5fae81aea0bc048979a258e4cf098a",
       "src": "https://github.com/Kaiser-Yang/nvim-treesitter-endwise"
     },
     "nvim-treesitter-textobjects": {
