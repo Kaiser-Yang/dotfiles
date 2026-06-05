@@ -22,3 +22,4 @@ setup_fzf() {
     "
     eval "$(fzf --zsh)"
 }
+zvm_after_init_commands+=(setup_fzf)
