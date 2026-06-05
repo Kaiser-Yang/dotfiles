@@ -7,7 +7,7 @@ vim.schedule(function()
         vim.diagnostic.open_float({ bufnr = bufnr, scope = 'cursor', focus = false })
       end,
     },
-    virtual_lines = { severity = { min = sev.WARN }, current_line = true },
+    virtual_text = true,
     severity_sort = true,
     signs = {
       text = {
