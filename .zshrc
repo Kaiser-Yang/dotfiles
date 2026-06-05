@@ -45,3 +45,4 @@ compinit -u -C
 # must be the last one to be sourced
 source "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
 [[ -n "$ZSH_PROFILE" ]] && zprof
+true # make sure the return code is always zero
