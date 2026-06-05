@@ -6,6 +6,10 @@
     export PATH="$PATH:$HOME/.local/bin"
 command -v go &>/dev/null &&
     export PATH="$PATH:$(go env GOPATH)/bin"
+if [[ -n "$PATH_ONLY" ]]; then
+    [[ -n "$ZSH_PROFILE" ]] && zprof
+    return 0
+fi
 WEZTERM_SHELL_SKIP_USER_VARS=true
 command -v nvim &>/dev/null &&
     export EDITOR=nvim

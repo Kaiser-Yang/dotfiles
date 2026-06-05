@@ -9,14 +9,14 @@ local function get_running_program(pane)
     local proc_name = basename(proc_path)
     if proc_name == 'tmux' then
         local ok, stdout = wezterm.run_child_process({
-            'tmux',
-            'display-message',
-            '-p',
-            '-t',
-            '.',
-            '#{pane_current_command}',
+            'env',
+            'PATH_ONLY=true',
+            os.getenv('SHELL'),
+            '-ci',
+            "tmux display-message -p -t . '#{pane_current_command}'",
         })
-        if ok and stdout then return stdout:gsub('[\r\n]+', '') end
+        if not ok then return '' end
+        if stdout then return stdout:gsub('[\r\n]+', '') end
     end
     return proc_name
 end
