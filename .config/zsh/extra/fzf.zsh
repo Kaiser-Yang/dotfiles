@@ -21,5 +21,7 @@ setup_fzf() {
       --bind 'ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up'
     "
     eval "$(fzf --zsh)"
+    bindkey -r '^T' 2>/dev/null
+    bindkey '^P' fzf-file-widget
 }
 zvm_after_init_commands+=(setup_fzf)
