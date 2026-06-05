@@ -1,6 +1,3 @@
-avante.nvim
-blink-cmp-avante
-diffview.nvim
 non-ascii.nvim
 nvim-jdtls
 overseer.nvim
