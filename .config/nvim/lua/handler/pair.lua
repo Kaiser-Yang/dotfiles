@@ -151,7 +151,7 @@ function M.auto_pair_wrap(key)
     local keycode = vim.keycode(key)
     if _G.loaded['ultimate-autopair.nvim'] and vim.tbl_contains(autopair_first_keycode, keycode) then
       return autopair(keycode)
-    elseif _G.loaded['blink.pairs'] and not u.buffer.big() and vim.tbl_contains(blink_pairs_keycode, keycode) then
+    elseif _G.loaded['blink.pairs'] and vim.tbl_contains(blink_pairs_keycode, keycode) then
       return blink_pairs(keycode)
     elseif _G.loaded['ultimate-autopair.nvim'] and vim.tbl_contains(autopair_keycode, keycode) then
       return autopair(keycode)
