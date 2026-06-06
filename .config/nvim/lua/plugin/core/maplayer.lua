@@ -74,6 +74,14 @@ local opts = {
   { key = 'aq', mode = 'ox', desc = '`` block', handler = h.builtin.around_tilde_bracket },
   { key = 'iq', mode = 'ox', desc = '`` block', handler = h.builtin.inside_tilde_bracket },
   { key = 'zS', desc = 'Inspect', handler = h.builtin.inspect },
+  { key = 'a~', mode = 'ox', desc = '~~ block', handler = h.builtin.action_wrap('a', '~') },
+  { key = 'i~', mode = 'ox', desc = '~~ block', handler = h.builtin.action_wrap('i', '~') },
+  { key = 'a$', mode = 'ox', desc = '$$ block', handler = h.builtin.action_wrap('a', '$') },
+  { key = 'i$', mode = 'ox', desc = '$$ block', handler = h.builtin.action_wrap('i', '$') },
+  { key = 'a*', mode = 'ox', desc = '** block', handler = h.builtin.action_wrap('a', '*') },
+  { key = 'i*', mode = 'ox', desc = '** block', handler = h.builtin.action_wrap('i', '*') },
+  { key = 'a ', mode = 'ox', desc = 'space block', handler = h.builtin.action_wrap('a', ' ') },
+  { key = 'i ', mode = 'ox', desc = 'space block', handler = h.builtin.action_wrap('i', ' ') },
 
   -- LSP
   -- INFO:

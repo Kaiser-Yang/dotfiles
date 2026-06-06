@@ -480,4 +480,170 @@ function M.swap_wrap(direction)
   end
 end
 
+--- @param line string
+--- @param escapes table<string>
+--- @return table<number, boolean> 1-indexed
+local function compute_escaped(line, escapes)
+  local len = #line
+  local escaped = {}
+  for i = 1, len do
+    escaped[i] = false
+  end
+  local i = 1
+  while i <= len do
+    for _, e in ipairs(escapes) do
+      if i + #e <= len and line:sub(i, i + #e - 1) == e then
+        escaped[i + #e] = true
+        i = i + #e + 1
+        goto continue
+      end
+    end
+    i = i + 1
+    ::continue::
+  end
+  return escaped
+end
+
+--- @param line string
+--- @param start number 1-indexed
+--- @param direction number
+--- @param char string
+--- @param escaped table
+--- @return number? 1-indexed
+local function find_next_char(line, start, direction, char, escaped)
+  local len = #line
+  local pos = start + direction
+  while direction == 1 and pos + #char - 1 <= len or direction == -1 and pos >= 1 do
+    if line:sub(pos, pos + #char - 1) == char and not escaped[pos] then return pos end
+    pos = pos + direction
+  end
+end
+
+--- @param line string
+--- @param pos number 1-indexed
+--- @param char string
+--- @param escaped table
+--- @return number? 1-indexed
+--- @return number? 1-indexed
+local function find_pair_for_char(line, pos, char, escaped)
+  local positions = {}
+  local i = 1
+  local len = #line
+  while i <= len - #char + 1 do
+    if line:sub(i, i + #char - 1) == char and not escaped[i] then
+      table.insert(positions, i)
+      i = i + #char
+    else
+      i = i + 1
+    end
+  end
+  local idx = nil
+  ---@diagnostic disable-next-line: redefined-local
+  for i, p in ipairs(positions) do
+    if p == pos then
+      idx = i
+      break
+    end
+  end
+  if not idx then return nil, nil end
+  if idx % 2 == 1 then
+    if idx + 1 <= #positions then return pos, positions[idx + 1] end
+  else
+    if idx - 1 >= 1 then return positions[idx - 1], pos end
+  end
+  return nil, nil
+end
+
+--- @param line string
+--- @param cursor number 1-indexed
+--- @param char string
+--- @param escaped table
+--- @return number? 1-indexed
+--- @return number? 1-indexed
+local function find_pair_around_cursor(line, cursor, char, escaped)
+  local left = find_next_char(line, cursor, -1, char, escaped)
+  local right = find_next_char(line, cursor, 1, char, escaped)
+  if left and right and left < right then return left, right end
+  local first = right
+  if not first then return end
+  local second = find_next_char(line, first + #char, 1, char, escaped)
+  if not second then return end
+  return first, second
+end
+
+--- @param left number 1-indexed
+--- @param right number 1-indexed
+--- @param line string
+--- @param action 'i'|'a'
+--- @param char_len number
+--- @return number 0-indexed inclusive
+--- @return number 0-indexed exclusive
+local function apply_action(left, right, line, action, char_len)
+  if action == 'i' then
+    -- minus 1 here to convert to 0-indexed
+    return left - 1 + char_len, right - 1
+  elseif action == 'a' then
+    local l = left - 1 -- 0-indexed
+    local r = right - 1 + char_len -- 0-indexed exclusive
+    local len = #line
+    if r < len and line:sub(r + 1, r + 1) == ' ' then
+      r = r + 1
+    elseif l > 0 and line:sub(l, l) == ' ' then
+      l = l - 1
+    end
+    return l, r
+  end
+  error('impossible')
+end
+
+--- @param action 'i'|'a'
+--- @param char string
+--- @param escapes? table<string>
+--- @return number? start_col 0-indexed inclusive
+--- @return number? end_col 0-indexed exclusive
+local function get_range(action, char, escapes)
+  escapes = escapes or {}
+  local mode = vim.fn.mode()
+  local is_visual = mode:match('[vV\22]') ~= nil
+  local line = vim.fn.getline('.')
+  if line == '' then return end
+  local escaped = compute_escaped(line, escapes)
+  local char_len = #char
+  if char_len == 0 then return end
+
+  local function find_pair_at(pos)
+    local cur_sub = line:sub(pos, pos + char_len - 1)
+    if cur_sub == char and not escaped[pos] then
+      return find_pair_for_char(line, pos, char, escaped)
+    else
+      return find_pair_around_cursor(line, pos, char, escaped)
+    end
+  end
+
+  local cursor
+  if not is_visual then
+    cursor = vim.fn.getcurpos()[3] -- 1-indexed
+  else
+    local start_pos = vim.fn.getpos('.')
+    local end_pos = vim.fn.getpos('v')
+    if start_pos[2] ~= end_pos[2] then return end
+    local start_col = start_pos[3] -- 1-indexed
+    local end_col = end_pos[3] -- 1-indexed
+    cursor = math.min(start_col, end_col)
+  end
+  local left, right = find_pair_at(cursor)
+  if not left or not right then return end
+  return apply_action(left, right, line, action, char_len)
+end
+
+function M.action_wrap(action, char, escapes)
+  return function()
+    local left, right = get_range(action, char, escapes)
+    if not left or not right then return false end
+    local row = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
+    u.update_selection(row, left, row, right)
+    return true
+  end
+end
+
 return M
