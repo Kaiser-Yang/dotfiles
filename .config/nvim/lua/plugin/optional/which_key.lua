@@ -34,11 +34,11 @@ w.setup({
   defer = function(ctx) return ctx.mode ~= 'o' end,
 })
 w.add({
-  { '<leader>d', buffer = true, icon = { icon = ' ', color = 'orange' }, desc = 'Dap', mode = 'n' },
-  { '<leader>g', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Git', mode = 'nx' },
-  { '<leader>x', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Conflict' },
-  { '<leader>xd', buffer = true, icon = { icon = ' ', color = 'red' }, desc = 'Diff' },
-  { '<leader>tg', buffer = true, icon = { icon = ' ', color = 'yellow' }, desc = 'Git' },
+  { '<leader>d', icon = { icon = ' ', color = 'orange' }, desc = 'Dap', mode = 'n' },
+  { '<leader>g', icon = { icon = ' ', color = 'red' }, desc = 'Git', mode = 'nx' },
+  { '<leader>x', icon = { icon = ' ', color = 'red' }, desc = 'Conflict' },
+  { '<leader>xd', icon = { icon = ' ', color = 'red' }, desc = 'Diff' },
+  { '<leader>tg', icon = { icon = ' ', color = 'yellow' }, desc = 'Git' },
   { '<leader>t', icon = { icon = ' ', color = 'yellow' }, desc = 'Toggle' },
   { '<leader>s', icon = { icon = ' ', color = 'green' }, desc = 'Search' },
   { '<leader>f', icon = { icon = ' ', color = 'green' }, desc = 'File' },
