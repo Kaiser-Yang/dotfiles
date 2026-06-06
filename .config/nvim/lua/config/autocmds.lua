@@ -108,20 +108,6 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
-  desc = 'Disable diagnostic when leaving normal; enable otherwise',
-  group = _G.autocmd_group,
-  callback = function()
-    if u.in_macro_executing() then return end
-    ---@diagnostic disable-next-line: undefined-field
-    local new = vim.v.event.new_mode
-    local status = new == 'n'
-    local bufnr = vim.api.nvim_get_current_buf()
-    if status == vim.diagnostic.is_enabled({ bufnr = bufnr }) then return end
-    vim.diagnostic.enable(status, { bufnr = bufnr })
-  end,
-})
-
 local limit = 1024 * 1024 -- 1 MB
 local timeout = 300 -- Unit: ms
 vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
