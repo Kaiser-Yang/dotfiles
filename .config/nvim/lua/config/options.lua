@@ -1,7 +1,3 @@
--- Disable entire built-in ftplugin mappings to avoid conflicts.
--- See https://github.com/neovim/neovim/tree/master/runtime/ftplugin for built-in ftplugins.
-vim.g.no_plugin_maps = true
-
 -- We use another explorer instead of netrw, so disable it
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
