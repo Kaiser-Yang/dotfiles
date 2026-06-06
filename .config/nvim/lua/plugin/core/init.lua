@@ -19,8 +19,6 @@ vim.schedule(function()
   require('plugin.core.repmove')
   -- Git conflict resolver
   require('plugin.core.resolve')
-  -- Session
-  require('plugin.core.session')
   -- Add/delete/change surrounding pairs
   require('plugin.core.surround')
   -- Fuzzy finder / pickers (Telescope)
