@@ -23,6 +23,8 @@ vim.schedule(function()
   require('plugin.optional.lightbulb')
   -- Statusline
   require('plugin.optional.lualine')
+  -- Open markdown preview in browser
+  require('plugin.optional.markdown_preview')
   -- Better UI for vim.ui.input / vim.ui.select
   require('plugin.optional.nui')
   -- Markdown viewer
