@@ -21,8 +21,8 @@ require('blink.pairs').setup({
     },
     unmatched_group = 'BlinkPairsUnmatched',
     matchparen = {
-      enabled = true,
-      cmdline = true,
+      enabled = false,
+      cmdline = false,
       include_surrounding = false,
       group = 'BlinkPairsMatchParen',
       priority = 250,
