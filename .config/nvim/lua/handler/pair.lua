@@ -42,7 +42,7 @@ local function autopair(keycode)
   core.get_run(keycode)
   local res = core.run_run(keycode)
   u.key.feed(res, 'n', false)
-  return res and res ~= ""
+  return res and res ~= ''
 end
 
 local keycode_to_function
