@@ -80,7 +80,7 @@ end
 --- @param start_col integer 0 indexed
 --- @param end_row integer 0 indexed
 --- @param end_col integer 0 indexed, exclusive
---- @param selection_mode string
+--- @param selection_mode string?
 function M.update_selection(start_row, start_col, end_row, end_col, selection_mode)
   selection_mode = selection_mode or 'v'
 
