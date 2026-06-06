@@ -1,12 +1,7 @@
-local u = require('utils')
 local M = {}
 
 local function check()
   if not _G.loaded['nvim-treesitter-textobjects'] then return false end
-  if u.buffer.big() then
-    vim.notify('Buffer is too big for nvim-treesitter-textobjects', vim.log.levels.WARN, { title = 'Light Boat' })
-    return false
-  end
   return true
 end
 local function select(query_string, query_group)

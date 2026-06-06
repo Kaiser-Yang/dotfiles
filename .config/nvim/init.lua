@@ -33,6 +33,17 @@ vim.filetype.add({
     gotmpl = 'gotmpl',
     gotmplhtml = 'gotmplhtml',
   },
+  pattern = {
+    ['.*'] = {
+      function(path, buf)
+        if not path or not buf or vim.bo[buf].filetype == 'bigfile' then return end
+        if path ~= vim.fs.normalize(vim.api.nvim_buf_get_name(buf)) then return end
+        if not require('utils').buffer.big(buf) then return end
+        vim.schedule(function() vim.bo[buf].syntax = vim.filetype.match({ buf = buf }) or '' end)
+        return 'bigfile'
+      end,
+    },
+  },
 })
 vim.treesitter.language.register('html', 'gotmplhtml')
 require('vim._core.ui2').enable({ msg = { targets = 'msg' } })
