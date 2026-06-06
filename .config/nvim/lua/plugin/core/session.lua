@@ -1,5 +1,7 @@
 local u = require('utils')
-u.gh('rmagatti/auto-session')
+u.gh('nvim-lua/plenary.nvim')
+u.gh('nvim-telescope/telescope.nvim')
+u.gh('Kaiser-Yang/auto-session')
 
 -- HACK:
 -- https://github.com/rmagatti/auto-session/issues/407
@@ -7,7 +9,14 @@ u.gh('rmagatti/auto-session')
 require('auto-session').setup({
   auto_save = vim.fs.root(0, '.git'),
   auto_create = vim.fs.root(0, '.git'),
-  auto_restore = vim.fs.root(0, '.git'),
-  session_lens = { mappings = false },
-  close_filetypes_on_save = { 'help', 'man', 'grug-far', 'NvimTree', 'dap-view', 'CompetiTest' },
+  auto_restore = false,
+  session_lens = {
+    picker = 'telescope',
+    mappings = {
+      delete_session = false,
+      alternate_session = false,
+      copy_session = false,
+      source_session = { { 'i', 'n' }, '<cr>' },
+    },
+  },
 })
