@@ -4,10 +4,11 @@ alias ls='ls --color=auto -h'
 alias lsa='ls --color=auto -ha'
 alias ll='ls --color=auto -lh'
 alias lla='ls --color=auto -lha'
-alias ...=../..
-alias ....=../../..
-alias .....=../../../..
-alias ......=../../../../..
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
 alias d='dirs -v'
 alias -- -='cd -'
 alias 1='cd -1'
