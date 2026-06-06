@@ -364,11 +364,9 @@ end
 M.system_put_before = '"+P'
 M.system_yank_eol = '"+y$'
 M.system_cut_eol = '"+d$'
-M.to_left = '<c-w><c-h>'
-M.to_bottom = '<c-w><c-j>'
-M.to_above = '<c-w><c-k>'
-M.to_right = '<c-w><c-l>'
 M.nop = ''
+
+function M.window(key) return '<c-w>' .. key end
 
 function M.toggle_spell()
   local status = vim.wo.spell == false

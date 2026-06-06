@@ -29,7 +29,6 @@ local function search_count()
   return last_search .. '[' .. result.current .. '/' .. result.total .. ']'
 end
 
-vim.o.laststatus = 3
 require('lualine').setup({
   options = {
     globalstatus = true,
@@ -56,9 +55,7 @@ require('lualine').setup({
     lualine_x = {
       { '%-10.S', separator = { left = '', right = '' } },
       search_count,
-      'selectioncount',
       'lsp_status',
-      'encoding',
       'fileformat',
       'filetype',
     },

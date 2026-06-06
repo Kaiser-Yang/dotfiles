@@ -13,7 +13,7 @@ w.setup({
   keys = { scroll_down = '', scroll_up = '' },
   icons = { rules = false },
   triggers = { { '<auto>', mode = 'nxo' }, { 'b', mode = 'n' } },
-  plugins = { registers = { format = function(value) return value:gsub('^%s+', ''):gsub('%s+$', ''):sub(1, 10) end } },
+  plugins = { registers = { format = function(value) return value:gsub('^%s+', ''):gsub('%s+$', ''):sub(1, 100) end } },
   -- BUG:
   -- See https://github.com/folke/which-key.nvim/issues/1033
   filter = function(mapping)

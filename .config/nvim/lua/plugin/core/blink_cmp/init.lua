@@ -81,8 +81,9 @@ require('blink.cmp').setup({
         opts = {
           show_hidden_files_by_default = true,
           get_cwd = function(ctx)
-            if vim.bo[ctx.bufnr].buftype == 'nofile' then return vim.fn.getcwd() end
-            return vim.fn.expand(('#%d:p:h'):format(ctx.bufnr))
+            local dir = vim.fn.fnamemodify(vim.fn.bufname(ctx.bufnr), ':p:h')
+            if not vim.uv.fs_stat(dir) then return vim.fn.getcwd() end
+            return dir
           end,
         },
         fallbacks = {},
@@ -230,9 +231,7 @@ require('blink.cmp.completion.list').show = function(ctx, items_by_source)
 end
 
 -- After "blink.cmp" loads, we can enable LSP servers
-local lsp_path = vim.fn.stdpath('config')
-if lsp_path:sub(-1) ~= '/' then lsp_path = lsp_path .. '/' end
-lsp_path = lsp_path .. 'after/lsp'
+local lsp_path = vim.fn.stdpath('config') .. '/after/lsp'
 local servers = vim.fn.glob(lsp_path .. '/**/*.lua', true, true)
 servers = vim.tbl_map(function(path) return vim.fn.fnamemodify(path, ':t:r') end, servers)
 if #servers > 0 then vim.lsp.enable(servers) end

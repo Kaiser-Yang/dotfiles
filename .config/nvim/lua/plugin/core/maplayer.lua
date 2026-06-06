@@ -27,10 +27,10 @@ local opts = {
   { key = '<m-d>', mode = 'ci', desc = 'Delete to EOW', handler = h.builtin.delete_to_eow },
   { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.builtin.toggle_lazygit },
   { key = '<m-/>', mode = 'inx', desc = 'Toggle Line Comment', handler = h.builtin.toggle_comment },
-  { key = '<c-h>', desc = 'To Left', handler = h.builtin.to_left },
-  { key = '<c-j>', desc = 'To Bottom', handler = h.builtin.to_bottom },
-  { key = '<c-k>', desc = 'To Above', handler = h.builtin.to_above },
-  { key = '<c-l>', desc = 'To Right', handler = h.builtin.to_right },
+  { key = '<c-h>', desc = 'To Left', handler = h.builtin.window('h') },
+  { key = '<c-j>', desc = 'To Bottom', handler = h.builtin.window('j') },
+  { key = '<c-k>', desc = 'To Above', handler = h.builtin.window('k') },
+  { key = '<c-l>', desc = 'To Right', handler = h.builtin.window('l') },
   { key = '<c-w>h', desc = 'Swap with Left', handler = h.builtin.swap_wrap('left') },
   { key = '<c-w>j', desc = 'Swap with Bottom', handler = h.builtin.swap_wrap('bottom') },
   { key = '<c-w>k', desc = 'Swap with Top', handler = h.builtin.swap_wrap('top') },
@@ -61,11 +61,11 @@ local opts = {
   { key = '<m-n>', mode = 'c', desc = 'Next Commend History', handler = h.builtin.down },
   { key = '<m-p>', mode = 'c', desc = 'Previous Commend History', handler = h.builtin.up },
   { key = '<leader>r', desc = 'Run Single File', handler = h.builtin.run_single_file },
-  { key = '<leader>tD', desc = 'Buffer Diagnostic', handler = h.builtin.toggle_diagnostic },
+  { key = '<leader>td', desc = 'Buffer Diagnostic', handler = h.builtin.toggle_diagnostic },
   { key = '<leader>ts', desc = 'Spell', handler = h.builtin.toggle_spell },
   { key = '<leader>tt', desc = 'Treesitter Highlight', handler = h.builtin.toggle_treesitter },
   { key = '<c-q>', desc = 'Diagnostic Qflist', handler = h.builtin.diagnostic_qflist },
-  { key = { 'ae', 'ie' }, mode = 'ox', desc = 'Edit', handler = h.builtin.select_file },
+  { key = 'al', mode = 'ox', desc = 'All Line', handler = h.builtin.select_file },
   { key = { '<esc>', '<c-[>' }, desc = 'No Highlight Search', handler = h.builtin.no_hl_search },
   { key = 'aa', mode = 'ox', desc = '<> block', handler = h.builtin.around_angle_bracket },
   { key = 'ia', mode = 'ox', desc = '<> block', handler = h.builtin.inside_angle_bracket },
@@ -73,7 +73,6 @@ local opts = {
   { key = 'ir', mode = 'ox', desc = '[] block', handler = h.builtin.inside_square_bracket },
   { key = 'aq', mode = 'ox', desc = '`` block', handler = h.builtin.around_tilde_bracket },
   { key = 'iq', mode = 'ox', desc = '`` block', handler = h.builtin.inside_tilde_bracket },
-  { key = 'zS', desc = 'Inspect', handler = h.builtin.inspect },
   { key = 'a~', mode = 'ox', desc = '~~ block', handler = h.builtin.action_wrap('a', '~') },
   { key = 'i~', mode = 'ox', desc = '~~ block', handler = h.builtin.action_wrap('i', '~') },
   { key = 'a$', mode = 'ox', desc = '$$ block', handler = h.builtin.action_wrap('a', '$') },
@@ -82,6 +81,7 @@ local opts = {
   { key = 'i*', mode = 'ox', desc = '** block', handler = h.builtin.action_wrap('i', '*') },
   { key = 'a ', mode = 'ox', desc = 'space block', handler = h.builtin.action_wrap('a', ' ') },
   { key = 'i ', mode = 'ox', desc = 'space block', handler = h.builtin.action_wrap('i', ' ') },
+  { key = 'zS', desc = 'Inspect', handler = h.builtin.inspect },
 
   -- LSP
   -- INFO:
@@ -100,7 +100,7 @@ local opts = {
   { key = 'gO', desc = 'Document Symbol', handler = h.lsp.document_symbol },
   { key = 'gW', desc = 'Dynamic Workspace Symbols', handler = h.lsp.dynamic_workspace_symbols },
   { key = '<leader>ti', desc = 'Inlay Hint', handler = h.lsp.toggle_inlay_hint },
-  { key = '<leader>tc', desc = 'Code Lens', handler = h.lsp.toggle_codelens },
+  { key = '<leader>tx', desc = 'Code Lens', handler = h.lsp.toggle_codelens },
 
   -- Git
   { key = { 'ah', 'ih' }, mode = 'ox', desc = 'Git Hunk', handler = h.git.select_hunk },
@@ -389,7 +389,7 @@ local opts = {
   { key = '<m-e>', desc = 'Open, Focus, or Reveal', handler = h.tree.open_focus_reveal },
 
   -- Context
-  { key = '<leader>tC', desc = 'Context', handler = h.toggle_context },
+  { key = '<leader>tc', desc = 'Context', handler = h.toggle_context },
 
   -- Window Resizer
   { key = '<up>', desc = 'Resize Top', handler = h.resize_wrap('top'), fallback = true, expr = true },
@@ -406,7 +406,6 @@ local opts = {
 
   -- Debugger
   { key = '<m-b>', desc = 'Toggle Breakpoint', handler = h.dap.toggle_breakpoint },
-  { key = '<leader>td', desc = 'Dap View', handler = h.dap.toggle_dap_view },
   { key = '<leader>tv', desc = 'Dap Virtual Text', handler = h.dap.toggle_virtual_text },
   { key = '<leader>dl', desc = 'Set Log Point', handler = h.dap.set_log_point },
   { key = '<leader>dc', desc = 'Set Condition Breakpoint', handler = h.dap.set_condition_breakpoint },

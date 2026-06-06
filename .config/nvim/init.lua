@@ -1,11 +1,4 @@
 vim.loader.enable()
-vim.g.lint = true
-vim.g.color = true
-vim.g.flash = true
-vim.g.autotag = true
-vim.g.conform = true
-vim.g.treesitter_highlight = true
-vim.g.treesitter_foldexpr = true
 vim.g.big_file_limit = 3 * 1024 * 1024 -- 3 MB
 vim.g.big_file_average_every_line = nil -- Unit: B, nil for no limit
 vim.g.treesitter_ensure_installed = {

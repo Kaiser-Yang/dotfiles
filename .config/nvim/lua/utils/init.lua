@@ -3,7 +3,10 @@ local M = {
   key = require('utils.key'),
 }
 
-function M.enabled(name) return vim.b[name] == true or vim.b[name] == nil and vim.g[name] ~= false end
+function M.enabled(name, buf)
+  buf = buf or 0
+  return vim.b[buf][name] == true or vim.b[buf][name] == nil and vim.g[name] ~= false
+end
 
 --- Check if the current file is in the possible config directory.
 function M.in_config_dir()

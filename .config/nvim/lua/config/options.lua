@@ -32,8 +32,6 @@ vim.o.autowriteall = true
 vim.o.cmdwinheight = 10
 vim.o.showmode = false
 vim.o.cmdheight = 0
-vim.o.showcmd = true
-vim.o.showcmdloc = 'statusline'
 vim.o.updatetime = 300
 vim.o.statuscolumn = '%s%l%=%C '
 vim.o.undofile = true
@@ -45,16 +43,17 @@ vim.opt.sessionoptions:remove('buffers')
 vim.opt.sessionoptions:remove('blank')
 vim.opt.sessionoptions:append('globals')
 vim.o.showtabline = 0
-vim.o.laststatus = 0
+vim.o.statusline = ' '
+vim.o.showcmd = true
+vim.o.showcmdloc = 'statusline'
 vim.o.colorcolumn = '80'
 vim.o.textwidth = 80
-vim.o.formatoptions = table.concat({
-  'c', -- auto-wrap comments using 'textwidth'
-  'r', -- '<cr>' to insert comment leader
-  'o', -- 'o' or 'O' to insert comment leader
-  '/', -- do not insert comment leader when // is after a statement
-  'q', -- allow formatting of comments with "gq"
-  'l', -- long lines are not broken in insert mode
-  'B', -- do not insert a space between multibyte characters when joining lines
-  'j', -- remove a comment leader when joining lines
-})
+-- 'c': auto-wrap comments using 'textwidth'
+-- 'r': '<cr>' to insert comment leader
+-- 'o': 'o' or 'O' to insert comment leader
+-- '/': do not insert comment leader when // is after a statement
+-- 'q': allow formatting of comments with "gq"
+-- 'l': long lines are not broken in insert mode
+-- 'B': do not insert a space between multibyte characters when joining lines
+-- 'j': remove a comment leader when joining lines
+vim.o.formatoptions = 'cro/qlBj'

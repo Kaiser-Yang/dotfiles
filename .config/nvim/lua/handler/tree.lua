@@ -137,8 +137,8 @@ M.copy_node_information = function()
   local filename = node.name
   local modify = vim.fn.fnamemodify
   local results = {
-    { key = 'FILENAME', value = filename },
     { key = 'PATH (CWD)', value = modify(filepath, ':.') },
+    { key = 'FILENAME', value = filename },
     { key = 'PATH', value = filepath },
     { key = 'URI', value = vim.uri_from_fname(filepath) },
     { key = 'BASENAME', value = modify(filename, ':r') },

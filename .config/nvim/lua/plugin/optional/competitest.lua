@@ -59,8 +59,6 @@ require('competitest').setup({
       sub_dir = 'Luogu'
       local id = task.url:match('/problem/([A-Za-z0-9]+)')
       if id then filename = id end
-    elseif task.url:find('leetcode') then
-      sub_dir = 'LeetCode'
     elseif task.url:find('uva') then
       sub_dir = 'UVa'
       local id = task.url:match('UVA%-?(%d+)')

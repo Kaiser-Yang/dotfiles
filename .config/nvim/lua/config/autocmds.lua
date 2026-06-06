@@ -26,7 +26,8 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
   once = true,
 })
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
+
+vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Store or restore the unnamed register',
   group = _G.autocmd_group,
   callback = function()
@@ -40,7 +41,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
 })
 
 local force = false
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
+vim.api.nvim_create_autocmd('ModeChanged', {
   desc = 'Disable hlsearch when leaving normal mode',
   group = _G.autocmd_group,
   callback = function()
@@ -60,7 +61,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('ModeChanged', {
 
 local limit = 1024 * 1024 -- 1 MB
 local timeout = 300 -- Unit: ms
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
+vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight after yanking',
   group = _G.autocmd_group,
   callback = function()
@@ -86,7 +87,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('TextYankPost', {
 vim.api.nvim_create_autocmd('FileType', {
   desc = 'Enable some treesitter features',
   group = _G.autocmd_group,
-  callback = vim.schedule_wrap(function(ev)
+  callback = function(ev)
     if not vim.api.nvim_buf_is_valid(ev.buf) then return end
     if
       u.enabled('treesitter_highlight')
@@ -95,7 +96,11 @@ vim.api.nvim_create_autocmd('FileType', {
       -- lua, markdown, help and query files will be started by neovim automatically
       and not vim.tbl_contains({ 'lua', 'markdown', 'help', 'query' }, vim.bo[ev.buf].filetype)
     then
-      vim.treesitter.start(ev.buf)
+      if not vim.v.vim_did_init then
+        vim.schedule_wrap(vim.treesitter.start)(ev.buf)
+      else
+        vim.treesitter.start(ev.buf)
+      end
     end
     if u.enabled('treesitter_foldexpr') and u.treesitter_available(ev.buf, 'folds') then
       for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -109,10 +114,10 @@ vim.api.nvim_create_autocmd('FileType', {
         end
       end
     end
-  end),
+  end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
+vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'Enable some LSP features',
   group = _G.autocmd_group,
   callback = function(ev)
@@ -124,10 +129,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
         desc = 'LSP document highlight',
         group = highlight_augroup,
         buffer = ev.buf,
-        callback = function()
-          vim.lsp.buf.clear_references()
-          vim.lsp.buf.document_highlight()
-        end,
+        callback = vim.lsp.buf.document_highlight,
       })
       vim.api.nvim_create_autocmd({ 'CursorMovedI', 'CursorMovedC', 'CursorMoved', 'ModeChanged', 'BufLeave' }, {
         desc = 'Clear LSP document highlight',
@@ -169,7 +171,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('LspAttach', {
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'FocusLost', 'BufLeave' }, {
+vim.api.nvim_create_autocmd({ 'FocusLost', 'BufLeave' }, {
   desc = 'Save on leaving',
   group = _G.autocmd_group,
   callback = function()
@@ -184,13 +186,13 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'FocusLost', 'BufLeave' }, {
 vim.api.nvim_create_autocmd('FileType', {
   desc = 'Guess indent for files',
   group = _G.autocmd_group,
-  callback = vim.schedule_wrap(function(ev)
+  callback = function(ev)
     if not u.buffer.normal(ev.buf) or not _G.loaded['guess-indent.nvim'] then return end
     require('guess-indent').set_from_buffer(ev.buf, true, true)
-  end),
+  end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
+vim.api.nvim_create_autocmd('BufWritePre', {
   desc = 'Format on save',
   group = _G.autocmd_group,
   callback = function(ev)
@@ -199,14 +201,14 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufWritePre', {
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('User', {
+vim.api.nvim_create_autocmd('User', {
   desc = 'Set wrap for telescope',
   group = _G.autocmd_group,
   pattern = 'TelescopePreviewerLoaded',
   callback = function() vim.wo.wrap = true end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('QuitPre', {
+vim.api.nvim_create_autocmd('QuitPre', {
   desc = 'Quit when there is only nvim-tree',
   group = _G.autocmd_group,
   nested = false,
@@ -238,7 +240,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)('QuitPre', {
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWinEnter', 'BufEnter' }, {
+vim.api.nvim_create_autocmd('BufWinEnter', {
   desc = 'Set winbar for competitest windows',
   group = _G.autocmd_group,
   callback = function(ev)
@@ -269,7 +271,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWinEnter', 'BufEnter' }, {
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('WinNew', {
+vim.api.nvim_create_autocmd('WinNew', {
   desc = 'Resize nvim-tree when there is only nvim-tree',
   group = _G.autocmd_group,
   callback = function()
@@ -322,7 +324,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWritePost', 'InsertLeave', 'TextChanged' }, {
+vim.api.nvim_create_autocmd({ 'BufWritePost', 'InsertLeave', 'TextChanged' }, {
   desc = 'Run linters',
   group = _G.autocmd_group,
   callback = function(ev)
@@ -339,7 +341,7 @@ vim.schedule_wrap(vim.api.nvim_create_autocmd)({ 'BufWritePost', 'InsertLeave', 
   end,
 })
 
-vim.schedule_wrap(vim.api.nvim_create_autocmd)('BufEnter', {
+vim.api.nvim_create_autocmd('BufEnter', {
   group = _G.autocmd_group,
   desc = 'Set key mappings for floating windows',
   callback = function()
