@@ -64,8 +64,7 @@ vim.schedule(function()
           end
         end
 
-        if list_type == nil then list_type = 'loclist' end
-        if should_open == nil then should_open = true end
+        if list_type == nil then list_type = 'qflist' end
 
         local conflicts = {}
         local function extend(bufnr, new_conflicts)
@@ -115,21 +114,24 @@ vim.schedule(function()
                 text = string.format('Conflict %d/%d', i, #conflicts),
               })
             end
-            local open_cmd = nil
+            local open_cmd, goto_cmd
             if list_type == 'qflist' then
               vim.fn.setqflist({}, 'r', {
                 title = 'Git Conflicts',
                 items = items,
               })
               open_cmd = 'copen'
+              goto_cmd = 'cfirst'
             else
               vim.fn.setloclist(vim.api.nvim_get_current_win(), {}, 'r', {
                 title = 'Git Conflicts',
                 items = items,
               })
               open_cmd = 'lopen'
+              goto_cmd = 'lfirst'
             end
             if should_open then vim.cmd(open_cmd) end
+            vim.cmd(goto_cmd)
             vim.notify(
               string.format(
                 'Detected %d conflict(s) in current repository, they have been added to %s.',
