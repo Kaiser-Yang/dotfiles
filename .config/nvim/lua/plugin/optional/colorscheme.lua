@@ -9,7 +9,6 @@ require('catppuccin').setup({
       style = 'boarded',
     },
     blink_indent = true,
-    blink_pairs = true,
     dadbod_ui = true,
     dap = true,
     dropbar = {

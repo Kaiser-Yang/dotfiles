@@ -28,11 +28,6 @@
       "rev": "b127d48bf8e9ac9cf41f6e0fbead317503f76558",
       "src": "https://github.com/saghen/blink.lib"
     },
-    "blink.pairs": {
-      "rev": "4e43012356d33a26f69eae475f746fbe9f325f44",
-      "src": "https://github.com/saghen/blink.pairs",
-      "version": ">=0.0.0"
-    },
     "catppuccin": {
       "rev": "0303a7208dba448c459767486a38a6ec05c4216b",
       "src": "https://github.com/catppuccin/nvim"

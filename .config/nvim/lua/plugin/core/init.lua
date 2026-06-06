@@ -1,8 +1,6 @@
 vim.schedule(function()
   -- Completion engine (blink)
   require('plugin.core.blink_cmp')
-  -- Highlight matching pairs (brackets/quotes, etc.)
-  require('plugin.core.blink_pairs')
   -- Code formatter
   require('plugin.core.conform')
   -- Debug Adapter Protocol (DAP) integration

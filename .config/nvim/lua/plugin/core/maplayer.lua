@@ -351,7 +351,6 @@ local opts = {
     handler = h.pair.auto_pair_wrap('<m-tab>'),
     fallback = h.builtin.right,
   },
-  { key = '!', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('!') },
 
   -- Indent
   { key = 'i|', mode = 'ox', desc = 'Indent', handler = h.indent.inside },
