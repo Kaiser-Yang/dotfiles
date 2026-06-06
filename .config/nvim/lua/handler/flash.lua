@@ -14,6 +14,21 @@ function M.jump()
   return true
 end
 
+function M.select_word()
+  if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return false end
+  require('flash').jump({
+    pattern = '.',
+    search = {
+      mode = function(pattern)
+        if pattern:sub(1, 1) == '.' then pattern = pattern:sub(2) end
+        return ([[\<%s\w*\>]]):format(pattern), ([[\<%s]]):format(pattern)
+      end,
+    },
+    jump = { pos = 'range' },
+  })
+  return true
+end
+
 function M.forward_search()
   if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return false end
   require('flash').jump({ forward = true, wrap = true, search = { multi_window = false } })
