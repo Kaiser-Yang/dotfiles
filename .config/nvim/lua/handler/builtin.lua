@@ -535,9 +535,11 @@ function M.swap_wrap(direction)
 end
 
 --- @param line string
---- @param escapes table<string>
+--- @param escapes? string|string[]
 --- @return table<number, boolean> 1-indexed
 local function compute_escaped(line, escapes)
+  escapes = escapes or {}
+  if type(escapes) == 'string' then escapes = { escapes } end
   local len = #line
   local escaped = {}
   for i = 1, len do
@@ -652,11 +654,10 @@ end
 
 --- @param action 'i'|'a'
 --- @param char string
---- @param escapes? table<string>
+--- @param escapes? string|string[]
 --- @return number? start_col 0-indexed inclusive
 --- @return number? end_col 0-indexed exclusive
 local function get_range(action, char, escapes)
-  escapes = escapes or {}
   local mode = vim.fn.mode()
   local is_visual = mode:match('[vV\22]') ~= nil
   local line = vim.fn.getline('.')
@@ -690,13 +691,25 @@ local function get_range(action, char, escapes)
   return apply_action(left, right, line, action, char_len)
 end
 
-function M.action_wrap(action, char, escapes)
+--- @param action 'a'|'i'
+--- @param chars string|string[]
+--- @param escapes? string[]|table<string, string[]>
+function M.action_wrap(action, chars, escapes)
+  escapes = escapes or {}
+  if type(chars) == 'string' then
+    if not escapes[chars] then escapes[chars] = escapes end
+    chars = { chars }
+  end
   return function()
-    local left, right = get_range(action, char, escapes)
-    if not left or not right then return false end
-    local row = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
-    u.update_selection(row, left, row, right)
-    return true
+    for _, char in ipairs(chars) do
+      local left, right = get_range(action, char, escapes[char])
+      if left and right then
+        local row = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
+        u.update_selection(row, left, row, right)
+        return true
+      end
+    end
+    return false
   end
 end
 
