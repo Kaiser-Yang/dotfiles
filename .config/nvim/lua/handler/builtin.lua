@@ -644,4 +644,10 @@ function M.action_wrap(action, char, escapes)
   end
 end
 
+function M.join()
+  local prefix = u.get_cnt_prefix()
+  if type(prefix) == 'number' then prefix = prefix + 1 end
+  return prefix .. 'J'
+end
+
 return M

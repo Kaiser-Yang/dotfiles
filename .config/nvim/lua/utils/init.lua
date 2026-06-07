@@ -194,7 +194,7 @@ function M.build_plugin(names)
   end
 end
 
-function M.get_cnt_prefix() return vim.v.count1 > 1 and vim.v.count1 or '' end
+function M.get_cnt_prefix() return vim.v.count > 0 and vim.v.count or '' end
 
 --- @param insertText string
 --- @return string

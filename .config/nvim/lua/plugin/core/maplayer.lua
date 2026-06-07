@@ -7,6 +7,7 @@ vim.api.nvim_del_keymap('n', 'gcc')
 local h = require('handler')
 local opts = {
   -- Builtin
+  { key = 'J', desc = 'Join', handler = h.builtin.join },
   { key = 'j', mode = 'nx', desc = 'Record jump list', handler = h.builtin.jump_list_wrap('j') },
   { key = 'k', mode = 'nx', desc = 'Record jump list', handler = h.builtin.jump_list_wrap('k') },
   { key = '<c-f>', mode = 'ci', desc = 'Right', handler = h.builtin.right },
