@@ -764,4 +764,24 @@ function M.join()
   return prefix .. 'J'
 end
 
+function M.smart_tab()
+  local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  vim.schedule(function()
+    if
+      string.sub(vim.api.nvim_get_current_line(), 1, cursor_pos[2]):match('^%s*$')
+      or not vim.deep_equal(cursor_pos, vim.api.nvim_win_get_cursor(0))
+    then
+      return
+    end
+    local res = ''
+    if vim.bo.expandtab then
+      res = string.rep(' ', vim.bo.shiftwidth)
+    else
+      res = '<c-v><tab>'
+    end
+    u.key.feed(res, 'nt')
+  end)
+  return '<tab>'
+end
+
 return M
