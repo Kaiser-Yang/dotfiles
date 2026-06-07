@@ -226,11 +226,6 @@ local opts = {
   { key = '<m-s>na', desc = 'Argument', handler = h.treesitter.swap_with_next_parameter },
 
   -- Treesitter Text Object
-  -- By default, "ab", "aB", "ib" and "iB" are aliases of "a(", "a{", "i(" and "i{" respectively
-  -- Therefore we use "a[", "a]" and "i[", "i]" here, for the original "a[" and
-  -- "il" you can use "ar" and "ir".
-  { key = { 'a[', 'a]' }, mode = 'ox', desc = 'Block', handler = h.treesitter.around_block },
-  { key = { 'i[', 'i]' }, mode = 'ox', desc = 'Block', handler = h.treesitter.inside_block },
   { key = 'ac', mode = 'ox', desc = 'Class', handler = h.treesitter.around_class },
   { key = 'ic', mode = 'ox', desc = 'Class', handler = h.treesitter.inside_class },
   { key = 'af', mode = 'ox', desc = 'For', handler = h.treesitter.around_loop },
