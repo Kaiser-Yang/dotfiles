@@ -50,7 +50,6 @@ w.add({
   { ']', desc = 'Next', mode = 'nxo', icon = { icon = ' ', color = 'blue' } },
   { '<leader>s', icon = { icon = ' ', color = 'green' }, desc = 'Search' },
   { '<leader>f', icon = { icon = ' ', color = 'green' }, desc = 'File' },
-  { '<leader>/', icon = { icon = ' ', color = 'green' } },
   { '*', desc = 'Search Backward', icon = { icon = ' ', color = 'green' }, mode = 'x' },
   { '#', desc = 'Search Forward', icon = { icon = ' ', color = 'green' }, mode = 'x' },
   { '<m-s>', desc = 'Swap', icon = { icon = '󰓡 ', color = 'green' } },

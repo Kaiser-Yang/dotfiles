@@ -365,7 +365,7 @@ local opts = {
   { key = '<leader>so', desc = 'Open Files', handler = h.telescope.live_grep_open_file },
   { key = '<leader>fc', desc = 'Config Path', handler = h.telescope.find_file_config },
   { key = '<leader>fp', desc = 'Plugin Path', handler = h.telescope.find_file_plugin },
-  { key = '<leader>/', desc = 'Current Buffer Fuzzy Search', handler = h.telescope.current_buffer_fuzzy_find },
+  { key = '<leader>s/', desc = 'Current Buffer', handler = h.telescope.current_buffer_fuzzy_find },
 
   -- Nvim Tree
   { key = '<m-e>', desc = 'Open, Focus, or Reveal', handler = h.tree.open_focus_reveal },
