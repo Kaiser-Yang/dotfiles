@@ -9,6 +9,7 @@ require('flash').setup({
       function(win) return not vim.api.nvim_win_get_config(win).focusable end,
     },
   },
+  prompt = { prefix = { { '', 'FlashPromptIcon' } } },
   label = { reuse = 'all' },
   modes = {
     search = {

@@ -47,6 +47,7 @@ require('catppuccin').setup({
       TabLine = { fg = C.surface1, bg = C.mantle },
       TabLineSel = { fg = C.text, bg = C.base, style = { 'bold' } },
       TabLineJumpKey = { fg = C.red, style = { 'bold', 'italic' } },
+      FlashPromptIcon = { fg = C.orange },
     }
   end,
 })
