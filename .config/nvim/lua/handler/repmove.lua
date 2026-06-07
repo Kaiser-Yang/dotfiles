@@ -465,4 +465,36 @@ function M.select_tab()
   return true
 end
 
+local function get_mode_type()
+  local mode = vim.fn.mode('1')
+  if mode:match('^no') then
+    return 'Operation'
+  elseif mode:match('^n') then
+    return 'Normal'
+  else
+    return 'Visual'
+  end
+end
+
+local function make_matchit_func(suffix, idx)
+  return function()
+    if suffix == '' and vim.v.count > 0 then return false end
+    local t = get_mode_type()
+    local backward_plug = string.format('<plug>(Matchit%s%sBackward)', t, suffix)
+    local forward_plug = string.format('<plug>(Matchit%s%sForward)', t, suffix)
+    return u.ensure_repmove(backward_plug, forward_plug)[idx]()
+  end
+end
+
+local match_it = {
+  ['%'] = make_matchit_func('', 2), -- Forward
+  ['g%'] = make_matchit_func('', 1), -- Backward
+  [']%'] = make_matchit_func('Multi', 2), -- Forward
+  ['[%'] = make_matchit_func('Multi', 1), -- Backward
+}
+
+function M.matchit_wrap(key)
+  return function() return match_it[key]() end
+end
+
 return M

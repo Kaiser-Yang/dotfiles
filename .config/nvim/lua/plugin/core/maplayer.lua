@@ -152,6 +152,10 @@ local opts = {
   { key = 'F', mode = 'nox', desc = 'Flash F', handler = h.repmove.F },
   { key = 't', mode = 'nox', desc = 'Flash t', handler = h.repmove.t },
   { key = 'T', mode = 'nox', desc = 'Flash T', handler = h.repmove.T },
+  { key = '%', mode = 'nox', desc = 'Next Matchit', handler = h.repmove.matchit_wrap('%'), expr = true, fallback = true },
+  { key = 'g%', mode = 'nox', desc = 'Previous Matchit', handler = h.repmove.matchit_wrap('g%'), expr = true },
+  { key = '[%', mode = 'nox', desc = 'Next Multi Matchit', handler = h.repmove.matchit_wrap('[%'), expr = true },
+  { key = ']%', mode = 'nox', desc = 'Previous Multi Mathit', handler = h.repmove.matchit_wrap(']%'), expr = true },
   -- INFO:
   -- By default, "[c" and "]c" are used to navigate changes in the buffer.
   -- In most cases, we cant use "[g" and "]g" to navigate between git hunks
