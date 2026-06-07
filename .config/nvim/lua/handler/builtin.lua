@@ -691,25 +691,70 @@ local function get_range(action, char, escapes)
   return apply_action(left, right, line, action, char_len)
 end
 
+---@class selection
+---@field left integer
+---@field right integer
+
+--- @param selections selection[]
+--- @param col integer
+--- @return selection?
+local function choose_best_selection(selections, col)
+  local best_inside = nil
+  local best_inside_len = math.huge
+  local best_right = nil
+  local best_right_dist = math.huge
+  local best_left = nil
+  local best_left_dist = math.huge
+
+  for _, sel in ipairs(selections) do
+    local inside = (col >= sel.left and col < sel.right)
+    if inside then
+      local len = sel.right - sel.left
+      if len < best_inside_len then
+        best_inside = sel
+        best_inside_len = len
+      end
+    elseif col <= sel.left then
+      local dist = sel.left - col
+      if dist < best_right_dist then
+        best_right = sel
+        best_right_dist = dist
+      end
+    elseif col >= sel.right then
+      local dist = col - sel.right
+      if dist < best_left_dist then
+        best_left = sel
+        best_left_dist = dist
+      end
+    end
+  end
+  return best_inside or best_right or best_left or nil
+end
+
 --- @param action 'a'|'i'
 --- @param chars string|string[]
 --- @param escapes? string[]|table<string, string[]>
 function M.action_wrap(action, chars, escapes)
-  escapes = escapes or {}
   if type(chars) == 'string' then
-    if not escapes[chars] then escapes[chars] = escapes end
+    if escapes and not escapes[chars] then escapes[chars] = escapes end
     chars = { chars }
   end
+  escapes = escapes or {}
   return function()
+    ---@type selection[]
+    local selections = {}
     for _, char in ipairs(chars) do
       local left, right = get_range(action, char, escapes[char])
-      if left and right then
-        local row = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
-        u.update_selection(row, left, row, right)
-        return true
-      end
+      if left and right then table.insert(selections, { left = left, right = right }) end
     end
-    return false
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local col = cursor_pos[2] -- 0-indexed
+    local best = choose_best_selection(selections, col)
+    if best then
+      local row = cursor_pos[1] - 1 -- 0-indexed
+      u.update_selection(row, best.left, row, best.right)
+    end
+    return best ~= nil
   end
 end
 
