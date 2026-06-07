@@ -115,26 +115,15 @@ function M.update_selection(start_row, start_col, end_row, end_col, selection_mo
 end
 
 --- @param cmd string?
---- @param bufnr integer|nil
+--- @param bufnr? integer
+--- @param win_opts? vim.api.keyset.win_config
 --- @return integer|nil bufnr, integer|nil winid
 function M.terminal(cmd, bufnr, win_opts)
   cmd = cmd or ''
   local term_buf = bufnr
   if term_buf == nil or not vim.api.nvim_buf_is_valid(term_buf) then term_buf = vim.api.nvim_create_buf(false, true) end
 
-  local term_win = vim.api.nvim_open_win(
-    term_buf,
-    true,
-    vim.tbl_extend('force', {
-      relative = 'editor',
-      width = vim.o.columns,
-      height = vim.o.lines,
-      row = 0,
-      col = 0,
-      style = 'minimal',
-      border = 'none',
-    }, win_opts or {})
-  )
+  local term_win = vim.api.nvim_open_win(term_buf, true, win_opts or {})
   if term_win == 0 then
     vim.notify('Failed to open terminal window', vim.log.levels.ERROR, { title = 'Light Boat' })
     return nil, nil

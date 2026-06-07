@@ -284,6 +284,14 @@ local function competi_test()
   return true
 end
 
+local floating_win_opts = {
+  relative = 'editor',
+  width = vim.o.columns,
+  height = vim.o.lines,
+  row = 0,
+  col = 0,
+  border = 'none',
+}
 function M.run_single_file()
   if competi_test() then return true end
   local filetype = vim.bo.filetype
@@ -299,7 +307,7 @@ function M.run_single_file()
     vim.notify('Unsupported filetype: ' .. vim.inspect(vim.bo.filetype), vim.log.levels.WARN, { title = 'Light Boat' })
     return false
   end
-  local buf, win = u.terminal(cmd)
+  local buf, win = u.terminal(cmd, nil, floating_win_opts)
   return buf and win
 end
 
@@ -313,8 +321,56 @@ function M.toggle_lazygit()
   if lazygit_win and vim.api.nvim_win_is_valid(lazygit_win) then
     vim.api.nvim_win_hide(lazygit_win)
   else
-    lazygit_buf, lazygit_win = u.terminal('lazygit', lazygit_buf, { border = 'none' })
+    lazygit_buf, lazygit_win = u.terminal('lazygit', lazygit_buf, floating_win_opts)
     return lazygit_buf ~= nil and lazygit_win ~= nil
+  end
+  return true
+end
+
+local function get_left_nvimtree_width()
+  local left_win = nil
+  local min_col = math.huge
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local config = vim.api.nvim_win_get_config(win)
+    if config.relative == '' then
+      local pos = vim.api.nvim_win_get_position(win)
+      if pos[2] < min_col then
+        min_col = pos[2]
+        left_win = win
+      end
+    end
+  end
+  if left_win then
+    local buf = vim.api.nvim_win_get_buf(left_win)
+    if vim.bo[buf].filetype == 'NvimTree' then return vim.api.nvim_win_get_width(left_win) end
+  end
+  return 0
+end
+local terminal_win = nil
+local terminal_buf = nil
+function M.toggle_terminal()
+  if
+    terminal_win
+    and vim.api.nvim_win_is_valid(terminal_win)
+    and vim.tbl_contains(vim.api.nvim_tabpage_list_wins(0), terminal_win)
+  then
+    vim.api.nvim_win_hide(terminal_win)
+  else
+    local left_offset = get_left_nvimtree_width()
+    local total_width = vim.o.columns
+    local total_height = vim.o.lines
+    local height = math.floor(math.max(12, total_height / 4))
+    --- @type vim.api.keyset.win_config
+    local config = {
+      relative = 'editor',
+      row = total_height - height,
+      col = left_offset,
+      width = total_width - left_offset,
+      height = height,
+      border = { '', '─', '', '', '', '', '', '' },
+    }
+    terminal_buf, terminal_win = u.terminal(nil, terminal_buf, config)
+    return terminal_buf ~= nil and terminal_win ~= nil
   end
   return true
 end

@@ -27,6 +27,9 @@ local opts = {
   { key = '<m-V>', mode = 'nx', desc = 'System Put Before', handler = h.builtin.system_put_before },
   { key = '<m-d>', mode = 'ci', desc = 'Delete EOW', handler = h.builtin.delete_to_eow },
   { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.builtin.toggle_lazygit },
+  -- INFO:
+  -- <c-space> is same with <c-~>
+  { key = { '<c-~>', '<c-space>' }, mode = 'nt', desc = 'Toggle Terminal', handler = h.builtin.toggle_terminal },
   { key = '<m-/>', mode = 'inx', desc = 'Toggle Comment', handler = h.builtin.toggle_comment },
   { key = '<c-h>', desc = 'Left', handler = h.builtin.window('h') },
   { key = '<c-j>', desc = 'Bottom', handler = h.builtin.window('j') },
