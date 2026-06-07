@@ -148,10 +148,10 @@ local opts = {
   -- Repmove Motion
   { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.repmove.semicolon },
   { key = ',', mode = 'nx', desc = 'Last Motion Backward', handler = h.repmove.comma },
-  { key = 'f', mode = 'nx', desc = 'Flash f', handler = h.repmove.f },
-  { key = 'F', mode = 'nx', desc = 'Flash F', handler = h.repmove.F },
-  { key = 't', mode = 'nx', desc = 'Flash t', handler = h.repmove.t },
-  { key = 'T', mode = 'nx', desc = 'Flash T', handler = h.repmove.T },
+  { key = 'f', mode = 'nox', desc = 'Flash f', handler = h.repmove.f },
+  { key = 'F', mode = 'nox', desc = 'Flash F', handler = h.repmove.F },
+  { key = 't', mode = 'nox', desc = 'Flash t', handler = h.repmove.t },
+  { key = 'T', mode = 'nox', desc = 'Flash T', handler = h.repmove.T },
   -- INFO:
   -- By default, "[c" and "]c" are used to navigate changes in the buffer.
   -- In most cases, we cant use "[g" and "]g" to navigate between git hunks

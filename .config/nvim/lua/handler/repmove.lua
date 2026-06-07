@@ -13,7 +13,11 @@ end
 
 local function flash_wrap(key)
   return function()
-    if not _G.loaded['flash.nvim'] or not u.enabled('flash') then return u.get_cnt_prefix() .. key end
+    local mode = vim.fn.mode('1')
+    if not _G.loaded['flash.nvim'] or not u.enabled('flash') then
+      local op = vim.v.operator
+      return '<esc>' .. u.get_cnt_prefix() .. (mode:find('no') and op or '') .. key
+    end
     local Repeat = require('flash.repeat')
     local Config = require('flash.config')
     local Flash = require('flash.plugins.char')
@@ -30,7 +34,6 @@ local function flash_wrap(key)
       Flash.state:update({ pattern = Flash.char_in_op })
       Flash.state:jump({ count = vim.v.count1 })
     else
-      local mode = vim.fn.mode('1')
       Flash.jump(key)
       if mode:find('no') then Flash.char_in_op = Flash.char end
     end
