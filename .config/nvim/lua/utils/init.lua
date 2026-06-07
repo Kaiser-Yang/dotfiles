@@ -114,32 +114,27 @@ function M.update_selection(start_row, start_col, end_row, end_col, selection_mo
   vim.api.nvim_win_set_cursor(0, { end_row + 1, end_col })
 end
 
---- @param cmd string
+--- @param cmd string?
 --- @param bufnr integer|nil
---- @param border string|nil
 --- @return integer|nil bufnr, integer|nil winid
-function M.terminal(cmd, bufnr, border)
-  if cmd == nil or cmd == '' and bufnr == nil then
-    vim.notify('No command provided', vim.log.levels.ERROR, { title = 'Light Boat' })
-    return nil, nil
-  end
-
+function M.terminal(cmd, bufnr, win_opts)
+  cmd = cmd or ''
   local term_buf = bufnr
   if term_buf == nil or not vim.api.nvim_buf_is_valid(term_buf) then term_buf = vim.api.nvim_create_buf(false, true) end
 
-  border = border or vim.o.winborder
-  border = border == '' and 'none' or border
-  local term_win = vim.api.nvim_open_win(term_buf, true, {
-    relative = 'editor',
-    width = vim.o.columns,
-    height = vim.o.lines,
-    row = 0,
-    col = 0,
-    zindex = 50,
-    style = 'minimal',
-    ---@diagnostic disable-next-line: assign-type-mismatch
-    border = border,
-  })
+  local term_win = vim.api.nvim_open_win(
+    term_buf,
+    true,
+    vim.tbl_extend('force', {
+      relative = 'editor',
+      width = vim.o.columns,
+      height = vim.o.lines,
+      row = 0,
+      col = 0,
+      style = 'minimal',
+      border = 'none',
+    }, win_opts or {})
+  )
   if term_win == 0 then
     vim.notify('Failed to open terminal window', vim.log.levels.ERROR, { title = 'Light Boat' })
     return nil, nil
