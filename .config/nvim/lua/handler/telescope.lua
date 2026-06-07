@@ -352,4 +352,10 @@ function M.live_grep_open_file()
   return true
 end
 
+function M.search_session()
+  if not _G.loaded['auto-session'] or not _G.loaded['telescope.nvim'] then return false end
+  require('telescope').extensions['session-lens'].search_session()
+  return true
+end
+
 return M

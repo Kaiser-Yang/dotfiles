@@ -9,7 +9,7 @@ local w = require('which-key')
 w.setup({
   preset = 'helix',
   delay = 0,
-  sort = { 'order', 'group', 'desc', 'mod' },
+  sort = { 'order', 'group', 'alphanum', 'mod' },
   keys = { scroll_down = '', scroll_up = '' },
   icons = { rules = false },
   triggers = { { '<auto>', mode = 'nxo' }, { 'b', mode = 'n' }, { 'a', mode = 'x' }, { 'i', mode = 'x' } },

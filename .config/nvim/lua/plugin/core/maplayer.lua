@@ -8,8 +8,8 @@ local h = require('handler')
 local opts = {
   -- Builtin
   { key = 'J', desc = 'Join', handler = h.builtin.join },
-  { key = 'j', mode = 'nx', desc = 'Record jump list', handler = h.builtin.jump_list_wrap('j') },
-  { key = 'k', mode = 'nx', desc = 'Record jump list', handler = h.builtin.jump_list_wrap('k') },
+  { key = 'j', mode = 'nx', desc = 'Record Jump List', handler = h.builtin.jump_list_wrap('j') },
+  { key = 'k', mode = 'nx', desc = 'Record Jump List', handler = h.builtin.jump_list_wrap('k') },
   { key = '<c-f>', mode = 'ci', desc = 'Right', handler = h.builtin.right },
   { key = '<c-b>', mode = 'ci', desc = 'Left', handler = h.builtin.left },
   { key = '<m-f>', mode = 'ci', desc = 'Word Forward', handler = h.builtin.word_forward },
@@ -25,40 +25,44 @@ local opts = {
   { key = '<m-X>', desc = 'System Cut EOL', handler = h.builtin.system_cut_eol },
   { key = '<m-C>', desc = 'System Yank EOL', handler = h.builtin.system_yank_eol },
   { key = '<m-V>', mode = 'nx', desc = 'System Put Before', handler = h.builtin.system_put_before },
-  { key = '<m-d>', mode = 'ci', desc = 'Delete to EOW', handler = h.builtin.delete_to_eow },
+  { key = '<m-d>', mode = 'ci', desc = 'Delete EOW', handler = h.builtin.delete_to_eow },
   { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.builtin.toggle_lazygit },
-  { key = '<m-/>', mode = 'inx', desc = 'Toggle Line Comment', handler = h.builtin.toggle_comment },
-  { key = '<c-h>', desc = 'To Left', handler = h.builtin.window('h') },
-  { key = '<c-j>', desc = 'To Bottom', handler = h.builtin.window('j') },
-  { key = '<c-k>', desc = 'To Above', handler = h.builtin.window('k') },
-  { key = '<c-l>', desc = 'To Right', handler = h.builtin.window('l') },
-  { key = '<c-w>h', desc = 'Swap with Left', handler = h.builtin.swap_wrap('left') },
-  { key = '<c-w>j', desc = 'Swap with Bottom', handler = h.builtin.swap_wrap('bottom') },
-  { key = '<c-w>k', desc = 'Swap with Top', handler = h.builtin.swap_wrap('top') },
-  { key = '<c-w>l', desc = 'Swap with Right', handler = h.builtin.swap_wrap('right') },
+  { key = '<m-/>', mode = 'inx', desc = 'Toggle Comment', handler = h.builtin.toggle_comment },
+  { key = '<c-h>', desc = 'Left', handler = h.builtin.window('h') },
+  { key = '<c-j>', desc = 'Bottom', handler = h.builtin.window('j') },
+  { key = '<c-k>', desc = 'Top', handler = h.builtin.window('k') },
+  { key = '<c-l>', desc = 'Right', handler = h.builtin.window('l') },
+  { key = '<c-w>h', desc = 'Swap Left', handler = h.builtin.swap_wrap('left') },
+  { key = '<c-w>j', desc = 'Swap Bottom', handler = h.builtin.swap_wrap('bottom') },
+  { key = '<c-w>k', desc = 'Swap Top', handler = h.builtin.swap_wrap('top') },
+  { key = '<c-w>l', desc = 'Swap Right', handler = h.builtin.swap_wrap('right') },
   { key = '<c-w>t', desc = 'Tab Split', handler = h.builtin.tab_split },
+  -- INFO:
   -- By default "<C-A>" is used to insert all commands in command mode
   -- and is used to insert previously inserted text in insert mode
   { key = '<c-a>', mode = 'ci', desc = 'Cursor to BOL', handler = h.builtin.cursor_to_bol },
+  -- INFO:
   -- By default, "<c-e>" is used to insert content below the cursor
-  -- This hack will make it still work as default when the cusor is already at the end of the line in insert mode
+  -- This hack will make it still work as default when the cursor is already at the end of the line in insert mode
   {
     key = '<c-e>',
     mode = 'ci',
-    desc = 'Cursor to EOL',
+    desc = 'Cursor EOL',
     handler = h.builtin.cursor_to_eol,
     fallback = true,
     priority = 0,
   },
+  -- INFO:
+  -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
   {
     key = '<c-k>',
     mode = 'ci',
-    desc = 'Delete to EOL',
+    desc = 'Delete EOL',
     handler = h.builtin.delete_to_eol,
     fallback = true,
     priority = 0,
   },
-  { key = '&', desc = 'Last Substitute with Flag', handler = h.builtin.last_s_cmd },
+  { key = '&', desc = 'Last Substitute', handler = h.builtin.last_s_cmd },
   { key = '<m-n>', mode = 'c', desc = 'Next Commend History', handler = h.builtin.down },
   { key = '<m-p>', mode = 'c', desc = 'Previous Commend History', handler = h.builtin.up },
   { key = '<leader>r', desc = 'Run Single File', handler = h.builtin.run_single_file },
@@ -68,38 +72,36 @@ local opts = {
   { key = '<c-q>', desc = 'Diagnostic Qflist', handler = h.builtin.diagnostic_qflist },
   { key = 'al', mode = 'ox', desc = 'All Line', handler = h.builtin.select_file },
   { key = { '<esc>', '<c-[>' }, desc = 'No Highlight Search', handler = h.builtin.no_hl_search },
-  { key = 'aa', mode = 'ox', desc = '<> block', handler = h.builtin.around_angle_bracket },
-  { key = 'ia', mode = 'ox', desc = '<> block', handler = h.builtin.inside_angle_bracket },
-  { key = 'ar', mode = 'ox', desc = '[] block', handler = h.builtin.around_square_bracket },
-  { key = 'ir', mode = 'ox', desc = '[] block', handler = h.builtin.inside_square_bracket },
-  { key = 'aq', mode = 'ox', desc = '`` block', handler = h.builtin.around_tilde_bracket },
-  { key = 'iq', mode = 'ox', desc = '`` block', handler = h.builtin.inside_tilde_bracket },
-  { key = 'a~', mode = 'ox', desc = '~~ block', handler = h.builtin.action_wrap('a', '~') },
-  { key = 'i~', mode = 'ox', desc = '~~ block', handler = h.builtin.action_wrap('i', '~') },
-  { key = 'a$', mode = 'ox', desc = '$$ block', handler = h.builtin.action_wrap('a', '$') },
-  { key = 'i$', mode = 'ox', desc = '$$ block', handler = h.builtin.action_wrap('i', '$') },
-  { key = 'a*', mode = 'ox', desc = '** block', handler = h.builtin.action_wrap('a', '*') },
-  { key = 'i*', mode = 'ox', desc = '** block', handler = h.builtin.action_wrap('i', '*') },
-  { key = 'a ', mode = 'ox', desc = 'space block', handler = h.builtin.action_wrap('a', ' ') },
-  { key = 'i ', mode = 'ox', desc = 'space block', handler = h.builtin.action_wrap('i', ' ') },
+  { key = 'aa', mode = 'ox', desc = '<> Block', handler = h.builtin.around_angle_bracket },
+  { key = 'ia', mode = 'ox', desc = '<> Block', handler = h.builtin.inside_angle_bracket },
+  { key = 'ar', mode = 'ox', desc = '[] Block', handler = h.builtin.around_square_bracket },
+  { key = 'ir', mode = 'ox', desc = '[] Block', handler = h.builtin.inside_square_bracket },
+  { key = 'a~', mode = 'ox', desc = '~~ Block', handler = h.builtin.action_wrap('a', '~') },
+  { key = 'i~', mode = 'ox', desc = '~~ Block', handler = h.builtin.action_wrap('i', '~') },
+  { key = 'a$', mode = 'ox', desc = '$$ Block', handler = h.builtin.action_wrap('a', '$') },
+  { key = 'i$', mode = 'ox', desc = '$$ Block', handler = h.builtin.action_wrap('i', '$') },
+  { key = 'a*', mode = 'ox', desc = '** Block', handler = h.builtin.action_wrap('a', '*') },
+  { key = 'i*', mode = 'ox', desc = '** Block', handler = h.builtin.action_wrap('i', '*') },
+  { key = 'a ', mode = 'ox', desc = 'Space Block', handler = h.builtin.action_wrap('a', ' ') },
+  { key = 'i ', mode = 'ox', desc = 'Space Block', handler = h.builtin.action_wrap('i', ' ') },
   { key = 'zS', desc = 'Inspect', handler = h.builtin.inspect },
 
   -- LSP
   -- INFO:
-  -- By default, "tagfunc" is set whne "LspAttach",
+  -- By default, "tagfunc" is set when "LspAttach",
   -- "<C-]>", "<C-W>]", and "<C-W>}" will work, you can use them to go to definition
   { key = 'K', desc = 'Hover', handler = h.lsp.hover, fallback = true },
   { key = 'grn', desc = 'Rename', handler = h.lsp.rename },
   { key = 'gra', desc = 'Code Action', handler = h.lsp.code_action },
-  { key = 'grD', desc = 'Declaration', handler = h.lsp.declaration },
-  { key = 'grx', desc = 'Codelens', handler = h.lsp.codelens_run },
-  { key = 'grr', desc = 'References', handler = h.lsp.references },
+  { key = 'grd', desc = 'Declaration', handler = h.lsp.declaration },
+  { key = 'grx', desc = 'Code Lens', handler = h.lsp.codelens_run },
+  { key = 'grr', desc = 'Reference', handler = h.lsp.references },
   { key = 'grI', desc = 'Implementation', handler = h.lsp.implementation },
   { key = 'gri', desc = 'Incoming Call', handler = h.lsp.incoming_calls },
   { key = 'gro', desc = 'Outgoing Call', handler = h.lsp.outgoing_calls },
   { key = 'grt', desc = 'Type Definition', handler = h.lsp.type_definition },
   { key = 'gO', desc = 'Document Symbol', handler = h.lsp.document_symbol },
-  { key = 'gW', desc = 'Dynamic Workspace Symbols', handler = h.lsp.dynamic_workspace_symbols },
+  { key = 'gW', desc = 'Dynamic Workspace Symbol', handler = h.lsp.dynamic_workspace_symbols },
   { key = '<leader>ti', desc = 'Inlay Hint', handler = h.lsp.toggle_inlay_hint },
   { key = '<leader>tx', desc = 'Code Lens', handler = h.lsp.toggle_codelens },
 
@@ -111,19 +113,19 @@ local opts = {
   { key = '<leader>gU', desc = 'Undo Add Buffer', handler = h.git.reset_buffer_index },
   { key = '<leader>gr', mode = 'nx', desc = 'Reset', handler = h.git.reset },
   { key = '<leader>gR', desc = 'Reset Buffer', handler = h.git.reset_buffer },
-  { key = '<leader>gt', desc = 'Git Diff This with Input', handler = h.git.diff_this_with_input, expr = true },
-  { key = '<leader>gq', desc = 'Qflist with Input', handler = h.git.qflist_with_input, expr = true },
-  { key = '<leader>gl', desc = 'Loclist with Input', handler = h.git.loclist_with_input, expr = true },
+  { key = '<leader>gt', desc = 'Git Diff This', handler = h.git.diff_this_with_input, expr = true },
+  { key = '<leader>gq', desc = 'Qflist', handler = h.git.qflist_with_input, expr = true },
+  { key = '<leader>gl', desc = 'Loclist', handler = h.git.loclist_with_input, expr = true },
   { key = '<leader>gd', desc = 'Diff', handler = h.git.preview_hunk },
   { key = '<leader>gD', desc = 'Diff Inline', handler = h.git.preview_hunk_inline },
   { key = '<leader>gb', desc = 'Line Blame', handler = h.git.line_blame },
   { key = '<leader>gB', desc = 'Buffer Blame', handler = h.git.buffer_blame },
-  { key = '<leader>xc', desc = 'Choose Current', handler = h.git.choose_ours },
-  { key = '<leader>xi', desc = 'Choose Incoming', handler = h.git.choose_theirs },
-  { key = '<leader>xb', desc = 'Choose Both', handler = h.git.choose_both },
-  { key = '<leader>xB', desc = 'Choose Both Reverse', handler = h.git.choose_both_reverse },
-  { key = '<leader>xn', desc = 'Choose None', handler = h.git.choose_none },
-  { key = '<leader>xa', desc = 'Choose Ancestor', handler = h.git.choose_base },
+  { key = '<leader>xc', desc = 'Current', handler = h.git.choose_ours },
+  { key = '<leader>xi', desc = 'Incoming', handler = h.git.choose_theirs },
+  { key = '<leader>xb', desc = 'Both', handler = h.git.choose_both },
+  { key = '<leader>xB', desc = 'Both Reverse', handler = h.git.choose_both_reverse },
+  { key = '<leader>xn', desc = 'None', handler = h.git.choose_none },
+  { key = '<leader>xa', desc = 'Ancestor', handler = h.git.choose_base },
   { key = '<leader>xdi', desc = 'Incoming', handler = h.git.show_diff_theirs },
   { key = '<leader>xdc', desc = 'Current', handler = h.git.show_diff_ours },
   { key = '<leader>xdb', desc = 'Both', handler = h.git.show_diff_both },
@@ -131,7 +133,7 @@ local opts = {
   { key = '<leader>xdV', desc = 'Incoming vs. Current', handler = h.git.show_diff_theirs_vs_ours },
   { key = '<leader>tgb', desc = 'Current Line Blame', handler = h.git.toggle_current_line_blame },
   { key = '<leader>tgw', desc = 'Word Diff', handler = h.git.toggle_word_diff },
-  { key = '<leader>tgs', desc = 'Signs', handler = h.git.toggle_signs },
+  { key = '<leader>tgs', desc = 'Sign', handler = h.git.toggle_signs },
   { key = '<leader>tgn', desc = 'Line Number Highlight', handler = h.git.toggle_numhl },
   { key = '<leader>tgd', desc = 'Deleted', handler = h.git.toggle_deleted },
   { key = '<leader>tgl', desc = 'Line Highlight', handler = h.git.toggle_linehl },
@@ -139,18 +141,13 @@ local opts = {
   -- Repmove Motion
   { key = ';', mode = 'nx', desc = 'Last Motion Forward', handler = h.repmove.semicolon },
   { key = ',', mode = 'nx', desc = 'Last Motion Backward', handler = h.repmove.comma },
-  { key = 'f', mode = 'nox', desc = 'Move to Next Character', handler = h.repmove.f },
-  { key = 'F', mode = 'nox', desc = 'Move to Previous Character', handler = h.repmove.F },
-  { key = 't', mode = 'nox', desc = 'Move till Next Character', handler = h.repmove.t },
-  { key = 'T', mode = 'nox', desc = 'Move till Previous Character', handler = h.repmove.T },
-  -- By deafault, "[a" and "]a" are mapped to ":prevvious" and ":next"
-  { key = '[a', mode = 'nox', desc = 'Argument Start', handler = h.repmove.previous_parameter_start },
-  { key = ']a', mode = 'nox', desc = 'Argument Start', handler = h.repmove.next_parameter_start },
-  -- By deafault, "[A" and "]A" are mapped to ":rewind" and ":last"
-  { key = '[A', mode = 'nox', desc = 'Argument End', handler = h.repmove.previous_parameter_end },
-  { key = ']A', mode = 'nox', desc = 'Argument End', handler = h.repmove.next_parameter_end },
+  { key = 'f', mode = 'nx', desc = 'Flash f', handler = h.repmove.f },
+  { key = 'F', mode = 'nx', desc = 'Flash F', handler = h.repmove.F },
+  { key = 't', mode = 'nx', desc = 'Flash t', handler = h.repmove.t },
+  { key = 'T', mode = 'nx', desc = 'Flash T', handler = h.repmove.T },
+  -- INFO:
   -- By default, "[c" and "]c" are used to navigate changes in the buffer.
-  -- In most caes, we cant use "[g" and "]g" to navigate between git hunks
+  -- In most cases, we cant use "[g" and "]g" to navigate between git hunks
   { key = '[c', mode = 'nox', desc = 'Class Start', handler = h.repmove.previous_class_start },
   { key = ']c', mode = 'nox', desc = 'Class Start', handler = h.repmove.next_class_start },
   { key = '[C', mode = 'nox', desc = 'Class End', handler = h.repmove.previous_class_end },
@@ -163,11 +160,13 @@ local opts = {
   { key = ']g', mode = 'nx', desc = 'Git Hunk', handler = h.repmove.next_hunk },
   { key = '[x', mode = 'nx', desc = 'Conflict', handler = h.repmove.previous_conflict },
   { key = ']x', mode = 'nx', desc = 'Conflict', handler = h.repmove.next_conflict },
+  -- INFO:
   -- By default, "[i", "]i", "[I", and "]I" are used to show information of keywords under cursor
   { key = '[i', mode = 'nox', desc = 'If Start', handler = h.repmove.previous_conditional_start },
   { key = ']i', mode = 'nox', desc = 'If Start', handler = h.repmove.next_conditional_start },
   { key = '[I', mode = 'nox', desc = 'If End', handler = h.repmove.previous_conditional_end },
   { key = ']I', mode = 'nox', desc = 'If End', handler = h.repmove.next_conditional_end },
+  -- INFO:
   -- By default "[f" and "]f" are aliases of "gf"
   { key = '[f', mode = 'nox', desc = 'For Start', handler = h.repmove.previous_loop_start },
   { key = ']f', mode = 'nox', desc = 'For Start', handler = h.repmove.next_loop_start },
@@ -177,17 +176,9 @@ local opts = {
   { key = ']m', mode = 'nox', desc = 'Method Start', handler = h.repmove.next_function_start },
   { key = '[M', mode = 'nox', desc = 'Method End', handler = h.repmove.previous_function_end },
   { key = ']M', mode = 'nox', desc = 'Method End', handler = h.repmove.next_function_end },
-  { key = '[o', mode = 'nox', desc = 'Call Start', handler = h.repmove.previous_call_start },
-  { key = ']o', mode = 'nox', desc = 'Call Start', handler = h.repmove.next_call_start },
-  { key = '[O', mode = 'nox', desc = 'Call End', handler = h.repmove.previous_call_end },
-  { key = ']O', mode = 'nox', desc = 'Call End', handler = h.repmove.next_call_end },
-  -- By default "[r" and "]r" are used to search "rare" words
-  { key = '[r', mode = 'nox', desc = 'Return Start', handler = h.repmove.previous_return_start },
-  { key = ']r', mode = 'nox', desc = 'Return Start', handler = h.repmove.next_return_start },
-  { key = '[R', mode = 'nox', desc = 'Return End', handler = h.repmove.previous_return_end },
-  { key = ']R', mode = 'nox', desc = 'Return End', handler = h.repmove.next_return_end },
   { key = '[s', mode = 'nox', desc = 'Misspelled Word', handler = h.repmove.previous_misspelled },
   { key = ']s', mode = 'nox', desc = 'Misspelled Word', handler = h.repmove.next_misspelled },
+  -- INFO:
   -- By default "[t" and "]t" are mapped to ":tp" and ":tn"
   -- Those two below do not support vim.v.count
   { key = '[t', mode = 'nox', desc = 'Todo', handler = h.repmove.previous_todo },
@@ -196,8 +187,6 @@ local opts = {
   { key = ']]', mode = 'nox', desc = 'Block Start', handler = h.repmove.next_block_start },
   { key = '[]', mode = 'nox', desc = 'Block End', handler = h.repmove.previous_block_end },
   { key = '][', mode = 'nox', desc = 'Block End', handler = h.repmove.next_block_end },
-  { key = '[|', mode = 'nox', desc = 'Indent Start', handler = h.repmove.indent_top },
-  { key = ']|', mode = 'nox', desc = 'Indent End', handler = h.repmove.indent_bottom },
   { key = '[b', desc = 'Buffer', handler = h.repmove.previous_buffer },
   { key = ']b', desc = 'Buffer', handler = h.repmove.next_buffer },
   { key = '[B', desc = 'Buffer', handler = h.repmove.first_buffer },
@@ -228,28 +217,13 @@ local opts = {
   -- Swap
   { key = '<m-s>pa', desc = 'Argument', handler = h.treesitter.swap_with_previous_parameter },
   { key = '<m-s>na', desc = 'Argument', handler = h.treesitter.swap_with_next_parameter },
-  { key = '<m-s>pl', desc = 'Block', handler = h.treesitter.swap_with_previous_block },
-  { key = '<m-s>nl', desc = 'Block', handler = h.treesitter.swap_with_next_block },
-  { key = '<m-s>pc', desc = 'Class', handler = h.treesitter.swap_with_previous_class },
-  { key = '<m-s>nc', desc = 'Class', handler = h.treesitter.swap_with_next_class },
-  { key = '<m-s>pf', desc = 'For', handler = h.treesitter.swap_with_previous_loop },
-  { key = '<m-s>nf', desc = 'For', handler = h.treesitter.swap_with_next_loop },
-  { key = '<m-s>pi', desc = 'If', handler = h.treesitter.swap_with_previous_conditional },
-  { key = '<m-s>ni', desc = 'If', handler = h.treesitter.swap_with_next_conditional },
-  { key = '<m-s>pm', desc = 'Method', handler = h.treesitter.swap_with_previous_function },
-  { key = '<m-s>nm', desc = 'Method', handler = h.treesitter.swap_with_next_function },
-  { key = '<m-s>po', desc = 'Call', handler = h.treesitter.swap_with_previous_call },
-  { key = '<m-s>no', desc = 'Call', handler = h.treesitter.swap_with_next_call },
-  { key = '<m-s>pr', desc = 'Return', handler = h.treesitter.swap_with_previous_return },
-  { key = '<m-s>nr', desc = 'Return', handler = h.treesitter.swap_with_next_return },
 
   -- Treesitter Text Object
-  { key = 'aA', mode = 'ox', desc = 'Argument', handler = h.treesitter.around_parameter },
-  { key = 'iA', mode = 'ox', desc = 'Argument', handler = h.treesitter.inside_parameter },
   -- By default, "ab", "aB", "ib" and "iB" are aliases of "a(", "a{", "i(" and "i{" respectively
-  -- Therefore we use "al" and "il" here
-  { key = 'al', mode = 'ox', desc = 'Block', handler = h.treesitter.around_block },
-  { key = 'il', mode = 'ox', desc = 'Block', handler = h.treesitter.inside_block },
+  -- Therefore we use "a[", "a]" and "i[", "i]" here, for the original "a[" and
+  -- "il" you can use "ar" and "ir".
+  { key = { 'a[', 'a]' }, mode = 'ox', desc = 'Block', handler = h.treesitter.around_block },
+  { key = { 'i[', 'i]' }, mode = 'ox', desc = 'Block', handler = h.treesitter.inside_block },
   { key = 'ac', mode = 'ox', desc = 'Class', handler = h.treesitter.around_class },
   { key = 'ic', mode = 'ox', desc = 'Class', handler = h.treesitter.inside_class },
   { key = 'af', mode = 'ox', desc = 'For', handler = h.treesitter.around_loop },
@@ -258,13 +232,10 @@ local opts = {
   { key = 'ii', mode = 'ox', desc = 'If', handler = h.treesitter.inside_conditional },
   { key = 'am', mode = 'ox', desc = 'Method', handler = h.treesitter.around_function },
   { key = 'im', mode = 'ox', desc = 'Method', handler = h.treesitter.inside_function },
-  { key = 'ao', mode = 'ox', desc = 'Call', handler = h.treesitter.around_call },
-  { key = 'io', mode = 'ox', desc = 'Call', handler = h.treesitter.inside_call },
-  { key = 'aR', mode = 'ox', desc = 'Return', handler = h.treesitter.around_return },
-  { key = 'iR', mode = 'ox', desc = 'Return', handler = h.treesitter.inside_return },
 
   -- Completion
   { key = '<c-s>', mode = 'i', desc = 'Toggle Signature Help', handler = h.completion.toggle_signature },
+  -- INFO:
   -- By default, "<c-u>" are used to delete content before
   {
     key = '<c-u>',
@@ -280,6 +251,7 @@ local opts = {
     handler = h.completion.scroll_signature_up,
     fallback = true,
   },
+  -- INFO:
   -- By default, "<c-d>" and "<c-t>" are used to delete or add indent in insert mode
   {
     key = '<c-d>',
@@ -299,8 +271,10 @@ local opts = {
   },
   { key = '<tab>', mode = 'i', desc = 'Snippet Forward', handler = h.completion.snippet_forward, fallback = true },
   { key = '<s-tab>', mode = 'i', desc = 'Snippet Backward', handler = h.completion.snippet_backward },
+  -- INFO:
   -- By default <C-J> is an alias of <CR>
   { key = '<c-j>', mode = 'ci', desc = 'Select Next', handler = h.completion.select_next, fallback = true },
+  -- INFO:
   -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
   {
     key = '<c-k>',
@@ -310,8 +284,10 @@ local opts = {
     fallback = true,
     priority = 1,
   },
+  -- INFO:
   -- By default "<c-y>" is used to insert content above the cursor
   { key = '<c-y>', mode = 'ci', desc = 'Accept', handler = h.completion.accept, fallback = true },
+  -- INFO:
   -- By default, "<c-e>" is used to insert content below the cursor
   { key = '<c-e>', mode = 'ci', desc = 'Cancel', handler = h.completion.cancel, fallback = true, priority = 1 },
 
@@ -321,6 +297,7 @@ local opts = {
   { key = '<m-F>', mode = 'nx', desc = 'Async Format', handler = h.format },
 
   -- Surround
+  -- INFO:
   -- By default "s" and "S" in visual mode are aliases of "c"
   { key = 's', mode = 'x', desc = 'Surround', handler = h.pair.surround_visual, expr = true },
   { key = 'S', mode = 'x', desc = 'Surround Line Mode', handler = h.pair.surround_visual_line, expr = true },
@@ -344,7 +321,6 @@ local opts = {
   { key = '<space>', mode = 'i', desc = 'Autopair Space', handler = h.pair.auto_pair_wrap('<space>') },
   { key = '<m-e>', mode = 'i', desc = 'Autopair Fastwarp', handler = h.pair.auto_pair_wrap('<m-e>') },
   { key = '<m-E>', mode = 'i', desc = 'Autopair Reverse Fastwarp', handler = h.pair.auto_pair_wrap('<m-E>') },
-  { key = '<m-s>', mode = 'i', desc = 'Autopair Close', handler = h.pair.auto_pair_wrap('<m-)>') },
   {
     key = '<c-l>',
     mode = 'i',
@@ -352,11 +328,6 @@ local opts = {
     handler = h.pair.auto_pair_wrap('<m-tab>'),
     fallback = h.builtin.right,
   },
-
-  -- Indent
-  { key = 'i|', mode = 'ox', desc = 'Indent', handler = h.indent.inside },
-  { key = 'a|', mode = 'ox', desc = 'Indent', handler = h.indent.around },
-  { key = '<leader>tI', desc = 'Indent', handler = h.indent.toggle },
 
   -- Picker
   { key = 'gy', desc = 'Search Register', handler = h.telescope.registers },
@@ -375,16 +346,17 @@ local opts = {
   { key = '<leader>sk', desc = 'Key Mapping', handler = h.telescope.keymaps },
   { key = '<leader>sm', desc = 'Marks', handler = h.telescope.marks },
   { key = '<leader>sM', desc = 'Man Page', handler = h.telescope.man_pages },
+  { key = '<leader>ss', desc = 'Session', handler = h.telescope.search_session },
   { key = '<leader>sS', desc = 'Picker', handler = h.telescope.pickers },
   { key = '<leader>sr', desc = 'Recent Files', handler = h.telescope.oldfiles },
   { key = '<leader>st', desc = 'Todo', handler = h.telescope.todo },
   { key = '<leader>sb', desc = 'Buffer', handler = h.telescope.buffers },
   { key = '<leader>sc', desc = 'Config Path', handler = h.telescope.live_grep_config },
   { key = '<leader>sp', desc = 'Plugin Path', handler = h.telescope.live_grep_plugin },
+  { key = '<leader>so', desc = 'Open Files', handler = h.telescope.live_grep_open_file },
   { key = '<leader>fc', desc = 'Config Path', handler = h.telescope.find_file_config },
   { key = '<leader>fp', desc = 'Plugin Path', handler = h.telescope.find_file_plugin },
   { key = '<leader>/', desc = 'Current Buffer Fuzzy Search', handler = h.telescope.current_buffer_fuzzy_find },
-  { key = '<leader>s/', desc = 'Search in Open Files', handler = h.telescope.live_grep_open_file },
 
   -- Nvim Tree
   { key = '<m-e>', desc = 'Open, Focus, or Reveal', handler = h.tree.open_focus_reveal },
@@ -401,9 +373,6 @@ local opts = {
   { key = '<s-down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = true, expr = true },
   { key = '<s-left>', desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = true, expr = true },
   { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = true, expr = true },
-
-  -- Session
-  { key = '<leader>ss', desc = 'Session', handler = h.search_session },
 
   -- Debugger
   { key = '<m-b>', desc = 'Toggle Breakpoint', handler = h.dap.toggle_breakpoint },
