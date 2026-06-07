@@ -2,14 +2,14 @@
   "@field": {
     "prefix": "@field",
     "body": [
-      "@field ${1:public} ${2:name} ${3:type}$0"
+      "@field ${1:public} ${2:name} ${0:type}"
     ],
     "description": "Describe a table field definition."
   },
   "@param": {
     "prefix": "@param",
     "body": [
-      "@param ${1:name} ${2:type}$0"
+      "@param ${1:name} ${0:type}"
     ],
     "description": "Describe function parameters. It requires the name of the parameter and its description."
   },
