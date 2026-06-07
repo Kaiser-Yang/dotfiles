@@ -187,7 +187,6 @@ local opts = {
   { key = ']s', mode = 'nox', desc = 'Misspelled Word', handler = h.repmove.next_misspelled },
   -- INFO:
   -- By default "[t" and "]t" are mapped to ":tp" and ":tn"
-  -- Those two below do not support vim.v.count
   { key = '[t', mode = 'nox', desc = 'Todo', handler = h.repmove.previous_todo },
   { key = ']t', mode = 'nox', desc = 'Todo', handler = h.repmove.next_todo },
   { key = '[[', mode = 'nox', desc = 'Block Start', handler = h.repmove.previous_block_start },
