@@ -14,7 +14,7 @@ end
 local function flash_wrap(key)
   return function()
     local mode = vim.fn.mode('1')
-    if not _G.loaded['flash.nvim'] or not u.enabled('flash') then
+    if not _G.loaded['flash.nvim'] or not u.enabled('flash') or vim.v.count > 0 then
       local op = vim.v.operator
       return '<esc>' .. u.get_cnt_prefix() .. (mode:find('no') and op or '') .. key
     end
