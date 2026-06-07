@@ -39,7 +39,7 @@ local opts = {
   { key = '<c-w>j', desc = 'Swap Bottom', handler = h.builtin.swap_wrap('bottom') },
   { key = '<c-w>k', desc = 'Swap Top', handler = h.builtin.swap_wrap('top') },
   { key = '<c-w>l', desc = 'Swap Right', handler = h.builtin.swap_wrap('right') },
-  { key = '<c-w>t', desc = 'Tab Split', handler = h.builtin.tab_split },
+  { key = { '<c-w>t', '<c-w><c-t>' }, desc = 'Tab Split', handler = h.builtin.tab_split },
   -- INFO:
   -- By default "<C-A>" is used to insert all commands in command mode
   -- and is used to insert previously inserted text in insert mode
