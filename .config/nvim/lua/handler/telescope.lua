@@ -87,7 +87,7 @@ local function extract_quoted_and_rest(s, q)
   if not end_idx then return nil, nil end
   return unescape_quoted_inner(s:sub(2, end_idx - 1)), s:sub(end_idx + 1)
 end
--- Main factory: returns a function suitable for which-key / telescope mappings
+
 function M.toggle_quotation(prompt_bufnr)
   local quote_char = '"'
   local action_state = require('telescope.actions.state')
