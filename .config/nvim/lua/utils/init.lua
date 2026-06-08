@@ -51,16 +51,15 @@ local repmove = {}
 --- @param comma? string|function
 --- @param semicolon? string|function
 --- @return table<function>
-function M.ensure_repmove(previous, next, comma, semicolon, rp)
-  rp = rp or repmove
-  if not rp[previous] or not rp[next] then
+function M.ensure_repmove(previous, next, comma, semicolon)
+  if not repmove[previous] or not repmove[next] then
     if _G.loaded['repmove.nvim'] then
-      rp[previous], rp[next] = require('repmove').make(previous, next, comma, semicolon)
+      repmove[previous], repmove[next] = require('repmove').make(previous, next, comma, semicolon)
     else
-      rp[previous], rp[next] = M.ensure_function(previous), M.ensure_function(next)
+      repmove[previous], repmove[next] = M.ensure_function(previous), M.ensure_function(next)
     end
   end
-  return { rp[previous], rp[next] }
+  return { repmove[previous], repmove[next] }
 end
 
 function M.treesitter_available(bufnr, name)
