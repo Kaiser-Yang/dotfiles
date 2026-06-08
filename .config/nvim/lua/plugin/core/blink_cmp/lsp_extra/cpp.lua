@@ -94,7 +94,7 @@ return {
       '$1::$1() {}',
       '',
       '$1::~$1() {}',
-    }, 'enum class (since C++11)'),
+    }, 'class'),
     ['struct'] = u.make_snippet_wrap('st', {
       'struct ${1:MyStruct} {',
       '\t$0',

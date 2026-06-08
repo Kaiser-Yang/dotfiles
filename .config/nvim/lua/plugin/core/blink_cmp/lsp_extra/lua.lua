@@ -31,7 +31,7 @@ return {
     ['local'] = u.make_snippet_wrap('l', 'local ', 'local'),
     ['else'] = u.make_snippet_wrap('else', {
       'else',
-      '\t$0',
+      '\t',
     }),
   },
   [k.Event] = {

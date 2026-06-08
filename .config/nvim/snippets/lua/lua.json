@@ -13,15 +13,25 @@
     ],
     "description": "create a Lua class"
   },
-  "mfu": {
-    "prefix": "mfu",
+  "method": {
+    "prefix": "met",
     "body": ["function {$1:Obj}:${2:methodName}($3)", "\t$0", "end"],
-    "description": "member function for a class"
+    "description": "method for a class"
+  },
+  "lafu": {
+    "prefix": "lafu",
+    "body": ["local ${1:name} = function($2)", "\t${0}", "end"],
+    "description": "local assignment function"
   },
   "afu": {
     "prefix": "afu",
     "body": ["${1:name} = function($2)", "\t${0}", "end"],
-    "description": "anonymous function assignment"
+    "description": "assignment function"
+  },
+  "a": {
+    "prefix": "a",
+    "body": ["${1:name} = ${2:nil}"],
+    "description": "assignment"
   },
   "la": {
     "prefix": "la",
@@ -35,7 +45,7 @@
   },
   "lreq": {
     "prefix": "lreq",
-    "body": ["local ${1:module} = require(\"${2:$1}\")$0"],
+    "body": ["local ${1:module} = require('${2}')$0"],
     "description": "local require"
   },
   "lm": {

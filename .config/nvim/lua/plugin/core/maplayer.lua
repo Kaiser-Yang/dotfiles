@@ -17,7 +17,7 @@ local opts = {
   { key = '<c-p>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '<c-n>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '<tab>', mode = 'c', desc = 'Nop', handler = h.builtin.nop },
-  { key = '<tab>', mode = 'i', desc = 'Smart Tab', handler = h.builtin.smart_tab, priority = 0 },
+  { key = '<tab>', mode = 'i', desc = 'Smart Tab', handler = h.builtin.smart_tab, priority = 0, fallback = true },
   { key = '<s-tab>', mode = 'c', desc = 'Nop', handler = h.builtin.nop },
   { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = h.builtin.insert_undo_point, priority = 1 },
   { key = '<m-x>', mode = 'nox', desc = 'System Cut', handler = h.builtin.system_cut, expr = true },
@@ -286,8 +286,8 @@ local opts = {
     expr = true,
     fallback = true,
   },
-  { key = '<tab>', mode = 'i', desc = 'Snippet Forward', handler = h.completion.snippet_forward, priority = 1 },
-  { key = '<s-tab>', mode = 'i', desc = 'Snippet Backward', handler = h.completion.snippet_backward },
+  { key = '<tab>', mode = 'ins', desc = 'Snippet Forward', handler = h.completion.snippet_forward, priority = 1, fallback = true },
+  { key = '<s-tab>', mode = 'ins', desc = 'Snippet Backward', handler = h.completion.snippet_backward, fallback = true },
   -- INFO:
   -- By default <C-J> is an alias of <CR>
   { key = '<c-j>', mode = 'ci', desc = 'Select Next', handler = h.completion.select_next, fallback = true },

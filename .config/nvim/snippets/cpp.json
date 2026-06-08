@@ -1,7 +1,7 @@
 {
   "#if": {
     "prefix": "#if",
-    "body": ["#if ${1:0}", "$0", "#endif // $1"],
+    "body": ["#if ${1:condition}", "$0", "#endif // $1"],
     "description": "#if"
   },
   "#ifdef": {
@@ -16,8 +16,8 @@
   },
   "#def": {
     "prefix": "def",
-    "body": ["#define $0"],
-    "description": "#define \" \""
+    "body": ["#define "],
+    "description": "#define"
   },
   "#inc": {
     "prefix": "#inc",
@@ -30,7 +30,7 @@
     "description": "#include \" \""
   },
   "auto function": {
-    "prefix": "afu",
+    "prefix": "aufu",
     "body": ["auto ${1:name}( ${2:void} ) -> ${3:auto} {", "\t${5}", "}"],
     "description": "auto function and trailing return"
   },

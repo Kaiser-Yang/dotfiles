@@ -1,37 +1,27 @@
 {
   "@field": {
     "prefix": "@field",
-    "body": [
-      "@field ${1:public} ${2:name} ${0:type}"
-    ],
+    "body": ["@field ${1:name} ${2:type}"],
     "description": "Describe a table field definition."
   },
   "@param": {
     "prefix": "@param",
-    "body": [
-      "@param ${1:name} ${0:type}"
-    ],
+    "body": ["@param ${1:name} ${2:type}"],
     "description": "Describe function parameters. It requires the name of the parameter and its description."
   },
   "@return": {
     "prefix": "@return",
-    "body": [
-      "@return "
-    ],
+    "body": ["@return "],
     "description": "Describe a returning value of the function. Since Lua can return multiple values, this tag should appear more than once."
   },
   "@see": {
     "prefix": "@see",
-    "body": [
-      "@see "
-    ],
+    "body": ["@see "],
     "description": "Refers to other descriptions of functions or tables."
   },
   "@class": {
     "prefix": "@class",
-    "body": [
-      "@class "
-    ],
+    "body": ["@class "],
     "description": "If LuaDoc cannot infer the type of documentation (function, table or module definition), the programmer can specify it explicitly."
   }
 }
