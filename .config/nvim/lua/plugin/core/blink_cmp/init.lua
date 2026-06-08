@@ -7,9 +7,9 @@ local function default_sources()
   local res = {}
   local sql_file = vim.tbl_contains({ 'sql', 'mysql', 'plsql' }, vim.bo.filetype)
   if sql_file then
-    table.insert(res, 'dadbod')
+    if _G.loaded['vim-dadbod-completion'] then table.insert(res, 'dadbod') end
   elseif vim.bo.filetype == 'dap-repl' then
-    table.insert(res, 'dap')
+    if _G.loaded['blink-cmp-dap'] then table.insert(res, 'dap') end
   else
     table.insert(res, 'lsp')
   end
