@@ -286,8 +286,21 @@ local opts = {
     expr = true,
     fallback = true,
   },
-  { key = '<tab>', mode = 'ins', desc = 'Snippet Forward', handler = h.completion.snippet_forward, priority = 1, fallback = true },
-  { key = '<s-tab>', mode = 'ins', desc = 'Snippet Backward', handler = h.completion.snippet_backward, fallback = true },
+  {
+    key = '<tab>',
+    mode = 'ins',
+    desc = 'Snippet Forward',
+    handler = h.completion.snippet_forward,
+    priority = 1,
+    fallback = true,
+  },
+  {
+    key = '<s-tab>',
+    mode = 'ins',
+    desc = 'Snippet Backward',
+    handler = h.completion.snippet_backward,
+    fallback = true,
+  },
   -- INFO:
   -- By default <C-J> is an alias of <CR>
   { key = '<c-j>', mode = 'ci', desc = 'Select Next', handler = h.completion.select_next, fallback = true },
