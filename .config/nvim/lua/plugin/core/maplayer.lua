@@ -17,7 +17,6 @@ local opts = {
   { key = '<c-p>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '<c-n>', mode = 'ci', desc = 'Nop', handler = h.builtin.nop },
   { key = '<tab>', mode = 'c', desc = 'Nop', handler = h.builtin.nop },
-  { key = '<tab>', mode = 'i', desc = 'Smart Tab', handler = h.builtin.smart_tab, priority = 0, fallback = true },
   { key = '<s-tab>', mode = 'c', desc = 'Nop', handler = h.builtin.nop },
   { key = '<cr>', mode = 'i', desc = 'Insert Undo Point', handler = h.builtin.insert_undo_point, priority = 1 },
   { key = '<m-x>', mode = 'nox', desc = 'System Cut', handler = h.builtin.system_cut, expr = true },
@@ -354,13 +353,7 @@ local opts = {
   { key = '<space>', mode = 'i', desc = 'Autopair Space', handler = h.pair.auto_pair_wrap('<space>') },
   { key = '<m-e>', mode = 'i', desc = 'Autopair Fastwarp', handler = h.pair.auto_pair_wrap('<m-e>') },
   { key = '<m-E>', mode = 'i', desc = 'Autopair Reverse Fastwarp', handler = h.pair.auto_pair_wrap('<m-E>') },
-  {
-    key = '<c-l>',
-    mode = 'i',
-    desc = 'Autopair Tabout',
-    handler = h.pair.auto_pair_wrap('<m-tab>'),
-    fallback = h.builtin.right,
-  },
+  { key = '<tab>', mode = 'i', desc = 'Smart Tab', handler = h.pair.smart_tab, priority = 0, fallback = true },
 
   -- Picker
   { key = 'gy', desc = 'Search Register', handler = h.telescope.registers },
