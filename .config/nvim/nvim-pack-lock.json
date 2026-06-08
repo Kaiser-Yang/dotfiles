@@ -148,7 +148,7 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "repmove.nvim": {
-      "rev": "2b8db852d2532c898ed21d2f46ed22528d819dad",
+      "rev": "ed161e9014344e7af478a627d9d5259cc4e98779",
       "src": "https://github.com/Kaiser-Yang/repmove.nvim"
     },
     "resolve.nvim": {

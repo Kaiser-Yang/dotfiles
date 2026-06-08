@@ -313,7 +313,10 @@ function M.nvim_tree_previous_git()
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   return u.ensure_repmove(
     require('nvim-tree.api').node.navigate.git.prev_recursive,
-    require('nvim-tree.api').node.navigate.git.next_recursive
+    require('nvim-tree.api').node.navigate.git.next_recursive,
+    nil,
+    nil,
+    'NvimTree'
   )[1]()
 end
 function M.nvim_tree_next_git()
@@ -321,7 +324,10 @@ function M.nvim_tree_next_git()
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   return u.ensure_repmove(
     require('nvim-tree.api').node.navigate.git.prev_recursive,
-    require('nvim-tree.api').node.navigate.git.next_recursive
+    require('nvim-tree.api').node.navigate.git.next_recursive,
+    nil,
+    nil,
+    'NvimTree'
   )[2]()
 end
 function M.nvim_tree_previous_diagnostic()
@@ -329,7 +335,10 @@ function M.nvim_tree_previous_diagnostic()
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   return u.ensure_repmove(
     require('nvim-tree.api').node.navigate.diagnostics.prev_recursive,
-    require('nvim-tree.api').node.navigate.diagnostics.next_recursive
+    require('nvim-tree.api').node.navigate.diagnostics.next_recursive,
+    nil,
+    nil,
+    'NvimTree'
   )[1]()
 end
 function M.nvim_tree_next_diagnostic()
@@ -337,7 +346,10 @@ function M.nvim_tree_next_diagnostic()
   if vim.fn.mode('1') == 'n' then vim.cmd("normal! m'") end
   return u.ensure_repmove(
     require('nvim-tree.api').node.navigate.diagnostics.prev_recursive,
-    require('nvim-tree.api').node.navigate.diagnostics.next_recursive
+    require('nvim-tree.api').node.navigate.diagnostics.next_recursive,
+    nil,
+    nil,
+    'NvimTree'
   )[2]()
 end
 function M.next_diagnostic() return u.ensure_repmove(previous_diagnostic, next_diagnostic)[2]() end
@@ -399,7 +411,9 @@ function M.T() return u.ensure_repmove(flash_wrap('T'), flash_wrap('t'), flash_w
 function M.t() return u.ensure_repmove(flash_wrap('T'), flash_wrap('t'), flash_wrap(','), flash_wrap(';'))[2]() end
 function M.next_todo() return u.ensure_repmove(previous_todo, next_todo)[2]() end
 function M.next_misspelled() return u.ensure_repmove(previous_misspelled, next_misspelled)[2]() end
-function M.next_section_start() return u.ensure_repmove(previous_section_start, next_section_start)[2]() end
+function M.next_section_start()
+  return u.ensure_repmove(previous_section_start, next_section_start, nil, nil, 'help')[2]()
+end
 function M.next_function_start() return u.ensure_repmove(previous_function_start, next_function_start)[2]() end
 function M.next_function_end() return u.ensure_repmove(previous_function_end, next_function_end)[2]() end
 function M.next_class_start() return u.ensure_repmove(previous_class_start, next_class_start)[2]() end
@@ -418,10 +432,12 @@ function M.next_statement_start() return u.ensure_repmove(previous_statement_sta
 function M.next_statement_end() return u.ensure_repmove(previous_statement_end, next_statement_end)[2]() end
 function M.next_call_start() return u.ensure_repmove(previous_call_start, next_call_start)[2]() end
 function M.next_call_end() return u.ensure_repmove(previous_call_end, next_call_end)[2]() end
-function M.next_plugin() return u.ensure_repmove(previous_plugin, next_plugin)[2]() end
+function M.next_plugin() return u.ensure_repmove(previous_plugin, next_plugin, nil, nil, 'nvim-pack')[2]() end
 function M.previous_todo() return u.ensure_repmove(previous_todo, next_todo)[1]() end
 function M.previous_misspelled() return u.ensure_repmove(previous_misspelled, next_misspelled)[1]() end
-function M.previous_section_start() return u.ensure_repmove(previous_section_start, next_section_start)[1]() end
+function M.previous_section_start()
+  return u.ensure_repmove(previous_section_start, next_section_start, nil, nil, 'help')[1]()
+end
 function M.previous_function_start() return u.ensure_repmove(previous_function_start, next_function_start)[1]() end
 function M.previous_function_end() return u.ensure_repmove(previous_function_end, next_function_end)[1]() end
 function M.previous_class_start() return u.ensure_repmove(previous_class_start, next_class_start)[1]() end
@@ -440,17 +456,27 @@ function M.previous_statement_start() return u.ensure_repmove(previous_statement
 function M.previous_statement_end() return u.ensure_repmove(previous_statement_end, next_statement_end)[1]() end
 function M.previous_call_start() return u.ensure_repmove(previous_call_start, next_call_start)[1]() end
 function M.previous_call_end() return u.ensure_repmove(previous_call_end, next_call_end)[1]() end
-function M.previous_plugin() return u.ensure_repmove(previous_plugin, next_plugin)[1]() end
+function M.previous_plugin() return u.ensure_repmove(previous_plugin, next_plugin, nil, nil, 'nvim-pack')[1]() end
 function M.previous_tab() return u.ensure_repmove(tabprevious, tabnext)[1]() end
 function M.next_tab() return u.ensure_repmove(tabprevious, tabnext)[2]() end
-function M.grug_next_input() return u.ensure_repmove(grug_previous_input, grug_next_input)[2]() end
-function M.grug_previous_input() return u.ensure_repmove(grug_previous_input, grug_next_input)[1]() end
-function M.grug_apply_then_next() return u.ensure_repmove(grug_apply_then_previous, grug_apply_then_next)[2]() end
-function M.grug_apply_then_previous() return u.ensure_repmove(grug_apply_then_previous, grug_apply_then_next)[1]() end
-function M.grug_sync_then_next() return u.ensure_repmove(grug_sync_then_previous, grug_sync_then_next)[2]() end
-function M.grug_sync_then_previous() return u.ensure_repmove(grug_sync_then_previous, grug_sync_then_next)[1]() end
-function M.grug_open_next() return u.ensure_repmove(grug_open_previous, grug_open_next)[2]() end
-function M.grug_open_previous() return u.ensure_repmove(grug_open_previous, grug_open_next)[1]() end
+function M.grug_next_input() return u.ensure_repmove(grug_previous_input, grug_next_input, nil, nil, 'grug-far')[2]() end
+function M.grug_previous_input()
+  return u.ensure_repmove(grug_previous_input, grug_next_input, nil, nil, 'grug-far')[1]()
+end
+function M.grug_apply_then_next()
+  return u.ensure_repmove(grug_apply_then_previous, grug_apply_then_next, nil, nil, 'grug-far')[2]()
+end
+function M.grug_apply_then_previous()
+  return u.ensure_repmove(grug_apply_then_previous, grug_apply_then_next, nil, nil, 'grug-far')[1]()
+end
+function M.grug_sync_then_next()
+  return u.ensure_repmove(grug_sync_then_previous, grug_sync_then_next, nil, nil, 'grug-far')[2]()
+end
+function M.grug_sync_then_previous()
+  return u.ensure_repmove(grug_sync_then_previous, grug_sync_then_next, nil, nil, 'grug-far')[1]()
+end
+function M.grug_open_next() return u.ensure_repmove(grug_open_previous, grug_open_next, nil, nil, 'grug-far')[2]() end
+function M.grug_open_previous() return u.ensure_repmove(grug_open_previous, grug_open_next, nil, nil, 'grug-far')[1]() end
 function M.select_tab()
   if #vim.api.nvim_list_tabpages() == 1 then return false end
   local ignored = vim.v.count == 0 and _G.loaded['tabby.nvim']

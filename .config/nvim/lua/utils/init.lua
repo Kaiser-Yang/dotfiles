@@ -50,11 +50,12 @@ local repmove = {}
 --- @param next string|function
 --- @param comma? string|function
 --- @param semicolon? string|function
+--- @param filetypes? string|string[]
 --- @return table<function>
-function M.ensure_repmove(previous, next, comma, semicolon)
+function M.ensure_repmove(previous, next, comma, semicolon, filetypes)
   if not repmove[previous] or not repmove[next] then
     if _G.loaded['repmove.nvim'] then
-      repmove[previous], repmove[next] = require('repmove').make(previous, next, comma, semicolon)
+      repmove[previous], repmove[next] = require('repmove').make(previous, next, comma, semicolon, filetypes)
     else
       repmove[previous], repmove[next] = M.ensure_function(previous), M.ensure_function(next)
     end
