@@ -65,6 +65,10 @@
       "rev": "84a4987ff36798c2fc1169cbaff67960aed9776f",
       "src": "https://github.com/NMAC427/guess-indent.nvim"
     },
+    "live-server.nvim": {
+      "rev": "85915d0e7dd926a54b0082aaeafc10a82bfe8288",
+      "src": "https://github.com/selimacerbas/live-server.nvim"
+    },
     "lualine.nvim": {
       "rev": "221ce6b2d999187044529f49da6554a92f740a96",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
@@ -86,7 +90,7 @@
       "src": "https://github.com/mfussenegger/nvim-dap"
     },
     "nvim-dap-view": {
-      "rev": "ba5c838e731003abefb8bc1c403c59aa5b3aa194",
+      "rev": "91a2b0eab74cc889499587166cc6e3d53a7e1e45",
       "src": "https://github.com/igorlfs/nvim-dap-view"
     },
     "nvim-dap-virtual-text": {
@@ -110,7 +114,7 @@
       "src": "https://github.com/kylechui/nvim-surround"
     },
     "nvim-tree.lua": {
-      "rev": "07f541fcaa4a5ae019598240362449ab7e9812b3",
+      "rev": "82f58063d67defc620e1ef8be606fc62a7b5dc1e",
       "src": "https://github.com/nvim-tree/nvim-tree.lua"
     },
     "nvim-treesitter": {
@@ -180,7 +184,7 @@
       "src": "https://github.com/folke/todo-comments.nvim"
     },
     "ts-autotag.nvim": {
-      "rev": "35f79f6253dff5cc43cf943d74c4b2734370a81d",
+      "rev": "d8a12e00e3f32987cb29d50146a66061d4e5f98d",
       "src": "https://github.com/tronikelis/ts-autotag.nvim"
     },
     "ultimate-autopair.nvim": {
