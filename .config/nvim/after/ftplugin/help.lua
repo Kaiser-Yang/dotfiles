@@ -1,4 +1,3 @@
-vim.cmd('setlocal number relativenumber')
 local h = require('handler')
 local mapping = {
   { { 'n', 'x', 'o' }, '[[', h.repmove.previous_section_start, { desc = 'Section Start' } },
