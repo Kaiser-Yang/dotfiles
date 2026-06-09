@@ -527,4 +527,18 @@ function M.matchit_wrap(key)
   return function() return match_it[key]() end
 end
 
+local function select_previous_node()
+  require('vim.treesitter._select').select_prev(vim.v.count1)
+  return true
+end
+
+local function select_next_node()
+  require('vim.treesitter._select').select_next(vim.v.count1)
+  return true
+end
+
+function M.select_previous_node() return u.ensure_repmove(select_previous_node, select_next_node)[1]() end
+
+function M.select_next_node() return u.ensure_repmove(select_previous_node, select_next_node)[2]() end
+
 return M

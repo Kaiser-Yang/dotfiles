@@ -219,6 +219,8 @@ local opts = {
   { key = ']L', desc = 'Last Loclist Item', handler = h.repmove.last_loclist_item },
   { key = '[<c-l>', desc = 'File Loclist Item', handler = h.repmove.previous_file_loclist_item },
   { key = ']<c-l>', desc = 'File Loclist Item', handler = h.repmove.next_file_loclist_item },
+  { key = '[n', mode = 'x', desc = 'Select Node', handler = h.repmove.select_previous_node },
+  { key = ']n', mode = 'x', desc = 'Select Node', handler = h.repmove.select_next_node },
   { key = '[q', desc = 'Qflist Item', handler = h.repmove.previous_qflist_item },
   { key = ']q', desc = 'Qflist Item', handler = h.repmove.next_qflist_item },
   { key = '[Q', desc = 'First Qflist Item', handler = h.repmove.first_qflist_item },
