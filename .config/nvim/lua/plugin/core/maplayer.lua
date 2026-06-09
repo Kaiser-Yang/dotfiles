@@ -35,6 +35,7 @@ local opts = {
   { key = '<c-j>', desc = 'Bottom', handler = h.builtin.window('j') },
   { key = '<c-k>', desc = 'Top', handler = h.builtin.window('k') },
   { key = '<c-l>', desc = 'Right', handler = h.builtin.window('l') },
+  { key = '<c-w><c-c>', desc = 'Close', handler = h.builtin.window('c') },
   { key = '<c-w>h', desc = 'Swap Left', handler = h.builtin.swap_wrap('left') },
   { key = '<c-w>j', desc = 'Swap Bottom', handler = h.builtin.swap_wrap('bottom') },
   { key = '<c-w>k', desc = 'Swap Top', handler = h.builtin.swap_wrap('top') },
