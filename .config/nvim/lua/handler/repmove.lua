@@ -29,13 +29,17 @@ local function flash_wrap(key)
     local autohide = Config.get('char').autohide
     if Repeat.is_repeat then
       Flash.jump_labels = false
+      Flash.motion = Flash.motion_in_op
       Flash.state = Flash.new()
       Flash.state:hide()
       Flash.state:update({ pattern = Flash.char_in_op })
       Flash.state:jump({ count = vim.v.count1 })
     else
       Flash.jump(key)
-      if mode:find('no') then Flash.char_in_op = Flash.char end
+      if mode:find('no') then
+        Flash.motion_in_op = Flash.motion
+        Flash.char_in_op = Flash.char
+      end
     end
     vim.schedule(function()
       Flash.jumping = false
