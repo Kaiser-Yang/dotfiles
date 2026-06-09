@@ -421,5 +421,9 @@ local opts = {
   { key = '<f10>', desc = 'Dap Step Over', handler = h.dap.step_over },
   { key = '<f11>', desc = 'Dap Step Into', handler = h.dap.step_into },
   { key = '<f12>', desc = 'Dap Step Out', handler = h.dap.step_out },
+
+  -- treesj
+  { key = 'gJ', desc = 'Treesitter Join', handler = h.treesitter_join },
+  { key = 'gS', desc = 'Treesitter Split', handler = h.treesitter_split },
 }
 require('maplayer').setup(opts)

@@ -41,6 +41,8 @@ vim.schedule(function()
   require('plugin.optional.treesitter_context')
   -- Treesitter textobjects (motions / swap / select)
   require('plugin.optional.treesitter_textobjects')
+  -- Tree Split and Join
+  require('plugin.optional.treesj')
   -- Show keybindings as you type (which-key)
   require('plugin.optional.which_key')
   -- Easy window resizing
