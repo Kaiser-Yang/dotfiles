@@ -11,7 +11,9 @@ local function ui_input_on_init(uiinput, opts, on_done)
     or prompt:find('Rename')
     or prompt:find('Remove')
     or prompt:find('New Name')
-  ) and default:sub(-1) ~= '/' or opts.normal
+  )
+      and default:sub(-1) ~= '/'
+    or opts.normal
   uiinput:on(event.BufLeave, function() uiinput:unmount() end, { once = true })
   uiinput:map('n', 'q', function() on_done(nil) end, { noremap = true, nowait = true })
   uiinput:map('i', '<c-c>', function() on_done(nil) end, { noremap = true, nowait = true })
@@ -112,7 +114,7 @@ local function override_ui_select()
       zindex = 999,
     }
 
-    if kind == 'codeaction' then
+    if kind == 'codeaction' or border_top_text:find('refactor') then
       -- change position for codeaction selection
       popup_options.relative = 'cursor'
       popup_options.position = { row = 2, col = 0 }

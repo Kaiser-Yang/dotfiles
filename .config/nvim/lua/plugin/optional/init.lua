@@ -27,6 +27,8 @@ vim.schedule(function()
   require('plugin.optional.markdown_preview')
   -- Better UI for vim.ui.input / vim.ui.select
   require('plugin.optional.nui')
+  -- Refactoring
+  require('plugin.optional.refactoring')
   -- Markdown viewer
   require('plugin.optional.render_markdown')
   -- Session

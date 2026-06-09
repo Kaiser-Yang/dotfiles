@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "async.nvim": {
+      "rev": "7a1d7d49933fbe902b84b55f352a3b10fd587331",
+      "src": "https://github.com/lewis6991/async.nvim"
+    },
     "auto-session": {
       "rev": "d93d91c32ef511b02bf3c56abe916a932f62b17a",
       "src": "https://github.com/Kaiser-Yang/auto-session"
@@ -142,6 +146,10 @@
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
+    "refactoring.nvim": {
+      "rev": "624c01e8175901484eac74512baf35e9dfe269b8",
+      "src": "https://github.com/ThePrimeagen/refactoring.nvim"
     },
     "render-markdown.nvim": {
       "rev": "5adf0895310c1904e5abfaad40a2baad7fe44a07",

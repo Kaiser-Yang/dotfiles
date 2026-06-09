@@ -31,6 +31,12 @@ function M.references()
   return true
 end
 
+function M.refactor()
+  if not _G.loaded['refactoring.nvim'] then return false end
+  require('refactoring').select_refactor()
+  return true
+end
+
 function M.implementation()
   if _G.loaded['telescope.nvim'] then
     require('telescope.builtin').lsp_implementations()
