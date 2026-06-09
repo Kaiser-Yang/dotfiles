@@ -100,7 +100,7 @@ local opts = {
   -- "<C-]>", "<C-W>]", and "<C-W>}" will work, you can use them to go to definition
   { key = 'K', desc = 'Hover', handler = h.lsp.hover, fallback = true },
   { key = 'grn', desc = 'Rename', handler = h.lsp.rename },
-  { key = 'gra', desc = 'Code Action', handler = h.lsp.code_action },
+  { key = 'gra', mode = 'nx', desc = 'Code Action', handler = h.lsp.code_action },
   { key = 'grd', desc = 'Declaration', handler = h.lsp.declaration },
   { key = 'grx', desc = 'Code Lens', handler = h.lsp.codelens_run },
   { key = 'grr', desc = 'Reference', handler = h.lsp.references },
@@ -254,7 +254,7 @@ local opts = {
   { key = 'im', mode = 'ox', desc = 'Method', handler = h.treesitter.inside_function },
 
   -- Completion
-  { key = '<c-s>', mode = 'i', desc = 'Toggle Signature Help', handler = h.completion.toggle_signature },
+  { key = '<c-s>', mode = 'is', desc = 'Toggle Signature Help', handler = h.completion.toggle_signature },
   -- INFO:
   -- By default, "<c-u>" are used to delete content before
   {
@@ -404,10 +404,10 @@ local opts = {
   -- Debugger
   { key = '<m-b>', desc = 'Toggle Breakpoint', handler = h.dap.toggle_breakpoint },
   { key = '<leader>tv', desc = 'Dap Virtual Text', handler = h.dap.toggle_virtual_text },
-  { key = '<leader>dl', desc = 'Set Log Point', handler = h.dap.set_log_point },
-  { key = '<leader>dc', desc = 'Set Condition Breakpoint', handler = h.dap.set_condition_breakpoint },
-  { key = '<leader>dh', desc = 'Set Hit Count Breakpoint', handler = h.dap.set_hit_count_breakpoint },
-  { key = '<leader>de', desc = 'Dap Set Exception Breakpoints', handler = h.dap.set_exception_breakpoints },
+  { key = '<leader>dl', desc = 'Log Point', handler = h.dap.set_log_point },
+  { key = '<leader>dc', desc = 'Condition Breakpoint', handler = h.dap.set_condition_breakpoint },
+  { key = '<leader>dh', desc = 'Hit Count Breakpoint', handler = h.dap.set_hit_count_breakpoint },
+  { key = '<leader>de', desc = 'Exception Breakpoints', handler = h.dap.set_exception_breakpoints },
   { key = '<leader>dC', desc = 'Clear Breakpoint', handler = h.dap.clear_breakpoints },
   { key = '<leader>ds', desc = 'Show Breakpoint Information', handler = h.dap.show_breakpoint_info },
   { key = '<f4>', desc = 'Dap Terminate', handler = h.dap.terminate },
