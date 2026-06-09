@@ -1,6 +1,6 @@
 vim.b.lint = false
 vim.b.color = false
-vim.g.flash = false
+vim.b.flash = false
 vim.b.pairs = false
 vim.b.autotag = false
 vim.b.conform = false
