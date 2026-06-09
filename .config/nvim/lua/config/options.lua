@@ -59,3 +59,4 @@ vim.o.textwidth = 80
 vim.o.formatoptions = 'cro/qlBj'
 vim.opt.indentkeys:append('!^I')
 vim.opt.indentkeys:remove('!^F')
+vim.o.spelllang = 'en,cjk'
