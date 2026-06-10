@@ -116,7 +116,6 @@ local opts = {
     }),
     grep_string = { additional_args = additional_args },
     find_files = { find_command = find_command },
-    oldfiles = { prompt_title = 'Recent Files' },
     help_tags = { mappings = {} },
     man_pages = { mappings = {} },
   },

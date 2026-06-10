@@ -378,14 +378,16 @@ local opts = {
   { key = '<leader>sM', desc = 'Man Page', handler = h.telescope.man_pages },
   { key = '<leader>ss', desc = 'Session', handler = h.telescope.search_session },
   { key = '<leader>sS', desc = 'Picker', handler = h.telescope.pickers },
-  { key = '<leader>sr', desc = 'Recent Files', handler = h.telescope.oldfiles },
+  { key = '<leader>so', desc = 'Old File', handler = h.telescope.oldfiles },
   { key = '<leader>st', desc = 'Todo', handler = h.telescope.todo },
   { key = '<leader>sb', desc = 'Buffer', handler = h.telescope.buffers },
   { key = '<leader>sc', desc = 'Config Path', handler = h.telescope.live_grep_config },
   { key = '<leader>sp', desc = 'Plugin Path', handler = h.telescope.live_grep_plugin },
-  { key = '<leader>so', desc = 'Open Files', handler = h.telescope.live_grep_open_file },
+  { key = '<leader>sO', desc = 'Open Files', handler = h.telescope.live_grep_open_file },
+  { key = '<leader>sr', desc = 'Root Path', handler = h.telescope.live_grep_root },
   { key = '<leader>fc', desc = 'Config Path', handler = h.telescope.find_file_config },
   { key = '<leader>fp', desc = 'Plugin Path', handler = h.telescope.find_file_plugin },
+  { key = '<leader>fr', desc = 'Root Path', handler = h.telescope.find_file_root },
   { key = '<leader>s/', desc = 'Current Buffer', handler = h.telescope.current_buffer_fuzzy_find },
 
   -- Nvim Tree

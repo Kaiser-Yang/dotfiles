@@ -331,6 +331,13 @@ M.live_grep_plugin = function()
   return true
 end
 
+function M.live_grep_root()
+  local root = vim.fs.root(vim.fn.expand('%:p'), { '.git' })
+  if not root or not _G.loaded['telescope.nvim'] then return false end
+  live_grep({ cwd = root })
+  return true
+end
+
 M.find_file_config = function()
   if not _G.loaded['telescope.nvim'] then return false end
   require('telescope.builtin').find_files({ cwd = c_dir })
@@ -340,6 +347,13 @@ end
 M.find_file_plugin = function()
   if not _G.loaded['telescope.nvim'] then return false end
   require('telescope.builtin').find_files({ cwd = l_dir })
+  return true
+end
+
+function M.find_file_root()
+  local root = vim.fs.root(vim.fn.expand('%:p'), { '.git' })
+  if not root or not _G.loaded['telescope.nvim'] then return false end
+  require('telescope.builtin').find_files({ cwd = root })
   return true
 end
 
