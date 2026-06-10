@@ -35,6 +35,8 @@ vim.schedule(function()
   require('plugin.optional.session')
   -- Tabline
   require('plugin.optional.tabby')
+  -- Tmux Navigator
+  require('plugin.optional.tmux_navigator')
   -- Highlight and manage TODO/FIXME comments
   require('plugin.optional.todo_comments')
   -- Treesitter (parser installer)

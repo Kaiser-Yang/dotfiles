@@ -422,7 +422,21 @@ M.system_yank_eol = '"+y$'
 M.system_cut_eol = '"+d$'
 M.nop = ''
 
-function M.window(key) return '<c-w>' .. key end
+local window_extra = {
+  h = '<cmd>TmuxNavigateLeft<cr>',
+  j = '<cmd>TmuxNavigateDown<cr>',
+  k = '<cmd>TmuxNavigateUp<cr>',
+  l = '<cmd>TmuxNavigateRight<cr>',
+}
+function M.window(key)
+  if window_extra[key] then
+    return function()
+      if _G.loaded['vim-tmux-navigator'] then return window_extra[key] end
+      return '<c-w>' .. key
+    end
+  end
+  return '<c-w>' .. key
+end
 
 function M.toggle_spell()
   local status = vim.wo.spell == false

@@ -215,6 +215,10 @@
       "rev": "07e92e22114cc5b1ba4938d99897d85b58e20475",
       "src": "https://github.com/kristijanhusak/vim-dadbod-ui"
     },
+    "vim-tmux-navigator": {
+      "rev": "e41c431a0c7b7388ae7ba341f01a0d217eb3a432",
+      "src": "https://github.com/christoomey/vim-tmux-navigator"
+    },
     "which-key.nvim": {
       "rev": "531ebec6370aff4ada619d48d6f26343ae7259a0",
       "src": "https://github.com/Kaiser-Yang/which-key.nvim"
