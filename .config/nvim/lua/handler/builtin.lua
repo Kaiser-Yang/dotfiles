@@ -529,14 +529,7 @@ function M.swap_wrap(direction)
     if type(nei_win) == 'table' then nei_win = nei_win[1] end
     local cur_buf = vim.api.nvim_win_get_buf(cur_win)
     local nei_buf = vim.api.nvim_win_get_buf(nei_win)
-    if
-      vim.wo[cur_win].winfixbuf
-      or vim.wo[nei_win].winfixbuf
-      or vim.bo[cur_buf].buftype ~= ''
-      or vim.bo[nei_buf].buftype ~= ''
-    then
-      return false
-    end
+    if vim.wo[cur_win].winfixbuf or vim.wo[nei_win].winfixbuf then return false end
     local cur_pos = vim.api.nvim_win_get_cursor(cur_win)
     local nei_pos = vim.api.nvim_win_get_cursor(nei_win)
     vim.api.nvim_win_set_buf(cur_win, nei_buf)
