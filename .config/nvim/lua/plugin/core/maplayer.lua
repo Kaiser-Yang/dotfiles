@@ -27,15 +27,11 @@ local opts = {
   { key = '<m-V>', mode = 'nx', desc = 'System Put Before', handler = h.builtin.system_put_before },
   { key = '<m-d>', mode = 'ci', desc = 'Delete EOW', handler = h.builtin.delete_to_eow },
   { key = '<m-g>', mode = 'nt', desc = 'Toggle Lazygit', handler = h.builtin.toggle_lazygit },
-  -- INFO:
-  -- <c-space> is same with <c-~>
-  { key = { '<c-~>', '<c-space>' }, mode = 'nt', desc = 'Toggle Terminal', handler = h.builtin.toggle_terminal },
   { key = '<m-/>', mode = 'inx', desc = 'Toggle Comment', handler = h.builtin.toggle_comment },
   { key = '<c-h>', desc = 'Left', handler = h.builtin.window('h') },
   { key = '<c-j>', desc = 'Bottom', handler = h.builtin.window('j') },
   { key = '<c-k>', desc = 'Top', handler = h.builtin.window('k') },
   { key = '<c-l>', desc = 'Right', handler = h.builtin.window('l') },
-  { key = '<c-w><c-c>', desc = 'Close', handler = h.builtin.window('c') },
   { key = '<c-w>h', desc = 'Swap Left', handler = h.builtin.swap_wrap('left') },
   { key = '<c-w>j', desc = 'Swap Bottom', handler = h.builtin.swap_wrap('bottom') },
   { key = '<c-w>k', desc = 'Swap Top', handler = h.builtin.swap_wrap('top') },
@@ -44,28 +40,14 @@ local opts = {
   -- INFO:
   -- By default "<C-A>" is used to insert all commands in command mode
   -- and is used to insert previously inserted text in insert mode
-  { key = '<c-a>', mode = 'ci', desc = 'Cursor to BOL', handler = h.builtin.cursor_to_bol },
+  { key = '<c-a>', mode = 'ci', desc = 'Cursor BOL', handler = h.builtin.cursor_to_bol },
   -- INFO:
   -- By default, "<c-e>" is used to insert content below the cursor
   -- This hack will make it still work as default when the cursor is already at the end of the line in insert mode
-  {
-    key = '<c-e>',
-    mode = 'ci',
-    desc = 'Cursor EOL',
-    handler = h.builtin.cursor_to_eol,
-    fallback = true,
-    priority = 0,
-  },
+  { key = '<c-e>', mode = 'ci', desc = 'Cursor EOL', handler = h.builtin.cursor_to_eol, fallback = true, priority = 0 },
   -- INFO:
   -- By default, "<c-k>" is used to insert digraph, see ":help i_CTRL-K" and ":help c_CTRL-K"
-  {
-    key = '<c-k>',
-    mode = 'ci',
-    desc = 'Delete EOL',
-    handler = h.builtin.delete_to_eol,
-    fallback = true,
-    priority = 0,
-  },
+  { key = '<c-k>', mode = 'ci', desc = 'Delete EOL', handler = h.builtin.delete_to_eol, fallback = true, priority = 0 },
   { key = '&', desc = 'Last Substitute', handler = h.builtin.last_s_cmd },
   { key = '<m-n>', mode = 'c', desc = 'Next Commend History', handler = h.builtin.down },
   { key = '<m-p>', mode = 'c', desc = 'Previous Commend History', handler = h.builtin.up },
@@ -154,14 +136,7 @@ local opts = {
   { key = 'F', mode = 'nox', desc = 'Flash F', handler = h.repmove.F },
   { key = 't', mode = 'nox', desc = 'Flash t', handler = h.repmove.t },
   { key = 'T', mode = 'nox', desc = 'Flash T', handler = h.repmove.T },
-  {
-    key = '%',
-    mode = 'nox',
-    desc = 'Next Matchit',
-    handler = h.repmove.matchit_wrap('%'),
-    expr = true,
-    fallback = true,
-  },
+  { key = '%', mode = 'nox', desc = 'Next Matchit', handler = h.repmove.matchit_wrap('%'), expr = true },
   { key = 'g%', mode = 'nox', desc = 'Previous Matchit', handler = h.repmove.matchit_wrap('g%'), expr = true },
   { key = '[%', mode = 'nox', desc = 'Next Multi Matchit', handler = h.repmove.matchit_wrap('[%'), expr = true },
   { key = ']%', mode = 'nox', desc = 'Previous Multi Mathit', handler = h.repmove.matchit_wrap(']%'), expr = true },
@@ -239,8 +214,6 @@ local opts = {
   { key = '<c-s>', mode = 'nox', desc = 'Flash Two Char Jump', handler = h.flash.two_char_jump },
   { key = '<leader><leader>', mode = 'nox', desc = 'Flash Jump', handler = h.flash.jump },
   { key = '<leader>w', mode = 'nox', desc = 'Flash Select Word', handler = h.flash.select_word },
-  { key = '<leader>n', mode = 'nox', desc = 'Flash Treesitter', handler = h.flash.treesitter },
-  { key = '<leader>T', mode = 'nox', desc = 'Flash Treesitter Search', handler = h.flash.treesitter_search },
 
   -- Swap
   { key = '<m-s>pa', desc = 'Argument', handler = h.treesitter.swap_with_previous_parameter },
@@ -351,7 +324,6 @@ local opts = {
   { key = '"', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('"') },
   { key = "'", mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap("'") },
   { key = '`', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('`') },
-  { key = '-', mode = 'i', desc = 'Autopair', handler = h.pair.auto_pair_wrap('-') },
   { key = '<bs>', mode = 'i', desc = 'Autopair BS', handler = h.pair.auto_pair_wrap('<bs>') },
   { key = '<cr>', mode = 'i', desc = 'Autopair CR', handler = h.pair.auto_pair_wrap('<cr>'), priority = 0 },
   { key = '<space>', mode = 'i', desc = 'Autopair Space', handler = h.pair.auto_pair_wrap('<space>') },
@@ -364,9 +336,9 @@ local opts = {
   { key = '<m-r>', desc = 'Resume', handler = h.telescope.resume },
   { key = '<c-f>', desc = 'Live Grep', handler = h.telescope.live_grep },
   { key = '<c-p>', desc = 'Find File', handler = h.telescope.find_file },
+  { key = '<m-f>', mode = 'nx', desc = 'Find Word', handler = h.telescope.find_word },
   { key = '<f1>', mode = 'i', desc = 'Search Help', handler = h.telescope.help_tags },
   { key = { '<f1>', 'g?' }, desc = 'Search Help', handler = h.telescope.help_tags },
-  { key = '<m-f>', mode = 'nx', desc = 'Find Word', handler = h.telescope.find_word },
   { key = '<leader>sa', desc = 'Auto commands', handler = h.telescope.auto_commands },
   { key = '<leader>sd', desc = 'Diagnostics', handler = h.telescope.diagnostics },
   { key = '<leader>sg', desc = 'Git', handler = h.telescope.git_status },
@@ -376,14 +348,14 @@ local opts = {
   { key = '<leader>sk', desc = 'Key Mapping', handler = h.telescope.keymaps },
   { key = '<leader>sm', desc = 'Marks', handler = h.telescope.marks },
   { key = '<leader>sM', desc = 'Man Page', handler = h.telescope.man_pages },
-  { key = '<leader>ss', desc = 'Session', handler = h.telescope.search_session },
-  { key = '<leader>sS', desc = 'Picker', handler = h.telescope.pickers },
   { key = '<leader>so', desc = 'Old File', handler = h.telescope.oldfiles },
+  { key = '<leader>sO', desc = 'Open Files', handler = h.telescope.live_grep_open_file },
+  { key = '<leader>ss', desc = 'Session', handler = h.telescope.search_session },
   { key = '<leader>st', desc = 'Todo', handler = h.telescope.todo },
   { key = '<leader>sb', desc = 'Buffer', handler = h.telescope.buffers },
   { key = '<leader>sc', desc = 'Config Path', handler = h.telescope.live_grep_config },
   { key = '<leader>sp', desc = 'Plugin Path', handler = h.telescope.live_grep_plugin },
-  { key = '<leader>sO', desc = 'Open Files', handler = h.telescope.live_grep_open_file },
+  { key = '<leader>sP', desc = 'Picker', handler = h.telescope.pickers },
   { key = '<leader>sr', desc = 'Root Path', handler = h.telescope.live_grep_root },
   { key = '<leader>fc', desc = 'Config Path', handler = h.telescope.find_file_config },
   { key = '<leader>fp', desc = 'Plugin Path', handler = h.telescope.find_file_plugin },
