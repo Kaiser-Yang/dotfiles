@@ -25,8 +25,8 @@
       "src": "https://github.com/saghen/blink.download"
     },
     "blink.indent": {
-      "rev": "086d8196b4ecd030a783139730195ad3f3ffd99a",
-      "src": "https://github.com/Kaiser-Yang/blink.indent"
+      "rev": "8b69b9262891fe81fe728fe6a52fa2a84dd5d5e0",
+      "src": "https://github.com/saghen/blink.indent"
     },
     "blink.lib": {
       "rev": "5876dd95deeb70aadbe9f1c0b7117a135061cdac",

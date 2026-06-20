@@ -1,8 +1,7 @@
 local u = require('utils')
-u.gh('Kaiser-Yang/blink.indent')
+u.gh('saghen/blink.indent')
 
 -- BUG: https://github.com/saghen/blink.indent/issues/47
--- BUG: https://github.com/saghen/blink.indent/issues/52
 require('blink.indent').setup({
   -- BUG: The default mappings can not be disabled, this is a bug
   mappings = {
