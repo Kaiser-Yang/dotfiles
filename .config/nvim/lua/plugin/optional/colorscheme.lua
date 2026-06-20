@@ -22,6 +22,7 @@ require('catppuccin').setup({
     lualine = { enabled = true },
     nvim_surround = false,
     nvimtree = true,
+    rainbow_delimiters = true,
     telescope = { enabled = true },
     treesitter_context = true,
     render_markdown = true,
