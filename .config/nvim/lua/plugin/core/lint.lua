@@ -8,5 +8,5 @@ require('lint').linters_by_ft = {
   markdown = { 'markdownlint' },
   python = { 'ruff' },
   sh = { 'shellcheck' },
-  zsh = { 'zsh' },
+  zsh = { 'shellcheck' },
 }
