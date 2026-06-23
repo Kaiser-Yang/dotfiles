@@ -298,9 +298,6 @@ function M.run_single_file()
   if filetype == 'lua' and u.in_config_dir() then
     vim.cmd('%lua')
     return true
-  elseif filetype == 'markdown' and _G.loaded['render-markdown.nvim'] then
-    vim.cmd('RenderMarkdown buf_toggle')
-    return true
   end
   local cmd = run_single_file_command(vim.bo.filetype, vim.fn.expand('%:p'))
   if not cmd or type(cmd) ~= 'string' then

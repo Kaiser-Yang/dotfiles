@@ -27,4 +27,10 @@ M.code_inline = expand_wrap('`${1:code}` $0')
 M.image = expand_wrap('![$1](${2:path}) $0')
 M.bold_and_italic = expand_wrap('***${1:bold and italic}*** $0')
 
+function M.toggle_render_markdown()
+  if vim.bo.filetype ~= 'markdown' or not _G.loaded['render-markdown.nvim'] then return false end
+  vim.cmd('RenderMarkdown buf_toggle')
+  return true
+end
+
 return M

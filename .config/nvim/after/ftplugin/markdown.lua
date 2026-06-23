@@ -23,13 +23,15 @@ local mappings = {
   { 'i', 'p', h.markdown.image, { desc = 'Insert Markdown Image' } },
   { 'i', 't', h.markdown.code_inline, { desc = 'Insert Markdown Code Line' } },
   { 'i', 'x', h.markdown.todo, { desc = 'Insert Markdown Todo' } },
+  { 'n', '<leader>tm', h.markdown.toggle_render_markdown, { desc = 'Render Markdown' } },
 }
 for _, m in ipairs(mappings) do
   local rhs = m[3]
   ---@diagnostic disable-next-line: assign-type-mismatch
   m[3] = function()
     local res = m[2]
-    if not comma_typed() then return res end
+    local mode = vim.fn.mode('1')
+    if mode:match('^i') and not comma_typed() then return res end
     local prefix = ''
     if type(rhs) == 'function' then
       res = rhs()
@@ -43,6 +45,7 @@ for _, m in ipairs(mappings) do
       res = rhs
       prefix = '<c-g>u<bs>'
     end
+    if not mode:match('^i') then prefix = '' end
     return prefix .. res
   end
   m[4].expr = true
