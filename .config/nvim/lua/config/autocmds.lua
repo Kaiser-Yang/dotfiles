@@ -354,3 +354,9 @@ vim.api.nvim_create_autocmd('BufEnter', {
     vim.keymap.set('n', 'q', '<c-w>q', { desc = 'Quit', buf = buf })
   end,
 })
+
+vim.api.nvim_create_autocmd({ 'InsertEnter', 'InsertLeave' }, {
+  group = _G.autocmd_group,
+  desc = 'Enable/diable diagnostic',
+  callback = function(ev) vim.diagnostic.enable(ev.event == 'InsertLeave', { bufnr = ev.buf }) end,
+})
