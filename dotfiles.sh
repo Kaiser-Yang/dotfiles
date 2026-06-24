@@ -4,7 +4,6 @@ REPO_ROOT=$(pwd)
 DIRS=(
     # nvim related configurations
     ".config/nvim"
-    ".local/share/rime-ls"
 
     # tmux related configurations
     ".tmux.conf"
@@ -20,6 +19,24 @@ DIRS=(
 
     # git configuration
     ".gitconfig"
+
+    # karabiner configuration
+    ".config/karabiner/karabiner.json"
+
+    # input method related configurations
+    ".local/share/fcitx5/rime"
+    ".local/share/fcitx5/themes"
+    ".config/fcitx5/conf/classicui.conf"
+
+    # terminal
+    ".config/wezterm"
+
+    # xremap
+    ".config/xremap"
+    ".config/autostart/xremap.desktop"
+
+    # font configuration
+    ".config/fontconfig/fonts_arch.conf"
 )
 # The reason why we use both `REQUIRED_EXECUTABLES` and `INSTALLATION_COMMANDS`
 # is to control the sequence of installation commands.
@@ -37,33 +54,13 @@ REQUIRED_EXECUTABLES=(
     "zoxide"
     "tree-sitter"
     "rg"
-    "rime_ls"
     "wn"
     "delta"
     "fzf"
-    "fd"
-    "bash-language-server"
-    "shfmt"
 )
 declare -A INSTALLATION_COMMANDS
 COMMANDS_AFTER_INSTALLATION=()
 
-if [[ "$(uname)" == "Darwin" ]]; then
-    COMMANDS_AFTER_INSTALLATION+=(
-        "defaults write -g ApplePressAndHoldEnabled -bool false"
-        "defaults write com.apple.dock autohide-delay 0"
-        "cp .config/karabiner/karabiner.json ~/.config/karabiner/"
-    )
-fi
-# Configurations that require a graphical interface
-if [[ -n "$DISPLAY" || "$(uname)" == "Darwin" ]]; then
-    DIRS+=(
-        # input method related configurations
-        ".local/share/fcitx5/rime"
-        # terminal
-        ".config/wezterm"
-    )
-fi
 SUDO=$(command -v sudo)
 # Arch linux related configurations
 if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
@@ -73,11 +70,16 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
             "fcitx5-rime"
             "wezterm"
         )
+        if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
+            REQUIRED_EXECUTABLES+=("xremap")
+        fi
+        if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+            REQUIRED_EXECUTABLES+=("wl-paste")
+        elif [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
+            REQUIRED_EXECUTABLES+=("xclip")
+        fi
     fi
-    REQUIRED_EXECUTABLES+=(
-        "yay"
-        "pkgfile"
-    )
+    REQUIRED_EXECUTABLES+=("yay")
     INSTALLATION_COMMANDS+=(
         [curl]="$SUDO pacman -Sy --noconfirm curl"
         [make]="$SUDO pacman -Sy --noconfirm make"
@@ -105,26 +107,20 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
         ["tree-sitter"]="$SUDO pacman -Sy --noconfirm tree-sitter"
         ["bash-language-server"]="$SUDO pacman -Sy --noconfirm bash-language-server"
         [shfmt]="$SUDO pacman -Sy --noconfirm shfmt"
-        [pkgfile]="$SUDO pacman -Sy --noconfirm pkgfile"
-    )
-    if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
-        REQUIRED_EXECUTABLES+=(xremap)
-        INSTALLATION_COMMANDS+=([xremap]="yay -Sy --noconfirm xremap-kde-bin")
-        DIRS+=(".config/xremap" ".config/autostart/xremap.desktop")
-    fi
-    DIRS+=(
-        ".config/fontconfig/fonts_arch.conf"
+        [xremap]="yay -Sy --noconfirm xremap-kde-bin"
     )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
+    COMMANDS_AFTER_INSTALLATION+=(
+        "defaults write -g ApplePressAndHoldEnabled -bool false"
+        "defaults write com.apple.dock autohide-delay 0"
+    )
     REQUIRED_EXECUTABLES=(
         "brew"
         "_update_package_list"
         "${REQUIRED_EXECUTABLES[@]}"
         "wezterm"
         "squirrel"
-        "pngpaste" # used by img-clip.nvim
-        "command-not-found-init"
     )
     INSTALLATION_COMMANDS+=(
         [brew]="install_brew"
@@ -142,29 +138,12 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [rg]="brew install ripgrep"
         [rime_ls]="brew install librime && install_rime_ls"
         [wn]="brew install wordnet"
-        # macOS should hava GUI always, we do not need to check it
         [wezterm]="brew install --cask wezterm"
         [squirrel]="brew install --cask squirrel"
         [pngpaste]="brew install pngpaste"
         [delta]="brew install git-delta"
         ["command-not-found-init"]="brew command-not-found-init"
     )
-fi
-# Configurations for all Linux distributions
-if [[ "$(uname)" == "Linux" ]]; then
-    DIRS+=(
-        ".config/fcitx5/conf/classicui.conf"
-        ".local/share/fcitx5/themes"
-    )
-    if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
-        REQUIRED_EXECUTABLES+=(
-            "wl-paste"
-        )
-    elif [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
-        REQUIRED_EXECUTABLES+=(
-            "xclip"
-        )
-    fi
 fi
 
 install_yay() {
@@ -178,7 +157,6 @@ install_yay() {
 # Returns:
 #     0  if installed
 #     1  if not installed
-#     2  if an error occurred
 is_installed() {
     local expected_executable="$1"
     if command -v "$expected_executable" &>/dev/null; then
@@ -194,7 +172,7 @@ is_installed() {
     if [[ "$package_manager" == "pacman" || "$package_manager" == 'yay' ]]; then
         if "$package_manager" -Q "$package_name" &>/dev/null ||
             "$package_manager" -Qg "$package_name" &>/dev/null; then
-            cat /dev/null
+            log_verbose "Command '$expected_executable' is installed."
             return 0
         else
             log_verbose "Package '$package_name' is not installed."
@@ -226,7 +204,7 @@ check_and_install_package() {
     is_installed "$expected_executable" "$package_manager" "$package_name"
     local res=$?
     if [ "$res" -eq 1 ]; then
-        log_verbose "Command '$expected_executable' is not installed. Installing..."
+        log_verbose "Installing '$expected_executable' ..."
         log_verbose "Installation command: $installation_command"
         if ! eval "$installation_command"; then
             log_error "Failed to install '$expected_executable'. " \
@@ -235,9 +213,6 @@ check_and_install_package() {
         fi
         log_verbose "'$expected_executable' installed successfully."
         return 0
-    elif [ "$res" -eq 2 ]; then
-        log_verbose "An error occurred while checking '$expected_executable'."
-        return "$res"
     fi
 }
 
@@ -274,16 +249,16 @@ log_verbose() {
 }
 
 usage() {
-    echo "Usage: $0 [OPTION]"
-    echo "Set up dotfiles by creating symbolic links, or restoring from backup."
-    echo ""
-    echo "  -c, --create     Bakc up original files and create symbolic links."
-    echo "  -i, --install    Install required packages."
-    echo "  -f, --fonts      Install optional fonts."
-    echo "  -r, --restore    Restore the original files from backup."
-    echo "  -s, --change     Change the default shell to zsh."
-    echo "  -v, --verbose    Enable verbose output."
-    echo "  -h, --help       Show this help message."
+    cat <<EOF
+Usage: $0 [OPTION]
+  -c, --create     Create symbolic links (backup originals)
+  -i, --install    Install required packages
+  -f, --fonts      Install fonts
+  -r, --restore    Restore original files from backup
+  -s, --change     Change default shell to zsh
+  -v, --verbose    Enable verbose output
+  -h, --help       Show this help message
+EOF
 }
 
 check_options() {
@@ -455,7 +430,7 @@ install_rime_ls() {
 }
 
 init_xremap() {
-    $SUDO usermod -aG input $USER
+    $SUDO usermod -aG input "$USER"
     local uinput_rule='KERNEL=="uinput", GROUP="input", TAG+="uaccess", MODE:="0660", OPTIONS+="static_node=uinput"'
     local uinput_file="/etc/udev/rules.d/99-input.rules"
     if ! grep -Fxq "$uinput_rule" "$uinput_file" 2>/dev/null; then
@@ -499,8 +474,6 @@ install_packages() {
         fi
         if [[ "$executable" == "xremap" ]]; then
             COMMANDS_AFTER_INSTALLATION+=(init_xremap)
-        elif [[ "$executable" == "pkgfile" ]]; then
-            COMMANDS_AFTER_INSTALLATION+=("$SUDO pkgfile -u")
         fi
         log_verbose "Command executed successfully: $cmd"
     done
@@ -531,7 +504,7 @@ back_up_and_link() {
     fi
     if [ -e "$dst" ]; then
         if [ "$(readlink -f "$dst")" = "$(realpath "$src")" ]; then
-            log_verbose "Skip same file $src <--> $dst."
+            log_verbose "Skipping same file $src <--> $dst."
             return 0
         fi
         # Back up existing $dest to $dest.bak
@@ -572,12 +545,11 @@ restore_one_file() {
         }
         log_verbose "Removed existing $dst."
     elif [ -e "$dst" ]; then
-        log_error "Cannot restore $dst because it is not a symbolic link to $src. " \
-            "If you create symbolic links with -e, you should use -e when restoring."
+        log_error "Cannot restore $dst because it is not a symbolic link to $src."
         return 1
     fi
     if [ ! -e "$dst.bak" ]; then
-        log_verbose "No backup found for $dst."
+        log_verbose "No backup found for $dst, so skipping"
         return 0
     fi
     log_verbose "Restoring $dst from backup $dst.bak."
@@ -592,7 +564,7 @@ update_submodules() {
     git submodule foreach --quiet "echo \$name" | while read -r submodule; do
         url=$(git config --file .gitmodules --get submodule."$submodule".url)
         if [[ "$url" =~ ^git@ || "$url" =~ ^ssh:// ]]; then
-            log "Skip submodule $submodule with ssh url: $url"
+            log "Skipping submodule $submodule with ssh url: $url"
             continue
         fi
         if ! git submodule update --init "$submodule"; then
@@ -604,10 +576,10 @@ update_submodules() {
             echo "$submodule"
             if ! cd "$submodule" && update_submodules; then
                 log_error "Failed to update submodule $submodule. Please check your git configuration."
-                cd "$origin_cwd" || exit
+                cd "$origin_cwd" || exit 1
                 return 1
             fi
-            cd "$origin_cwd" || exit
+            cd "$origin_cwd" || exit 1
         fi
     done
 }
@@ -620,7 +592,7 @@ find_files() {
     fi
 
     log_verbose "Start to update git submodules."
-    update_submodules
+    update_submodules || exit $?
     log_verbose "Git submodules updated successfully."
 
     log_verbose "Start to find files in directories."
