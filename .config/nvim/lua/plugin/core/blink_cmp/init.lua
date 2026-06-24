@@ -220,6 +220,7 @@ local original = require('blink.cmp.completion.list').show
 require('blink.cmp.completion.list').show = function(ctx, items_by_source)
   local seen = {}
   local function filter(item)
+    if item.source_id == 'snippets' then return true end
     if seen[item.label] then return false end
     seen[item.label] = true
     return true
