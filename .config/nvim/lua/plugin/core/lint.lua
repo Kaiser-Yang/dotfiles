@@ -1,6 +1,7 @@
 local u = require('utils')
 u.gh('mfussenegger/nvim-lint')
-require('lint').linters_by_ft = {
+local l = require('lint')
+l.linters_by_ft = {
   c = { 'clangtidy' },
   cpp = { 'clangtidy' },
   go = { 'golangcilint' },
@@ -10,3 +11,4 @@ require('lint').linters_by_ft = {
   sh = { 'shellcheck' },
   zsh = { 'shellcheck' },
 }
+vim.list_extend(l.linters.shellcheck.args, { '-x' })
