@@ -1,6 +1,6 @@
 ---@type vim.lsp.Config
 return {
-  cmd = { 'thriftls' },
+  cmd = { 'thrift-ls' },
   filetypes = { 'thrift' },
   root_markers = { '.thrift' },
 }
