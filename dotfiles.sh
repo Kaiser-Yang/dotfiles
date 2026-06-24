@@ -142,7 +142,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [squirrel]="brew install --cask squirrel"
         [pngpaste]="brew install pngpaste"
         [delta]="brew install git-delta"
-        ["command-not-found-init"]="brew command-not-found-init"
+        ["command-not-found-init"]="brew install command-not-found-init"
     )
 fi
 
