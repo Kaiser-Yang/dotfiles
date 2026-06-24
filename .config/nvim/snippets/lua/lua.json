@@ -14,7 +14,7 @@
     "description": "create a Lua class"
   },
   "method": {
-    "prefix": "met",
+    "prefix": ["met", "fum"],
     "body": ["function {$1:Obj}:${2:methodName}($3)", "\t$0", "end"],
     "description": "method for a class"
   },

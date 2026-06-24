@@ -28,6 +28,7 @@ end
 local k = require('blink.cmp.types').CompletionItemKind
 local lsp_extra = {
   cpp = require('plugin.core.blink_cmp.lsp_extra.cpp'),
+  go = require('plugin.core.blink_cmp.lsp_extra.go'),
   lua = require('plugin.core.blink_cmp.lsp_extra.lua'),
 }
 local snippets_extra = {
