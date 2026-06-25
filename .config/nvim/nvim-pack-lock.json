@@ -176,8 +176,8 @@
       "src": "https://github.com/nanozuki/tabby.nvim"
     },
     "telescope-all-recent.nvim": {
-      "rev": "b82928988f4ea18a04efaa37524b9a99aa17cd42",
-      "src": "https://github.com/Kaiser-Yang/telescope-all-recent.nvim"
+      "rev": "12e60e16506a5dd0abb6def8472b6b61df26a608",
+      "src": "https://github.com/prochri/telescope-all-recent.nvim"
     },
     "telescope-fzf-native.nvim": {
       "rev": "b25b749b9db64d375d782094e2b9dce53ad53a40",
