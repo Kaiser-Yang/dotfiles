@@ -9,7 +9,6 @@ local opts = {
   -- Builtin
   { key = 'j', mode = 'nx', desc = 'Record Jump List', handler = h.builtin.jump_list_wrap('j') },
   { key = 'k', mode = 'nx', desc = 'Record Jump List', handler = h.builtin.jump_list_wrap('k') },
-  { key = '<c-f>', mode = 'ci', desc = 'Right', handler = h.builtin.right },
   { key = '<c-b>', mode = 'ci', desc = 'Left', handler = h.builtin.left },
   { key = '<m-f>', mode = 'ci', desc = 'Word Forward', handler = h.builtin.word_forward },
   { key = '<m-b>', mode = 'ci', desc = 'Word Backward', handler = h.builtin.word_backward },
