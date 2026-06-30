@@ -57,6 +57,7 @@ REQUIRED_EXECUTABLES=(
     "wn"
     "delta"
     "fzf"
+    "go"
 )
 declare -A INSTALLATION_COMMANDS
 COMMANDS_AFTER_INSTALLATION=()
@@ -108,6 +109,7 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
         ["bash-language-server"]="$SUDO pacman -Sy --noconfirm bash-language-server"
         [shfmt]="$SUDO pacman -Sy --noconfirm shfmt"
         [xremap]="yay -Sy --noconfirm xremap-kde-bin"
+        [go]="$SUDO pacman -Sy --noconfirm go"
     )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
@@ -143,6 +145,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [pngpaste]="brew install pngpaste"
         [delta]="brew install git-delta"
         ["command-not-found-init"]="brew install command-not-found-init"
+        [go]="brew install go"
     )
 fi
 
