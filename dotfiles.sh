@@ -147,6 +147,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
     COMMANDS_AFTER_INSTALLATION+=(
         "defaults write -g ApplePressAndHoldEnabled -bool false"
         "defaults write com.apple.dock autohide-delay 0"
+        "defaults write com.apple.dock autohide -bool true"
     )
     REQUIRED_EXECUTABLES=(
         "brew"
