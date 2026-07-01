@@ -70,6 +70,16 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
             "fcitx5-im"
             "fcitx5-rime"
             "wezterm"
+            "adobe-source-han-sans-cn-fonts"
+            "adobe-source-han-serif-cn-fonts"
+            "noto-fonts-cjk"
+            "wqy-microhei"
+            "wqy-microhei-lite"
+            "wqy-bitmapfont"
+            "wqy-zenhei"
+            "ttf-arphic-ukai"
+            "ttf-arphic-uming"
+            "ttf-jetbrains-mono-nerd"
         )
         if [[ "$XDG_CURRENT_DESKTOP" == 'KDE' ]]; then
             REQUIRED_EXECUTABLES+=("xremap")
@@ -110,6 +120,16 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
         [shfmt]="$SUDO pacman -Sy --noconfirm shfmt"
         [xremap]="yay -Sy --noconfirm xremap-kde-bin"
         [go]="$SUDO pacman -Sy --noconfirm go"
+        ["adobe-source-han-sans-cn-fonts"]="$SUDO pacman -Sy --noconfirm adobe-source-han-sans-cn-fonts && refresh_fonts_cache"
+        ["adobe-source-han-serif-cn-fonts"]="$SUDO pacman -Sy --noconfirm adobe-source-han-serif-cn-fonts && refresh_fonts_cache"
+        ["noto-fonts-cjk"]="$SUDO pacman -Sy --noconfirm noto-fonts-cjk && refresh_fonts_cache"
+        ["wqy-microhei"]="$SUDO pacman -Sy --noconfirm wqy-microhei && refresh_fonts_cache"
+        ["wqy-microhei-lite"]="$SUDO pacman -Sy --noconfirm wqy-microhei-lite && refresh_fonts_cache"
+        ["wqy-bitmapfont"]="$SUDO pacman -Sy --noconfirm wqy-bitmapfont && refresh_fonts_cache"
+        ["wqy-zenhei"]="$SUDO pacman -Sy --noconfirm wqy-zenhei && refresh_fonts_cache"
+        ["ttf-arphic-ukai"]="$SUDO pacman -Sy --noconfirm ttf-arphic-ukai && refresh_fonts_cache"
+        ["ttf-arphic-uming"]="$SUDO pacman -Sy --noconfirm ttf-arphic-uming && refresh_fonts_cache"
+        ["ttf-jetbrains-mono-nerd"]="$SUDO pacman -Sy --noconfirm ttf-jetbrains-mono-nerd && refresh_fonts_cache"
     )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
@@ -123,6 +143,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         "${REQUIRED_EXECUTABLES[@]}"
         "wezterm"
         "squirrel"
+        "font-jetbrains-mono-nerd-font"
     )
     INSTALLATION_COMMANDS+=(
         [brew]="install_brew"
@@ -146,6 +167,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         [delta]="brew install git-delta"
         ["command-not-found-init"]="brew install command-not-found-init"
         [go]="brew install go"
+        ["font-jetbrains-mono-nerd-font"]="brew install --cask font-jetbrains-mono-nerd-font"
     )
 fi
 
@@ -256,7 +278,6 @@ usage() {
 Usage: $0 [OPTION]
   -c, --create     Create symbolic links (backup originals)
   -i, --install    Install required packages
-  -f, --fonts      Install fonts
   -r, --restore    Restore original files from backup
   -s, --change     Change default shell to zsh
   -v, --verbose    Enable verbose output
@@ -265,8 +286,8 @@ EOF
 }
 
 check_options() {
-    if [[ "$RESTORE" == false && "$CREATE_LINKS" == false && "$INSTALL_PACKAGES" == false &&
-        "$INSTALL_FONTS" == false && "$CHANGE_SHELL" == false ]]; then
+    if [[ "$RESTORE" == false && "$CREATE_LINKS" == false &&
+        "$INSTALL_PACKAGES" == false && "$CHANGE_SHELL" == false ]]; then
         log_error "No valid option provided. Please use -c, -i, -s, or -r."
         usage
         return 1
@@ -283,7 +304,6 @@ init_options() {
     VERBOSE=false
     INSTALL_PACKAGES=false
     CREATE_LINKS=false
-    INSTALL_FONTS=false
     CHANGE_SHELL=false
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -307,10 +327,6 @@ init_options() {
             CREATE_LINKS=true
             shift
             ;;
-        --fonts)
-            INSTALL_FONTS=true
-            shift
-            ;;
         --change)
             CHANGE_SHELL=true
             shift
@@ -327,7 +343,6 @@ init_options() {
                 v) VERBOSE=true ;;
                 i) INSTALL_PACKAGES=true ;;
                 c) CREATE_LINKS=true ;;
-                f) INSTALL_FONTS=true ;;
                 s) CHANGE_SHELL=true ;;
                 *)
                     log_error "Unknown option: -${short_opts:$i:1}"
@@ -684,39 +699,13 @@ restore() {
     restore_or_create restore || return $?
 }
 
-install_fonts() {
-    log "Start to install fonts."
-    local fonts=()
-    local command
-    if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
-        command="$SUDO pacman -Sy --noconfirm"
-        fonts+=(
-            adobe-source-han-sans-cn-fonts adobe-source-han-serif-cn-fonts
-            noto-fonts-cjk
-            wqy-microhei wqy-microhei-lite wqy-bitmapfont wqy-zenhei
-            ttf-arphic-ukai ttf-arphic-uming ttf-jetbrains-mono-nerd
-        )
-    elif [[ "$(uname)" == "Darwin" ]]; then
-        if ! command -v brew &>/dev/null; then
-            log_error "Homebrew is not installed. Please install Homebrew first."
-            return 1
-        fi
-        command='brew install --cask'
-        fonts+=(font-jetbrains-mono-nerd-font)
-    fi
-    for font in "${fonts[@]}"; do
-        check_and_install_package "$font" "$command $font" || {
-            log_error "Failed to install font: $font. Please check the installation command."
-            return 1
-        }
-    done
+refresh_fonts_cache() {
     if [[ "$(uname)" == "Linux" ]]; then
         fc-cache -f &>/dev/null || {
             log_error "Failed to update font cache. Please check your fonts installation."
             return 1
         }
     fi
-    log "Fonts installed successfully."
 }
 
 main() {
@@ -730,11 +719,6 @@ main() {
         restore || return $?
     else
         log_verbose "Skipping restoration of original files."
-    fi
-    if [ "$INSTALL_FONTS" = true ]; then
-        install_fonts || return $?
-    else
-        log_verbose "Skipping fonts installation."
     fi
     if [ "$INSTALL_PACKAGES" = true ]; then
         install_packages || return $?
