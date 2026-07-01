@@ -58,8 +58,18 @@ REQUIRED_EXECUTABLES=(
     "delta"
     "fzf"
     "go"
+    "goimports"
+    "tree-sitter"
+    "gopls"
+    "pyright"
+    "thrift-ls"
 )
 declare -A INSTALLATION_COMMANDS
+INSTALLATION_COMMANDS+=(
+    [goimports]="go install golang.org/x/tools/cmd/goimports@latest"
+    [gopls]="go install golang.org/x/tools/gopls@latest"
+    ["thrift-ls"]="go install github.com/joyme123/thrift-ls@latest"
+)
 COMMANDS_AFTER_INSTALLATION=()
 
 SUDO=$(command -v sudo)
@@ -115,7 +125,6 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
         [delta]="$SUDO pacman -Sy --noconfirm git-delta"
         [fzf]="$SUDO pacman -Sy --noconfirm fzf"
         [fd]="$SUDO pacman -Sy --noconfirm fd"
-        ["tree-sitter"]="$SUDO pacman -Sy --noconfirm tree-sitter"
         ["bash-language-server"]="$SUDO pacman -Sy --noconfirm bash-language-server"
         [shfmt]="$SUDO pacman -Sy --noconfirm shfmt"
         [xremap]="yay -Sy --noconfirm xremap-kde-bin"
@@ -130,6 +139,8 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
         ["ttf-arphic-ukai"]="$SUDO pacman -Sy --noconfirm ttf-arphic-ukai && refresh_fonts_cache"
         ["ttf-arphic-uming"]="$SUDO pacman -Sy --noconfirm ttf-arphic-uming && refresh_fonts_cache"
         ["ttf-jetbrains-mono-nerd"]="$SUDO pacman -Sy --noconfirm ttf-jetbrains-mono-nerd && refresh_fonts_cache"
+        ["tree-sitter"]="$SUDO pacman -Sy --noconfirm tree-sitter-cli"
+        [pyright]="$SUDO pacman -Sy --noconfirm pyright"
     )
 # macOS related configurations
 elif [[ "$(uname)" == "Darwin" ]]; then
@@ -168,6 +179,8 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         ["command-not-found-init"]="brew install command-not-found-init"
         [go]="brew install go"
         ["font-jetbrains-mono-nerd-font"]="brew install --cask font-jetbrains-mono-nerd-font"
+        ["tree-sitter"]="brew install tree-sitter-cli"
+        [pyright]="brew install pyright"
     )
 fi
 
