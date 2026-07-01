@@ -526,7 +526,7 @@ back_up_and_link() {
         log_verbose "No existing file at $dst, no backup needed."
     fi
     # Create a symbolic link: $dst --> $src
-    if ! eval "$sudo_cmd ln -s $src $dst"; then
+    if ! eval "$sudo_cmd ln -s '$src' '$dst'"; then
         log_error "Failed to create symbolic link from $src to $dst. Please check the file path."
         return 1
     fi
@@ -556,7 +556,7 @@ restore_one_file() {
         return 0
     fi
     log_verbose "Restoring $dst from backup $dst.bak."
-    eval "$sudo_cmd mv $dst.bak $dst" || {
+    eval "$sudo_cmd mv '$dst.bak' '$dst'" || {
         log_error "Failed to restore $dst from backup. Please check the file path."
         return 1
     }
