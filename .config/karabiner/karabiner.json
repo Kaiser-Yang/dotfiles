@@ -64,22 +64,6 @@
                   }
                 ],
                 "type": "basic"
-              },
-              {
-                "from": {
-                  "key_code": "e",
-                  "modifiers": {
-                    "mandatory": ["left_control", "left_command"],
-                    "optional": []
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "e",
-                    "modifiers": ["left_control", "left_option"]
-                  }
-                ],
-                "type": "basic"
               }
             ]
           },
@@ -90,7 +74,7 @@
                 "conditions": [
                   {
                     "bundle_identifiers": ["^com\\.github\\.wez\\.wezterm$"],
-                    "type": "frontmost_application_unless"
+                    "type": "frontmost_application_if"
                   }
                 ],
                 "from": { "key_code": "left_command" },
@@ -101,12 +85,37 @@
                 "conditions": [
                   {
                     "bundle_identifiers": ["^com\\.github\\.wez\\.wezterm$"],
-                    "type": "frontmost_application_unless"
+                    "type": "frontmost_application_if"
                   }
                 ],
                 "from": { "key_code": "left_option" },
                 "to": [{ "key_code": "left_command" }],
                 "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "Map Ctrl+[ to Esc globally",
+            "manipulators": [
+              {
+                "conditions": [
+                  {
+                    "bundle_identifiers": ["^com\\.github\\.wez\\.wezterm$"],
+                    "type": "frontmost_application_unless"
+                  }
+                ],
+                "type": "basic",
+                "from": {
+                  "key_code": "open_bracket",
+                  "modifiers": {
+                    "mandatory": ["left_control"]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "escape"
+                  }
+                ]
               }
             ]
           }
@@ -121,16 +130,8 @@
               "to": [{ "key_code": "left_control" }]
             },
             {
-              "from": { "key_code": "left_command" },
-              "to": [{ "key_code": "left_option" }]
-            },
-            {
               "from": { "key_code": "left_control" },
               "to": [{ "apple_vendor_top_case_key_code": "keyboard_fn" }]
-            },
-            {
-              "from": { "key_code": "left_option" },
-              "to": [{ "key_code": "left_command" }]
             }
           ]
         }
