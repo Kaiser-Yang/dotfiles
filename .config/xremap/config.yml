@@ -5,6 +5,7 @@ keymap:
     remap:
       Ctrl-a: Home
       Ctrl-e: End
+      Ctrl-leftbrace: Esc
       Alt-z: Ctrl-z
       Alt-x: Ctrl-x
       Alt-c: Ctrl-c
