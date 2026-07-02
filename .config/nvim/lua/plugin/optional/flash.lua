@@ -1,5 +1,5 @@
 local u = require('utils')
-u.gh('Kaiser-Yang/flash.nvim', 'develop')
+u.gh('Kaiser-Yang/flash.nvim')
 require('flash').setup({
   search = {
     multi_window = false,
