@@ -13,6 +13,7 @@ DIRS=(
     # zsh related configurations
     ".zshrc"
     ".config/zsh"
+    ".p10k.zsh"
 
     # lazygit related configurations
     ".config/lazygit"
@@ -236,7 +237,7 @@ is_installed() {
 check_and_install_package() {
     local expected_executable="$1"
     local installation_command="${*:2}"
-    IFS=" " read -r -a cmd_array <<<"$installation_command"
+    cmd_array=($installation_command)
     local package_manager="${cmd_array[0]}"
     [[ "$package_manager" == "$SUDO" ]] && package_manager="${cmd_array[1]}"
     local package_name="${cmd_array[-1]}"
