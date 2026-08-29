@@ -1,4 +1,3 @@
-vim.b.lint = false
 vim.b.color = false
 vim.b.flash = false
 vim.b.pairs = false

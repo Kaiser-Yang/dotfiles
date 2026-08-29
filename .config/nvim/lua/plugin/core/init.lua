@@ -11,8 +11,6 @@ vim.schedule(function()
   require('plugin.core.gitsigns')
   -- Detect/guess indentation style per buffer
   require('plugin.core.guess_indent')
-  -- Lint
-  require('plugin.core.lint')
   -- Global keymaps manager / layer system
   require('plugin.core.maplayer')
   -- Repeat last motion with `;` and `,`
