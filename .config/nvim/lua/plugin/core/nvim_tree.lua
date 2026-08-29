@@ -87,8 +87,8 @@ require('nvim-tree').setup({
   },
   modified = { enable = true },
   filters = {
-    git_ignored = true,
-    dotfiles = not u.in_config_dir(),
+    dotfiles = false,
+    git_ignored = false,
     custom = {
       '^\\.git/info/refs$',
       '^\\.git/logs',
