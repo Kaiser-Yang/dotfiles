@@ -64,6 +64,7 @@ REQUIRED_EXECUTABLES=(
     "gopls"
     "pyright"
     "thrift-ls"
+    "vscode-json-language-server"
 )
 declare -A INSTALLATION_COMMANDS
 INSTALLATION_COMMANDS+=(
@@ -127,6 +128,7 @@ if grep -qi '^ID=arch' /etc/os-release &>/dev/null; then
         [fzf]="$SUDO pacman -Sy --noconfirm fzf"
         [fd]="$SUDO pacman -Sy --noconfirm fd"
         ["bash-language-server"]="$SUDO pacman -Sy --noconfirm bash-language-server"
+        ["vscode-json-language-server"]="$SUDO pacman -Sy --noconfirm vscode-json-languageserver"
         [shfmt]="$SUDO pacman -Sy --noconfirm shfmt"
         [xremap]="yay -Sy --noconfirm xremap-kde-bin"
         [go]="$SUDO pacman -Sy --noconfirm go"
@@ -183,6 +185,7 @@ elif [[ "$(uname)" == "Darwin" ]]; then
         ["font-jetbrains-mono-nerd-font"]="brew install --cask font-jetbrains-mono-nerd-font"
         ["tree-sitter"]="brew install tree-sitter-cli"
         [pyright]="brew install pyright"
+        ["vscode-json-language-server"]="brew install vscode-langservers-extracted"
     )
 fi
 
