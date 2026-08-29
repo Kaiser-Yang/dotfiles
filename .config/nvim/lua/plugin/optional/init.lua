@@ -17,8 +17,6 @@ vim.schedule(function()
   require('plugin.optional.fidget')
   -- Flash
   require('plugin.optional.flash')
-  -- Find and Replace
-  require('plugin.optional.grug_far')
   -- Code action indicator
   require('plugin.optional.lightbulb')
   -- Statusline

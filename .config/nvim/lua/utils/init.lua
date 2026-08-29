@@ -223,8 +223,6 @@ function M.make_snippet_wrap(label, lines, desc)
   end
 end
 
-function M.grug_inst() return require('grug-far').get_instance(vim.api.nvim_get_current_buf()) end
-
 -- disable global shada; create separate shadafile for each workspace
 -- ensures project-scoped jumplist, marks, etc.
 --—@return string?

@@ -18,7 +18,6 @@ require('catppuccin').setup({
     fidget = true,
     flash = true,
     gitsigns = true,
-    grug_far = true,
     lualine = { enabled = true },
     nvim_surround = false,
     nvimtree = true,
