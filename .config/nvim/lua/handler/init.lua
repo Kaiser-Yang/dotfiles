@@ -78,16 +78,4 @@ function M.pick_window()
   return '<cmd>Tabby pick_window<cr>'
 end
 
-function M.treesitter_join()
-  if not _G.loaded['treesj'] then return false end
-  require('treesj').join()
-  return true
-end
-
-function M.treesitter_split()
-  if not _G.loaded['treesj'] then return false end
-  require('treesj').split()
-  return true
-end
-
 return M

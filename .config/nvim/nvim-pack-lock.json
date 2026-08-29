@@ -186,10 +186,6 @@
       "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",
       "src": "https://github.com/folke/todo-comments.nvim"
     },
-    "treesj": {
-      "rev": "79aedb401bbdc7e4202f7881eab5f6feb2105b0a",
-      "src": "https://github.com/Wansmer/treesj"
-    },
     "ts-autotag.nvim": {
       "rev": "6178353d9003e91eb053d69cf9a4d72e28137daa",
       "src": "https://github.com/tronikelis/ts-autotag.nvim"
