@@ -510,7 +510,7 @@ function M.toggle_diagnostic()
 end
 
 function M.jump_list_wrap(key, cnt)
-  cnt = cnt or 5
+  cnt = cnt or 1
   return function()
     local res = u.get_cnt_prefix() .. key
     if vim.v.count1 > cnt then vim.cmd("normal! m'") end
