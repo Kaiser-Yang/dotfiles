@@ -193,10 +193,14 @@ local command = {
       end,
     },
   },
+  -- INFO:
+  -- This should be removed in nvim-0.13
   PackUpdate = {
     callback = function(args) pack_command_handler('update', args) end,
     opts = { nargs = '*', bang = true, bar = true, complete = pack_complete },
   },
+  -- INFO:
+  -- This should be removed in nvim-0.13
   PackDel = {
     callback = function(args) pack_command_handler('del', args) end,
     opts = { nargs = '*', bang = true, bar = true, complete = pack_complete },

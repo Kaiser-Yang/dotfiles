@@ -76,9 +76,15 @@ require('nvim-tree').setup({
   renderer = {
     group_empty = true,
     indent_markers = { enable = true },
+    -- Summary of hidden nodes
     hidden_display = 'all',
   },
-  diagnostics = { enable = true, show_on_dirs = true, diagnostic_opts = true },
+  diagnostics = {
+    enable = true,
+    show_on_dirs = true,
+    -- Use icons from 'vim.diagnostics'
+    diagnostic_opts = true
+  },
   modified = { enable = true },
   filters = {
     git_ignored = true,

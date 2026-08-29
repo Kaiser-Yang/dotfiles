@@ -1,6 +1,6 @@
 local M = {}
 
-function M.big(buffer, event)
+function M.big(buffer)
   buffer = M.normalize_buf(buffer)
   local _size = M.size(buffer)
   local line_count = vim.api.nvim_buf_line_count(0)
@@ -9,9 +9,6 @@ function M.big(buffer, event)
   local average_every_line = type(vim.b[buffer].big_file_average_every_line) == 'number'
       and vim.b[buffer].big_file_average_every_line
     or type(vim.g.big_file_average_every_line) == 'number' and vim.g.big_file_average_every_line
-  -- We can not get the right line count before the buffer is loaded,
-  -- so we can only check the file size in that case.
-  if event == 'BufReadPre' then average_every_line = nil end
   return type(limit) == 'number' and _size >= limit
     or type(average_every_line) == 'number' and _size >= average_every_line * line_count
 end
@@ -42,6 +39,9 @@ function M.size(buffer)
   return res
 end
 
+--- Check if a buffer is a normal buffer
+--- @param bufnr? integer
+--- @return boolean
 function M.normal(bufnr)
   bufnr = M.normalize_buf(bufnr)
   return vim.api.nvim_buf_is_valid(bufnr)

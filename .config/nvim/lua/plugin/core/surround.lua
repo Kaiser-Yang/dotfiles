@@ -3,6 +3,7 @@ local u = require('utils')
 u.gh('kylechui/nvim-surround')
 require('nvim-surround').setup({
   surrounds = {
+    -- Make 'cs>>' behavior like 'cs<>'
     [')'] = { change = { target = '^(. ?)().-( ?.)()$' } },
     ['}'] = { change = { target = '^(. ?)().-( ?.)()$' } },
     ['>'] = { change = { target = '^(. ?)().-( ?.)()$' } },
