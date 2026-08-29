@@ -142,10 +142,6 @@
       "rev": "012f1480cd9a5fc99fce7678e0a536421a53fc46",
       "src": "https://github.com/HiPhish/rainbow-delimiters.nvim"
     },
-    "refactoring.nvim": {
-      "rev": "7eaa150061ea18fdbe18fbb924d236e3ddccc57d",
-      "src": "https://github.com/ThePrimeagen/refactoring.nvim"
-    },
     "render-markdown.nvim": {
       "rev": "4663eb3ecd538bd5062628fb6d95bbe6bdca78f6",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"

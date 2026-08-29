@@ -27,8 +27,6 @@ vim.schedule(function()
   require('plugin.optional.nui')
   -- Rainbow pairs
   require('plugin.optional.rainbow')
-  -- Refactoring
-  require('plugin.optional.refactoring')
   -- Markdown viewer
   require('plugin.optional.render_markdown')
   -- Session

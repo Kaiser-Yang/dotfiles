@@ -103,7 +103,6 @@ local function override_ui_select()
 
   function UISelect:init(items, opts, on_done)
     local border_top_text = get_prompt_text(opts.prompt, '[Select Item]')
-    local kind = opts.kind or 'unknown'
     local format_item = opts.format_item or function(item) return tostring(item.__raw_item or item) end
 
     local popup_options = {
@@ -113,12 +112,6 @@ local function override_ui_select()
       win_options = { winhighlight = 'NormalFloat:Normal,FloatBorder:Normal' },
       zindex = 999,
     }
-
-    if kind == 'codeaction' or border_top_text:find('refactor') then
-      -- change position for codeaction selection
-      popup_options.relative = 'cursor'
-      popup_options.position = { row = 2, col = 0 }
-    end
 
     local max_width = popup_options.relative == 'editor' and vim.o.columns - 4 or vim.api.nvim_win_get_width(0) - 4
     local max_height = popup_options.relative == 'editor' and math.floor(vim.o.lines * 80 / 100)
