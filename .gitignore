@@ -9,3 +9,5 @@ repro.lua
 
 # lock files
 *.lock
+
+.config/lazygit/state.yml
