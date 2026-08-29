@@ -371,10 +371,10 @@ local opts = {
   { key = '<down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom'), fallback = true, expr = true },
   { key = '<left>', desc = 'Resize Left', handler = h.resize_wrap('left'), fallback = true, expr = true },
   { key = '<right>', desc = 'Resize Right', handler = h.resize_wrap('right'), fallback = true, expr = true },
-  { key = '<s-up>', desc = 'Resize Top', handler = h.resize_wrap('top', true), fallback = true, expr = true },
-  { key = '<s-down>', desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = true, expr = true },
-  { key = '<s-left>', desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = true, expr = true },
-  { key = '<s-right>', desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = true, expr = true },
+  { key = { '<s-up>', '<m-up>' }, desc = 'Resize Top', handler = h.resize_wrap('top', true), fallback = true, expr = true },
+  { key = { '<s-down>', '<m-down>' }, desc = 'Resize Bottom', handler = h.resize_wrap('bottom', true), fallback = true, expr = true },
+  { key = { '<s-left>', '<m-left>' }, desc = 'Resize Left', handler = h.resize_wrap('left', true), fallback = true, expr = true },
+  { key = { '<s-right>', '<m-right>' }, desc = 'Resize Right', handler = h.resize_wrap('right', true), fallback = true, expr = true },
 
   -- Debugger
   { key = '<m-b>', desc = 'Toggle Breakpoint', handler = h.dap.toggle_breakpoint },
