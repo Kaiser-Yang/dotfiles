@@ -30,10 +30,10 @@ local opts = {
   { key = '<m-j>', desc = 'Bottom', handler = h.builtin.window('j') },
   { key = '<m-k>', desc = 'Top', handler = h.builtin.window('k') },
   { key = '<m-l>', desc = 'Right', handler = h.builtin.window('l') },
-  { key = '<c-w>h', desc = 'Swap Left', handler = h.builtin.swap_wrap('left') },
-  { key = '<c-w>j', desc = 'Swap Bottom', handler = h.builtin.swap_wrap('bottom') },
-  { key = '<c-w>k', desc = 'Swap Top', handler = h.builtin.swap_wrap('top') },
-  { key = '<c-w>l', desc = 'Swap Right', handler = h.builtin.swap_wrap('right') },
+  { key = { '<c-w>h', '<c-w><c-h>' }, desc = 'Swap Left', handler = h.builtin.swap_wrap('left') },
+  { key = { '<c-w>j', '<c-w><c-j>' }, desc = 'Swap Bottom', handler = h.builtin.swap_wrap('bottom') },
+  { key = { '<c-w>k', '<c-w><c-k>' }, desc = 'Swap Top', handler = h.builtin.swap_wrap('top') },
+  { key = { '<c-w>l', '<c-w><c-l>' }, desc = 'Swap Right', handler = h.builtin.swap_wrap('right') },
   { key = { '<c-w>t', '<c-w><c-t>' }, desc = 'Tab Split', handler = h.builtin.tab_split },
   -- INFO:
   -- By default "<C-A>" is used to insert all commands in command mode
