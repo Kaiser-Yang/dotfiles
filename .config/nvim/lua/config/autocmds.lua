@@ -171,7 +171,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-vim.api.nvim_create_autocmd({ 'FocusLost', 'BufLeave' }, {
+vim.api.nvim_create_autocmd('CursorHold', {
   desc = 'Save on leaving',
   group = _G.autocmd_group,
   callback = function()
@@ -192,6 +192,8 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- INFO:
+-- This will not be trigger by auto-save when 'CursorHold'
 vim.api.nvim_create_autocmd('BufWritePre', {
   desc = 'Format on save',
   group = _G.autocmd_group,
@@ -212,7 +214,7 @@ vim.api.nvim_create_autocmd('QuitPre', {
   desc = 'Quit when there is only nvim-tree',
   group = _G.autocmd_group,
   nested = false,
-  callback = function(ev)
+  callback = function()
     if not _G.loaded['nvim-tree.lua'] then return end
 
     local tree = require('nvim-tree.api').tree
@@ -230,7 +232,7 @@ vim.api.nvim_create_autocmd('QuitPre', {
       end
     end
 
-    if ev.event == 'QuitPre' and winCount == 1 and lastWinId == vim.api.nvim_get_current_win() then
+    if winCount == 1 and lastWinId == vim.api.nvim_get_current_win() then
       if #vim.api.nvim_list_tabpages() == 1 then
         vim.api.nvim_cmd({ cmd = 'qall' }, {})
       else

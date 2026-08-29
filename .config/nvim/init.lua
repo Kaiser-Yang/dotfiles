@@ -21,6 +21,8 @@ _G.loaded = {}
 _G.autocmd_group = vim.api.nvim_create_augroup('LightBoat', { clear = true })
 --- @type string?
 _G.last_args = nil
+--- @type string?
+_G.last_filename = nil
 vim.filetype.add({
   extension = {
     gotmpl = 'gotmpl',
