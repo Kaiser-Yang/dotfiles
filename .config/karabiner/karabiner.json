@@ -95,6 +95,27 @@
             ]
           },
           {
+            "description": "Map Option-Tab to Command-Tab",
+            "manipulators": [
+              {
+                "from": {
+                  "key_code": "tab",
+                  "modifiers": {
+                    "mandatory": ["left_option"],
+                    "optional": []
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "tab",
+                    "modifiers": ["left_command"]
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
             "description": "Map Ctrl+[ to Esc globally",
             "manipulators": [
               {
