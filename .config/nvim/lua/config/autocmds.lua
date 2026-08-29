@@ -60,7 +60,7 @@ vim.api.nvim_create_autocmd('ModeChanged', {
 })
 
 local limit = 1024 * 1024 -- 1 MB
-local timeout = 300 -- Unit: ms
+local timeout = 300       -- Unit: ms
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight after yanking',
   group = _G.autocmd_group,
@@ -90,11 +90,11 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function(ev)
     if not vim.api.nvim_buf_is_valid(ev.buf) then return end
     if
-      u.enabled('treesitter_highlight')
-      and u.treesitter_available(ev.buf, 'highlights')
-      -- INFO:
-      -- lua, markdown, help and query files will be started by neovim automatically
-      and not vim.tbl_contains({ 'lua', 'markdown', 'help', 'query' }, vim.bo[ev.buf].filetype)
+        u.enabled('treesitter_highlight')
+        and u.treesitter_available(ev.buf, 'highlights')
+        -- INFO:
+        -- lua, markdown, help and query files will be started by neovim automatically
+        and not vim.tbl_contains({ 'lua', 'markdown', 'help', 'query' }, vim.bo[ev.buf].filetype)
     then
       if not vim.v.vim_did_init then
         vim.schedule_wrap(vim.treesitter.start)(ev.buf)
@@ -105,9 +105,9 @@ vim.api.nvim_create_autocmd('FileType', {
     if u.enabled('treesitter_foldexpr') and u.treesitter_available(ev.buf, 'folds') then
       for _, win in ipairs(vim.api.nvim_list_wins()) do
         if
-          vim.api.nvim_win_is_valid(win)
-          and vim.api.nvim_win_get_buf(win) == ev.buf
-          and (vim.wo[win][0].foldmethod ~= 'expr' or vim.wo[win][0].foldexpr ~= 'v:lua.vim.treesitter.foldexpr()')
+            vim.api.nvim_win_is_valid(win)
+            and vim.api.nvim_win_get_buf(win) == ev.buf
+            and (vim.wo[win][0].foldmethod ~= 'expr' or vim.wo[win][0].foldexpr ~= 'v:lua.vim.treesitter.foldexpr()')
         then
           vim.wo[win][0].foldmethod = 'expr'
           vim.wo[win][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
@@ -247,9 +247,9 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
     if vim.bo[ev.buf].filetype ~= 'CompetiTest' then return end
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       if
-        vim.api.nvim_win_is_valid(win)
-        and vim.api.nvim_win_get_buf(win) == ev.buf
-        and vim.api.nvim_win_get_config(win).relative == ''
+          vim.api.nvim_win_is_valid(win)
+          and vim.api.nvim_win_get_buf(win) == ev.buf
+          and vim.api.nvim_win_get_config(win).relative == ''
       then
         vim.wo[win][0].signcolumn = 'no'
         vim.wo[win][0].statuscolumn = '%l '
@@ -304,9 +304,9 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
     if not vim.tbl_contains({ 'grug-far', 'dap-view', 'CompetiTest' }, vim.bo[ev.buf].filetype) then return end
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       if
-        vim.api.nvim_win_is_valid(win)
-        and vim.api.nvim_win_get_buf(win) == ev.buf
-        and vim.wo[win][0].winfixbuf ~= true
+          vim.api.nvim_win_is_valid(win)
+          and vim.api.nvim_win_get_buf(win) == ev.buf
+          and vim.wo[win][0].winfixbuf ~= true
       then
         vim.wo[win][0].winfixbuf = true
       end
