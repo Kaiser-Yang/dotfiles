@@ -1,5 +1,3 @@
--- File explorer
-require('plugin.core.nvim_tree')
 vim.schedule(function()
   -- Completion engine (blink)
   require('plugin.core.blink_cmp')
@@ -13,6 +11,8 @@ vim.schedule(function()
   require('plugin.core.guess_indent')
   -- Global keymaps manager / layer system
   require('plugin.core.maplayer')
+  -- File explorer
+  require('plugin.core.nvim_tree')
   -- Repeat last motion with `;` and `,`
   require('plugin.core.repmove')
   -- Git conflict resolver
