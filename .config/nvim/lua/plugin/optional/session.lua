@@ -9,7 +9,7 @@ u.gh('Kaiser-Yang/auto-session')
 require('auto-session').setup({
   auto_save = vim.fs.root(0, '.git'),
   auto_create = vim.fs.root(0, '.git'),
-  auto_restore = false,
+  auto_restore = vim.fs.root(0, '.git'),
   session_lens = {
     picker = 'telescope',
     mappings = {

@@ -1,5 +1,7 @@
 -- Colorscheme
 require('plugin.optional.colorscheme')
+-- Session
+require('plugin.optional.session')
 vim.schedule(function()
   -- Auto tag
   require('plugin.optional.autotag')
@@ -29,8 +31,6 @@ vim.schedule(function()
   require('plugin.optional.rainbow')
   -- Markdown viewer
   require('plugin.optional.render_markdown')
-  -- Session
-  require('plugin.optional.session')
   -- Tabline
   require('plugin.optional.tabby')
   -- Tmux Navigator
