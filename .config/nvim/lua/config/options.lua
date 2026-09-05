@@ -55,6 +55,4 @@ vim.o.textwidth = 80
 -- 'B': do not insert a space between multibyte characters when joining lines
 -- 'j': remove a comment leader when joining lines
 vim.o.formatoptions = 'cro/qlBj'
-vim.opt.indentkeys:append('!^I')
-vim.opt.indentkeys:remove('!^F')
 vim.o.spelllang = 'en,cjk'
