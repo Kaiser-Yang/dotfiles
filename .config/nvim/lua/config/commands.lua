@@ -3,16 +3,6 @@ local function pack_command_handler(method, args)
   local plugins = {}
   if args.args and args.args ~= '' then
     plugins = vim.split(args.args, '%s+', { trimempty = true })
-    for _, p in ipairs(plugins) do
-      if not _G.loaded[p] then
-        vim.notify(
-          'Unknown plugin: ' .. p,
-          vim.log.levels.ERROR,
-          { title = 'Pack' .. method:gsub('^%l', string.upper) }
-        )
-        return
-      end
-    end
   else
     plugins = vim.tbl_keys(_G.loaded)
   end
